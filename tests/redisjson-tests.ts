@@ -2,12 +2,19 @@ import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { Redisjson } from '../modules/redisjson';
 const client = new Redisjson({
-    host: 'localhost',
-    port: 123,
-    password: '123951'
+    host: cliArguments.host,
+    port: parseInt(cliArguments.port),
+    password: cliArguments.password
 });
 
 describe('Sanity testing', async function() {
+    before(async () => {
+        await client.connect();
+    })
+    after(async () => {
+        client.disconnect();
+    })
+
     it('delCommand function', async () => {
     });
 
