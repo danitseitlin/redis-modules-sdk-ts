@@ -17,7 +17,12 @@
   },
   "homepage": "https://github.com/danitseitlin/redis-modules#readme",
   "devDependencies": {
+    "@types/chai": "^4.2.14",
     "@types/ioredis": "^4.17.6",
+    "@types/mocha": "^8.0.3",
+    "chai": "^4.2.0",
+    "cli-argument-parser": "^0.3.4",
+    "mocha": "^8.2.0",
     "typescript": "^4.0.3"
   },
   "dependencies": {
