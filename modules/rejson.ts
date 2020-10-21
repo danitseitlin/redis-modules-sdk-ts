@@ -1,7 +1,7 @@
 
 import * as Redis from 'ioredis';
 
-export class Redisjson extends Redis{
+export class ReJSON extends Redis{
     constructor(options: Redis.RedisOptions) {
         super(options)
     }
