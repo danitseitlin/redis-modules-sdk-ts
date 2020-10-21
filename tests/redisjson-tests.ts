@@ -4,7 +4,7 @@ import { Redisjson } from '../modules/redisjson';
 const client = new Redisjson({
     host: cliArguments.host,
     port: parseInt(cliArguments.port),
-    password: cliArguments.password
+    //password: cliArguments.password
 });
 
 describe('Sanity testing', async function() {
@@ -16,6 +16,8 @@ describe('Sanity testing', async function() {
     })
 
     it('delCommand function', async () => {
+        console.log(await client.set('key', 'value'));
+        console.log(await client.get('key'))
     });
 
     it(' function', async () => {
