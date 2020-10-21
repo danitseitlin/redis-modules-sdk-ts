@@ -30,3 +30,5 @@ jobs:
         run: sudo systemctl status redis
       - name: Redis ping
         run: sudo redis-cli pong
+      - name: Running tests
+        run: npm run test ./tests/redisjson-test.ts -- -- --host=127.0.0.1 --port=6379
