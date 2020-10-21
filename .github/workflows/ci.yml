@@ -31,4 +31,4 @@ jobs:
       - name: Setting up NPM env
         run: npm i
       - name: Running tests
-        run: npm run test ./tests/redisjson-test.ts -- -- --host=127.0.0.1 --port=6379
+        run: npm run tests
