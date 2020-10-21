@@ -28,7 +28,7 @@ jobs:
         run: whoami && ls -l /etc/redis/redis.conf && sudo chown runner /etc/redis/redis.conf && sudo echo "supervised systemd" >> /etc/redis/redis.conf && sudo systemctl restart redis.service
       - name: Redis status
         run: sudo systemctl status redis
-      - name: Redis ping
-        run: sudo redis-cli pong
+      - name: Setting up NPM env
+        run: npm i
       - name: Running tests
         run: npm run test ./tests/redisjson-test.ts -- -- --host=127.0.0.1 --port=6379
