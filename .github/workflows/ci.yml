@@ -20,9 +20,15 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+      - name: Setup Redis
+        run: sudo apt update && sudo apt install make && sudo apt install redis-server
+      - name: Configure Redis
+        run: whoami && ls -l /etc/redis/redis.conf && sudo chown runner /etc/redis/redis.conf && sudo echo "supervised systemd" >> /etc/redis/redis.conf && sudo systemctl restart redis.service
+      - name: Redis status
+        run: sudo systemctl status redis
       - name: Setting up Redis with ReJSON module
         run: sudo git clone https://github.com/RedisJSON/RedisJSON.git && cd RedisJSON && sudo apt-get install build-essential && sudo apt-get install -y cargo && sudo make && ls
       - name: Start Redis Server
-        run: redis-server --loadmodule src/rejson.so
-      - name: Running ReJSON tests
+        run: redis-server stop && redis-server --loadmodule src/rejson.so
+      - name: Running tests
         run: npm i && npm run rejson-module-tests
