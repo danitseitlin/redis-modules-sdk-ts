@@ -33,6 +33,6 @@ jobs:
       #- name: Setting up Redis with ReJSON module
       #  run: git clone --recursive https://github.com/RediSearch/RediSearch.git && cd RediSearch && sudo make setup && make build && sudo systemctl stop redis.service && make run
       - name: Setting up Redis with ReJSON module
-        run: sudo git clone https://github.com/RedisJSON/RedisJSON.git && cd RedisJSON && sudo apt-get install build-essential && sudo make && ls
+        run: sudo git clone https://github.com/RedisJSON/RedisJSON.git && cd RedisJSON && sudo apt-get install build-essential && sudo apt-get install -y cargo && sudo make && ls
       - name: Running ReJSON tests
         run: npm run rejson-module-tests
