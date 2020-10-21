@@ -1,1 +1,1 @@
-export { Redisjson } from './modules/redisjson';
+export { ReJSON } from './modules/rejson';
