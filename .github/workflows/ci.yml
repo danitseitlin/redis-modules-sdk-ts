@@ -22,15 +22,17 @@ jobs:
       - uses: actions/checkout@v2
 
       # Runs a single command using the runners shell
-      - name: Setup Redis
-        run: sudo apt update && sudo apt install make && sudo apt install redis-server
-      - name: Configure Redis
-        run: whoami && ls -l /etc/redis/redis.conf && sudo chown runner /etc/redis/redis.conf && sudo echo "supervised systemd" >> /etc/redis/redis.conf && sudo systemctl restart redis.service
-      - name: Redis status
-        run: sudo systemctl status redis
-      - name: Setting up NPM env
-        run: npm i
+      #- name: Setup Redis
+      #  run: sudo apt update && sudo apt install make && sudo apt install redis-server
+      #- name: Configure Redis
+      #  run: whoami && ls -l /etc/redis/redis.conf && sudo chown runner /etc/redis/redis.conf && sudo echo "supervised systemd" >> /etc/redis/redis.conf && sudo systemctl restart redis.service
+      #- name: Redis status
+      #  run: sudo systemctl status redis
+      #- name: Setting up NPM env
+      #  run: npm i
+      #- name: Setting up Redis with ReJSON module
+      #  run: git clone --recursive https://github.com/RediSearch/RediSearch.git && cd RediSearch && sudo make setup && make build && sudo systemctl stop redis.service && make run
       - name: Setting up Redis with ReJSON module
-        run: git clone --recursive https://github.com/RediSearch/RediSearch.git && cd RediSearch && sudo make setup && make build && sudo systemctl stop redis.service && make run
+        run: git clone --recursive https://github.com/RediSearch/RediSearch.git && cd RediSearch && sudo make setup && make fetch && sudo ./deps/readies/bin/getredis && make run
       - name: Running ReJSON tests
         run: npm run rejson-module-tests
