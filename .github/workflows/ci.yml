@@ -30,5 +30,7 @@ jobs:
         run: sudo systemctl status redis
       - name: Setting up NPM env
         run: npm i
-      - name: Running tests
-        run: npm run tests
+      - name: Setting up Redis with ReJSON module
+        run: git clone --recursive https://github.com/RediSearch/RediSearch.git && sudo make setup && make build && make run
+      - name: Running ReJSON tests
+        run: npm run rejson-module-tests

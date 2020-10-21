@@ -15,7 +15,7 @@ describe('RedisJSON Module testing', async function() {
     })
 
     it('delCommand function', async () => {
-
+        console.log(await client.setCommand('key', '.', "{x: 1}"));
     });
 
     it(' function', async () => {
