@@ -9,7 +9,7 @@ const client = new Redisjson({
 
 describe('Sanity testing', async function() {
     before(async () => {
-        await client.connect();
+        //await client.connect();
     })
     after(async () => {
         client.disconnect();
