@@ -31,6 +31,6 @@ jobs:
       - name: Setting up NPM env
         run: npm i
       - name: Setting up Redis with ReJSON module
-        run: git clone --recursive https://github.com/RediSearch/RediSearch.git && cd RediSearch && sudo make setup && make build && make run
+        run: git clone --recursive https://github.com/RediSearch/RediSearch.git && cd RediSearch && sudo make setup && make build && sudo systemctl stop redis.service && make run
       - name: Running ReJSON tests
         run: npm run rejson-module-tests
