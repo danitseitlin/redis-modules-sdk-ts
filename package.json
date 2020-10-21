@@ -4,7 +4,9 @@
   "description": "A project for all Redis modules client connections and commands",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -r ts-node/register"
+    "test": "mocha -r ts-node/register",
+    "redisjson-module-tests": "npm run test tests/redisjson.ts -- -- --host=127.0.0.1 --port=6379",
+    "tests": "npm run redisjson-module-tests"
   },
   "repository": {
     "type": "git",
