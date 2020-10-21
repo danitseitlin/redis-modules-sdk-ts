@@ -23,7 +23,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Setup Redis
-        run: sudo apt update && sudo apt install redis-server
+        run: sudo apt update && sudo apt install make && sudo apt install redis-server
       - name: Configure Redis
         run: whoami && ls -l /etc/redis/redis.conf && sudo chown runner /etc/redis/redis.conf && sudo echo "supervised systemd" >> /etc/redis/redis.conf && sudo systemctl restart redis.service
       - name: Redis status
@@ -31,6 +31,6 @@ jobs:
       - name: Setting up NPM env
         run: npm i
       - name: Setting up Redis with ReJSON module
-        run: git clone --recursive https://github.com/RediSearch/RediSearch.git && make build && make run
+        run: git clone --recursive https://github.com/RediSearch/RediSearch.git && sudo make setup && make build && make run
       - name: Running ReJSON tests
         run: npm run rejson-module-tests
