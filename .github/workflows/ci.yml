@@ -25,7 +25,7 @@ jobs:
       - name: Setup Redis
         run: sudo apt update && sudo apt install redis-server
       - name: Configure Redis
-        run: ls -l /etc/redis/redis.conf && sudo su - && chown su /etc/redis/redis.conf 777 && sudo echo "supervised systemd" >> /etc/redis/redis.conf && sudo systemctl restart redis.service
+        run: sudo su - && whoami && ls -l /etc/redis/redis.conf && sudo chown su /etc/redis/redis.conf 777 && sudo echo "supervised systemd" >> /etc/redis/redis.conf && sudo systemctl restart redis.service
       - name: Redis status
         run: sudo systemctl status redis
       - name: Redis ping
