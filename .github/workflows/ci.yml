@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Setting up Redis with ReJSON module
         run: sudo git clone https://github.com/RedisJSON/RedisJSON.git && cd RedisJSON && sudo apt-get install build-essential && sudo apt-get install -y cargo && sudo make && ls
-      - name: Setting up NPM env
-        run: npm i
+      - name: Start Redis Server
+        run: redis-server --loadmodule src/rejson.so
       - name: Running ReJSON tests
-        run: npm run rejson-module-tests
+        run: npm i && npm run rejson-module-tests
