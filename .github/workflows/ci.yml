@@ -22,15 +22,15 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      - name: Setup Redis
+      - name: Installing Redis
         run: sudo apt update && sudo apt install make && sudo apt install redis-server
-      - name: Configure Redis
+      - name: Configurating Redis
         run: whoami && ls -l /etc/redis/redis.conf && sudo chown runner /etc/redis/redis.conf && sudo echo "supervised systemd" >> /etc/redis/redis.conf && sudo systemctl restart redis.service
+      - name: Setting up Redis with ReJSON module
+        run: sudo git clone https://github.com/RedisJSON/RedisJSON.git && cd RedisJSON && sudo apt-get install build-essential && sudo apt-get install -y cargo && sudo cargo build --release && cd && sudo chmod -R 777 /etc/ && mkdir /etc/redis/modules/ && mv ./target/release/librejson.so /etc/redis/modules/
+      - name: Start Redis Server
+        run: sudo echo "loadmodule /etc/redis/modules/librejson.so" >> /etc/redis/redis.conf && sudo systemctl stop redis.service
       - name: Redis status
         run: sudo systemctl status redis
-      - name: Setting up Redis with ReJSON module
-        run: sudo git clone https://github.com/RedisJSON/RedisJSON.git && cd RedisJSON && sudo apt-get install build-essential && sudo apt-get install -y cargo && sudo make && cd src/ && ls && sudo chmod -R 777 /etc/ && mkdir /etc/redis/modules/ && mv rejson.so /etc/redis/modules/
-      - name: Start Redis Server
-        run: sudo echo "loadmodule /etc/redis/modules/rejson.so" >> /etc/redis/redis.conf && sudo systemctl stop redis.service
       - name: Running tests
         run: npm i && npm run rejson-module-tests
