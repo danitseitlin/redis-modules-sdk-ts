@@ -27,8 +27,8 @@ jobs:
       - name: Redis status
         run: sudo systemctl status redis
       - name: Setting up Redis with ReJSON module
-        run: sudo git clone https://github.com/RedisJSON/RedisJSON.git && cd RedisJSON && sudo apt-get install build-essential && sudo apt-get install -y cargo && sudo make && ls
+        run: sudo git clone https://github.com/RedisJSON/RedisJSON.git && cd RedisJSON && sudo apt-get install build-essential && sudo apt-get install -y cargo && sudo make && cd src/ && mkdir /etc/redis/modules/ && mv rejson.so /etc/redis/modules/
       - name: Start Redis Server
-        run: sudo systemctl stop redis.service && redis-server --loadmodule src/rejson.so
+        run: sudo echo "loadmodule /etc/redis/modules/rejson.so" >> /etc/redis/redis.conf && sudo systemctl stop redis.service
       - name: Running tests
         run: npm i && npm run rejson-module-tests
