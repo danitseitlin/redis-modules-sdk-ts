@@ -25,12 +25,12 @@ jobs:
       - name: Installing Redis
         run: sudo apt update && sudo apt install make && sudo apt install redis-server
       - name: Configurating Redis
-        run: whoami && ls -l /etc/redis/redis.conf && sudo chown runner /etc/redis/redis.conf && sudo echo "supervised systemd" >> /etc/redis/redis.conf && sudo systemctl restart redis.service
+        run: whoami && ls -l /etc/redis/redis.conf && sudo chown runner /etc/redis/redis.conf && sudo echo "supervised systemd" >> /etc/redis/redis.conf
       - name: Setting up Redis with ReJSON module
         #run: sudo git clone https://github.com/RedisJSON/RedisJSON.git && cd RedisJSON && sudo apt-get install build-essential && sudo apt-get install -y cargo && sudo cargo build --release && cd && sudo chmod -R 777 /etc/ && mkdir /etc/redis/modules/ && cd /target/release/ && ls && mv librejson.so /etc/redis/modules/
         run: sudo git clone https://github.com/RedisJSON/RedisJSON.git && cd RedisJSON && sudo apt-get install build-essential && sudo apt-get install -y cargo && sudo cargo build --release
       - name: Start Redis Server
-        run: sudo echo "loadmodule ./target/release/librejson.so" >> /etc/redis/redis.conf && sudo systemctl start redis.service
+        run: sudo echo "loadmodule ./target/release/librejson.so" >> /etc/redis/redis.conf && sudo systemctl restart redis.service
       - name: Redis status
         run: sudo systemctl status redis
       - name: Running tests
