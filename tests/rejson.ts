@@ -10,7 +10,7 @@ describe('RedisJSON Module testing', async function() {
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });
-        await client.connect();
+        //await client.connect();
     })
     after(async () => {
         client.disconnect();

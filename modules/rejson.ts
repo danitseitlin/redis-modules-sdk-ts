@@ -4,7 +4,6 @@ import * as Redis from 'ioredis';
 export class ReJSON extends Redis {
     constructor(options: Redis.RedisOptions) {
         super(options)
-        this.disconnect();
     }
 
     /**
