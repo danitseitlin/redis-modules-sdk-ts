@@ -27,7 +27,7 @@ jobs:
       - name: Configurating Redis
         run: whoami && ls -l /etc/redis/redis.conf && sudo chown runner /etc/redis/redis.conf && sudo echo "supervised systemd" >> /etc/redis/redis.conf
       - name: Setting up Redis with ReJSON module
-        run: sudo git clone https://github.com/RedisJSON/RedisJSON.git && cd RedisJSON && sudo cargo build --release && pwd && ls && sudo chmod -R 777 /etc/ && mkdir /etc/redis/modules/ && cd target && ls && mv librejson.so /etc/redis/modules/
+        run: sudo git clone https://github.com/RedisJSON/RedisJSON.git && cd RedisJSON && sudo cargo build --release && pwd && sudo chmod -R 777 /etc/ && mkdir /etc/redis/modules/ && cd target/release && ls && mv librejson.so /etc/redis/modules/
         #run: sudo git clone https://github.com/RedisJSON/RedisJSON.git && cd RedisJSON && sudo apt-get install build-essential && sudo apt-get install -y cargo && sudo cargo build --release
       - name: Start Redis Server
         run: sudo echo "loadmodule /etc/redis/modules/librejson.so" >> /etc/redis/redis.conf && sudo /etc/init.d/redis-server stop sudo /etc/init.d/redis-server start
