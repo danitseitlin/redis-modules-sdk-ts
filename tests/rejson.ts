@@ -1,6 +1,7 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { ReJSON } from '../modules/rejson';
+import { createPublicKey } from 'crypto';
 let client: ReJSON;
 
 describe('RedisJSON Module testing', async function() {
@@ -9,6 +10,7 @@ describe('RedisJSON Module testing', async function() {
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });
+        await client.connect();
     })
     after(async () => {
         client.disconnect();
