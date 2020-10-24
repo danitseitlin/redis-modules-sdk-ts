@@ -98,7 +98,7 @@ describe('RedisJSON Module testing', async function() {
     
     it('objkeysCommand function', async () => {
         const response = await client.objkeysCommand(key1, path);
-        expect(response).to.equal("[ 'x', 'str' ]", 'The response of the objkeys command');
+        expect(response).to.equal([ 'x', 'str' ], 'The response of the objkeys command');
     });
     
     it('objlenCommand function', async () => {
@@ -118,7 +118,7 @@ describe('RedisJSON Module testing', async function() {
     
     it('respCommand function', async () => {
         const response = await client.respCommand(key1, path)
-        expect(response).to.equal("[ '{', 'x', 9, 'str', 'yyrrr' ]", 'The response of the resp command');
+        expect(response).to.equal([ '{', 'x', 9, 'str', 'yyrrr' ], 'The response of the resp command');
     });
 
     it('delCommand function', async () => {
