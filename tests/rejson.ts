@@ -35,7 +35,8 @@ describe('RedisJSON Module testing', async function() {
     
     it('mgetCommand function', async () => {
         const response = await client.mgetCommand([key1, key2], path);
-        expect(response).to.equal('[ \'{"x":1,"str":"yy"}\', \'{"x":3}\' ]', 'The response of the mget command');
+        expect(response).to.contain('{"x":1,"str":"yy"}', 'The response of the mget command');
+        expect(response).to.contain('{"x":3}', 'The response of the mget command');
     });
     
     it('typeCommand function', async () => {
@@ -45,19 +46,19 @@ describe('RedisJSON Module testing', async function() {
     
     it('numincrbyCommand function', async () => {
         const response = await client.numincrbyCommand(key1, 2, '.x');
-        expect(response).to.equal(3, 'The response of the numincrby command')
+        expect(response).to.equal('3', 'The response of the numincrby command')
     });
     
     it('nummultbyCommand function', async () => {
         const response = await client.nummultbyCommand(key1, 3, '.x');
-        expect(response).to.equal(9, 'The response of the nummultby command')
+        expect(response).to.equal('9', 'The response of the nummultby command')
     });
     
     it('strappendCommand function', async () => {
         const response = await client.strappendCommand(key1, '"rrr"', '.str');
         expect(response).to.equal(5, 'The response of the strappend command');
         const string = await client.getCommand(key1, '.str');
-        expect(string).to.equal('yyrrr', 'The response of the get command');
+        expect(string).to.equal('"yyrrr"', 'The response of the get command');
     });
     
     it('strlenCommand function', async () => {
@@ -87,7 +88,7 @@ describe('RedisJSON Module testing', async function() {
     
     it('arrpopCommand function', async () => {
         const response = await client.arrpopCommand(key3, 0, '.items');
-        expect(response).to.equal(1, 'The response of the arrpop command');
+        expect(response).to.equal('1', 'The response of the arrpop command');
     });
     
     it('arrtrimCommand function', async () => {
@@ -97,7 +98,7 @@ describe('RedisJSON Module testing', async function() {
     
     it('objkeysCommand function', async () => {
         const response = await client.objkeysCommand(key1, path);
-        expect(response).to.equal('\[ \'x\', \'str\' ]', 'The response of the objkeys command');
+        expect(response).to.equal("[ 'x', 'str' ]", 'The response of the objkeys command');
     });
     
     it('objlenCommand function', async () => {
@@ -117,7 +118,7 @@ describe('RedisJSON Module testing', async function() {
     
     it('respCommand function', async () => {
         const response = await client.respCommand(key1, path)
-        expect(response).to.equal('\[ \'{\', \'x\', 9, \'str\', \'yyrrr\' ]', 'The response of the resp command');
+        expect(response).to.equal("[ '{', 'x', 9, 'str', 'yyrrr' ]", 'The response of the resp command');
     });
 
     it('delCommand function', async () => {
