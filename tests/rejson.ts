@@ -19,19 +19,23 @@ describe('RedisJSON Module testing', async function() {
     })
 
     it('setCommand function', async () => {
-        console.log(await client.setCommand(key1, path, '{"x": 1, "str": "yy"}'));
-        console.log(await client.setCommand(key2, path, '{"x": 3}'));
-        console.log(await client.setCommand(key3, path, '{"items": [1]}'));
+        let response = await client.setCommand(key1, path, '{"x": 1, "str": "yy"}');
+        expect(response).to.equal('OK', 'The response of the set command');
+        response = await client.setCommand(key2, path, '{"x": 3}');
+        expect(response).to.equal('OK', 'The response of the set command');
+        response = await client.setCommand(key3, path, '{"items": [1]}');
+        expect(response).to.equal('OK', 'The response of the set command');
     });
 
     it('getCommand function', async () => {
-        console.log(await client.getCommand(key1, path))
+        const response = await client.getCommand(key1, path);
+        expect(response).to.equal('{"x":1,"str":"yy"}', 'The response of the get command');
     });
 
     
     it('mgetCommand function', async () => {
-        
-        console.log(await client.mgetCommand([key1, key2], path));
+        const response = await client.mgetCommand([key1, key2], path);
+        expect(response).to.equal('[ \'{"x":1,"str":"yy"}\', \'{"x":3}\' ]');
     });
     
     it('typeCommand function', async () => {
