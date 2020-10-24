@@ -1,7 +1,6 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { ReJSON } from '../modules/rejson';
-import { createPublicKey } from 'crypto';
 let client: ReJSON;
 const key1 = 'key1';
 const key2 = 'key2';
@@ -20,7 +19,7 @@ describe('RedisJSON Module testing', async function() {
     })
 
     it('setCommand function', async () => {
-        console.log(await client.setCommand(key1, path, '{"x": 1}'));
+        console.log(await client.setCommand(key1, path, '{"x": 1, "str: "yy"}'));
         console.log(await client.setCommand(key2, path, '{"x": 3}'));
         console.log(await client.setCommand(key3, path, '{"items": [1]}'));
     });
@@ -48,11 +47,11 @@ describe('RedisJSON Module testing', async function() {
     });
     
     it('strappendCommand function', async () => {
-        console.log(await client.strappendCommand(key1, 'rrr', '.x'));
+        console.log(await client.strappendCommand(key1, 'rrr', '.str'));
     });
     
     it('strlenCommand function', async () => {
-        console.log(await client.strlenCommand(key1, '.x'))
+        console.log(await client.strlenCommand(key1, '.str'))
     });
     
     it('arrappendCommand function', async () => {

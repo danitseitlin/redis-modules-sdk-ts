@@ -2,6 +2,10 @@
 import * as Redis from 'ioredis';
 
 export class ReJSON extends Redis {
+    /**
+     * Initializing the 
+     * @param options 
+     */
     constructor(options: Redis.RedisOptions) {
         super(options)
     }
