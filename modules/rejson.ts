@@ -74,10 +74,10 @@ export class ReJSON extends Redis {
      * @param number 
      * @param path 
      */
-    async numincrbyCommand(key: string, number: string, path?: string): Promise<string> {
+    async numincrbyCommand(key: string, number: number, path?: string): Promise<string> {
         const args = [key];
         if(path !== undefined) args.push(path);
-        args.push(number)
+        args.push(number.toString())
         return await this.send_command('JSON.NUMINCRBY', args)
     }
 
@@ -87,10 +87,10 @@ export class ReJSON extends Redis {
      * @param number 
      * @param path 
      */
-    async nummultbyCommand(key: string, number: string, path?: string): Promise<string> {
+    async nummultbyCommand(key: string, number: number, path?: string): Promise<string> {
         const args = [key];
         if(path !== undefined) args.push(path);
-        args.push(number)
+        args.push(number.toString())
         return await this.send_command('JSON.NUMMULTBY', args)
     }
 
