@@ -3,8 +3,8 @@ import * as Redis from 'ioredis';
 
 export class ReJSON extends Redis {
     /**
-     * Initializing the 
-     * @param options 
+     * Initializing the ReJSON object. Initialization starts an active connection to the Redis database
+     * @param options The options of the Redis database.
      */
     constructor(options: Redis.RedisOptions) {
         super(options)
@@ -37,10 +37,10 @@ export class ReJSON extends Redis {
      * Retrieving a JSON key
      * @param key The name of the key
      * @param path The path of the key.
-     * @param parameters 
+     * @param parameters Additional parameters to arrange the returned values
      * @returns Return the value at path in JSON serialized form.
      */
-    async getCommand(key: string, path?: string, parameters?: getCommandParameters): Promise<string>{
+    async getCommand(key: string, path?: string, parameters?: GetCommandParameters): Promise<string>{
         const args = [key];
         for(const parameter in parameters) {
             const name = parameter.toUpperCase();
@@ -66,7 +66,7 @@ export class ReJSON extends Redis {
     }
 
     /**
-     * 
+     * Retrieving the type of a JSON key
      * @param key The name of the key
      * @param path The path of the key.
      */
@@ -77,9 +77,9 @@ export class ReJSON extends Redis {
     }
 
     /**
-     * 
+     * Increasing JSON key value by number
      * @param key The name of the key
-     * @param number 
+     * @param number The number to increase by
      * @param path The path of the key.
      */
     async numincrbyCommand(key: string, number: number, path?: string): Promise<string> {
@@ -90,9 +90,9 @@ export class ReJSON extends Redis {
     }
 
     /**
-     * 
+     * Multiplying JSON key value by number
      * @param key The name of the key
-     * @param number 
+     * @param number The number to multiply by
      * @param path The path of the key.
      */
     async nummultbyCommand(key: string, number: number, path?: string): Promise<string> {
@@ -103,9 +103,9 @@ export class ReJSON extends Redis {
     }
 
     /**
-     * 
+     * Appending string to JSON key string value
      * @param key The name of the key
-     * @param jsonString 
+     * @param string The string to append to key value 
      * @param path The path of the key.
      */
     async strappendCommand(key: string, string: string, path?: string): Promise<string> {
@@ -115,7 +115,7 @@ export class ReJSON extends Redis {
     }
 
     /**
-     * 
+     * Retrieving the length of a JSON key value
      * @param key The name of the key
      * @param path The path of the key.
      */
@@ -126,21 +126,21 @@ export class ReJSON extends Redis {
     }
 
     /**
-     * 
+     * Appending string to JSON key array value
      * @param key The name of the key
-     * @param items 
+     * @param items The items to append to an existing JSON array
      * @param path The path of the key.
      */
-    async arrappendCommand(key: string, items: any[], path?: string): Promise<number> {
+    async arrappendCommand(key: string, items: string[], path?: string): Promise<number> {
         const args = [key];
         if(path !== undefined) args.push(path);
         return await this.send_command('JSON.ARRAPPEND', args.concat(items));
     }
 
     /**
-     * 
+     * Retrieving JSON key array item by index
      * @param key The name of the key
-     * @param scalar 
+     * @param scalar The scalar to filter out a JSON key
      * @param path The path of the key.
      */
     async arrindexCommand(key: string, scalar: string, path?: string): Promise<number> {
@@ -151,10 +151,10 @@ export class ReJSON extends Redis {
     }
     
     /**
-     * 
+     * Inserting item into JSON key array
      * @param key The name of the key
-     * @param index 
-     * @param json 
+     * @param index The index to insert the JSON into the array
+     * @param json The JSON string to insert into the array
      * @param path The path of the key.
      */
     async arrinsertCommand(key: string, index: number, json: string, path?: string): Promise<number> {
@@ -166,7 +166,7 @@ export class ReJSON extends Redis {
     }
 
     /**
-     * 
+     * Retrieving the length of a JSON key array
      * @param key The name of the key
      * @param path The path of the key.
      */
@@ -177,9 +177,9 @@ export class ReJSON extends Redis {
     }
 
     /**
-     * 
+     * Poping an array item by index
      * @param key The name of the key
-     * @param index 
+     * @param index The index of the array item to pop
      * @param path The path of the key.
      */
     async arrpopCommand(key: string, index: number, path?: string): Promise<string> {
@@ -190,22 +190,22 @@ export class ReJSON extends Redis {
     }
 
     /**
-     * 
+     * Triming an array by index range
      * @param key The name of the key
-     * @param start 
-     * @param stop 
+     * @param start The starting index of the trim
+     * @param end The ending index of the trim
      * @param path The path of the key.
      */
-    async arrtrimCommand(key: string, start: number, stop: number, path?: string): Promise<string> {
+    async arrtrimCommand(key: string, start: number, end: number, path?: string): Promise<string> {
         const args = [key];
         if(path !== undefined) args.push(path);
         args.push(start.toString());
-        args.push(stop.toString());
+        args.push(end.toString());
         return await this.send_command('JSON.ARRTRIM', args);
     }
 
     /**
-     * 
+     * Retrieving an array of JSON keys
      * @param key The name of the key
      * @param path The path of the key.
      */
@@ -216,7 +216,7 @@ export class ReJSON extends Redis {
     }
 
     /**
-     * 
+     * Retrieving the length of a JSON
      * @param key The name of the key
      * @param path The path of the key.
      */
@@ -227,8 +227,8 @@ export class ReJSON extends Redis {
     }
 
     /**
-     * 
-     * @param subcommand 
+     * Executing debug command
+     * @param subcommand The subcommand of the debug command
      * @param key The name of the key
      * @param path The path of the key.
      */
@@ -242,7 +242,7 @@ export class ReJSON extends Redis {
     }
 
     /**
-     * 
+     * An alias of delCommand
      * @param key The name of the key
      * @param path The path of the key.
      */
@@ -253,7 +253,7 @@ export class ReJSON extends Redis {
     }
 
     /**
-     * 
+     * Retrieving a JSON key value in RESP protocol
      * @param key The name of the key
      * @param path The path of the key.
      */
@@ -265,9 +265,13 @@ export class ReJSON extends Redis {
 }
 
 /**
- * 
+ * The get command additional parameters
+ * @param indent Sets the indentation string for nested levels
+ * @param newline Sets the string that's printed at the end of each line
+ * @param space Sets the string that's put between a key and a value 
+ * @param noescape Will disable the sending of \uXXXX escapes for non-ascii characters
  */
-export type getCommandParameters = {
+export type GetCommandParameters = {
     indent?: string,
     newline?: string,
     space?: string,

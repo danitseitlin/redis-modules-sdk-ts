@@ -67,7 +67,7 @@ describe('RedisJSON Module testing', async function() {
     });
     
     it('arrappendCommand function', async () => {
-        const response = await client.arrappendCommand(key3, [3,5,4,2], '.items');
+        const response = await client.arrappendCommand(key3, ['3','5','4','2'], '.items');
         expect(response).to.equal(5, 'The response of the arrappend command');
     });
     
