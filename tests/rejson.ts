@@ -5,6 +5,7 @@ import { createPublicKey } from 'crypto';
 let client: ReJSON;
 const key1 = 'key1';
 const key2 = 'key2';
+const key3 = 'arrkey';
 const path = '.';
 
 describe('RedisJSON Module testing', async function() {
@@ -20,6 +21,8 @@ describe('RedisJSON Module testing', async function() {
 
     it('setCommand function', async () => {
         console.log(await client.setCommand(key1, path, '{"x": 1}'));
+        console.log(await client.setCommand(key2, path, '{"x": 3}'));
+        console.log(await client.setCommand(key3, path, '{"items": [1]}'));
     });
 
     it('getCommand function', async () => {
@@ -28,7 +31,7 @@ describe('RedisJSON Module testing', async function() {
 
     
     it('mgetCommand function', async () => {
-        console.log(await client.setCommand(key2, path, '{"x": 3}'));
+        
         console.log(await client.mgetCommand([key1, key2], path));
     });
     
@@ -37,43 +40,43 @@ describe('RedisJSON Module testing', async function() {
     });
     
     it('numincrbyCommand function', async () => {
-        console.log(await client.numincrbyCommand(key1, 1, path));
+        console.log(await client.numincrbyCommand(key1, 2, '.x'));
     });
     
     it('nummultbyCommand function', async () => {
-        console.log(await client.nummultbyCommand(key1, 1, path));
+        console.log(await client.nummultbyCommand(key1, 3, '.x'));
     });
     
     it('strappendCommand function', async () => {
-        console.log(await client.strappendCommand(key1, ',{"y": 2}', path));
+        console.log(await client.strappendCommand(key1, 'rrr', '.x'));
     });
     
     it('strlenCommand function', async () => {
-        console.log(await client.strlenCommand(key1, path))
+        console.log(await client.strlenCommand(key1, '.x'))
     });
     
     it('arrappendCommand function', async () => {
-        console.log(await client.arrappendCommand(key1, '{"y": 6}', path))
+        console.log(await client.arrappendCommand(key3, [3,5,4,2], '.items'))
     });
     
     it('arrindexCommand function', async () => {
-        console.log(await client.arrindexCommand(key1, 'y', path));
+        console.log(await client.arrindexCommand(key3, '1', '.items'));
     });
     
     it('arrinsertCommand function', async () => {
-        console.log(await client.arrinsertCommand(key1, 1, '{"z": 5}', path));
+        console.log(await client.arrinsertCommand(key3, 1, '{"z": 5}', '.items'));
     });
     
     it('arrlenCommand function', async () => {
-        console.log(await client.arrlenCommand(key1, '.'));
+        console.log(await client.arrlenCommand(key3, '.items'));
     });
     
     it('arrpopCommand function', async () => {
-        console.log(await client.arrpopCommand(key1, 0, path));
+        console.log(await client.arrpopCommand(key3, 0, '.items'));
     });
     
     it('arrtrimCommand function', async () => {
-        console.log(await client.arrtrimCommand(key1, 0, 1, path));
+        console.log(await client.arrtrimCommand(key3, 0, 1, '.items'));
     });
     
     it('objkeysCommand function', async () => {
@@ -97,6 +100,6 @@ describe('RedisJSON Module testing', async function() {
     });
 
     it('delCommand function', async () => {
-        console.log(client.delCommand(key1, path));
+        console.log(await client.delCommand(key1, path));
     });
 });
