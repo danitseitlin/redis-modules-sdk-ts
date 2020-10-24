@@ -19,7 +19,7 @@ describe('RedisJSON Module testing', async function() {
     })
 
     it('setCommand function', async () => {
-        console.log(await client.setCommand(key1, path, '{"x": 1, "str: "yy"}'));
+        console.log(await client.setCommand(key1, path, '{"x": 1, "str": "yy"}'));
         console.log(await client.setCommand(key2, path, '{"x": 3}'));
         console.log(await client.setCommand(key3, path, '{"items": [1]}'));
     });
