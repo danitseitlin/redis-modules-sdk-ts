@@ -108,11 +108,10 @@ export class ReJSON extends Redis {
      * @param jsonString 
      * @param path The path of the key.
      */
-    async strappendCommand(key: string, jsonString: string, path?: string): Promise<string> {
+    async strappendCommand(key: string, string: string, path?: string): Promise<string> {
         const args = [key];
         if(path !== undefined) args.push(path);
-        args.push(jsonString);
-        return await this.send_command('JSON.STRAPPEND', args);
+        return await this.send_command('JSON.STRAPPEND', args.concat(string));
     }
 
     /**

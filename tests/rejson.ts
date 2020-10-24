@@ -47,7 +47,7 @@ describe('RedisJSON Module testing', async function() {
     });
     
     it('strappendCommand function', async () => {
-        console.log(await client.strappendCommand(key1, 'rrr', '.str'));
+        console.log(await client.strappendCommand(key1, '"rrr"', '.str'));
     });
     
     it('strlenCommand function', async () => {
