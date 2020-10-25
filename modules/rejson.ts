@@ -13,8 +13,8 @@ export class ReJSON extends Redis {
     /**
      * Deleting a JSON key
      * @param key The name of the key
-     * @param path The path of the key. defaults to root if not provided. Non-existing keys and paths are ignored. Deleting an object's root is equivalent to deleting the key from Redis.
-     * @returns The number of parths deleted (0 or 1).
+     * @param path The path of the key defaults to root if not provided. Non-existing keys and paths are ignored. Deleting an object's root is equivalent to deleting the key from Redis.
+     * @returns The number of paths deleted (0 or 1).
      */
     async delCommand(key: string, path?: string): Promise<number> {
         const parameters = [key];
@@ -25,9 +25,9 @@ export class ReJSON extends Redis {
     /**
      * Setting a new JSON key
      * @param key The name of the key
-     * @param path The path of the key.
-     * @param json The JSON string of the key. i.e. '{"x": 4}'
-     * @returns "OK"
+     * @param path The path of the key
+     * @param json The JSON string of the key i.e. '{"x": 4}'
+     * @returns Simple String OK if executed correctly, or Null Bulk if the specified NX or XX conditions were not met. 
      */
     async setCommand(key: string, path: string, json: string): Promise<"OK"> {
         return await this.send_command('JSON.SET', [key, path, json])
@@ -36,9 +36,9 @@ export class ReJSON extends Redis {
     /**
      * Retrieving a JSON key
      * @param key The name of the key
-     * @param path The path of the key.
+     * @param path The path of the key
      * @param parameters Additional parameters to arrange the returned values
-     * @returns Return the value at path in JSON serialized form.
+     * @returns The value at path in JSON serialized form.
      */
     async getCommand(key: string, path?: string, parameters?: GetCommandParameters): Promise<string>{
         const args = [key];
@@ -57,7 +57,7 @@ export class ReJSON extends Redis {
      * Retrieving values from multiple keys
      * @param keys A list of keys
      * @param path The path of the keys
-     * @returns Returns the values at path from multiple key's. Non-existing keys and non-existing paths are reported as null.
+     * @returns The values at path from multiple key's. Non-existing keys and non-existing paths are reported as null.
      */
     async mgetCommand(keys: string[], path?: string): Promise<string[]> {
         const args = keys;
@@ -68,7 +68,8 @@ export class ReJSON extends Redis {
     /**
      * Retrieving the type of a JSON key
      * @param key The name of the key
-     * @param path The path of the key.
+     * @param path The path of the key
+     * @returns Simple String, specifically the type of value. 
      */
     async typeCommand(key: string, path?: string): Promise<string> {
         const args = [key];
@@ -80,7 +81,8 @@ export class ReJSON extends Redis {
      * Increasing JSON key value by number
      * @param key The name of the key
      * @param number The number to increase by
-     * @param path The path of the key.
+     * @param path The path of the key
+     * @returns Bulk String, specifically the stringified new value.
      */
     async numincrbyCommand(key: string, number: number, path?: string): Promise<string> {
         const args = [key];
@@ -93,7 +95,8 @@ export class ReJSON extends Redis {
      * Multiplying JSON key value by number
      * @param key The name of the key
      * @param number The number to multiply by
-     * @param path The path of the key.
+     * @param path The path of the key
+     * @returns Bulk String, specifically the stringified new value. 
      */
     async nummultbyCommand(key: string, number: number, path?: string): Promise<string> {
         const args = [key];
@@ -106,7 +109,8 @@ export class ReJSON extends Redis {
      * Appending string to JSON key string value
      * @param key The name of the key
      * @param string The string to append to key value 
-     * @param path The path of the key.
+     * @param path The path of the key
+     * @returns Integer, specifically the string's new length.
      */
     async strappendCommand(key: string, string: string, path?: string): Promise<string> {
         const args = [key];
@@ -117,7 +121,8 @@ export class ReJSON extends Redis {
     /**
      * Retrieving the length of a JSON key value
      * @param key The name of the key
-     * @param path The path of the key.
+     * @param path The path of the key
+     * @returns Integer, specifically the string's length. 
      */
     async strlenCommand(key: string, path?: string): Promise<number | null> {
         const args = [key];
@@ -129,7 +134,8 @@ export class ReJSON extends Redis {
      * Appending string to JSON key array value
      * @param key The name of the key
      * @param items The items to append to an existing JSON array
-     * @param path The path of the key.
+     * @param path The path of the key
+     * @returns Integer, specifically the array's new size.
      */
     async arrappendCommand(key: string, items: string[], path?: string): Promise<number> {
         const args = [key];
@@ -141,7 +147,8 @@ export class ReJSON extends Redis {
      * Retrieving JSON key array item by index
      * @param key The name of the key
      * @param scalar The scalar to filter out a JSON key
-     * @param path The path of the key.
+     * @param path The path of the key
+     * @returns Integer, specifically the position of the scalar value in the array, or -1 if unfound. 
      */
     async arrindexCommand(key: string, scalar: string, path?: string): Promise<number> {
         const args = [key];
@@ -155,7 +162,8 @@ export class ReJSON extends Redis {
      * @param key The name of the key
      * @param index The index to insert the JSON into the array
      * @param json The JSON string to insert into the array
-     * @param path The path of the key.
+     * @param path The path of the key
+     * @returns Integer, specifically the array's new size.
      */
     async arrinsertCommand(key: string, index: number, json: string, path?: string): Promise<number> {
         const args = [key];
@@ -168,7 +176,8 @@ export class ReJSON extends Redis {
     /**
      * Retrieving the length of a JSON key array
      * @param key The name of the key
-     * @param path The path of the key.
+     * @param path The path of the key
+     * @returns Integer, specifically the array's length. 
      */
     async arrlenCommand(key: string, path?: string): Promise<number> {
         const args = [key];
@@ -180,7 +189,8 @@ export class ReJSON extends Redis {
      * Poping an array item by index
      * @param key The name of the key
      * @param index The index of the array item to pop
-     * @param path The path of the key.
+     * @param path The path of the key
+     * @returns Bulk String, specifically the popped JSON value.
      */
     async arrpopCommand(key: string, index: number, path?: string): Promise<string> {
         const args = [key];
@@ -194,7 +204,8 @@ export class ReJSON extends Redis {
      * @param key The name of the key
      * @param start The starting index of the trim
      * @param end The ending index of the trim
-     * @param path The path of the key.
+     * @param path The path of the key
+     * @returns Integer, specifically the array's new size. 
      */
     async arrtrimCommand(key: string, start: number, end: number, path?: string): Promise<string> {
         const args = [key];
@@ -207,7 +218,8 @@ export class ReJSON extends Redis {
     /**
      * Retrieving an array of JSON keys
      * @param key The name of the key
-     * @param path The path of the key.
+     * @param path The path of the key
+     * @returns Array, specifically the key names in the object as Bulk Strings. 
      */
     async objkeysCommand(key: string, path?: string): Promise<string[]> {
         const args = [key];
@@ -218,7 +230,8 @@ export class ReJSON extends Redis {
     /**
      * Retrieving the length of a JSON
      * @param key The name of the key
-     * @param path The path of the key.
+     * @param path The path of the key
+     * @returns Integer, specifically the number of keys in the object.
      */
     async objlenCommand(key: string, path?: string): Promise<number> {
         const args = [key];
@@ -230,7 +243,10 @@ export class ReJSON extends Redis {
      * Executing debug command
      * @param subcommand The subcommand of the debug command
      * @param key The name of the key
-     * @param path The path of the key.
+     * @param path The path of the key
+     * @returns 
+        MEMORY returns an integer, specifically the size in bytes of the value
+        HELP returns an array, specifically with the help message
      */
     async debugCommand(subcommand: 'MEMORY' | 'HELP', key?: string, path?: string): Promise<string[] | number> {
         const args: string[] = [subcommand];
@@ -244,7 +260,8 @@ export class ReJSON extends Redis {
     /**
      * An alias of delCommand
      * @param key The name of the key
-     * @param path The path of the key.
+     * @param path The path of the key
+     * @returns The number of paths deleted (0 or 1).
      */
     async forgetCommand(key: string, path?: string): Promise<number> {
         const parameters = [key];
@@ -255,7 +272,8 @@ export class ReJSON extends Redis {
     /**
      * Retrieving a JSON key value in RESP protocol
      * @param key The name of the key
-     * @param path The path of the key.
+     * @param path The path of the key
+     * @returns Array, specifically the JSON's RESP form as detailed. 
      */
     async respCommand(key: string, path?: string): Promise<string[]> {
         const parameters = [key];

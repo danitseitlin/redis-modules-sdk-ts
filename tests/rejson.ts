@@ -31,7 +31,6 @@ describe('RedisJSON Module testing', async function() {
         const response = await client.getCommand(key1, path);
         expect(response).to.equal('{"x":1,"str":"yy"}', 'The response of the get command');
     });
-
     
     it('mgetCommand function', async () => {
         const response = await client.mgetCommand([key1, key2], path);
