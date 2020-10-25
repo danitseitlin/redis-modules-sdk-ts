@@ -1,5 +1,5 @@
-# redis-modules
-A project for all Redis modules client connections and commands
+# Redis modules project
+A project meant for connecting to Redis databases with modules easily, built with Typescript.
 
 ## ReJSON module
 ### Quick start
