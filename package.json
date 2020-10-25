@@ -6,7 +6,9 @@
   "scripts": {
     "test": "mocha -r ts-node/register",
     "rejson-module-tests": "npm run test tests/rejson.ts -- -- --host=127.0.0.1 --port=6379",
-    "tests": "npm run rejson-module-tests"
+    "tests": "npm run rejson-module-tests",
+    "pre-deploy": "npm run tests && npm run build",
+    "deploy": "npm-deploy redis-modules"
   },
   "repository": {
     "type": "git",
@@ -26,6 +28,7 @@
     "chai": "^4.2.0",
     "cli-argument-parser": "^0.3.4",
     "mocha": "^8.2.0",
+    "npm-package-deployer": "^0.2.9",
     "ts-node": "^9.0.0",
     "typescript": "^4.0.3"
   },

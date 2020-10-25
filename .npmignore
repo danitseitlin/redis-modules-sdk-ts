@@ -1,0 +1,8 @@
+.github
+node_modules
+tests
+**/tests/*.ts
+**/tests/*.js
+package-lock.json
+index.ts
+tsconfig.json
