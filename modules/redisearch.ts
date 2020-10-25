@@ -165,6 +165,24 @@ export class RediSearch extends Redis {
                 }
             }
         }
+        if(parameters.slop !== undefined)
+            args.concat(['SLOP', parameters.slop.toString()])
+        if(parameters.inOrder !== undefined)
+            args.push('INORDER')
+        if(parameters.language !== undefined)
+            args.concat(['LANGUAGE', parameters.language])
+        if(parameters.expander !== undefined)
+            args.concat(['EXPANDER', parameters.expander])
+        if(parameters.scorer !== undefined)
+            args.concat(['SCORER', parameters.scorer])
+        if(parameters.explainScore !== undefined)
+            args.push('EXPLAINSCORE')
+        if(parameters.payload)
+            args.concat(['PAYLOAD', parameters.payload])
+        if(parameters.sortBy !== undefined)
+            args.concat(['SORTBY', parameters.sortBy.field, parameters.sortBy.sort])
+        if(parameters.limit !== undefined)
+            args.concat(['LIMIT', parameters.limit.first.toString(), parameters.limit.num.toString()])
     }
 }
 
@@ -266,7 +284,7 @@ export type SearchParameters = {
     expander?: string,
     scorer?: string,
     explainScore?: boolean,
-    payload?: boolean,
+    payload?: string,
     sortBy?: {
         field: string,
         sort: 'ASC' | 'DESC'
