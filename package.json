@@ -4,6 +4,7 @@
   "description": "A project for all Redis modules client connections and commands",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "test": "mocha -r ts-node/register",
     "rejson-module-tests": "npm run test tests/rejson.ts -- -- --host=127.0.0.1 --port=6379",
     "tests": "npm run rejson-module-tests",
