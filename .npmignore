@@ -1,6 +1,6 @@
 .github
 node_modules
-modules
+modules/**
 tests
 **/tests/*.ts
 **/tests/*.js
