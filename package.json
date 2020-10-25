@@ -1,5 +1,5 @@
 {
-  "name": "redis-modules",
+  "name": "redis-modules-cli",
   "version": "0.0.1",
   "description": "A project for all Redis modules client connections and commands",
   "main": "index.js",
@@ -9,7 +9,7 @@
     "rejson-module-tests": "npm run test tests/rejson.ts -- -- --host=127.0.0.1 --port=6379",
     "tests": "npm run rejson-module-tests",
     "pre-deploy": "npm run tests && npm run build",
-    "deploy": "npm-deploy redis-modules"
+    "deploy": "npm-deploy redis-modules-cli"
   },
   "repository": {
     "type": "git",
