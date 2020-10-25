@@ -183,7 +183,29 @@ export class RediSearch extends Redis {
             args.concat(['SORTBY', parameters.sortBy.field, parameters.sortBy.sort])
         if(parameters.limit !== undefined)
             args.concat(['LIMIT', parameters.limit.first.toString(), parameters.limit.num.toString()])
+        return await this.send_command('FT.SEARCH', args);
     }
+
+    async aggregateCommand() {}
+    async explainCommand() {}
+    async explainCLICommand() {}
+    async alterCommand() {}
+    async dropindexCommand() {}
+    async aliasaddCommand() {}
+    async aliasupdateCommand() {}
+    async aliasdelCommand() {}
+    async sugaddCommand() {}
+    async suggetCommand() {}
+    async sugdelCommand() {}
+    async suglenCommand() {}
+    async synupdateCommand() {}
+    async syndumpCommand() {}
+    async spellcheckCommand() {}
+    async dictaddCommand() {}
+    async dictdelCommand() {}
+    async dictdumpCommand() {}
+    async infoCommand() {}
+    async configCommand() {}
 }
 
 export type CreateParameters = {
