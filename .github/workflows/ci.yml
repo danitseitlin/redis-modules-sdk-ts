@@ -10,8 +10,8 @@ on:
     branches: [master]
   pull_request: 
     paths:
-    - 'modules/rejson.ts'
-    - 'tests/rejson.ts'  
+    - '**/rejson.ts'
+    - '**/rejson.ts'
     branches: [master]
 
 
