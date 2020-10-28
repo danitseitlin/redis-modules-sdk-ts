@@ -291,17 +291,56 @@ export class RediSearch {
     async tagvalgs(index: string, field: string) {
         return await this.redis.send_command('FT.TAGVALS', [index, field]);
     }
-    async sugadd() {}
-    async sugget() {}
-    async sugdel() {}
-    async suglen() {}
-    async synupdate() {}
-    async syndump() {}
-    async spellcheck() {}
-    async dictadd() {}
-    async dictdel() {}
-    async dictdump() {}
-    async info() {}
+    async sugadd(key: string, string: string, score: number, options: SugAddParameters) {
+        const args = [key, string, score];
+        if(options.incr !== undefined)
+            args.push('INCR');
+        if(options.payload !== undefined)
+            args.concat(['PAYLOAD', options.payload]);
+        return await this.redis.send_command('FT.SUGADD', args);
+    }
+    async sugget(key: string, prefix: string, options: SugGetParameters) {
+        const args = [key, prefix];
+        if(options.fuzzy !== undefined)
+            args.push('FUZZY');
+        if(options.max !== undefined)   
+            args.concat(['MAX', options.max.toString()]);
+        if(options.withScores !== undefined)
+            args.push('WITHSCORES');
+        if(options.withPayloads !== undefined)
+            args.push('WITHPAYLOADS');
+        return await this.redis.send_command('FT.SUGGET', args);
+    }
+    async sugdel(key: string, string: string) {
+        return await this.redis.send_command('FT.SUGDEL', [key, string]);
+    }
+    async suglen(key: string) {
+        return await this.redis.send_command('FT.SUGLEN', key); 
+    }
+    async synupdate(index: string, groupId: number, terms: string[], skipInitialScan = false) {
+        const args = [index, groupId].concat(terms);
+        if(skipInitialScan === true)
+            args.push('SKIPINITIALSCAN');
+        return await this.redis.send_command('FT.SYNUPDATE', args); 
+    }
+    async syndump(index: string) {
+        return await this.redis.send_command('FT.SYNDUMP', [index]);
+    }
+    async spellcheck() {
+
+    }
+    async dictadd(dict: string, terms: string[]) {
+        return await this.redis.send_command('FT.DICTADD', [dict].concat(terms));
+    }
+    async dictdel(dict: string, terms: string[]) {
+        return await this.redis.send_command('FT.DICTDEL', [dict].concat(terms));
+    }
+    async dictdump(dict: string) {
+        return await this.redis.send_command('FT.DICTDUMP', [dict]);
+    }
+    async info(index: string) {
+        return await this.redis.send_command('FT.INFO', [index]);
+    }
     async config() {}
 }
 
@@ -450,4 +489,16 @@ export type AggregateParameters = {
         numberOfResults: number
     },
     filter: string
+}
+
+export type SugAddParameters = {
+    incr: number,
+    payload: string
+}
+
+export type SugGetParameters = {
+    fuzzy: string,
+    max: number,
+    withScores: boolean,
+    withPayloads: boolean
 }
