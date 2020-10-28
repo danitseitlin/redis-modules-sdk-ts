@@ -1,13 +1,28 @@
 
 import * as Redis from 'ioredis';
 
-export class ReJSON extends Redis {
+export class ReJSON {
+
+    public redis: Redis.Redis;
+
     /**
      * Initializing the ReJSON object. Initialization starts an active connection to the Redis database
      * @param options The options of the Redis database.
      */
-    constructor(options: Redis.RedisOptions) {
-        super(options)
+    constructor(public options: Redis.RedisOptions) {}
+    
+    /**
+     * Connecting to the Redis database with ReJSON module
+     */
+    async connect(): Promise<void> {
+        this.redis = new Redis(this.options);
+    }
+
+    /**
+     * Disconnecting from the Redis database with ReJSON module
+     */
+    async disconnect(): Promise<void> {
+        await this.redis.quit();
     }
 
     /**
@@ -16,10 +31,10 @@ export class ReJSON extends Redis {
      * @param path The path of the key defaults to root if not provided. Non-existing keys and paths are ignored. Deleting an object's root is equivalent to deleting the key from Redis.
      * @returns The number of paths deleted (0 or 1).
      */
-    async delCommand(key: string, path?: string): Promise<number> {
+    async del(key: string, path?: string): Promise<number> {
         const parameters = [key];
         if(path !== undefined) parameters.push(path)
-        return await this.send_command('JSON.DEL', parameters)
+        return await this.redis.send_command('JSON.DEL', parameters)
     }
 
     /**
@@ -29,8 +44,8 @@ export class ReJSON extends Redis {
      * @param json The JSON string of the key i.e. '{"x": 4}'
      * @returns Simple String OK if executed correctly, or Null Bulk if the specified NX or XX conditions were not met. 
      */
-    async setCommand(key: string, path: string, json: string): Promise<"OK"> {
-        return await this.send_command('JSON.SET', [key, path, json])
+    async set(key: string, path: string, json: string): Promise<"OK"> {
+        return await this.redis.send_command('JSON.SET', [key, path, json])
     }
 
     /**
@@ -40,7 +55,7 @@ export class ReJSON extends Redis {
      * @param parameters Additional parameters to arrange the returned values
      * @returns The value at path in JSON serialized form.
      */
-    async getCommand(key: string, path?: string, parameters?: GetCommandParameters): Promise<string>{
+    async get(key: string, path?: string, parameters?: GetCommandParameters): Promise<string>{
         const args = [key];
         for(const parameter in parameters) {
             const name = parameter.toUpperCase();
@@ -50,7 +65,7 @@ export class ReJSON extends Redis {
                 args.push(value);
         }
         if(path !== undefined) args.push(path);
-        return await this.send_command('JSON.GET', args)
+        return await this.redis.send_command('JSON.GET', args)
     }
 
     /**
@@ -59,10 +74,10 @@ export class ReJSON extends Redis {
      * @param path The path of the keys
      * @returns The values at path from multiple key's. Non-existing keys and non-existing paths are reported as null.
      */
-    async mgetCommand(keys: string[], path?: string): Promise<string[]> {
+    async mget(keys: string[], path?: string): Promise<string[]> {
         const args = keys;
         if(path !== undefined) args.push(path);
-        return await this.send_command('JSON.MGET', args)
+        return await this.redis.send_command('JSON.MGET', args)
     }
 
     /**
@@ -71,10 +86,10 @@ export class ReJSON extends Redis {
      * @param path The path of the key
      * @returns Simple String, specifically the type of value. 
      */
-    async typeCommand(key: string, path?: string): Promise<string> {
+    async type(key: string, path?: string): Promise<string> {
         const args = [key];
         if(path !== undefined) args.push(path);
-        return await this.send_command('JSON.TYPE', args)
+        return await this.redis.send_command('JSON.TYPE', args)
     }
 
     /**
@@ -84,11 +99,11 @@ export class ReJSON extends Redis {
      * @param path The path of the key
      * @returns Bulk String, specifically the stringified new value.
      */
-    async numincrbyCommand(key: string, number: number, path?: string): Promise<string> {
+    async numincrby(key: string, number: number, path?: string): Promise<string> {
         const args = [key];
         if(path !== undefined) args.push(path);
         args.push(number.toString())
-        return await this.send_command('JSON.NUMINCRBY', args)
+        return await this.redis.send_command('JSON.NUMINCRBY', args)
     }
 
     /**
@@ -98,11 +113,11 @@ export class ReJSON extends Redis {
      * @param path The path of the key
      * @returns Bulk String, specifically the stringified new value. 
      */
-    async nummultbyCommand(key: string, number: number, path?: string): Promise<string> {
+    async nummultby(key: string, number: number, path?: string): Promise<string> {
         const args = [key];
         if(path !== undefined) args.push(path);
         args.push(number.toString())
-        return await this.send_command('JSON.NUMMULTBY', args)
+        return await this.redis.send_command('JSON.NUMMULTBY', args)
     }
 
     /**
@@ -112,10 +127,10 @@ export class ReJSON extends Redis {
      * @param path The path of the key
      * @returns Integer, specifically the string's new length.
      */
-    async strappendCommand(key: string, string: string, path?: string): Promise<string> {
+    async strappend(key: string, string: string, path?: string): Promise<string> {
         const args = [key];
         if(path !== undefined) args.push(path);
-        return await this.send_command('JSON.STRAPPEND', args.concat(string));
+        return await this.redis.send_command('JSON.STRAPPEND', args.concat(string));
     }
 
     /**
@@ -124,10 +139,10 @@ export class ReJSON extends Redis {
      * @param path The path of the key
      * @returns Integer, specifically the string's length. 
      */
-    async strlenCommand(key: string, path?: string): Promise<number | null> {
+    async strlen(key: string, path?: string): Promise<number | null> {
         const args = [key];
         if(path !== undefined) args.push(path);
-        return await this.send_command('JSON.STRLEN', args);
+        return await this.redis.send_command('JSON.STRLEN', args);
     }
 
     /**
@@ -137,10 +152,10 @@ export class ReJSON extends Redis {
      * @param path The path of the key
      * @returns Integer, specifically the array's new size.
      */
-    async arrappendCommand(key: string, items: string[], path?: string): Promise<number> {
+    async arrappend(key: string, items: string[], path?: string): Promise<number> {
         const args = [key];
         if(path !== undefined) args.push(path);
-        return await this.send_command('JSON.ARRAPPEND', args.concat(items));
+        return await this.redis.send_command('JSON.ARRAPPEND', args.concat(items));
     }
 
     /**
@@ -150,11 +165,11 @@ export class ReJSON extends Redis {
      * @param path The path of the key
      * @returns Integer, specifically the position of the scalar value in the array, or -1 if unfound. 
      */
-    async arrindexCommand(key: string, scalar: string, path?: string): Promise<number> {
+    async arrindex(key: string, scalar: string, path?: string): Promise<number> {
         const args = [key];
         if(path !== undefined) args.push(path);
         args.push(scalar);
-        return await this.send_command('JSON.ARRINDEX', args);
+        return await this.redis.send_command('JSON.ARRINDEX', args);
     }
     
     /**
@@ -165,12 +180,12 @@ export class ReJSON extends Redis {
      * @param path The path of the key
      * @returns Integer, specifically the array's new size.
      */
-    async arrinsertCommand(key: string, index: number, json: string, path?: string): Promise<number> {
+    async arrinsert(key: string, index: number, json: string, path?: string): Promise<number> {
         const args = [key];
         if(path !== undefined) args.push(path);
         args.push(index.toString());
         args.push(json);
-        return await this.send_command('JSON.ARRINSERT', args);
+        return await this.redis.send_command('JSON.ARRINSERT', args);
     }
 
     /**
@@ -179,10 +194,10 @@ export class ReJSON extends Redis {
      * @param path The path of the key
      * @returns Integer, specifically the array's length. 
      */
-    async arrlenCommand(key: string, path?: string): Promise<number> {
+    async arrlen(key: string, path?: string): Promise<number> {
         const args = [key];
         if(path !== undefined) args.push(path);
-        return await this.send_command('JSON.ARRLEN', args);
+        return await this.redis.send_command('JSON.ARRLEN', args);
     }
 
     /**
@@ -192,11 +207,11 @@ export class ReJSON extends Redis {
      * @param path The path of the key
      * @returns Bulk String, specifically the popped JSON value.
      */
-    async arrpopCommand(key: string, index: number, path?: string): Promise<string> {
+    async arrpop(key: string, index: number, path?: string): Promise<string> {
         const args = [key];
         if(path !== undefined) args.push(path);
         args.push(index.toString());
-        return await this.send_command('JSON.ARRPOP', args);
+        return await this.redis.send_command('JSON.ARRPOP', args);
     }
 
     /**
@@ -207,12 +222,12 @@ export class ReJSON extends Redis {
      * @param path The path of the key
      * @returns Integer, specifically the array's new size. 
      */
-    async arrtrimCommand(key: string, start: number, end: number, path?: string): Promise<string> {
+    async arrtrim(key: string, start: number, end: number, path?: string): Promise<string> {
         const args = [key];
         if(path !== undefined) args.push(path);
         args.push(start.toString());
         args.push(end.toString());
-        return await this.send_command('JSON.ARRTRIM', args);
+        return await this.redis.send_command('JSON.ARRTRIM', args);
     }
 
     /**
@@ -221,10 +236,10 @@ export class ReJSON extends Redis {
      * @param path The path of the key
      * @returns Array, specifically the key names in the object as Bulk Strings. 
      */
-    async objkeysCommand(key: string, path?: string): Promise<string[]> {
+    async objkeys(key: string, path?: string): Promise<string[]> {
         const args = [key];
         if(path !== undefined) args.push(path);
-        return await this.send_command('JSON.OBJKEYS', args);
+        return await this.redis.send_command('JSON.OBJKEYS', args);
     }
 
     /**
@@ -233,10 +248,10 @@ export class ReJSON extends Redis {
      * @param path The path of the key
      * @returns Integer, specifically the number of keys in the object.
      */
-    async objlenCommand(key: string, path?: string): Promise<number> {
+    async objlen(key: string, path?: string): Promise<number> {
         const args = [key];
         if(path !== undefined) args.push(path);
-        return await this.send_command('JSON.OBJLEN', args);
+        return await this.redis.send_command('JSON.OBJLEN', args);
     }
 
     /**
@@ -248,13 +263,13 @@ export class ReJSON extends Redis {
         MEMORY returns an integer, specifically the size in bytes of the value
         HELP returns an array, specifically with the help message
      */
-    async debugCommand(subcommand: 'MEMORY' | 'HELP', key?: string, path?: string): Promise<string[] | number> {
+    async debug(subcommand: 'MEMORY' | 'HELP', key?: string, path?: string): Promise<string[] | number> {
         const args: string[] = [subcommand];
         if(subcommand === 'MEMORY') {
             if(key !== undefined) args.push(key);
             if(path !== undefined) args.push(path);
         }
-        return await this.send_command('JSON.DEBUG', args);
+        return await this.redis.send_command('JSON.DEBUG', args);
     }
 
     /**
@@ -263,10 +278,10 @@ export class ReJSON extends Redis {
      * @param path The path of the key
      * @returns The number of paths deleted (0 or 1).
      */
-    async forgetCommand(key: string, path?: string): Promise<number> {
+    async forget(key: string, path?: string): Promise<number> {
         const parameters = [key];
         if(path !== undefined) parameters.push(path)
-        return await this.send_command('JSON.FORGET', parameters)
+        return await this.redis.send_command('JSON.FORGET', parameters)
     }
 
     /**
@@ -275,10 +290,10 @@ export class ReJSON extends Redis {
      * @param path The path of the key
      * @returns Array, specifically the JSON's RESP form as detailed. 
      */
-    async respCommand(key: string, path?: string): Promise<string[]> {
+    async resp(key: string, path?: string): Promise<string[]> {
         const parameters = [key];
         if(path !== undefined) parameters.push(path)
-        return await this.send_command('JSON.RESP', parameters)
+        return await this.redis.send_command('JSON.RESP', parameters)
     }
 }
 
