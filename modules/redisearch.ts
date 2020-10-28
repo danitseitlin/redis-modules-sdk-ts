@@ -1,18 +1,32 @@
 
 import * as Redis from 'ioredis';
-import { inherits } from 'util';
 
-export class RediSearch extends Redis {
+export class RediSearch {
+
+    public redis: Redis.Redis;
+
     /**
-     * Initializing the RediSearch object. Initialization starts an active connection to the Redis database
+     * Initializing the RediSearch object
      * @param options The options of the Redis database.
      */
-    constructor(options: Redis.RedisOptions) {
-        super(options)
+    constructor(public options: Redis.RedisOptions) {}
+
+    /**
+     * Connecting to the Redis database with ReJSON module
+     */
+    async connect(): Promise<void> {
+        this.redis = new Redis(this.options);
     }
 
-    async createCommand(parameters: CreateParameters, schemaFields: SchemaField[]) {
-        const args = [parameters.index.toString()]
+    /**
+     * Disconnecting from the Redis database with ReJSON module
+     */
+    async disconnect(): Promise<void> {
+        await this.redis.quit();
+    }
+
+    async create(parameters: CreateParameters, schemaFields: SchemaField[]) {
+        const args: string[] = [parameters.index.toString()]
         args.concat(['ON', parameters.on]);
         if(parameters.prefix !== undefined) {
             args.push('PREFIX');
@@ -57,56 +71,56 @@ export class RediSearch extends Redis {
             if(field.seperator !== undefined) args.concat(['SEPERATOR', field.seperator]);
             if(field.weight !== undefined) args.concat(['WEIGHT', field.weight.toString()]);
         }
-        return await this.send_command('FT.CREATE', args);
+        return await  this.redis.send_command('FT.CREATE', args);
     }
 
-    async hsetCommand(hash: string, fields: {[key: string]: string}) {
-        const args = [hash];
+    async hset(hash: string, fields: {[key: string]: string}) {
+        const args: string[] = [hash];
         for(const field in fields) {
             args.push(field);
             args.push(fields[field]);
         }
-        return await this.send_command('HSET', args);
+        return await  this.redis.send_command('HSET', args);
     }
 
-    async hsetnxCommand(hash: string, fields: {[key: string]: string}) {
-        const args = [hash];
+    async hsetnx(hash: string, fields: {[key: string]: string}) {
+        const args: string[] = [hash];
         for(const field in fields) {
             args.push(field);
             args.push(fields[field]);
         }
-        return await this.send_command('HSETNX', args);
+        return await  this.redis.send_command('HSETNX', args);
     }
 
-    async hdelCommand(hash: string, fields: {[key: string]: string}) {
-        const args = [hash];
+    async hdel(hash: string, fields: {[key: string]: string}) {
+        const args: string[] = [hash];
         for(const field in fields) {
             args.push(field);
             args.push(fields[field]);
         }
-        return await this.send_command('HDEL', args);
+        return await  this.redis.send_command('HDEL', args);
     }
 
-    async hincrbyCommand(hash: string, fields: {[key: string]: number}) {
-        const args = [hash];
+    async hincrby(hash: string, fields: {[key: string]: number}) {
+        const args: string[] = [hash];
         for(const field in fields) {
             args.push(field);
             args.push(fields[field].toString());
         }
-        return await this.send_command('HINCRBY', args);
+        return await  this.redis.send_command('HINCRBY', args);
     }
 
-    async hdecrbyCommand(hash: string, fields: {[key: string]: number}) {
-        const args = [hash];
+    async hdecrby(hash: string, fields: {[key: string]: number}) {
+        const args: string[] = [hash];
         for(const field in fields) {
             args.push(field);
             args.push(fields[field].toString());
         }
-        return await this.send_command('HDECRBY', args);
+        return await  this.redis.send_command('HDECRBY', args);
     }
 
-    async searchCommand(parameters: SearchParameters) {
-        const args = [parameters.index.toString(), parameters.query];
+    async search(parameters: SearchParameters) {
+        const args: string[] = [parameters.index.toString(), parameters.query];
         if(parameters.noContent === true)
             args.push('NOCONTENT')
         if(parameters.verbatim === true)
@@ -183,29 +197,103 @@ export class RediSearch extends Redis {
             args.concat(['SORTBY', parameters.sortBy.field, parameters.sortBy.sort])
         if(parameters.limit !== undefined)
             args.concat(['LIMIT', parameters.limit.first.toString(), parameters.limit.num.toString()])
-        return await this.send_command('FT.SEARCH', args);
+        return await this.redis.send_command('FT.SEARCH', args);
     }
 
-    async aggregateCommand() {}
-    async explainCommand() {}
-    async explainCLICommand() {}
-    async alterCommand() {}
-    async dropindexCommand() {}
-    async aliasaddCommand() {}
-    async aliasupdateCommand() {}
-    async aliasdelCommand() {}
-    async sugaddCommand() {}
-    async suggetCommand() {}
-    async sugdelCommand() {}
-    async suglenCommand() {}
-    async synupdateCommand() {}
-    async syndumpCommand() {}
-    async spellcheckCommand() {}
-    async dictaddCommand() {}
-    async dictdelCommand() {}
-    async dictdumpCommand() {}
-    async infoCommand() {}
-    async configCommand() {}
+    async aggregate(parameters: AggregateParameters) {
+        const args: string[] = []
+        if(parameters.indexName !== undefined)
+            args.push(parameters.indexName)
+        if(parameters.query !== undefined)
+            args.push(parameters.query)
+        if(parameters.load !== undefined) {
+            args.push('LOAD')
+            if(parameters.load.nargs !== undefined)
+                args.push(parameters.load.nargs);
+            if(parameters.load.property !== undefined)
+                args.push(parameters.load.property);
+        }
+        if(parameters.groupBy !== undefined){
+            args.push('GROUPBY')
+            if(parameters.groupBy.nargs !== undefined)
+                args.push(parameters.groupBy.nargs);
+            if(parameters.groupBy.property !== undefined)
+                args.push(parameters.groupBy.property);
+        }
+        if(parameters.reduce !== undefined) {
+            args.push('REDUCE')
+            if(parameters.reduce.function !== undefined)
+                args.push(parameters.reduce.function);
+            if(parameters.reduce.nargs !== undefined)
+                args.push(parameters.reduce.nargs);
+            if(parameters.reduce.arg !== undefined)
+                args.push(parameters.reduce.arg);
+            if(parameters.reduce.as !== undefined)
+                args.concat(['AS', parameters.reduce.as]);
+        }
+        if(parameters.sortby !== undefined) {
+            args.push('SORTBY')
+            if(parameters.sortby.nargs !== undefined)
+                args.push(parameters.sortby.nargs);
+            if(parameters.sortby.property !== undefined)
+                args.push(parameters.sortby.property);
+            if(parameters.sortby.sort !== undefined)
+                args.push(parameters.sortby.sort);
+            if(parameters.sortby.max !== undefined)
+                args.concat(['MAX', parameters.sortby.max.toString()]);
+        }
+        if(parameters.apply !== undefined) {
+            args.push('APPLY');
+            if(parameters.apply.expression !== undefined)
+                args.push(parameters.apply.expression);
+            if(parameters.apply.as !== undefined)
+                args.push(parameters.apply.as);
+        }
+        if(parameters.limit !== undefined) {
+            args.push('LIMIT')
+            if(parameters.limit.offset !== undefined)
+                args.push(parameters.limit.offset)
+            if(parameters.limit.numberOfResults !== undefined)
+                args.push(parameters.limit.numberOfResults.toString());
+        }
+        return await this.redis.send_command('FT.AGGREGATE', args);
+    }
+    async explain(index: string, query: string) {
+        return await this.redis.send_command('FT.EXPLAIN', [index, query]);
+    }
+    async explainCLI(index: string, query: string) {
+        return await this.redis.send_command('FT.EXPLAINCLI', [index, query]);
+    }
+    async alter(index: string, field: string, options: AlterOptions) {
+        const args = [index, field, options.type]
+        if(options.sortable !== undefined) args.push('SORTABLE');
+        if(options.noindex !== undefined) args.push('NOINDEX');
+        if(options.nostem !== undefined) args.push('NOSTEM');
+        if(options.phonetic !== undefined) args.concat(['PHONETIC', options.phonetic]);
+        if(options.seperator !== undefined) args.concat(['SEPERATOR', options.seperator]);
+        if(options.weight !== undefined) args.concat(['WEIGHT', options.weight.toString()]);
+        return await this.redis.send_command('FT.ALTER', args);
+    }
+    async dropindex(index: string, deleteHash = false) {
+        const args = [index];
+        if(deleteHash === true) args.push('DD')
+        return await this.redis.send_command('FT.DROPINDEX', args);
+    }
+    async aliasadd() {}
+    async aliasupdate() {}
+    async aliasdel() {}
+    async sugadd() {}
+    async sugget() {}
+    async sugdel() {}
+    async suglen() {}
+    async synupdate() {}
+    async syndump() {}
+    async spellcheck() {}
+    async dictadd() {}
+    async dictdel() {}
+    async dictdump() {}
+    async info() {}
+    async config() {}
 }
 
 export type CreateParameters = {
@@ -241,6 +329,10 @@ export type FieldOptions = {
     phonetic?: string,
     weight?: number,
     seperator?: string
+}
+
+export interface AlterOptions extends FieldOptions {
+    type: 'TEXT' | 'NUMERIC' | 'TAG' | string
 }
 
 export interface SchemaField extends FieldOptions {
@@ -315,4 +407,38 @@ export type SearchParameters = {
         first: number,
         num: number
     }
+}
+
+export type AggregateParameters = {
+    indexName: string,
+    query: string,
+    load: {
+        nargs: string,
+        property: string
+    },
+    groupBy: {
+        nargs: string,
+        property: string
+    },
+    reduce: {
+        function: string,
+        nargs: string,
+        arg: string,
+        as: string
+    },
+    sortby: {
+        nargs: string,
+        property: string,
+        sort: 'ASC' | 'DESC',
+        max: number
+    },
+    apply: {
+        expression: string,
+        as: string
+    },
+    limit: {
+        offset: string,
+        numberOfResults: number
+    },
+    filter: string
 }
