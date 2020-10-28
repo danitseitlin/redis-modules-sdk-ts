@@ -341,7 +341,12 @@ export class RediSearch {
     async info(index: string) {
         return await this.redis.send_command('FT.INFO', [index]);
     }
-    async config() {}
+    async config(command: 'GET' | 'SET' | 'HELP', option: string, value?: string) {
+        const args = [command, option];
+        if(command === 'SET')
+            args.push(value);
+        return await this.redis.send_command('FT.CONFIG', args);
+    }
 }
 
 export type CreateParameters = {
