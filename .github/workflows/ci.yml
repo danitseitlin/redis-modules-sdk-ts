@@ -32,7 +32,7 @@ jobs:
       - name: Configurating Redis
         run: whoami && ls -l /etc/redis/redis.conf && sudo chown runner /etc/redis/redis.conf && sudo echo "supervised systemd" >> /etc/redis/redis.conf
       - name: Building ReJSON module
-        run: sudo git clone https://github.com/RediSearch/RediSearch.git && cd RedisSearch && sudo cargo build && ls && cd target && ls && cd release && ls && --release && sudo mkdir /etc/redis/modules/ && sudo mv target/release/libredisearch.so /etc/redis/modules/
+        run: sudo git clone https://github.com/RediSearch/RediSearch.git && cd RediSearch && sudo cargo build && ls && cd target && ls && cd release && ls && --release && sudo mkdir /etc/redis/modules/ && sudo mv target/release/libredisearch.so /etc/redis/modules/
       - name: Restarting Redis Server
         run: sudo echo "loadmodule /etc/redis/modules/libredisearch.so" >> /etc/redis/redis.conf && sudo /etc/init.d/redis-server stop && sudo /etc/init.d/redis-server start
       - name: Verifying Redis status

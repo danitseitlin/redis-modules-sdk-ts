@@ -279,9 +279,18 @@ export class RediSearch {
         if(deleteHash === true) args.push('DD')
         return await this.redis.send_command('FT.DROPINDEX', args);
     }
-    async aliasadd() {}
-    async aliasupdate() {}
-    async aliasdel() {}
+    async aliasadd(name: string, index: string) {
+        return await this.redis.send_command('FT.ALIASADD', [name, index]);
+    }
+    async aliasupdate(name: string, index: string) {
+        return await this.redis.send_command('FT.ALIASUPDATE', [name, index]);
+    }
+    async aliasdel(name: string, index: string) {
+        return await this.redis.send_command('FT.ALIASDEL', [name, index]);
+    }
+    async tagvalgs(index: string, field: string) {
+        return await this.redis.send_command('FT.TAGVALS', [index, field]);
+    }
     async sugadd() {}
     async sugget() {}
     async sugdel() {}
