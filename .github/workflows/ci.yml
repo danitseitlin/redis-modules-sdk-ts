@@ -28,13 +28,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Installing Redis
-        run: sudo apt update && sudo apt install make && sudo apt-get install build-essential && sudo apt-get install -y cargo && sudo apt install redis-server 
+        run: sudo apt update && sudo apt install make && sudo apt-get install build-essential && sudo apt-get install -y cargo && sudo apt install redis
       - name: Configurating Redis
         run: whoami && ls -l /etc/redis/redis.conf && sudo chown runner /etc/redis/redis.conf && sudo echo "supervised systemd" >> /etc/redis/redis.conf && sudo echo "loadmodule /etc/redis/modules/redisearch.so" >> /etc/redis/redis.conf && sudo systemctl stop redis
       - name: Building RediSearch module
         run: sudo git clone --recursive https://github.com/RediSearch/RediSearch.git && cd RediSearch && sudo make setup && sudo make fetch && sudo make build #&& sudo mkdir /etc/redis/modules/ && sudo mv build/redisearch.so /etc/redis/modules/ && cd /etc/redis/modules && ls
       - name: Restarting Redis Server
-        run: sudo ./deps/readies/bin/getredis && redis-server --loadmodule ./build/redisearch.so TIMEOUT 100 #sudo systemctl restart redis
+        run: sudo redis-server --loadmodule ./build/redisearch.so TIMEOUT 100 #sudo systemctl restart redis
       - name: Verifying Redis status
         run: sudo systemctl status redis
       - name: Running tests
