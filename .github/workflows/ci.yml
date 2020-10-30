@@ -30,11 +30,11 @@ jobs:
       - name: Installing Redis
         run: sudo apt update && sudo apt install make && sudo apt-get install build-essential && sudo apt-get install -y cargo && sudo apt install redis-server 
       - name: Configurating Redis
-        run: whoami && ls -l /etc/redis/redis.conf && sudo chown runner /etc/redis/redis.conf && sudo echo "supervised systemd" >> /etc/redis/redis.conf
+        run: whoami && ls -l /etc/redis/redis.conf && sudo chown runner /etc/redis/redis.conf && sudo echo "supervised systemd" >> /etc/redis/redis.conf && sudo echo "loadmodule /etc/redis/modules/redisearch.so" >> /etc/redis/redis.conf && sudo service redis-server stop
       - name: Building RediSearch module
         run: sudo git clone --recursive https://github.com/RediSearch/RediSearch.git && cd RediSearch && sudo make setup && sudo make fetch && sudo make build && sudo mkdir /etc/redis/modules/ && sudo mv build/redisearch.so /etc/redis/modules/ && cd /etc/redis/modules && ls
       - name: Restarting Redis Server
-        run: sudo echo "loadmodule /etc/redis/modules/redisearch.so" >> /etc/redis/redis.conf && sudo systemctl stop redis-server.service && sudo service redis-server start 
+        run: sudo service redis-server start && sudo /etc/init.d/redis-server start
       - name: Verifying Redis status
         run: sudo systemctl status redis
       - name: Running tests
