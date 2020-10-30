@@ -38,4 +38,4 @@ jobs:
       - name: Verifying Redis status
         run: sudo systemctl status redis
       - name: Running tests
-        run: npm i && npm run rejson-module-tests
+        run: npm i && npm run redisearch-module-tests
