@@ -45,7 +45,7 @@ jobs:
         # this value please see https://github.com/AkihiroSuda/moby-snapshot/releases
         docker_nightly_version: snapshot-20200915
     - name:
-      run: docker run -p 6379:6379 -it --rm redislabs/redistimeseries
+      run: docker run -p 6379:6379 --rm redislabs/redistimeseries
     #runs-on: ubuntu-latest
     #container: redislabs/redistimeseries
     #steps:
