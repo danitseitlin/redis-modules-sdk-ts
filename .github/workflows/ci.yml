@@ -45,7 +45,7 @@ jobs:
         # this value please see https://github.com/AkihiroSuda/moby-snapshot/releases
         docker_nightly_version: snapshot-20200915
     - name:
-      run: docker exec -p 6379:6379 --rm redislabs/redistimeseries bash apt update && apt install nodejs && npm i && npm run rejson-module-tests
+      run: docker exec -p 6379:6379 --rm redislabs/redistimeseries /bin/bash apt update && apt install nodejs && npm i && npm run rejson-module-tests
     #runs-on: ubuntu-latest
     #container: redislabs/redistimeseries
     #steps:
