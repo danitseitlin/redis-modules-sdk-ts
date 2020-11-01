@@ -44,12 +44,20 @@ export class RedisTimeSeries {
         return await this.redis.send_command('TS.CREATE', args)
     }
 
-    async del() {
-
+    async del(key: string) {
+        return await this.redis.send_command('DEL', [key])
     }
 
-    async alter(key: string, options) {
-        
+    async alter(key: string, retention: number , labels?: TSLabel[]) {
+        const args = [key];
+        if(retention !== undefined)
+            args.concat(['RETENTION', retention.toString()]);
+        if(labels !== undefined && labels.length > 0) {
+            args.push('LABELS')
+            for(const label of labels) {
+                args.concat([label.name, label.value]);
+            }
+        }
     }
 
     async add(key: string, timestamp: string, value: string, options) {
@@ -110,4 +118,13 @@ export type TSCreateOptions = {
         name: string,
         value: string
     }[]
+}
+
+export type TSLabel = {
+    name: string,
+    value: string
+}
+
+export type TSAlterOptions = {
+
 }
