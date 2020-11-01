@@ -41,6 +41,6 @@ jobs:
     container: redislabs/redistimeseries
     steps:
       - name: 'Setup'
-        run: 'docker run -p 6379:6379 -it --rm redislabs/redistimeseries'
+        run: sudo systemctl status redis
         
 
