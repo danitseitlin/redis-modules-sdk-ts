@@ -35,3 +35,12 @@ jobs:
         run: sudo systemctl status redis
       - name: Running tests
         run: npm i && npm run rejson-module-tests
+  RedisTimeSeries:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+      container: redislabs/redistimeseries
+      steps:
+        - run: |
+          docker run -p 6379:6379 -it --rm redislabs/redistimeseries
+        
+

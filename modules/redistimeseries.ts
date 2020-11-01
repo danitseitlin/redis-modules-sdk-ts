@@ -58,54 +58,129 @@ export class RedisTimeSeries {
                 args.concat([label.name, label.value]);
             }
         }
+        return await this.redis.send_command('TS.ALTER', args)
     }
 
-    async add(key: string, timestamp: string, value: string, options) {
-
+    async add(key: string, timestamp: string, value: string, options: TSAddOptions) {
+        const args = [key, timestamp, value];
+        if(options.retention !== undefined)
+            args.concat(['RETENTION', options.retention.toString()])
+        if(options.uncompressed === true)
+            args.push('UNCOMPRESSED');
+        if(options.onDuplicate === true)
+            args.push('ON_DUPLICATE');
+        if(options.chunkSize !== undefined)
+            args.concat(['CHUNK_SIZE', options.chunkSize.toString()])
+        if(options.labels !== undefined && options.labels.length > 0) {
+            args.push('LABELS')
+            for(const label of options.labels) {
+                args.concat([label.name, label.value]);
+            }
+        }
+        return await this.redis.send_command('TS.ADD', args);
     }
 
-    async madd() {
-
+    async madd(keySets: TSKeySet[]) {
+        const args: string[] = []
+        for(const keySet of keySets)
+            args.concat([keySet.key, keySet.timestamp.toString(), keySet.value]);
+        return await this.redis.send_command('TS.MADD', args);   
     }
 
-    async incrby() {
-
+    async incrby(key: string, value: string, options: TSIncrbyDecrbyOptions) {
+        const args = [key, value];
+        if(options.retention !== undefined)
+            args.concat(['RETENTION', options.retention.toString()])
+        if(options.uncompressed === true)
+            args.push('UNCOMPRESSED');
+        if(options.chunkSize !== undefined)
+            args.concat(['CHUNK_SIZE', options.chunkSize.toString()])
+        if(options.labels !== undefined && options.labels.length > 0) {
+            args.push('LABELS')
+            for(const label of options.labels) {
+                args.concat([label.name, label.value]);
+            }
+        }
+        return await this.redis.send_command('TS.INCRBY', args);
     }
 
-    async decrby() {
-
+    async decrby(key: string, value: string, options: TSIncrbyDecrbyOptions) {
+        const args = [key, value];
+        if(options.retention !== undefined)
+            args.concat(['RETENTION', options.retention.toString()])
+        if(options.uncompressed === true)
+            args.push('UNCOMPRESSED');
+        if(options.chunkSize !== undefined)
+            args.concat(['CHUNK_SIZE', options.chunkSize.toString()])
+        if(options.labels !== undefined && options.labels.length > 0) {
+            args.push('LABELS')
+            for(const label of options.labels) {
+                args.concat([label.name, label.value]);
+            }
+        }
+        return await this.redis.send_command('TS.DECRBY', args);
     }
-    async createRule() {
-
+    async createRule(options: TSCreateRule) {
+        const args = [options.sourceKey, options.destKey, 'AGGREGATION', options.aggregation, options.timeBucket.toString()]
+        return await this.redis.send_command('TS.CREATERULE', args);
     }
 
-    async deleteRule() {
-
+    async deleteRule(sourceKey: string, destKey: string) {
+        return await this.redis.send_command('TS.DELETERULE', sourceKey, destKey)
     }
-    async range() {
-
+    async range(key: string, fromTimestamp: number, toTimestamp: number, options: TSRangeOptions) {
+        const args = [key, fromTimestamp.toString(), toTimestamp.toString()];
+        if(options.count !== undefined)
+            args.concat(['COUNT', options.count.toString()]);
+        if(options.aggregation !== undefined)
+            args.concat(['AGGREGATION', options.aggregation.type, options.aggregation.timeBucket.toString()]);
+        return await this.redis.send_command('TS.RANGE', args)
     }
-    async revrange() {
-
+    async revrange(key: string, fromTimestamp: number, toTimestamp: number, options: TSRangeOptions) {
+        const args = [key, fromTimestamp.toString(), toTimestamp.toString()];
+        if(options.count !== undefined)
+            args.concat(['COUNT', options.count.toString()]);
+        if(options.aggregation !== undefined)
+            args.concat(['AGGREGATION', options.aggregation.type, options.aggregation.timeBucket.toString()]);
+        return await this.redis.send_command('TS.REVRANGE', args)
     }
-    async mrange() {
-
+    async mrange(key: string, fromTimestamp: number, toTimestamp: number, filter: string, options: TSMRangeOptions) {
+        const args = [key, fromTimestamp.toString(), toTimestamp.toString()];
+        if(options.count !== undefined)
+            args.concat(['COUNT', options.count.toString()]);
+        if(options.aggregation !== undefined)
+            args.concat(['AGGREGATION', options.aggregation.type, options.aggregation.timeBucket.toString()]);
+        if(options.withlabels !== undefined)
+            args.push('WITHLABELS')
+        args.concat(['FILTER', filter])
+        return await this.redis.send_command('TS.MRANGE', args)
     }
     
-    async mrevrange() {
-
+    async mrevrange(key: string, fromTimestamp: number, toTimestamp: number, filter: string, options: TSMRangeOptions) {
+        const args = [key, fromTimestamp.toString(), toTimestamp.toString()];
+        if(options.count !== undefined)
+            args.concat(['COUNT', options.count.toString()]);
+        if(options.aggregation !== undefined)
+            args.concat(['AGGREGATION', options.aggregation.type, options.aggregation.timeBucket.toString()]);
+        if(options.withlabels !== undefined)
+            args.push('WITHLABELS')
+        args.concat(['FILTER', filter])
+        return await this.redis.send_command('TS.MREVRANGE', args)
     }
 
-    async get() {
-
+    async get(key: string) {
+        return await this.redis.send_command('TS.GET', key);
     }
 
-    async mget() {
-
+    async mget(filter: string, withLabels?: boolean) {
+        const args = [filter];
+        if(withLabels === true)
+            args.push('WITHLABELS');
+        return await this.redis.send_command('TS.MGET', args);
     }
 
-    async info() {
-
+    async info(key: string) {
+        return await this.redis.send_command('TS.INFO', key);
     }
 }
 
@@ -114,10 +189,7 @@ export type TSCreateOptions = {
     uncompressed?: boolean,
     chunkSize?: number,
     duplicatePolicy?: string,
-    labels?: {
-        name: string,
-        value: string
-    }[]
+    labels?: TSLabel[]
 }
 
 export type TSLabel = {
@@ -125,6 +197,49 @@ export type TSLabel = {
     value: string
 }
 
-export type TSAlterOptions = {
+export type TSAddOptions = {
+    retention?: number,
+    uncompressed?: boolean,
+    chunkSize?: number,
+    onDuplicate?: boolean,
+    labels?: TSLabel[]
+}
 
+export type TSKeySet = {
+    key: string,
+    timestamp: number,
+    value: string
+}
+
+export interface TSIncrbyDecrbyOptions extends TSOptions {
+    timestamp?: number
+}
+
+export type TSOptions = {
+    retention?: number,
+    uncompressed?: boolean,
+    chunkSize?: number,
+    labels?: TSLabel[]
+}
+
+export type TSCreateRule = {
+    sourceKey: string,
+    destKey: string,
+    aggregation: TSAggregationType,
+    timeBucket: number
+}
+
+export type TSAggregationType = 'avg' | 'sum' | 'min' | 'max' | 'range' | 'range' | 'count' | 'first' | 'last' | 'std.p' | 'std.s' | 'var.p' | 'var.s' | string;
+
+export type TSRangeOptions = {
+    count?: number,
+    aggregation?: {
+        type: TSAggregationType,
+        timeBucket: number
+    }
+}
+
+export interface TSMRangeOptions extends TSRangeOptions {
+    withlabels?: boolean,
+    filter?: string
 }
