@@ -40,7 +40,8 @@ jobs:
     runs-on: ubuntu-latest
     container: redislabs/redistimeseries
     steps:
-      - run: |
+      - name: 'Setup'
+        run: |
         docker run -p 6379:6379 -it --rm redislabs/redistimeseries
         
 
