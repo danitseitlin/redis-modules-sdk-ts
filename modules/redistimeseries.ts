@@ -165,7 +165,7 @@ export class RedisTimeSeries {
      * @param options.chunkSize The 'CHUNK_SIZE' optional parameter
      * @param options.labels A list of 'LABELS' optional parameter
      */
-    async decrby(key: string, value: string, options: TSIncrbyDecrbyOptions) {
+    async decrby(key: string, value: string, options?: TSIncrbyDecrbyOptions) {
         const args = [key, value];
         if(options.retention !== undefined)
             args.concat(['RETENTION', options.retention.toString()])
