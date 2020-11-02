@@ -93,7 +93,7 @@ export class RedisTimeSeries {
      * @param options.chunkSize The 'CHUNK_SIZE' optional parameter
      * @param options.labels A list of 'LABELS' optional parameter
      */
-    async add(key: string, timestamp: string, value: string, options: TSAddOptions) {
+    async add(key: string, timestamp: string, value: string, options?: TSAddOptions) {
         const args = [key, timestamp, value];
         if(options.retention !== undefined)
             args.concat(['RETENTION', options.retention.toString()])
@@ -137,7 +137,7 @@ export class RedisTimeSeries {
      * @param options.chunkSize The 'CHUNK_SIZE' optional parameter
      * @param options.labels A list of 'LABELS' optional parameter
      */
-    async incrby(key: string, value: string, options: TSIncrbyDecrbyOptions) {
+    async incrby(key: string, value: string, options?: TSIncrbyDecrbyOptions) {
         const args = [key, value];
         if(options.retention !== undefined)
             args.concat(['RETENTION', options.retention.toString()])
@@ -373,7 +373,7 @@ export interface TSAddOptions extends TSOptions {
  */
 export type TSKeySet = {
     key: string,
-    timestamp: number,
+    timestamp: string,
     value: string
 }
 
