@@ -64,6 +64,7 @@ jobs:
         docker_channel: nightly
         # this value please see https://github.com/AkihiroSuda/moby-snapshot/releases
         docker_nightly_version: snapshot-20200915
+    - uses: actions/checkout@v2
     - name:
       run: docker run -p 6379:6379 -d --rm redislabs/redistimeseries && docker ps -a #/bin/bash apt update && apt install nodejs && npm i && npm run rejson-module-tests
     #- name: 'Setup'
