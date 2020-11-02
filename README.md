@@ -71,8 +71,8 @@ await client.disconnect();
 | madd       | TS.MADD                     |
 | incrby     | TS.INCRBY                   |
 | decrby     | TS.DECRBY                   |
-| createRule | TS.CREATERULE               |
-| deleteRule | TS.DELETERULE               |
+| createrule | TS.CREATERULE               |
+| deleterule | TS.DELETERULE               |
 | range      | TS.RANGE                    |
 | revrange   | TS.REVRANGE                 |
 | mrange     | TS.MRANGE                   |

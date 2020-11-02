@@ -35,7 +35,7 @@ export class RedisTimeSeries {
      * @param options.labels A list of 'LABELS' optional parameter
      * @param options.duplicatePolicy The 'DUPLICATE_POLICY' optional parameter
      */
-    async create(key: string, options?: TSCreateOptions) {
+    async create(key: string, options?: TSCreateOptions): Promise<'OK'> {
         const args = [key];
         if(options !== undefined && options.retention !== undefined)
             args.concat(['RETENTION', options.retention.toString()]);
@@ -68,7 +68,7 @@ export class RedisTimeSeries {
      * @param retention Optional. The retention time
      * @param labels Optional. The labels to update
      */
-    async alter(key: string, retention?: number, labels?: TSLabel[]) {
+    async alter(key: string, retention?: number, labels?: TSLabel[]): Promise<'OK'> {
         const args = [key];
         if(retention !== undefined)
             args.concat(['RETENTION', retention.toString()]);
@@ -93,7 +93,7 @@ export class RedisTimeSeries {
      * @param options.chunkSize The 'CHUNK_SIZE' optional parameter
      * @param options.labels A list of 'LABELS' optional parameter
      */
-    async add(key: string, timestamp: string, value: string, options?: TSAddOptions) {
+    async add(key: string, timestamp: string, value: string, options?: TSAddOptions): Promise<number> {
         const args = [key, timestamp, value];
         if(options !== undefined && options.retention !== undefined)
             args.concat(['RETENTION', options.retention.toString()])
@@ -123,6 +123,7 @@ export class RedisTimeSeries {
         const args: string[] = []
         for(const keySet of keySets)
             args.concat([keySet.key, keySet.timestamp.toString(), keySet.value]);
+        console.log(args)
         return await this.redis.send_command('TS.MADD', args);   
     }
 
@@ -137,7 +138,7 @@ export class RedisTimeSeries {
      * @param options.chunkSize The 'CHUNK_SIZE' optional parameter
      * @param options.labels A list of 'LABELS' optional parameter
      */
-    async incrby(key: string, value: string, options?: TSIncrbyDecrbyOptions) {
+    async incrby(key: string, value: string, options?: TSIncrbyDecrbyOptions): Promise<number> {
         const args = [key, value];
         if(options !== undefined && options.retention !== undefined)
             args.concat(['RETENTION', options.retention.toString()])
@@ -165,7 +166,7 @@ export class RedisTimeSeries {
      * @param options.chunkSize The 'CHUNK_SIZE' optional parameter
      * @param options.labels A list of 'LABELS' optional parameter
      */
-    async decrby(key: string, value: string, options?: TSIncrbyDecrbyOptions) {
+    async decrby(key: string, value: string, options?: TSIncrbyDecrbyOptions): Promise<number> {
         const args = [key, value];
         if(options !== undefined && options.retention !== undefined)
             args.concat(['RETENTION', options.retention.toString()])
@@ -190,7 +191,7 @@ export class RedisTimeSeries {
      * @param options.aggregation The aggregation type
      * @param options.timeBucket The time bucket
      */
-    async createRule(parameters: TSCreateRule) {
+    async createrule(parameters: TSCreateRule) {
         const args = [parameters.sourceKey, parameters.destKey, 'AGGREGATION', parameters.aggregation, parameters.timeBucket.toString()]
         return await this.redis.send_command('TS.CREATERULE', args);
     }
@@ -200,7 +201,7 @@ export class RedisTimeSeries {
      * @param sourceKey The source key
      * @param destKey The dest key
      */
-    async deleteRule(sourceKey: string, destKey: string) {
+    async deleterule(sourceKey: string, destKey: string) {
         return await this.redis.send_command('TS.DELETERULE', sourceKey, destKey)
     }
 
@@ -235,7 +236,7 @@ export class RedisTimeSeries {
      * @param options.aggregation.type The type of the 'AGGREGATION' command
      * @param options.aggregation.timeBucket The time bucket of the 'AGGREGATION' command
      */
-    async revrange(key: string, fromTimestamp: number, toTimestamp: number, options: TSRangeOptions) {
+    async revrange(key: string, fromTimestamp: number, toTimestamp: number, options?: TSRangeOptions) {
         const args = [key, fromTimestamp.toString(), toTimestamp.toString()];
         if(options !== undefined && options.count !== undefined)
             args.concat(['COUNT', options.count.toString()]);
@@ -420,7 +421,7 @@ export type TSCreateRule = {
 /**
  * The available types of aggregation
  */
-export type TSAggregationType = 'avg' | 'sum' | 'min' | 'max' | 'range' | 'range' | 'count' | 'first' | 'last' | 'std.p' | 'std.s' | 'var.p' | 'var.s' | string;
+export type TSAggregationType = 'avg' | 'sum' | 'min' | 'max' | 'range' | 'range' | 'count' | 'first' | 'last' | 'std.p' | 'std.s' | 'var.p' | 'var.s';
 
 /**
  * The 'TS.Range' command optional parameters
