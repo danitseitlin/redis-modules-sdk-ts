@@ -1,1 +1,4 @@
-export { ReJSON } from './modules/rejson';
+export { ReJSON, GetCommandParameters } from './modules/rejson';
+export {
+    RedisTimeSeries, TSCreateOptions, TSLabel, TSAddOptions, TSKeySet, TSIncrbyDecrbyOptions, TSOptions, TSCreateRule, TSAggregationType, TSRangeOptions, TSMRangeOptions
+} from './modules/redistimeseries';
