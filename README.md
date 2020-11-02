@@ -56,7 +56,7 @@ await client.connect();
 
 //Setting a key
 const response = await client.del('key');
-expect(response).to.equal('OK', 'The response of the set command');
+expect(response).to.equal('OK', 'The response of the del command');
 
 //Disconnect from the Redis database with Redis Times Series module
 await client.disconnect();
