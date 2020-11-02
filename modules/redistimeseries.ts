@@ -35,17 +35,17 @@ export class RedisTimeSeries {
      * @param options.labels A list of 'LABELS' optional parameter
      * @param options.duplicatePolicy The 'DUPLICATE_POLICY' optional parameter
      */
-    async create(key: string, options: TSCreateOptions) {
+    async create(key: string, options?: TSCreateOptions) {
         const args = [key];
-        if(options.retention !== undefined)
+        if(options !== undefined && options.retention !== undefined)
             args.concat(['RETENTION', options.retention.toString()]);
-        if(options.uncompressed === true)
+        if(options !== undefined && options.uncompressed === true)
             args.push('UNCOMPRESSED')
-        if(options.chunkSize !== undefined)
+        if(options !== undefined && options.chunkSize !== undefined)
             args.concat(['CHUNK_SIZE', options.chunkSize.toString()])
-        if(options.duplicatePolicy !== undefined)
+        if(options !== undefined && options.duplicatePolicy !== undefined)
             args.concat(['DUPLICATE_POLICY', options.duplicatePolicy])
-        if(options.labels !== undefined && options.labels.length > 0) {
+        if(options !== undefined && options.labels !== undefined && options.labels.length > 0) {
             args.push('LABELS');
             for(const label of options.labels) {
                 args.concat([label.name, label.value])
@@ -95,15 +95,15 @@ export class RedisTimeSeries {
      */
     async add(key: string, timestamp: string, value: string, options?: TSAddOptions) {
         const args = [key, timestamp, value];
-        if(options.retention !== undefined)
+        if(options !== undefined && options.retention !== undefined)
             args.concat(['RETENTION', options.retention.toString()])
-        if(options.uncompressed === true)
+        if(options !== undefined && options.uncompressed === true)
             args.push('UNCOMPRESSED');
-        if(options.onDuplicate === true)
+        if(options !== undefined && options.onDuplicate === true)
             args.push('ON_DUPLICATE');
-        if(options.chunkSize !== undefined)
+        if(options !== undefined && options.chunkSize !== undefined)
             args.concat(['CHUNK_SIZE', options.chunkSize.toString()])
-        if(options.labels !== undefined && options.labels.length > 0) {
+        if(options !== undefined && options.labels !== undefined && options.labels.length > 0) {
             args.push('LABELS')
             for(const label of options.labels) {
                 args.concat([label.name, label.value]);
@@ -139,13 +139,13 @@ export class RedisTimeSeries {
      */
     async incrby(key: string, value: string, options?: TSIncrbyDecrbyOptions) {
         const args = [key, value];
-        if(options.retention !== undefined)
+        if(options !== undefined && options.retention !== undefined)
             args.concat(['RETENTION', options.retention.toString()])
-        if(options.uncompressed === true)
+        if(options !== undefined && options.uncompressed === true)
             args.push('UNCOMPRESSED');
-        if(options.chunkSize !== undefined)
+        if(options !== undefined && options.chunkSize !== undefined)
             args.concat(['CHUNK_SIZE', options.chunkSize.toString()])
-        if(options.labels !== undefined && options.labels.length > 0) {
+        if(options !== undefined && options.labels !== undefined && options.labels.length > 0) {
             args.push('LABELS')
             for(const label of options.labels) {
                 args.concat([label.name, label.value]);
@@ -167,13 +167,13 @@ export class RedisTimeSeries {
      */
     async decrby(key: string, value: string, options?: TSIncrbyDecrbyOptions) {
         const args = [key, value];
-        if(options.retention !== undefined)
+        if(options !== undefined && options.retention !== undefined)
             args.concat(['RETENTION', options.retention.toString()])
-        if(options.uncompressed === true)
+        if(options !== undefined && options.uncompressed === true)
             args.push('UNCOMPRESSED');
-        if(options.chunkSize !== undefined)
+        if(options !== undefined && options.chunkSize !== undefined)
             args.concat(['CHUNK_SIZE', options.chunkSize.toString()])
-        if(options.labels !== undefined && options.labels.length > 0) {
+        if(options !== undefined && options.labels !== undefined && options.labels.length > 0) {
             args.push('LABELS')
             for(const label of options.labels) {
                 args.concat([label.name, label.value]);
@@ -184,14 +184,14 @@ export class RedisTimeSeries {
     
     /**
      * Creating a compaction rule
-     * @param options The 'TS.CREATERULE' command optional parameters
+     * @param parameters The 'TS.CREATERULE' command optional parameters
      * @param options.sourceKey The source key
      * @param options.destKey The dest key
      * @param options.aggregation The aggregation type
      * @param options.timeBucket The time bucket
      */
-    async createRule(options: TSCreateRule) {
-        const args = [options.sourceKey, options.destKey, 'AGGREGATION', options.aggregation, options.timeBucket.toString()]
+    async createRule(parameters: TSCreateRule) {
+        const args = [parameters.sourceKey, parameters.destKey, 'AGGREGATION', parameters.aggregation, parameters.timeBucket.toString()]
         return await this.redis.send_command('TS.CREATERULE', args);
     }
 
@@ -215,11 +215,11 @@ export class RedisTimeSeries {
      * @param options.aggregation.type The type of the 'AGGREGATION' command
      * @param options.aggregation.timeBucket The time bucket of the 'AGGREGATION' command
      */
-    async range(key: string, fromTimestamp: number, toTimestamp: number, options: TSRangeOptions) {
+    async range(key: string, fromTimestamp: number, toTimestamp: number, options?: TSRangeOptions) {
         const args = [key, fromTimestamp.toString(), toTimestamp.toString()];
-        if(options.count !== undefined)
+        if(options !== undefined && options.count !== undefined)
             args.concat(['COUNT', options.count.toString()]);
-        if(options.aggregation !== undefined)
+        if(options !== undefined && options.aggregation !== undefined)
             args.concat(['AGGREGATION', options.aggregation.type, options.aggregation.timeBucket.toString()]);
         return await this.redis.send_command('TS.RANGE', args)
     }
@@ -237,9 +237,9 @@ export class RedisTimeSeries {
      */
     async revrange(key: string, fromTimestamp: number, toTimestamp: number, options: TSRangeOptions) {
         const args = [key, fromTimestamp.toString(), toTimestamp.toString()];
-        if(options.count !== undefined)
+        if(options !== undefined && options.count !== undefined)
             args.concat(['COUNT', options.count.toString()]);
-        if(options.aggregation !== undefined)
+        if(options !== undefined && options.aggregation !== undefined)
             args.concat(['AGGREGATION', options.aggregation.type, options.aggregation.timeBucket.toString()]);
         return await this.redis.send_command('TS.REVRANGE', args)
     }
@@ -257,13 +257,13 @@ export class RedisTimeSeries {
      * @param options.aggregation.timeBucket The time bucket of the 'AGGREGATION' command
      * @param options.withLabels The 'WITHLABELS' optional parameter
      */
-    async mrange(key: string, fromTimestamp: number, toTimestamp: number, filter: string, options: TSMRangeOptions) {
+    async mrange(key: string, fromTimestamp: number, toTimestamp: number, filter: string, options?: TSMRangeOptions) {
         const args = [key, fromTimestamp.toString(), toTimestamp.toString()];
-        if(options.count !== undefined)
+        if(options !== undefined && options.count !== undefined)
             args.concat(['COUNT', options.count.toString()]);
-        if(options.aggregation !== undefined)
+        if(options !== undefined && options.aggregation !== undefined)
             args.concat(['AGGREGATION', options.aggregation.type, options.aggregation.timeBucket.toString()]);
-        if(options.withLabels !== undefined)
+        if(options !== undefined && options.withLabels !== undefined)
             args.push('WITHLABELS')
         args.concat(['FILTER', filter])
         return await this.redis.send_command('TS.MRANGE', args)
@@ -282,13 +282,13 @@ export class RedisTimeSeries {
      * @param options.aggregation.timeBucket The time bucket of the 'AGGREGATION' command
      * @param options.withLabels The 'WITHLABELS' optional parameter
      */
-    async mrevrange(key: string, fromTimestamp: number, toTimestamp: number, filter: string, options: TSMRangeOptions) {
+    async mrevrange(key: string, fromTimestamp: number, toTimestamp: number, filter: string, options?: TSMRangeOptions) {
         const args = [key, fromTimestamp.toString(), toTimestamp.toString()];
-        if(options.count !== undefined)
+        if(options !== undefined && options.count !== undefined)
             args.concat(['COUNT', options.count.toString()]);
-        if(options.aggregation !== undefined)
+        if(options !== undefined && options.aggregation !== undefined)
             args.concat(['AGGREGATION', options.aggregation.type, options.aggregation.timeBucket.toString()]);
-        if(options.withLabels !== undefined)
+        if(options !== undefined && options.withLabels !== undefined)
             args.push('WITHLABELS')
         args.concat(['FILTER', filter])
         return await this.redis.send_command('TS.MREVRANGE', args)
