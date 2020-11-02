@@ -17,24 +17,36 @@ jobs:
   # This workflow contains a single job called "build"
   ReJSON:
     # The type of runner that the job will run on
+    #runs-on: ubuntu-latest
+#
+    ## Steps represent a sequence of tasks that will be executed as part of the job
+    #steps:
+    #  # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    #  - uses: actions/checkout@v2
+    #  - name: Installing Redis
+    #    run: sudo apt update && sudo apt install make && sudo apt-get install build-essential && sudo apt-get install -y cargo && sudo apt install redis-server 
+    #  - name: Configurating Redis
+    #    run: whoami && ls -l /etc/redis/redis.conf && sudo chown runner /etc/redis/redis.conf && sudo echo "supervised systemd" >> /etc/redis/redis.conf
+    #  - name: Building ReJSON module
+    #    run: sudo git clone https://github.com/RedisJSON/RedisJSON.git && cd RedisJSON && sudo cargo build --release && sudo mkdir /etc/redis/modules/ && sudo mv target/release/librejson.so /etc/redis/modules/
+    #  - name: Restarting Redis Server
+    #    run: sudo echo "loadmodule /etc/redis/modules/librejson.so" >> /etc/redis/redis.conf && sudo /etc/init.d/redis-server stop && sudo /etc/init.d/redis-server start
+    #  - name: Verifying Redis status
+    #    run: sudo systemctl status redis
+    #  - name: Running tests
+    #    run: npm i && npm run rejson-module-tests
+    # redis-redisjson redislabs/rejson:latest
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-      - name: Installing Redis
-        run: sudo apt update && sudo apt install make && sudo apt-get install build-essential && sudo apt-get install -y cargo && sudo apt install redis-server 
-      - name: Configurating Redis
-        run: whoami && ls -l /etc/redis/redis.conf && sudo chown runner /etc/redis/redis.conf && sudo echo "supervised systemd" >> /etc/redis/redis.conf
-      - name: Building ReJSON module
-        run: sudo git clone https://github.com/RedisJSON/RedisJSON.git && cd RedisJSON && sudo cargo build --release && sudo mkdir /etc/redis/modules/ && sudo mv target/release/librejson.so /etc/redis/modules/
-      - name: Restarting Redis Server
-        run: sudo echo "loadmodule /etc/redis/modules/librejson.so" >> /etc/redis/redis.conf && sudo /etc/init.d/redis-server stop && sudo /etc/init.d/redis-server start
-      - name: Verifying Redis status
-        run: sudo systemctl status redis
-      - name: Running tests
-        run: npm i && npm run rejson-module-tests
+    - uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_channel: nightly
+        docker_nightly_version: snapshot-20200915
+    - uses: actions/checkout@v2
+    - name:
+      run: docker run -p 6379:6379 -d --rm redislabs/rejson:latest && docker ps -a
+    - name: Running tests
+      run: npm i && npm run rejson-module-tests
   RTS:
     runs-on: ubuntu-latest
     steps:
