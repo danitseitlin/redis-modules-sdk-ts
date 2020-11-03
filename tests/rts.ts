@@ -88,13 +88,13 @@ describe('RedisTimesSeries Module testing', async function() {
     });
     it('mrange function', async () => {
         const data = await client.get(key1);
-        const response = await client.mrange(key1, '-', data[1].toString(), 'l=label')
+        const response = await client.mrange(key1, '-', data[1].toString(), 'l!=v')
         console.log(response)
         //expect(response).to.equal(1, 'The response of the mrange command');
     });
     it('mrevrange function', async () => {
         const data = await client.get(key1);
-        const response = await client.mrevrange(key1, '-', data[1].toString(), 'l=label')
+        const response = await client.mrevrange(key1, '-', data[1].toString(), 'l!=v')
         console.log(response)
         //expect(response).to.equal(1, 'The response of the mrevrange command');
     });
@@ -103,7 +103,7 @@ describe('RedisTimesSeries Module testing', async function() {
         expect(response.length).to.equal(2, 'The response of the get command');
     });
     it('mget function', async () => {
-        const response = await client.mget('l=label');
+        const response = await client.mget('l!=v');
         console.log(response)
         //expect(response).to.equal(1, 'The response of the mget command');
     });
@@ -113,7 +113,7 @@ describe('RedisTimesSeries Module testing', async function() {
         //expect(response).to.equal(1, 'The response of the info command');
     });
     it('queryindex function', async () => {
-        const response = await client.queryindex('l=label')
+        const response = await client.queryindex('l!=v')
         expect(response.length).eql(0, 'The response of the queryindex command');
     });
     it('del function', async () => {
