@@ -122,6 +122,7 @@ export class RedisTimeSeries {
     async madd(keySets: TSKeySet[]) {
         const args: string[] = []
         for(const keySet of keySets) {
+            console.log(keySet)
             args.concat([keySet.key, keySet.timestamp.toString(), keySet.value]);
         }
         console.log(`arguments: ${args}`)
