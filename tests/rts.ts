@@ -50,14 +50,16 @@ describe('RedisTimesSeries Module testing', async function() {
         expect(response.length).to.equal(1, 'The response of the madd command');
     });
     it('incrby function', async () => {
-        const currentValue = parseInt((await client.get(key1))[0].toString())
-        const newValue = await client.incrby(key1, '1')
+        const currentValue = parseInt((await client.get(key1))[1].toString())
+        await client.incrby(key1, '1')
+        const newValue = parseInt((await client.get(key1))[1].toString())
         console.log(`${currentValue} vs ${newValue}`)
         expect(newValue).to.be.above(currentValue, 'The response of the incrby command');
     });
     it('decrby function', async () => {
-        const currentValue = parseInt((await client.get(key1))[0].toString())
-        const newValue = await client.decrby(key1, '2')
+        const currentValue = parseInt((await client.get(key1))[1].toString())
+        await client.decrby(key1, '1')
+        const newValue = parseInt((await client.get(key1))[1].toString())
         console.log(`${currentValue} vs ${newValue}`)
         expect(currentValue).to.be.above(newValue, 'The response of the decrby command');
     });
