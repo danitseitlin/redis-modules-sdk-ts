@@ -75,13 +75,13 @@ describe('RedisTimesSeries Module testing', async function() {
         const response = await client.deleterule(key1, key2);
         expect(response).to.equal('OK', 'The response of the deleterule command');
     });
-    it('range function', async () => {
+    it.skip('range function', async () => {
         const data = await client.get(key1);
         const response = await client.range(key1, data[0].toString(), data[1].toString())
         console.log(response)
         //expect(response).to.equal(1, 'The response of the range command');
     });
-    it('revrange function', async () => {
+    it.skip('revrange function', async () => {
         const data = await client.get(key1);
         const response = await client.revrange(key1, data[0].toString(), data[1].toString())
         console.log(response)

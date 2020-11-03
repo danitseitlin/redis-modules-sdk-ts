@@ -218,7 +218,7 @@ export class RedisTimeSeries {
      * @param options.aggregation.type The type of the 'AGGREGATION' command
      * @param options.aggregation.timeBucket The time bucket of the 'AGGREGATION' command
      */
-    async range(key: string, fromTimestamp: string, toTimestamp: string, options?: TSRangeOptions) {
+    async range(key: string, fromTimestamp: string, toTimestamp: string, options?: TSRangeOptions): Promise<number[]> {
         let args = [key, fromTimestamp, toTimestamp];
         if(options !== undefined && options.count !== undefined)
             args = args.concat(['COUNT', options.count.toString()]);
@@ -238,7 +238,7 @@ export class RedisTimeSeries {
      * @param options.aggregation.type The type of the 'AGGREGATION' command
      * @param options.aggregation.timeBucket The time bucket of the 'AGGREGATION' command
      */
-    async revrange(key: string, fromTimestamp: string, toTimestamp: string, options?: TSRangeOptions) {
+    async revrange(key: string, fromTimestamp: string, toTimestamp: string, options?: TSRangeOptions): Promise<number[]> {
         let args = [key, fromTimestamp.toString(), toTimestamp.toString()];
         if(options !== undefined && options.count !== undefined)
             args = args.concat(['COUNT', options.count.toString()]);
@@ -260,7 +260,7 @@ export class RedisTimeSeries {
      * @param options.aggregation.timeBucket The time bucket of the 'AGGREGATION' command
      * @param options.withLabels The 'WITHLABELS' optional parameter
      */
-    async mrange(key: string, fromTimestamp: string, toTimestamp: string, filter: string, options?: TSMRangeOptions) {
+    async mrange(key: string, fromTimestamp: string, toTimestamp: string, filter: string, options?: TSMRangeOptions): Promise<(string | number)[][]> {
         let args = [key, fromTimestamp, toTimestamp];
         if(options !== undefined && options.count !== undefined)
             args = args.concat(['COUNT', options.count.toString()]);
@@ -286,7 +286,7 @@ export class RedisTimeSeries {
      * @param options.aggregation.timeBucket The time bucket of the 'AGGREGATION' command
      * @param options.withLabels The 'WITHLABELS' optional parameter
      */
-    async mrevrange(key: string, fromTimestamp: string, toTimestamp: string, filter: string, options?: TSMRangeOptions) {
+    async mrevrange(key: string, fromTimestamp: string, toTimestamp: string, filter: string, options?: TSMRangeOptions): Promise<(string | number)[][]> {
         let args = [key, fromTimestamp.toString(), toTimestamp.toString()];
         if(options !== undefined && options.count !== undefined)
             args = args.concat(['COUNT', options.count.toString()]);
@@ -312,7 +312,7 @@ export class RedisTimeSeries {
      * @param filter Required. The filter
      * @param withLabels Optional. If to add the 'WITHLABELS' Optional parameter
      */
-    async mget(filter: string, withLabels?: boolean) {
+    async mget(filter: string, withLabels?: boolean): Promise<(string | number)[][]> {
         let args: string[] = [];
         if(withLabels === true)
             args.push('WITHLABELS');
