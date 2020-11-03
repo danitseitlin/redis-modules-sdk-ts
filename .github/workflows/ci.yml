@@ -5,37 +5,70 @@ on:
     branches: [master]
   pull_request: 
     branches: [master]
-
 jobs:
+  #Build for 'ReJSON' module
   ReJSON:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Installing Redis
-        run: sudo apt update && sudo apt install make && sudo apt-get install build-essential && sudo apt-get install -y cargo && sudo apt install redis-server 
-      - name: Configurating Redis
-        run: whoami && ls -l /etc/redis/redis.conf && sudo chown runner /etc/redis/redis.conf && sudo echo "supervised systemd" >> /etc/redis/redis.conf
-      - name: Building ReJSON module
-        run: sudo git clone https://github.com/RedisJSON/RedisJSON.git && cd RedisJSON && sudo cargo build --release && sudo mkdir /etc/redis/modules/ && sudo mv target/release/librejson.so /etc/redis/modules/
-      - name: Restarting Redis Server
-        run: sudo echo "loadmodule /etc/redis/modules/librejson.so" >> /etc/redis/redis.conf && sudo /etc/init.d/redis-server stop && sudo /etc/init.d/redis-server start
-      - name: Verifying Redis status
-        run: sudo systemctl status redis
-      - name: Running tests
-        run: npm i && npm run rejson-module-tests
-  RediSearch:
+    - uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_channel: nightly
+        docker_nightly_version: snapshot-20200915
+    - uses: actions/checkout@v2
+    - name: Setting up Redis
+      run: docker run -p 6379:6379 -d --rm redislabs/rejson:latest && docker ps -a
+    - name: Running tests
+      run: npm i && npm run rejson-module-tests
+  #Build for 'Redis Times Series' module
+  RTS:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Installing Redis
-        run: sudo apt update && sudo apt install make && sudo apt-get install build-essential && sudo apt-get install -y cargo && sudo apt install redis
-      - name: Configurating Redis
-        run: whoami && ls -l /etc/redis/redis.conf && sudo chown runner /etc/redis/redis.conf && sudo echo "supervised systemd" >> /etc/redis/redis.conf && sudo echo "loadmodule /etc/redis/modules/redisearch.so" >> /etc/redis/redis.conf && sudo systemctl stop redis
-      - name: Building RediSearch module
-        run: sudo git clone --recursive https://github.com/RediSearch/RediSearch.git && cd RediSearch && sudo make setup && sudo make fetch && sudo make build #&& sudo mkdir /etc/redis/modules/ && sudo mv build/redisearch.so /etc/redis/modules/ && cd /etc/redis/modules && ls
-      - name: Restarting Redis Server
-        run: sudo redis-server --loadmodule ./build/redisearch.so TIMEOUT 100 #sudo systemctl restart redis
-      - name: Verifying Redis status
-        run: sudo systemctl status redis
-      - name: Running tests
-        run: npm i && npm run redisearch-module-tests
+    - uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_channel: nightly
+        docker_nightly_version: snapshot-20200915
+    - uses: actions/checkout@v2
+    - name: Setting up Redis
+      run: docker run -p 6379:6379 -d --rm redislabs/redistimeseries && docker ps -a
+    - name: Running tests
+      run: npm i && npm run rts-module-tests
+  #Build for 'Redis Search' module
+  Redisearch:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_channel: nightly
+        docker_nightly_version: snapshot-20200915
+    - uses: actions/checkout@v2
+    - name: Setting up Redis
+      run: docker run -p 6379:6379 -d --rm redislabs/redisearch:latest && docker ps -a
+    #- name: Running tests
+    #  run: npm i && npm run rts-module-tests
+  #Build for 'Redis Bloom' module
+  RedisBloom:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_channel: nightly
+        docker_nightly_version: snapshot-20200915
+    - uses: actions/checkout@v2
+    - name: Setting up Redis
+      run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
+    #- name: Running tests
+    #  run: npm i && npm run rts-module-tests
+  #Build for 'Redis Graph module
+  #RedisGraph:
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #  - uses: docker-practice/actions-setup-docker@master
+  #    with:
+  #      docker_channel: nightly
+  #      docker_nightly_version: snapshot-20200915
+  #  - uses: actions/checkout@v2
+  #  - name: Setting up Redis
+  #    run: docker run -p 30001:30001 -p 30002:30002 -p 30003:30003 redislabs/rgcluster:latest && docker ps -a
+    #- name: Running tests
+    #  run: npm i && npm run rts-module-tests
+

@@ -108,7 +108,7 @@ describe('RedisJSON Module testing', async function() {
     
     it('debug function', async () => {
         const response = await client.debug('MEMORY', key1, path);
-        expect(response).to.equal(64, 'The response of the debug command');
+        expect(response).to.equal(145, 'The response of the debug command');
     });
     
     it('forget function', async () => {
