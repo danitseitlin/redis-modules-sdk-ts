@@ -121,8 +121,9 @@ export class RedisTimeSeries {
      */
     async madd(keySets: TSKeySet[]) {
         const args: string[] = []
-        for(const keySet of keySets)
+        for(const keySet of keySets) {
             args.concat([keySet.key, keySet.timestamp.toString(), keySet.value]);
+        }
         console.log(`arguments: ${args}`)
         return await this.redis.send_command('TS.MADD', args);   
     }
@@ -258,7 +259,7 @@ export class RedisTimeSeries {
      * @param options.aggregation.timeBucket The time bucket of the 'AGGREGATION' command
      * @param options.withLabels The 'WITHLABELS' optional parameter
      */
-    async mrange(key: string, fromTimestamp: number, toTimestamp: number, filter: string, options?: TSMRangeOptions) {
+    async mrange(key: string, fromTimestamp: string, toTimestamp: string, filter: string, options?: TSMRangeOptions) {
         const args = [key, fromTimestamp.toString(), toTimestamp.toString()];
         if(options !== undefined && options.count !== undefined)
             args.concat(['COUNT', options.count.toString()]);
@@ -283,7 +284,7 @@ export class RedisTimeSeries {
      * @param options.aggregation.timeBucket The time bucket of the 'AGGREGATION' command
      * @param options.withLabels The 'WITHLABELS' optional parameter
      */
-    async mrevrange(key: string, fromTimestamp: number, toTimestamp: number, filter: string, options?: TSMRangeOptions) {
+    async mrevrange(key: string, fromTimestamp: string, toTimestamp: string, filter: string, options?: TSMRangeOptions) {
         const args = [key, fromTimestamp.toString(), toTimestamp.toString()];
         if(options !== undefined && options.count !== undefined)
             args.concat(['COUNT', options.count.toString()]);
@@ -309,9 +310,10 @@ export class RedisTimeSeries {
      * @param withLabels Optional. If to add the 'WITHLABELS' Optional parameter
      */
     async mget(filter: string, withLabels?: boolean) {
-        const args = [filter];
+        const args: string[] = [];
         if(withLabels === true)
             args.push('WITHLABELS');
+        args.concat(['FILTER', filter])
         return await this.redis.send_command('TS.MGET', args);
     }
 

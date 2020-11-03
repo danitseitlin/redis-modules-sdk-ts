@@ -84,18 +84,18 @@ describe('RedisTimesSeries Module testing', async function() {
         //expect(response).to.equal(1, 'The response of the revrange command');
     });
     it('mrange function', async () => {
-        const response = await client.mrange(key1, 1, 1604362795118, 'l=label')
+        const response = await client.mrange(key1, '-', '+', 'l=label')
         console.log(response)
         //expect(response).to.equal(1, 'The response of the mrange command');
     });
     it('mrevrange function', async () => {
-        const response = await client.mrevrange(key1, 1, 1604361665700, 'l=label')
+        const response = await client.mrevrange(key1, '-', '+', 'l=label')
         console.log(response)
         //expect(response).to.equal(1, 'The response of the mrevrange command');
     });
     it('get function', async () => {
         const response = await client.get(key1);
-        expect(response).to.equal([ 1604362795138, '25' ], 'The response of the get command');
+        expect(response.length).to.equal(2, 'The response of the get command');
     });
     it('mget function', async () => {
         const response = await client.mget('l=label');
