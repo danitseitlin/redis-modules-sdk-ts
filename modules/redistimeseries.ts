@@ -319,8 +319,13 @@ export class RedisTimeSeries {
      * Retrieving information and statistics on the time-series
      * @param key The key
      */
-    async info(key: string) {
-        return await this.redis.send_command('TS.INFO', key);
+    async info(key: string): Promise<Info> {
+        const response = await this.redis.send_command('TS.INFO', key);
+        const info: Info = {};
+        for(let i = 0; i < response.length; i+2) {
+            info[response[i]] = response[i+1];
+        }
+        return info;
     }
 
     /**
@@ -330,6 +335,20 @@ export class RedisTimeSeries {
     async queryindex(filter: string) {
         return await this.redis.send_command('TS.QUERYINDEX', filter);
     }
+}
+
+export type Info = {
+    totalSamples?: string,
+    memoryUsage?: number,
+    firstTimestamp?: number,
+    lastTimestamp?: number,
+    retentionTime?: number,
+    chunkCount?: number,
+    chunkSize?: number,
+    duplicatePolicy?: boolean | null,
+    labels?: Array<string[]>,
+    sourceKey?: string | null,
+    rules?: Array<string[]>,
 }
 
 /**
