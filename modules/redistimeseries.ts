@@ -119,7 +119,7 @@ export class RedisTimeSeries {
      * @param keySets.timestamp The timestamp
      * @param keySets.value The value
      */
-    async madd(keySets: TSKeySet[]) {
+    async madd(keySets: TSKeySet[]):Promise<number[]> {
         let args: string[] = []
         for(const keySet of keySets)
             args = args.concat([keySet.key, keySet.timestamp, keySet.value]);

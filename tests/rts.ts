@@ -47,16 +47,17 @@ describe('RedisTimesSeries Module testing', async function() {
             timestamp: '*',
             value: '32'
         }])
-        console.log(response)
-        //expect(response).to.equal(1, 'The response of the madd command');
+        expect(response.length).to.equal(1, 'The response of the madd command');
     });
     it('incrby function', async () => {
-        const response = await client.incrby(key1, '1')
-        expect(response).to.equal(1604362795119, 'The response of the incrby command');
+        const currentValue = (await client.get(key1))[0]
+        const newValue = await client.incrby(key1, '1')
+        expect(newValue).greaterThan(parseInt(currentValue.toString()), 'The response of the incrby command');
     });
     it('decrby function', async () => {
-        const response = await client.decrby(key1, '2')
-        expect(response).to.equal(1604362795138, 'The response of the decrby command');
+        const currentValue = (await client.get(key1))[0]
+        const newValue = await client.decrby(key1, '2')
+        expect(parseInt(currentValue.toString())).greaterThan(newValue, 'The response of the decrby command');
     });
     it('createrule function', async () => {
         const response = await client.createrule({
@@ -65,21 +66,19 @@ describe('RedisTimesSeries Module testing', async function() {
             aggregation: 'avg',
             timeBucket: 1
         })
-        console.log(response)
         expect(response).to.equal('OK', 'The response of the createrule command');
     });
     it('deleterule function', async () => {
         const response = await client.deleterule(key1, key2);
-        console.log(response)
         expect(response).to.equal('OK', 'The response of the deleterule command');
     });
     it('range function', async () => {
-        const response = await client.range(key1, '0', '+')
+        const response = await client.range(key1, '- ', '+ ')
         console.log(response)
         //expect(response).to.equal(1, 'The response of the range command');
     });
     it('revrange function', async () => {
-        const response = await client.revrange(key1, '0', '+')
+        const response = await client.revrange(key1, '- ', '+ ')
         console.log(response)
         //expect(response).to.equal(1, 'The response of the revrange command');
     });
@@ -110,11 +109,10 @@ describe('RedisTimesSeries Module testing', async function() {
     it('queryindex function', async () => {
         const response = await client.queryindex('l=label')
         console.log(response)
-        //expect(response).to.equal([], 'The response of the queryindex command');
+        expect(response.length).eql(0, 'The response of the queryindex command');
     });
     it('del function', async () => {
         const response = await client.del(key1);
-        console.log(response)
         expect(response).to.equal(1, 'The response of the del command');
     });
 });
