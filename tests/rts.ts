@@ -23,45 +23,40 @@ describe('RedisTimesSeries Module testing', async function() {
                 value: 'value'
             }]
         })
-        console.log(response)
+        expect(response).to.equal('OK', 'The response of the create command');
         response = await client.create(key2, {
             labels:[{
                 name: 'label1',
                 value: 'value1'
             }]
         })
-        console.log(response)
-        //expect(response).to.equal(1, 'The response of the del command');
+        expect(response).to.equal('OK', 'The response of the create command');
     });
     
     it('alter function', async () => {
         const response = await client.alter(key1, 1);
-        console.log(response)
-        //expect(response).to.equal(1, 'The response of the del command');
+        expect(response).to.equal('OK', 'The response of the alter command');
     });
     it('add function', async () => {
         const response = await client.add(key1, '1548149180000', '26')
-        console.log(response)
-        //expect(response).to.equal(1, 'The response of the del command');
+        expect(response).to.equal(1548149180000, 'The response of the add command');
     });
     it('madd function', async () => {
         const response = await client.madd([{
             key: key1,
-            timestamp: '*',
+            timestamp: '1548149180000',
             value: '32'
         }])
         console.log(response)
-        //expect(response).to.equal(1, 'The response of the del command');
+        //expect(response).to.equal(1, 'The response of the madd command');
     });
     it('incrby function', async () => {
         const response = await client.incrby(key1, '1')
-        console.log(response)
-        //expect(response).to.equal(1, 'The response of the del command');
+        expect(response).to.equal(1604361665688, 'The response of the incrby command');
     });
     it('decrby function', async () => {
         const response = await client.decrby(key1, '2')
-        console.log(response)
-        //expect(response).to.equal(1, 'The response of the del command');
+        expect(response).to.equal(1604361665688, 'The response of the decrby command');
     });
     it('createrule function', async () => {
         const response = await client.createrule({
@@ -71,56 +66,54 @@ describe('RedisTimesSeries Module testing', async function() {
             timeBucket: 1
         })
         console.log(response)
-        //expect(response).to.equal(1, 'The response of the del command');
+        expect(response).to.equal('OK', 'The response of the createrule command');
     });
     it('deleterule function', async () => {
         const response = await client.deleterule(key1, key2);
         console.log(response)
-        //expect(response).to.equal(1, 'The response of the del command');
+        expect(response).to.equal('OK', 'The response of the deleterule command');
     });
     it('range function', async () => {
-        const response = await client.range(key1, 1, 2)
+        const response = await client.range(key1, 1, 1604361665700)
         console.log(response)
-        //expect(response).to.equal(1, 'The response of the del command');
+        //expect(response).to.equal(1, 'The response of the range command');
     });
     it('revrange function', async () => {
-        const response = await client.revrange(key1, 1, 2)
+        const response = await client.revrange(key1, 1, 1604361665700)
         console.log(response)
-        //expect(response).to.equal(1, 'The response of the del command');
+        //expect(response).to.equal(1, 'The response of the revrange command');
     });
     it('mrange function', async () => {
-        const response = await client.mrange(key1, 1, 2, 'l=label')
+        const response = await client.mrange(key1, 1, 1604361665700, 'l=label')
         console.log(response)
-        //expect(response).to.equal(1, 'The response of the del command');
+        //expect(response).to.equal(1, 'The response of the mrange command');
     });
     it('mrevrange function', async () => {
-        const response = await client.mrevrange(key1, 1, 2, 'l=label')
+        const response = await client.mrevrange(key1, 1, 1604361665700, 'l=label')
         console.log(response)
-        //expect(response).to.equal(1, 'The response of the del command');
+        //expect(response).to.equal(1, 'The response of the mrevrange command');
     });
     it('get function', async () => {
         const response = await client.get(key1);
-        console.log(response)
-        //expect(response).to.equal(1, 'The response of the del command');
+        expect(response).to.equal([ 1604361665689, '25' ], 'The response of the get command');
     });
     it('mget function', async () => {
         const response = await client.mget('l=label');
         console.log(response)
-        //expect(response).to.equal(1, 'The response of the del command');
+        //expect(response).to.equal(1, 'The response of the mget command');
     });
     it('info function', async () => {
         const response = await client.info(key1)
         console.log(response)
-        //expect(response).to.equal(1, 'The response of the del command');
+        //expect(response).to.equal(1, 'The response of the info command');
     });
     it('queryindex function', async () => {
         const response = await client.queryindex('l=label')
-        console.log(response)
-        expect(response).to.equal(1, 'The response of the del command');
+        expect(response).to.equal([], 'The response of the queryindex command');
     });
     it('del function', async () => {
         const response = await client.del(key1);
         console.log(response)
-        //expect(response).to.equal(1, 'The response of the del command');
+        expect(response).to.equal(1, 'The response of the del command');
     });
 });

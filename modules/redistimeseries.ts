@@ -58,7 +58,7 @@ export class RedisTimeSeries {
      * Deleting an existing TS key
      * @param key The key
      */
-    async del(key: string) {
+    async del(key: string): Promise<number> {
         return await this.redis.send_command('DEL', [key])
     }
 
@@ -191,7 +191,7 @@ export class RedisTimeSeries {
      * @param options.aggregation The aggregation type
      * @param options.timeBucket The time bucket
      */
-    async createrule(parameters: TSCreateRule) {
+    async createrule(parameters: TSCreateRule): Promise<'OK'> {
         const args = [parameters.sourceKey, parameters.destKey, 'AGGREGATION', parameters.aggregation, parameters.timeBucket.toString()]
         return await this.redis.send_command('TS.CREATERULE', args);
     }
@@ -201,7 +201,7 @@ export class RedisTimeSeries {
      * @param sourceKey The source key
      * @param destKey The dest key
      */
-    async deleterule(sourceKey: string, destKey: string) {
+    async deleterule(sourceKey: string, destKey: string): Promise<'OK'> {
         return await this.redis.send_command('TS.DELETERULE', sourceKey, destKey)
     }
 
@@ -299,7 +299,7 @@ export class RedisTimeSeries {
      * Retrieving the last sample of a key
      * @param key The key
      */
-    async get(key: string) {
+    async get(key: string): Promise<(string | number)[]> {
         return await this.redis.send_command('TS.GET', key);
     }
 
