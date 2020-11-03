@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import { RediSearch } from '../modules/redisearch';
 let client: RediSearch;
 let index = 'idx'
-let query = '@text:name=>{$phonetic:false}'
+let query = '@text:name'
 describe('RediSearch Module testing', async function() {
     before(async () => {
         client = new RediSearch({
