@@ -2,8 +2,8 @@ import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { RedisTimeSeries } from '../modules/redistimeseries';
 let client: RedisTimeSeries;
-const key1 = 'key';
-const key2 = 'key1';
+const key1 = 'key:2:32';
+const key2 = 'key:2:33';
 describe('RedisTimesSeries Module testing', async function() {
     before(async () => {
         client = new RedisTimeSeries({
@@ -94,7 +94,7 @@ describe('RedisTimesSeries Module testing', async function() {
     });
     it('mrevrange function', async () => {
         const data = await client.get(key1);
-        const response = await client.mrevrange(key1, data[0].toString(), data[1].toString(), 'l=label')
+        const response = await client.mrevrange(key1, data[0].toString(), (data[1]+100).toString(), 'l=label')
         console.log(response)
         //expect(response).to.equal(1, 'The response of the mrevrange command');
     });
