@@ -217,7 +217,7 @@ export class RedisTimeSeries {
      * @param options.aggregation.type The type of the 'AGGREGATION' command
      * @param options.aggregation.timeBucket The time bucket of the 'AGGREGATION' command
      */
-    async range(key: string, fromTimestamp: number, toTimestamp: number, options?: TSRangeOptions) {
+    async range(key: string, fromTimestamp: string, toTimestamp: string, options?: TSRangeOptions) {
         const args = [key, fromTimestamp.toString(), toTimestamp.toString()];
         if(options !== undefined && options.count !== undefined)
             args.concat(['COUNT', options.count.toString()]);
@@ -237,7 +237,7 @@ export class RedisTimeSeries {
      * @param options.aggregation.type The type of the 'AGGREGATION' command
      * @param options.aggregation.timeBucket The time bucket of the 'AGGREGATION' command
      */
-    async revrange(key: string, fromTimestamp: number, toTimestamp: number, options?: TSRangeOptions) {
+    async revrange(key: string, fromTimestamp: string, toTimestamp: string, options?: TSRangeOptions) {
         const args = [key, fromTimestamp.toString(), toTimestamp.toString()];
         if(options !== undefined && options.count !== undefined)
             args.concat(['COUNT', options.count.toString()]);
