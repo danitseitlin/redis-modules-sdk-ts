@@ -42,9 +42,10 @@ describe('RedisTimesSeries Module testing', async function() {
         expect(response).to.equal(1548149180000, 'The response of the add command');
     });
     it('madd function', async () => {
+        const info = await client.info(key1);
         const response = await client.madd([{
             key: key1,
-            timestamp: '*',
+            timestamp: info.firstTimestamp.toString(),
             value: '32'
         }])
         expect(response.length).to.equal(1, 'The response of the madd command');
