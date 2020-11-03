@@ -123,7 +123,7 @@ export class RedisTimeSeries {
         const args: string[] = []
         for(const keySet of keySets)
             args.concat([keySet.key, keySet.timestamp.toString(), keySet.value]);
-        console.log(args)
+        console.log(`arguments: ${args}`)
         return await this.redis.send_command('TS.MADD', args);   
     }
 
