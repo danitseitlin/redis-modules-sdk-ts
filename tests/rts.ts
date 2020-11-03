@@ -53,14 +53,12 @@ describe('RedisTimesSeries Module testing', async function() {
         const currentValue = parseInt((await client.get(key1))[1].toString())
         await client.incrby(key1, '1')
         const newValue = parseInt((await client.get(key1))[1].toString())
-        console.log(`${currentValue} vs ${newValue}`)
         expect(newValue).to.be.above(currentValue, 'The response of the incrby command');
     });
     it('decrby function', async () => {
         const currentValue = parseInt((await client.get(key1))[1].toString())
         await client.decrby(key1, '1')
         const newValue = parseInt((await client.get(key1))[1].toString())
-        console.log(`${currentValue} vs ${newValue}`)
         expect(currentValue).to.be.above(newValue, 'The response of the decrby command');
     });
     it('createrule function', async () => {
@@ -77,22 +75,26 @@ describe('RedisTimesSeries Module testing', async function() {
         expect(response).to.equal('OK', 'The response of the deleterule command');
     });
     it('range function', async () => {
-        const response = await client.range(key1, '- ', '+ ')
+        const data = await client.get(key1);
+        const response = await client.range(key1, data[0].toString(), data[1].toString())
         console.log(response)
         //expect(response).to.equal(1, 'The response of the range command');
     });
     it('revrange function', async () => {
-        const response = await client.revrange(key1, '- ', '+ ')
+        const data = await client.get(key1);
+        const response = await client.revrange(key1, data[0].toString(), data[1].toString())
         console.log(response)
         //expect(response).to.equal(1, 'The response of the revrange command');
     });
     it('mrange function', async () => {
-        const response = await client.mrange(key1, '-', '+', 'l=label')
+        const data = await client.get(key1);
+        const response = await client.mrange(key1, data[0].toString(), data[1].toString(), 'l=label')
         console.log(response)
         //expect(response).to.equal(1, 'The response of the mrange command');
     });
     it('mrevrange function', async () => {
-        const response = await client.mrevrange(key1, '-', '+', 'l=label')
+        const data = await client.get(key1);
+        const response = await client.mrevrange(key1, data[0].toString(), data[1].toString(), 'l=label')
         console.log(response)
         //expect(response).to.equal(1, 'The response of the mrevrange command');
     });
