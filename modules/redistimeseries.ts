@@ -34,6 +34,7 @@ export class RedisTimeSeries {
      * @param options.chunkSize The 'CHUNK_SIZE' optional parameter
      * @param options.labels A list of 'LABELS' optional parameter
      * @param options.duplicatePolicy The 'DUPLICATE_POLICY' optional parameter
+     * @returns "OK"
      */
     async create(key: string, options?: TSCreateOptions): Promise<'OK'> {
         let args = [key];
@@ -57,6 +58,7 @@ export class RedisTimeSeries {
     /**
      * Deleting an existing TS key
      * @param key The key
+     * @returns 1 if successful
      */
     async del(key: string): Promise<number> {
         return await this.redis.send_command('DEL', [key])
@@ -67,6 +69,7 @@ export class RedisTimeSeries {
      * @param key Required. The key
      * @param retention Optional. The retention time
      * @param labels Optional. The labels to update
+     * 
      */
     async alter(key: string, retention?: number, labels?: TSLabel[]): Promise<'OK'> {
         let args = [key];

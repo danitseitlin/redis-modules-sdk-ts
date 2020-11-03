@@ -88,13 +88,13 @@ describe('RedisTimesSeries Module testing', async function() {
     });
     it('mrange function', async () => {
         const data = await client.get(key1);
-        const response = await client.mrange(key1, '-', data[1].toString(), 'l!=v')
+        const response = await client.mrange(key1, '-', data[0].toString(), 'l!=v')
         console.log(response)
         //expect(response).to.equal(1, 'The response of the mrange command');
     });
     it('mrevrange function', async () => {
         const data = await client.get(key1);
-        const response = await client.mrevrange(key1, '-', data[1].toString(), 'l!=v')
+        const response = await client.mrevrange(key1, '-', data[0].toString(), 'l!=v')
         console.log(response)
         //expect(response).to.equal(1, 'The response of the mrevrange command');
     });
@@ -103,17 +103,16 @@ describe('RedisTimesSeries Module testing', async function() {
         expect(response.length).to.equal(2, 'The response of the get command');
     });
     it('mget function', async () => {
-        const response = await client.mget('l!=v');
+        const response = await client.mget('label=value');
         console.log(response)
         //expect(response).to.equal(1, 'The response of the mget command');
     });
     it('info function', async () => {
         const response = await client.info(key1)
-        console.log(response)
-        //expect(response).to.equal(1, 'The response of the info command');
+        expect(response.totalSamples).to.equal(1, 'The total samples of the key');
     });
     it('queryindex function', async () => {
-        const response = await client.queryindex('l!=v')
+        const response = await client.queryindex('label=value')
         expect(response.length).eql(0, 'The response of the queryindex command');
     });
     it('del function', async () => {
