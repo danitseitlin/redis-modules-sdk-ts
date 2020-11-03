@@ -266,6 +266,7 @@ export class RedisTimeSeries {
         if(options !== undefined && options.withLabels !== undefined)
             args.push('WITHLABELS')
         args = args.concat(['FILTER', filter])
+        console.log(`TS.MRANGE: ${args}`)
         return await this.redis.send_command('TS.MRANGE', args)
     }
     
@@ -291,6 +292,7 @@ export class RedisTimeSeries {
         if(options !== undefined && options.withLabels !== undefined)
             args.push('WITHLABELS')
         args = args.concat(['FILTER', filter])
+        console.log(`TS.MREVRANGE: ${args}`)
         return await this.redis.send_command('TS.MREVRANGE', args)
     }
 
@@ -322,7 +324,7 @@ export class RedisTimeSeries {
     async info(key: string): Promise<Info> {
         const response = await this.redis.send_command('TS.INFO', key);
         const info: Info = {};
-        for(let i = 0; i < response.length; i+2) {
+        for(let i = 0; i < response.length; i+=2) {
             info[response[i]] = response[i+1];
         }
         return info;
@@ -337,6 +339,20 @@ export class RedisTimeSeries {
     }
 }
 
+/**
+ * The info JS object
+ * @param totalSamples The count of total samples
+ * @param memoryUsage The memory usage
+ * @param firstTimestamp The first timestamp
+ * @param lastTimestamp The last timestamp
+ * @param retentionTime The retention time
+ * @param chunkCount The cound of chunks
+ * @param chunkSize The chunk size
+ * @param duplicatePolicy If duplicate policy is set
+ * @param labels A list of labels
+ * @param sourceKey If source key is set
+ * @param rules A list of rules
+ */
 export type Info = {
     totalSamples?: string,
     memoryUsage?: number,
