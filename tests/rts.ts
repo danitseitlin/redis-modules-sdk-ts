@@ -1,6 +1,6 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
-import { RedisTimeSeries } from '../modules/redistimeseries';
+import { RedisTimeSeries } from '../modules/rts';
 let client: RedisTimeSeries;
 const key1 = 'key:2:32';
 const key2 = 'key:2:33';
