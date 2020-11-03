@@ -44,7 +44,7 @@ describe('RedisTimesSeries Module testing', async function() {
     it('madd function', async () => {
         const response = await client.madd([{
             key: key1,
-            timestamp: '1548149180000',
+            timestamp: '*',
             value: '32'
         }])
         console.log(response)

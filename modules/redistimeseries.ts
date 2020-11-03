@@ -123,7 +123,8 @@ export class RedisTimeSeries {
         const args: string[] = []
         for(const keySet of keySets) {
             console.log(keySet)
-            args.concat([keySet.key, keySet.timestamp.toString(), keySet.value]);
+            args.concat([keySet.key, keySet.timestamp, keySet.value]);
+            console.log(args)
         }
         console.log(`arguments: ${args}`)
         return await this.redis.send_command('TS.MADD', args);   
@@ -261,7 +262,7 @@ export class RedisTimeSeries {
      * @param options.withLabels The 'WITHLABELS' optional parameter
      */
     async mrange(key: string, fromTimestamp: string, toTimestamp: string, filter: string, options?: TSMRangeOptions) {
-        const args = [key, fromTimestamp.toString(), toTimestamp.toString()];
+        const args = [key, fromTimestamp, toTimestamp];
         if(options !== undefined && options.count !== undefined)
             args.concat(['COUNT', options.count.toString()]);
         if(options !== undefined && options.aggregation !== undefined)
