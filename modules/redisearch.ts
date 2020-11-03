@@ -61,7 +61,7 @@ export class RediSearch {
             args = args.concat(['STOPWORDS', parameters.stopwords.num.toString(), parameters.stopwords.stopword]);
         if(parameters.skipInitialScan !== undefined)
             args.push('SKIPINITIALSCAN');
-        args.push(': SCHEMA');
+        args = args.concat([':', 'SCHEMA']);
         for(const field of schemaFields) {
             args.concat([field.name, field.type]);
             if(field.sortable !== undefined) args.push('SORTABLE');
