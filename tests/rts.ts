@@ -108,7 +108,6 @@ describe('RedisTimesSeries Module testing', async function() {
     });
     it('queryindex function', async () => {
         const response = await client.queryindex('l=label')
-        console.log(response)
         expect(response.length).eql(0, 'The response of the queryindex command');
     });
     it('del function', async () => {
