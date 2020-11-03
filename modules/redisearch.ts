@@ -74,7 +74,7 @@ export class RediSearch {
         return await  this.redis.send_command('FT.CREATE', args);
     }
 
-    async hset(hash: string, fields: {[key: string]: string}) {
+    /*async hset(hash: string, fields: {[key: string]: string}) {
         const args: string[] = [hash];
         for(const field in fields) {
             args.push(field);
@@ -117,7 +117,7 @@ export class RediSearch {
             args.push(fields[field].toString());
         }
         return await  this.redis.send_command('HDECRBY', args);
-    }
+    }*/
 
     async search(parameters: SearchParameters) {
         const args: string[] = [parameters.index.toString(), parameters.query];
@@ -350,7 +350,7 @@ export class RediSearch {
 }
 
 export type CreateParameters = {
-    index: number,
+    index: string,
     on: 'HASH',
     filter?: string,
     payloadField?: string,
@@ -394,7 +394,7 @@ export interface SchemaField extends FieldOptions {
 }
 
 export type SearchParameters = {
-    index: number,
+    index: string,
     query: string,
     noContent?: boolean,
     verbatim?: boolean,
@@ -465,31 +465,31 @@ export type SearchParameters = {
 export type AggregateParameters = {
     indexName: string,
     query: string,
-    load: {
+    load?: {
         nargs: string,
         property: string
     },
-    groupBy: {
+    groupBy?: {
         nargs: string,
         property: string
     },
-    reduce: {
+    reduce?: {
         function: string,
         nargs: string,
         arg: string,
         as: string
     },
-    sortby: {
+    sortby?: {
         nargs: string,
         property: string,
         sort: 'ASC' | 'DESC',
         max: number
     },
-    apply: {
+    apply?: {
         expression: string,
         as: string
     },
-    limit: {
+    limit?: {
         offset: string,
         numberOfResults: number
     },
