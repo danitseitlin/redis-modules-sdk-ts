@@ -52,12 +52,12 @@ describe('RedisTimesSeries Module testing', async function() {
     it('incrby function', async () => {
         const currentValue = (await client.get(key1))[0]
         const newValue = await client.incrby(key1, '1')
-        expect(newValue).greaterThan(parseInt(currentValue.toString()), 'The response of the incrby command');
+        expect(newValue).to.be.greaterThan(parseInt(currentValue.toString()), 'The response of the incrby command');
     });
     it('decrby function', async () => {
         const currentValue = (await client.get(key1))[0]
         const newValue = await client.decrby(key1, '2')
-        expect(parseInt(currentValue.toString())).greaterThan(newValue, 'The response of the decrby command');
+        expect(parseInt(currentValue.toString())).to.be.greaterThan(newValue, 'The response of the decrby command');
     });
     it('createrule function', async () => {
         const response = await client.createrule({
