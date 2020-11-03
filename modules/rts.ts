@@ -337,7 +337,7 @@ export class RedisTimeSeries {
      * Retrieving all the keys matching the filter list
      * @param filter The filter
      */
-    async queryindex(filter: string) {
+    async queryindex(filter: string): Promise<string[]> {
         return await this.redis.send_command('TS.QUERYINDEX', filter);
     }
 }
