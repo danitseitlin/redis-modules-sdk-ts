@@ -326,7 +326,7 @@ export class RediSearch {
     async syndump(index: string) {
         return await this.redis.send_command('FT.SYNDUMP', [index]);
     }
-    async spellcheck() {
+    async spellcheck(index: string, query: string, options?: FTSpellCheck) {
 
     }
     async dictadd(dict: string, terms: string[]) {
@@ -506,4 +506,11 @@ export type SugGetParameters = {
     max: number,
     withScores: boolean,
     withPayloads: boolean
+}
+export type FTSpellCheck = {
+    terms?: {
+        type: 'INCLUDE' | 'EXCLUDE',
+        dict?: string
+    }[],
+    distance?: string
 }
