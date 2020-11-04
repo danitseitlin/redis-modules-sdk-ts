@@ -65,30 +65,30 @@ describe('RediSearch Module testing', async function() {
         console.log(response)
     });
     it('aliasdel function', async () => {
-        const response = await client.aliasdel('a', index)
+        const response = await client.aliasdel('a')
         console.log(response)
     });
-    /*it('tagvalgs function', async () => {
-        const response = await client.tagvalgs()
+    it('tagvalgs function', async () => {
+        const response = await client.tagvals(index, 'name')
         console.log(response)
     });
     it('sugadd function', async () => {
-        const response = await client.sugadd()
+        const response = await client.sugadd('key', 'string', 1)
         console.log(response)
     });
     it('sugget function', async () => {
-        const response = await client.sugget()
+        const response = await client.sugget('key', 'str')
         console.log(response)
     });
     it('sugdel function', async () => {
-        const response = await client.sugdel()
+        const response = await client.sugdel('key', 'str')
         console.log(response)
     });
     it('suglen function', async () => {
-        const response = await client.suglen()
+        const response = await client.suglen('key')
         console.log(response)
     });
-    it('synupdate function', async () => {
+    /*it('synupdate function', async () => {
         const response = await client.synupdate()
         console.log(response)
     });
@@ -121,7 +121,7 @@ describe('RediSearch Module testing', async function() {
         console.log(response)
     });
     it('dropindex function', async () => {
-        const response = await client.dropindex()
+        const response = await client.dropindex(index)
         console.log(response)
     });*/
 });

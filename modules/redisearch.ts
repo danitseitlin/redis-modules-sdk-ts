@@ -285,13 +285,13 @@ export class RediSearch {
     async aliasupdate(name: string, index: string) {
         return await this.redis.send_command('FT.ALIASUPDATE', [name, index]);
     }
-    async aliasdel(name: string, index: string) {
-        return await this.redis.send_command('FT.ALIASDEL', [name, index]);
+    async aliasdel(name: string) {
+        return await this.redis.send_command('FT.ALIASDEL', [name]);
     }
-    async tagvalgs(index: string, field: string) {
+    async tagvals(index: string, field: string) {
         return await this.redis.send_command('FT.TAGVALS', [index, field]);
     }
-    async sugadd(key: string, string: string, score: number, options: SugAddParameters) {
+    async sugadd(key: string, string: string, score: number, options?: SugAddParameters) {
         let args = [key, string, score];
         if(options.incr !== undefined)
             args.push('INCR');
@@ -299,7 +299,7 @@ export class RediSearch {
             args = args.concat(['PAYLOAD', options.payload]);
         return await this.redis.send_command('FT.SUGADD', args);
     }
-    async sugget(key: string, prefix: string, options: SugGetParameters) {
+    async sugget(key: string, prefix: string, options?: SugGetParameters) {
         let args = [key, prefix];
         if(options.fuzzy !== undefined)
             args.push('FUZZY');
