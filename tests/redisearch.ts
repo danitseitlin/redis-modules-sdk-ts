@@ -26,31 +26,6 @@ describe('RediSearch Module testing', async function() {
         }])
         console.log(response)
     });
-    /*it('hset function', async () => {
-        const response = await client.hset('hash', {
-            'field1': 'value1'
-        })
-        console.log(response)
-    });
-    it('hsetnx function', async () => {
-        const response = await client.hsetnx('hash', {
-            'field1': 'value1'
-        })
-        console.log(response)
-    });
-    
-    it('hincrby function', async () => {
-        const response = await client.hincrby()
-        console.log(response)
-    });
-    it('hdecrby function', async () => {
-        const response = await client.hdecrby()
-        console.log(response)
-    });
-    it('hdel function', async () => {
-        const response = await client.hdel()
-        console.log(response)
-    });*/
     it('search function', async () => {
         const response = await client.search({
             index: index,
@@ -74,27 +49,26 @@ describe('RediSearch Module testing', async function() {
         const response = await client.explainCLI(index, query)
         console.log(response)
     });
-    /*it('alter function', async () => {
-        const response = await client.alter()
+    it('alter function', async () => {
+        const response = await client.alter(index, 'name', {
+            sortable: true
+        })
         console.log(response)
     });
-    it('dropindex function', async () => {
-        const response = await client.dropindex()
-        console.log(response)
-    });
+    
     it('aliasadd function', async () => {
-        const response = await client.aliasadd()
+        const response = await client.aliasadd('a', index)
         console.log(response)
     });
     it('aliasupdate function', async () => {
-        const response = await client.aliasupdate()
+        const response = await client.aliasupdate('a', index)
         console.log(response)
     });
     it('aliasdel function', async () => {
-        const response = await client.aliasdel()
+        const response = await client.aliasdel('a', index)
         console.log(response)
     });
-    it('tagvalgs function', async () => {
+    /*it('tagvalgs function', async () => {
         const response = await client.tagvalgs()
         console.log(response)
     });
@@ -144,6 +118,10 @@ describe('RediSearch Module testing', async function() {
     });
     it('config function', async () => {
         const response = await client.config()
+        console.log(response)
+    });
+    it('dropindex function', async () => {
+        const response = await client.dropindex()
         console.log(response)
     });*/
 });

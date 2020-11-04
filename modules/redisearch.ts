@@ -385,7 +385,7 @@ export type FieldOptions = {
 }
 
 export interface AlterOptions extends FieldOptions {
-    type: 'TEXT' | 'NUMERIC' | 'TAG' | string
+    type?: 'TEXT' | 'NUMERIC' | 'TAG' | string
 }
 
 export interface SchemaField extends FieldOptions {
