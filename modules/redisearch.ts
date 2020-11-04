@@ -293,21 +293,21 @@ export class RediSearch {
     }
     async sugadd(key: string, string: string, score: number, options?: SugAddParameters) {
         let args = [key, string, score];
-        if(options.incr !== undefined)
+        if(options !== undefined && options.incr !== undefined)
             args.push('INCR');
-        if(options.payload !== undefined)
+        if(options !== undefined && options.payload !== undefined)
             args = args.concat(['PAYLOAD', options.payload]);
         return await this.redis.send_command('FT.SUGADD', args);
     }
     async sugget(key: string, prefix: string, options?: SugGetParameters) {
         let args = [key, prefix];
-        if(options.fuzzy !== undefined)
+        if(options !== undefined && options.fuzzy !== undefined)
             args.push('FUZZY');
-        if(options.max !== undefined)   
+        if(options !== undefined && options.max !== undefined)   
             args = args.concat(['MAX', options.max.toString()]);
-        if(options.withScores !== undefined)
+        if(options !== undefined && options.withScores !== undefined)
             args.push('WITHSCORES');
-        if(options.withPayloads !== undefined)
+        if(options !== undefined && options.withPayloads !== undefined)
             args.push('WITHPAYLOADS');
         return await this.redis.send_command('FT.SUGGET', args);
     }
