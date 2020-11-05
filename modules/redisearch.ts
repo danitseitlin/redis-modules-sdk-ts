@@ -25,42 +25,50 @@ export class RediSearch {
         await this.redis.quit();
     }
 
-    async create(parameters: CreateParameters, schemaFields: SchemaField[]) {
-        let args: string[] = [parameters.index.toString()]
-        args = args.concat(['ON', parameters.on]);
-        if(parameters.prefix !== undefined) {
-            args.push('PREFIX');
-            for(const prefix of parameters.prefix)
-                args.concat([prefix.count.toString(), prefix.name])
+    /**
+     * Creating an index with a given spec
+     * @param parameters The additional parameters of the spec
+     * @param schemaFields The filter set after the 'SCHEMA' argument
+     * @returns 'OK'
+     */
+    async create(index: string, schemaFields: SchemaField[], parameters?: CreateParameters): Promise<'OK'> {
+        let args: string[] = [index]
+        args = args.concat(['ON', 'HASH']);
+        if(parameters !== undefined) {
+            if(parameters.prefix !== undefined) {
+                args.push('PREFIX');
+                for(const prefix of parameters.prefix)
+                    args.concat([prefix.count.toString(), prefix.name])
+            }
+            if(parameters.filter !== undefined)
+                args = args.concat(['FILTER', parameters.filter])
+            if(parameters.language !== undefined)
+                args = args.concat(['LANGUAGE', parameters.language]);
+            if(parameters.languageField !== undefined)
+                args = args.concat(['LANGUAGE_FIELD', parameters.languageField]);
+            if(parameters.score !== undefined)
+                args = args.concat(['SCORE', parameters.score])
+            if(parameters.score !== undefined)
+                args = args.concat(['SCORE_FIELD', parameters.scoreField])
+            if(parameters.payloadField !== undefined)
+                args = args.concat(['PAYLOAD_FIELD', parameters.payloadField])
+            if(parameters.maxTextFields !== undefined)
+                args = args.concat(['MAXTEXTFIELDS', parameters.maxTextFields.toString()])
+            if(parameters.noOffsets !== undefined)
+                args.push('NOOFFSETS');
+            if(parameters.temporary !== undefined)
+                args.push('TEMPORARY');
+            if(parameters.nohl !== undefined)
+                args.push('NOHL');
+            if(parameters.noFields !== undefined)
+                args.push('NOFIELDS');
+            if(parameters.noFreqs !== undefined)
+                args.push('NOFREQS');
+            if(parameters.stopwords !== undefined)
+                args = args.concat(['STOPWORDS', parameters.stopwords.num.toString(), parameters.stopwords.stopword]);
+            if(parameters.skipInitialScan !== undefined)
+                args.push('SKIPINITIALSCAN');
         }
-        if(parameters.filter !== undefined)
-            args = args.concat(['FILTER', parameters.filter])
-        if(parameters.language !== undefined)
-            args = args.concat(['LANGUAGE', parameters.language]);
-        if(parameters.languageField !== undefined)
-            args = args.concat(['LANGUAGE_FIELD', parameters.languageField]);
-        if(parameters.score !== undefined)
-            args = args.concat(['SCORE', parameters.score])
-        if(parameters.score !== undefined)
-            args = args.concat(['SCORE_FIELD', parameters.scoreField])
-        if(parameters.payloadField !== undefined)
-            args = args.concat(['PAYLOAD_FIELD', parameters.payloadField])
-        if(parameters.maxTextFields !== undefined)
-            args = args.concat(['MAXTEXTFIELDS', parameters.maxTextFields.toString()])
-        if(parameters.noOffsets !== undefined)
-            args.push('NOOFFSETS');
-        if(parameters.temporary !== undefined)
-            args.push('TEMPORARY');
-        if(parameters.nohl !== undefined)
-            args.push('NOHL');
-        if(parameters.noFields !== undefined)
-            args.push('NOFIELDS');
-        if(parameters.noFreqs !== undefined)
-            args.push('NOFREQS');
-        if(parameters.stopwords !== undefined)
-            args = args.concat(['STOPWORDS', parameters.stopwords.num.toString(), parameters.stopwords.stopword]);
-        if(parameters.skipInitialScan !== undefined)
-            args.push('SKIPINITIALSCAN');
         args.push('SCHEMA');
         for(const field of schemaFields) {
             args.concat([field.name, field.type]);
@@ -71,87 +79,90 @@ export class RediSearch {
             if(field.seperator !== undefined) args = args.concat(['SEPERATOR', field.seperator]);
             if(field.weight !== undefined) args.concat(['WEIGHT', field.weight.toString()]);
         }
+        
         return await  this.redis.send_command('FT.CREATE', args);
     }
 
-    async search(parameters: SearchParameters) {
-        let args: string[] = [parameters.index.toString(), parameters.query];
-        if(parameters.noContent === true)
-            args.push('NOCONTENT')
-        if(parameters.verbatim === true)
-            args.push('VERBARIM')
-        if(parameters.nonStopWords === true)
-            args.push('NOSTOPWORDS')
-        if(parameters.withScores === true)
-            args.push('WITHSCORES')
-        if(parameters.withPayloads === true)
-            args.push('WITHPAYLOADS')
-        if(parameters.withSortKeys === true)
-            args.push('WITHSORTKEYS')
-        if(parameters.filter !== undefined)
-        args = args.concat(['FILTER', parameters.filter.field, parameters.filter.min.toString(), parameters.filter.max.toString()])
-        if(parameters.geoFilter !== undefined)
-            args.concat([
-                'GEOFILTER',
-                parameters.geoFilter.field,
-                parameters.geoFilter.lon.toString(),
-                parameters.geoFilter.lat.toString(),
-                parameters.geoFilter.radius.toString(),
-                parameters.geoFilter.measurement
-            ])
-        if(parameters.inKeys !== undefined)
-            args = args.concat(['INKEYS', parameters.inKeys.num.toString(), parameters.inKeys.field])
-        if(parameters.inFields !== undefined)
-            args = args.concat(['INFIELDS', parameters.inFields.num.toString(), parameters.inFields.field])
-        if(parameters.return !== undefined)
-            args = args.concat(['RETURN', parameters.return.num.toString(), parameters.return.field])
-        if(parameters.summarize !== undefined) {
-            args.push('SUMMARIZE')
-            if(parameters.summarize.fields !== undefined) {
-                args.push('FIELDS')
-                for(const field of parameters.summarize.fields) {
-                    args.concat([field.num.toString(), field.field]);
+    async search(index: string, query: string, parameters?: SearchParameters): Promise<number[]> {
+        let args: string[] = [index, query];
+        if(parameters !== undefined) {
+            if(parameters.noContent === true)
+                args.push('NOCONTENT')
+            if(parameters.verbatim === true)
+                args.push('VERBARIM')
+            if(parameters.nonStopWords === true)
+                args.push('NOSTOPWORDS')
+            if(parameters.withScores === true)
+                args.push('WITHSCORES')
+            if(parameters.withPayloads === true)
+                args.push('WITHPAYLOADS')
+            if(parameters.withSortKeys === true)
+                args.push('WITHSORTKEYS')
+            if(parameters.filter !== undefined)
+            args = args.concat(['FILTER', parameters.filter.field, parameters.filter.min.toString(), parameters.filter.max.toString()])
+            if(parameters.geoFilter !== undefined)
+                args.concat([
+                    'GEOFILTER',
+                    parameters.geoFilter.field,
+                    parameters.geoFilter.lon.toString(),
+                    parameters.geoFilter.lat.toString(),
+                    parameters.geoFilter.radius.toString(),
+                    parameters.geoFilter.measurement
+                ])
+            if(parameters.inKeys !== undefined)
+                args = args.concat(['INKEYS', parameters.inKeys.num.toString(), parameters.inKeys.field])
+            if(parameters.inFields !== undefined)
+                args = args.concat(['INFIELDS', parameters.inFields.num.toString(), parameters.inFields.field])
+            if(parameters.return !== undefined)
+                args = args.concat(['RETURN', parameters.return.num.toString(), parameters.return.field])
+            if(parameters.summarize !== undefined) {
+                args.push('SUMMARIZE')
+                if(parameters.summarize.fields !== undefined) {
+                    args.push('FIELDS')
+                    for(const field of parameters.summarize.fields) {
+                        args.concat([field.num.toString(), field.field]);
+                    }
+                }
+                if(parameters.summarize.frags !== undefined) 
+                    args = args.concat(['FRAGS', parameters.summarize.frags.toString()])
+                if(parameters.summarize.len !== undefined) 
+                    args = args.concat(['LEN', parameters.summarize.len.toString()])
+                if(parameters.summarize.seperator !== undefined) 
+                    args = args.concat(['SEPARATOR', parameters.summarize.seperator])
+            }
+            if(parameters.highlight !== undefined) {
+                if(parameters.highlight.fields !== undefined) {
+                    args.push('FIELDS')
+                    for(const field of parameters.highlight.fields) {
+                        args = args.concat([field.num.toString(), field.field]);
+                    }
+                }
+                if(parameters.highlight.tags !== undefined) {
+                    args.push('TAGS')
+                    for(const tag of parameters.highlight.tags) {
+                        args = args.concat([tag.open, tag.close]);
+                    }
                 }
             }
-            if(parameters.summarize.frags !== undefined) 
-                args = args.concat(['FRAGS', parameters.summarize.frags.toString()])
-            if(parameters.summarize.len !== undefined) 
-                args = args.concat(['LEN', parameters.summarize.len.toString()])
-            if(parameters.summarize.seperator !== undefined) 
-                args = args.concat(['SEPARATOR', parameters.summarize.seperator])
+            if(parameters.slop !== undefined)
+                args = args.concat(['SLOP', parameters.slop.toString()])
+            if(parameters.inOrder !== undefined)
+                args.push('INORDER')
+            if(parameters.language !== undefined)
+                args = args.concat(['LANGUAGE', parameters.language])
+            if(parameters.expander !== undefined)
+                args = args.concat(['EXPANDER', parameters.expander])
+            if(parameters.scorer !== undefined)
+                args = args.concat(['SCORER', parameters.scorer])
+            if(parameters.explainScore !== undefined)
+                args.push('EXPLAINSCORE')
+            if(parameters.payload)
+                args = args.concat(['PAYLOAD', parameters.payload])
+            if(parameters.sortBy !== undefined)
+                args = args.concat(['SORTBY', parameters.sortBy.field, parameters.sortBy.sort])
+            if(parameters.limit !== undefined)
+                args = args.concat(['LIMIT', parameters.limit.first.toString(), parameters.limit.num.toString()])
         }
-        if(parameters.highlight !== undefined) {
-            if(parameters.highlight.fields !== undefined) {
-                args.push('FIELDS')
-                for(const field of parameters.highlight.fields) {
-                    args = args.concat([field.num.toString(), field.field]);
-                }
-            }
-            if(parameters.highlight.tags !== undefined) {
-                args.push('TAGS')
-                for(const tag of parameters.highlight.tags) {
-                    args = args.concat([tag.open, tag.close]);
-                }
-            }
-        }
-        if(parameters.slop !== undefined)
-            args = args.concat(['SLOP', parameters.slop.toString()])
-        if(parameters.inOrder !== undefined)
-            args.push('INORDER')
-        if(parameters.language !== undefined)
-            args = args.concat(['LANGUAGE', parameters.language])
-        if(parameters.expander !== undefined)
-            args = args.concat(['EXPANDER', parameters.expander])
-        if(parameters.scorer !== undefined)
-            args = args.concat(['SCORER', parameters.scorer])
-        if(parameters.explainScore !== undefined)
-            args.push('EXPLAINSCORE')
-        if(parameters.payload)
-            args = args.concat(['PAYLOAD', parameters.payload])
-        if(parameters.sortBy !== undefined)
-            args = args.concat(['SORTBY', parameters.sortBy.field, parameters.sortBy.sort])
-        if(parameters.limit !== undefined)
-            args = args.concat(['LIMIT', parameters.limit.first.toString(), parameters.limit.num.toString()])
         return await this.redis.send_command('FT.SEARCH', args);
     }
 
@@ -229,24 +240,24 @@ export class RediSearch {
         if(options.weight !== undefined) args = args.concat(['WEIGHT', options.weight.toString()]);
         return await this.redis.send_command('FT.ALTER', args);
     }
-    async dropindex(index: string, deleteHash = false) {
+    async dropindex(index: string, deleteHash = false): Promise<'OK'> {
         const args = [index];
         if(deleteHash === true) args.push('DD')
         return await this.redis.send_command('FT.DROPINDEX', args);
     }
-    async aliasadd(name: string, index: string) {
+    async aliasadd(name: string, index: string): Promise<'OK'> {
         return await this.redis.send_command('FT.ALIASADD', [name, index]);
     }
-    async aliasupdate(name: string, index: string) {
+    async aliasupdate(name: string, index: string): Promise<'OK'> {
         return await this.redis.send_command('FT.ALIASUPDATE', [name, index]);
     }
-    async aliasdel(name: string) {
+    async aliasdel(name: string): Promise<'OK'> {
         return await this.redis.send_command('FT.ALIASDEL', [name]);
     }
     async tagvals(index: string, field: string) {
         return await this.redis.send_command('FT.TAGVALS', [index, field]);
     }
-    async sugadd(key: string, string: string, score: number, options?: SugAddParameters) {
+    async sugadd(key: string, string: string, score: number, options?: SugAddParameters): Promise<number>{
         let args = [key, string, score];
         if(options !== undefined && options.incr !== undefined)
             args.push('INCR');
@@ -254,7 +265,7 @@ export class RediSearch {
             args = args.concat(['PAYLOAD', options.payload]);
         return await this.redis.send_command('FT.SUGADD', args);
     }
-    async sugget(key: string, prefix: string, options?: SugGetParameters) {
+    async sugget(key: string, prefix: string, options?: SugGetParameters): Promise<string[]> {
         let args = [key, prefix];
         if(options !== undefined && options.fuzzy !== undefined)
             args.push('FUZZY');
@@ -266,13 +277,13 @@ export class RediSearch {
             args.push('WITHPAYLOADS');
         return await this.redis.send_command('FT.SUGGET', args);
     }
-    async sugdel(key: string, string: string) {
+    async sugdel(key: string, string: string): Promise<number> {
         return await this.redis.send_command('FT.SUGDEL', [key, string]);
     }
-    async suglen(key: string) {
+    async suglen(key: string): Promise<number> {
         return await this.redis.send_command('FT.SUGLEN', key); 
     }
-    async synupdate(index: string, groupId: number, terms: string[], skipInitialScan = false) {
+    async synupdate(index: string, groupId: number, terms: string[], skipInitialScan = false): Promise<'OK'> {
         const args = [index, groupId].concat(terms);
         if(skipInitialScan === true)
             args.push('SKIPINITIALSCAN');
@@ -284,19 +295,19 @@ export class RediSearch {
     async spellcheck(index: string, query: string, options?: FTSpellCheck) {
 
     }
-    async dictadd(dict: string, terms: string[]) {
+    async dictadd(dict: string, terms: string[]): Promise<number> {
         return await this.redis.send_command('FT.DICTADD', [dict].concat(terms));
     }
-    async dictdel(dict: string, terms: string[]) {
+    async dictdel(dict: string, terms: string[]): Promise<number> {
         return await this.redis.send_command('FT.DICTDEL', [dict].concat(terms));
     }
-    async dictdump(dict: string) {
+    async dictdump(dict: string): Promise<string[]> {
         return await this.redis.send_command('FT.DICTDUMP', [dict]);
     }
     async info(index: string) {
         return await this.redis.send_command('FT.INFO', [index]);
     }
-    async config(command: 'GET' | 'SET' | 'HELP', option: string, value?: string) {
+    async config(command: 'GET' | 'SET' | 'HELP', option: string, value?: string): Promise<string[][]> {
         const args = [command, option];
         if(command === 'SET')
             args.push(value);
@@ -305,8 +316,8 @@ export class RediSearch {
 }
 
 export type CreateParameters = {
-    index: string,
-    on: 'HASH',
+    //index: string,
+    //on: 'HASH',
     filter?: string,
     payloadField?: string,
     maxTextFields?: number,
@@ -349,8 +360,6 @@ export interface SchemaField extends FieldOptions {
 }
 
 export type SearchParameters = {
-    index: string,
-    query: string,
     noContent?: boolean,
     verbatim?: boolean,
     nonStopWords?: boolean,

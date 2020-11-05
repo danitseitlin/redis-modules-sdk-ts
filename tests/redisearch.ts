@@ -27,20 +27,14 @@ describe('RediSearch Module testing', async function() {
     })
 
     it('create function', async () => {
-        const response = await client.create({
-            index: index,
-            on: 'HASH'
-        }, [{
+        const response = await client.create(index, [{
             name: 'name',
             type: 'TEXT'
         }])
         console.log(response)
     });
     it('search function', async () => {
-        const response = await client.search({
-            index: index,
-            query: query
-        })
+        const response = await client.search(index, query)
         console.log(response)
     });
     it('aggregate function', async () => {
