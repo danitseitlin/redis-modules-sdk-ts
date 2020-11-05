@@ -123,7 +123,7 @@ describe('RediSearch Module testing', async function() {
     it('dictdump function', async () => {
         const response = await client.dictdump(`${dict.name}1`)
         console.log(response)
-    });*/
+    });
     it('info function', async () => {
         const response = await client.info(index)
         console.log(response)
