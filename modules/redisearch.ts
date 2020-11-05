@@ -74,51 +74,6 @@ export class RediSearch {
         return await  this.redis.send_command('FT.CREATE', args);
     }
 
-    /*async hset(hash: string, fields: {[key: string]: string}) {
-        const args: string[] = [hash];
-        for(const field in fields) {
-            args.push(field);
-            args.push(fields[field]);
-        }
-        return await  this.redis.send_command('HSET', args);
-    }
-
-    async hsetnx(hash: string, fields: {[key: string]: string}) {
-        const args: string[] = [hash];
-        for(const field in fields) {
-            args.push(field);
-            args.push(fields[field]);
-        }
-        return await  this.redis.send_command('HSETNX', args);
-    }
-
-    async hdel(hash: string, fields: {[key: string]: string}) {
-        const args: string[] = [hash];
-        for(const field in fields) {
-            args.push(field);
-            args.push(fields[field]);
-        }
-        return await  this.redis.send_command('HDEL', args);
-    }
-
-    async hincrby(hash: string, fields: {[key: string]: number}) {
-        const args: string[] = [hash];
-        for(const field in fields) {
-            args.push(field);
-            args.push(fields[field].toString());
-        }
-        return await  this.redis.send_command('HINCRBY', args);
-    }
-
-    async hdecrby(hash: string, fields: {[key: string]: number}) {
-        const args: string[] = [hash];
-        for(const field in fields) {
-            args.push(field);
-            args.push(fields[field].toString());
-        }
-        return await  this.redis.send_command('HDECRBY', args);
-    }*/
-
     async search(parameters: SearchParameters) {
         let args: string[] = [parameters.index.toString(), parameters.query];
         if(parameters.noContent === true)
@@ -493,7 +448,7 @@ export type AggregateParameters = {
         offset: string,
         numberOfResults: number
     },
-    filter: string
+    filter?: string
 }
 
 export type SugAddParameters = {

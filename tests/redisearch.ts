@@ -4,6 +4,16 @@ import { RediSearch } from '../modules/redisearch';
 let client: RediSearch;
 let index = 'idx'
 let query = '@text:name'
+let alias = 'alias'
+let sug = {
+    key: 'k',
+    string: 'str',
+    score: 11
+}
+let dict = {
+    name: 'dictX',
+    term: 'termY'
+}
 describe('RediSearch Module testing', async function() {
     before(async () => {
         client = new RediSearch({
@@ -37,7 +47,6 @@ describe('RediSearch Module testing', async function() {
         const response = await client.aggregate({
             indexName: index,
             query: query,
-            filter: ''
         })
         console.log(response)
     });
@@ -57,71 +66,74 @@ describe('RediSearch Module testing', async function() {
     });
     
     it('aliasadd function', async () => {
-        const response = await client.aliasadd('a', index)
+        const response = await client.aliasadd(alias, index)
         console.log(response)
     });
     it('aliasupdate function', async () => {
-        const response = await client.aliasupdate('a', index)
+        const response = await client.aliasupdate(alias, index)
         console.log(response)
     });
     it('aliasdel function', async () => {
-        const response = await client.aliasdel('a')
+        const response = await client.aliasdel(alias)
         console.log(response)
     });
-    it('tagvalgs function', async () => {
-        const response = await client.tagvals(index, 'name')
-        console.log(response)
-    });
+    
     it('sugadd function', async () => {
-        const response = await client.sugadd('key', 'string', 1)
+        const response = await client.sugadd(sug.key, sug.string, sug.score);
         console.log(response)
     });
     it('sugget function', async () => {
-        const response = await client.sugget('key', 'str')
-        console.log(response)
-    });
-    it('sugdel function', async () => {
-        const response = await client.sugdel('key', 'str')
+        const response = await client.sugget(sug.key, sug.string)
         console.log(response)
     });
     it('suglen function', async () => {
-        const response = await client.suglen('key')
+        const response = await client.suglen(sug.key)
         console.log(response)
     });
-    /*it('synupdate function', async () => {
-        const response = await client.synupdate()
+    it('sugdel function', async () => {
+        const response = await client.sugdel(sug.key, sug.string)
+        console.log(response)
+    });
+    it('tagvalgs function', async () => {
+        const response = await client.tagvals(index, sug.key)
+        console.log(response)
+    });
+    it('synupdate function', async () => {
+        const response = await client.synupdate(index, 0, ['term1'])
         console.log(response)
     });
     it('syndump function', async () => {
-        const response = await client.syndump()
+        const response = await client.syndump(index)
         console.log(response)
     });
-    it('spellcheck function', async () => {
+    /*it('spellcheck function', async () => {
         const response = await client.spellcheck()
         console.log(response)
-    });
+    });*/
     it('dictadd function', async () => {
-        const response = await client.dictadd()
+        let response = await client.dictadd(dict.name, [dict.term])
+        console.log(response)
+        response = await client.dictadd(`${dict.name}1`, [dict.term+'1'])
         console.log(response)
     });
     it('dictdel function', async () => {
-        const response = await client.dictdel()
+        const response = await client.dictdel(dict.name, [dict.term])
         console.log(response)
     });
     it('dictdump function', async () => {
-        const response = await client.dictdump()
+        const response = await client.dictdump(`${dict.name}1`)
         console.log(response)
-    });
+    });*/
     it('info function', async () => {
-        const response = await client.info()
+        const response = await client.info(index)
         console.log(response)
     });
     it('config function', async () => {
-        const response = await client.config()
+        const response = await client.config('GET', '*')
         console.log(response)
     });
     it('dropindex function', async () => {
         const response = await client.dropindex(index)
         console.log(response)
-    });*/
+    });
 });
