@@ -166,7 +166,7 @@ export class RediSearch {
         return await this.redis.send_command('FT.SEARCH', args);
     }
 
-    async aggregate(parameters: AggregateParameters) {
+    async aggregate(parameters: AggregateParameters): Promise<number[]> {
         let args: string[] = []
         if(parameters.indexName !== undefined)
             args.push(parameters.indexName)
@@ -227,10 +227,10 @@ export class RediSearch {
     async explain(index: string, query: string) {
         return await this.redis.send_command('FT.EXPLAIN', [index, query]);
     }
-    async explainCLI(index: string, query: string) {
+    async explainCLI(index: string, query: string): Promise<string[]> {
         return await this.redis.send_command('FT.EXPLAINCLI', [index, query]);
     }
-    async alter(index: string, field: string, options: AlterOptions) {
+    async alter(index: string, field: string, options: AlterOptions): Promise<'OK'> {
         let args = [index, field, options.type]
         if(options.sortable !== undefined) args.push('SORTABLE');
         if(options.noindex !== undefined) args.push('NOINDEX');
@@ -293,7 +293,16 @@ export class RediSearch {
         return await this.redis.send_command('FT.SYNDUMP', [index]);
     }
     async spellcheck(index: string, query: string, options?: FTSpellCheck) {
-
+        const args = [index, query];
+        if(options !== undefined && options.distance !== undefined)
+            args.concat(['DISTANCE', options.distance])
+        if(options !== undefined && options.terms !== undefined) {
+            args.push('TERMS');
+            for(const term of options.terms) {
+                args.concat([term.type, term.dict]);
+            }
+        }
+        return await this.redis.send_command('FT.SPELLCHECK', args);
     }
     async dictadd(dict: string, terms: string[]): Promise<number> {
         return await this.redis.send_command('FT.DICTADD', [dict].concat(terms));
