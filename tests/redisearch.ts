@@ -38,10 +38,7 @@ describe('RediSearch Module testing', async function() {
         expect(response[0]).to.equal(0, 'The response of the FT.SEARCH command')
     });
     it('aggregate function', async () => {
-        const response = await client.aggregate({
-            indexName: index,
-            query: query,
-        })
+        const response = await client.aggregate(index, query)
         expect(response[0]).to.equal(0, 'The response of the FT.SEARCH command')
     });
     it('explain function', async () => {
@@ -53,9 +50,7 @@ describe('RediSearch Module testing', async function() {
         expect(response).to.equal('@NULL:UNION {  @NULL:name  @NULL:+name(expanded)}', 'The response of the FT.EXPLAINCLI command');
     });
     it('alter function', async () => {
-        const response = await client.alter(index, 'name', {
-            sortable: true
-        })
+        const response = await client.alter(index, 'name')
         expect(response).to.equal('OK', 'The response of the FT.ALTER command');
     });
     

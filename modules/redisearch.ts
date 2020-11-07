@@ -83,6 +83,13 @@ export class RediSearch {
         return await  this.redis.send_command('FT.CREATE', args);
     }
 
+    /**
+     * Searching the index with a textual query
+     * @param index The index
+     * @param query The query
+     * @param parameters The additional optional parameter
+     * @returns Array reply, where the first element is the total number of results, and then pairs of document id, and a nested array of field/value.
+     */
     async search(index: string, query: string, parameters?: SearchParameters): Promise<number[]> {
         let args: string[] = [index, query];
         if(parameters !== undefined) {
@@ -166,71 +173,97 @@ export class RediSearch {
         return await this.redis.send_command('FT.SEARCH', args);
     }
 
-    async aggregate(parameters: AggregateParameters): Promise<number[]> {
-        let args: string[] = []
-        if(parameters.indexName !== undefined)
-            args.push(parameters.indexName)
-        if(parameters.query !== undefined)
-            args.push(parameters.query)
-        if(parameters.load !== undefined) {
-            args.push('LOAD')
-            if(parameters.load.nargs !== undefined)
-                args.push(parameters.load.nargs);
-            if(parameters.load.property !== undefined)
-                args.push(parameters.load.property);
-        }
-        if(parameters.groupBy !== undefined){
-            args.push('GROUPBY')
-            if(parameters.groupBy.nargs !== undefined)
-                args.push(parameters.groupBy.nargs);
-            if(parameters.groupBy.property !== undefined)
-                args.push(parameters.groupBy.property);
-        }
-        if(parameters.reduce !== undefined) {
-            args.push('REDUCE')
-            if(parameters.reduce.function !== undefined)
-                args.push(parameters.reduce.function);
-            if(parameters.reduce.nargs !== undefined)
-                args.push(parameters.reduce.nargs);
-            if(parameters.reduce.arg !== undefined)
-                args.push(parameters.reduce.arg);
-            if(parameters.reduce.as !== undefined)
-                args = args.concat(['AS', parameters.reduce.as]);
-        }
-        if(parameters.sortby !== undefined) {
-            args.push('SORTBY')
-            if(parameters.sortby.nargs !== undefined)
-                args.push(parameters.sortby.nargs);
-            if(parameters.sortby.property !== undefined)
-                args.push(parameters.sortby.property);
-            if(parameters.sortby.sort !== undefined)
-                args.push(parameters.sortby.sort);
-            if(parameters.sortby.max !== undefined)
-                args = args.concat(['MAX', parameters.sortby.max.toString()]);
-        }
-        if(parameters.apply !== undefined) {
-            args.push('APPLY');
-            if(parameters.apply.expression !== undefined)
-                args.push(parameters.apply.expression);
-            if(parameters.apply.as !== undefined)
-                args.push(parameters.apply.as);
-        }
-        if(parameters.limit !== undefined) {
-            args.push('LIMIT')
-            if(parameters.limit.offset !== undefined)
-                args.push(parameters.limit.offset)
-            if(parameters.limit.numberOfResults !== undefined)
-                args.push(parameters.limit.numberOfResults.toString());
+    /**
+     * Runs a search query on an index, and performs aggregate transformations on the results, extracting statistics etc from them
+     * @param index The index
+     * @param query The query
+     * @param parameters The additional optional parameters
+     * @returns Array Response. Each row is an array and represents a single aggregate result
+     */
+    async aggregate(index: string, query: string, parameters?: AggregateParameters): Promise<number[]> {
+        let args: string[] = [index, query];
+        if(parameters !== undefined) {
+            if(parameters.load !== undefined) {
+                args.push('LOAD')
+                if(parameters.load.nargs !== undefined)
+                    args.push(parameters.load.nargs);
+                if(parameters.load.property !== undefined)
+                    args.push(parameters.load.property);
+            }
+            if(parameters.groupBy !== undefined){
+                args.push('GROUPBY')
+                if(parameters.groupBy.nargs !== undefined)
+                    args.push(parameters.groupBy.nargs);
+                if(parameters.groupBy.property !== undefined)
+                    args.push(parameters.groupBy.property);
+            }
+            if(parameters.reduce !== undefined) {
+                args.push('REDUCE')
+                if(parameters.reduce.function !== undefined)
+                    args.push(parameters.reduce.function);
+                if(parameters.reduce.nargs !== undefined)
+                    args.push(parameters.reduce.nargs);
+                if(parameters.reduce.arg !== undefined)
+                    args.push(parameters.reduce.arg);
+                if(parameters.reduce.as !== undefined)
+                    args = args.concat(['AS', parameters.reduce.as]);
+            }
+            if(parameters.sortby !== undefined) {
+                args.push('SORTBY')
+                if(parameters.sortby.nargs !== undefined)
+                    args.push(parameters.sortby.nargs);
+                if(parameters.sortby.property !== undefined)
+                    args.push(parameters.sortby.property);
+                if(parameters.sortby.sort !== undefined)
+                    args.push(parameters.sortby.sort);
+                if(parameters.sortby.max !== undefined)
+                    args = args.concat(['MAX', parameters.sortby.max.toString()]);
+            }
+            if(parameters.apply !== undefined) {
+                args.push('APPLY');
+                if(parameters.apply.expression !== undefined)
+                    args.push(parameters.apply.expression);
+                if(parameters.apply.as !== undefined)
+                    args.push(parameters.apply.as);
+            }
+            if(parameters.limit !== undefined) {
+                args.push('LIMIT')
+                if(parameters.limit.offset !== undefined)
+                    args.push(parameters.limit.offset)
+                if(parameters.limit.numberOfResults !== undefined)
+                    args.push(parameters.limit.numberOfResults.toString());
+            }
         }
         return await this.redis.send_command('FT.AGGREGATE', args);
     }
+
+    /**
+     * Retrieving the execution plan for a complex query
+     * @param index The index
+     * @param query The query
+     * @returns Returns the execution plan for a complex query
+     */
     async explain(index: string, query: string): Promise<string> {
         return await this.redis.send_command('FT.EXPLAIN', [index, query]);
     }
+
+    /**
+     * Retrieving the execution plan for a complex query but formatted for easier reading without using redis-cli --raw 
+     * @param index The index
+     * @param query The query
+     * @returns A string representing the execution plan.
+     */
     async explainCLI(index: string, query: string): Promise<string[]> {
         return await this.redis.send_command('FT.EXPLAINCLI', [index, query]);
     }
-    async alter(index: string, field: string, options: AlterOptions): Promise<'OK'> {
+
+    /**
+     * 
+     * @param index 
+     * @param field 
+     * @param options 
+     */
+    async alter(index: string, field: string, options?: AlterOptions): Promise<'OK'> {
         let args = [index, field, options.type]
         if(options.sortable !== undefined) args.push('SORTABLE');
         if(options.noindex !== undefined) args.push('NOINDEX');
@@ -240,14 +273,33 @@ export class RediSearch {
         if(options.weight !== undefined) args = args.concat(['WEIGHT', options.weight.toString()]);
         return await this.redis.send_command('FT.ALTER', args);
     }
+
+    /**
+     * Deleting the index
+     * @param index The index
+     * @param deleteHash If set, the drop operation will delete the actual document hashes.
+     * @returns 'OK'
+     */
     async dropindex(index: string, deleteHash = false): Promise<'OK'> {
         const args = [index];
         if(deleteHash === true) args.push('DD')
         return await this.redis.send_command('FT.DROPINDEX', args);
     }
+    
+    /**
+     * 
+     * @param name 
+     * @param index 
+     */
     async aliasadd(name: string, index: string): Promise<'OK'> {
         return await this.redis.send_command('FT.ALIASADD', [name, index]);
     }
+
+    /**
+     * 
+     * @param name 
+     * @param index 
+     */
     async aliasupdate(name: string, index: string): Promise<'OK'> {
         return await this.redis.send_command('FT.ALIASUPDATE', [name, index]);
     }
@@ -436,8 +488,6 @@ export type SearchParameters = {
 }
 
 export type AggregateParameters = {
-    indexName: string,
-    query: string,
     load?: {
         nargs: string,
         property: string
