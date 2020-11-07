@@ -87,7 +87,7 @@ describe('RediSearch Module testing', async function() {
     it('sugget function', async () => {
         const response = await client.sugget(sug.key, sug.string)
         console.log(response)
-        expect(response).to.equal(['str'], 'The response of the FT.SUGGET command');
+        expect(response[0]).to.equal('str', 'The response of the FT.SUGGET command');
     });
     it('suglen function', async () => {
         const response = await client.suglen(sug.key)
