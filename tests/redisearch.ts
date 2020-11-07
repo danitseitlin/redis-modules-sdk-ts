@@ -31,7 +31,6 @@ describe('RediSearch Module testing', async function() {
             name: 'name',
             type: 'TEXT'
         }])
-        console.log(response)
         expect(response).to.equal('OK', 'The response of the FT.CREATE command');
     });
     it('search function', async () => {
@@ -53,6 +52,7 @@ describe('RediSearch Module testing', async function() {
     it('explainCLI function', async () => {
         const response = await client.explainCLI(index, query)
         console.log(response)
+        console.log(response.toString())
         expect(response).to.equal([ '@NULL:UNION {', '  @NULL:name', '  @NULL:+name(expanded)', '}', '' ], 'The response of the FT.EXPLAINCLI command');
     });
     it('alter function', async () => {
@@ -131,7 +131,7 @@ describe('RediSearch Module testing', async function() {
     it('dictdump function', async () => {
         const response = await client.dictdump(`${dict.name}1`)
         console.log(response)
-        expect(response).to.equal(['term1'], 'The response of the FT.DICTDUMP command');
+        expect(response).to.equal(['termY1'], 'The response of the FT.DICTDUMP command');
     });
     it('info function', async () => {
         const response = await client.info(index)
