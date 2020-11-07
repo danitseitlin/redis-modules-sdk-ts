@@ -50,7 +50,7 @@ describe('RediSearch Module testing', async function() {
         console.log(typeof response)
     });
     it('explainCLI function', async () => {
-        const response = (await client.explainCLI(index, query)).toString().replace(',', '');
+        const response = (await client.explainCLI(index, query)).join('');
         console.log(response)
         expect(response).to.equal('@NULL:UNION {  @NULL:name  @NULL:+name(expanded)}', 'The response of the FT.EXPLAINCLI command');
     });
