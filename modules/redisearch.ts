@@ -258,19 +258,22 @@ export class RediSearch {
     }
 
     /**
-     * 
-     * @param index 
-     * @param field 
-     * @param options 
+     * Adding a new field to the index
+     * @param index The index
+     * @param field The field name
+     * @param options The additional optional parameters
+     * @returns 'OK'
      */
     async alter(index: string, field: string, options?: AlterOptions): Promise<'OK'> {
-        let args = [index, field, options.type]
-        if(options.sortable !== undefined) args.push('SORTABLE');
-        if(options.noindex !== undefined) args.push('NOINDEX');
-        if(options.nostem !== undefined) args.push('NOSTEM');
-        if(options.phonetic !== undefined) args = args.concat(['PHONETIC', options.phonetic]);
-        if(options.seperator !== undefined) args = args.concat(['SEPERATOR', options.seperator]);
-        if(options.weight !== undefined) args = args.concat(['WEIGHT', options.weight.toString()]);
+        let args = [index, 'SCHEMA', 'ADD', field, options.type]
+        if(options !== undefined) {
+            if(options.sortable !== undefined) args.push('SORTABLE');
+            if(options.noindex !== undefined) args.push('NOINDEX');
+            if(options.nostem !== undefined) args.push('NOSTEM');
+            if(options.phonetic !== undefined) args = args.concat(['PHONETIC', options.phonetic]);
+            if(options.seperator !== undefined) args = args.concat(['SEPERATOR', options.seperator]);
+            if(options.weight !== undefined) args = args.concat(['WEIGHT', options.weight.toString()]);
+        }
         return await this.redis.send_command('FT.ALTER', args);
     }
 
