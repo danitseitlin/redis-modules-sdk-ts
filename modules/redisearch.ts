@@ -265,8 +265,9 @@ export class RediSearch {
      * @returns 'OK'
      */
     async alter(index: string, field: string, options?: AlterOptions): Promise<'OK'> {
-        let args = [index, 'SCHEMA', 'ADD', field, options.type]
+        let args = [index, 'SCHEMA', 'ADD', field]
         if(options !== undefined) {
+            if(options.fieldType !== undefined) args.push(options.fieldType);
             if(options.sortable !== undefined) args.push('SORTABLE');
             if(options.noindex !== undefined) args.push('NOINDEX');
             if(options.nostem !== undefined) args.push('NOSTEM');
@@ -290,28 +291,51 @@ export class RediSearch {
     }
     
     /**
-     * 
-     * @param name 
-     * @param index 
+     * Adding alias fron an index
+     * @param name The alias name
+     * @param index The alias index
+     * @returns 'OK'
      */
     async aliasadd(name: string, index: string): Promise<'OK'> {
         return await this.redis.send_command('FT.ALIASADD', [name, index]);
     }
 
     /**
-     * 
-     * @param name 
-     * @param index 
+     * Updating alias index
+     * @param name The alias name
+     * @param index The alias index
+     * @returns 'OK'
      */
     async aliasupdate(name: string, index: string): Promise<'OK'> {
         return await this.redis.send_command('FT.ALIASUPDATE', [name, index]);
     }
+
+    /**
+     * Deleting alias fron an index
+     * @param name The alias name
+     * @returns 'OK'
+     */
     async aliasdel(name: string): Promise<'OK'> {
         return await this.redis.send_command('FT.ALIASDEL', [name]);
     }
-    async tagvals(index: string, field: string) {
+    
+    /**
+     * Retrieving the distinct tags indexed in a Tag field
+     * @param index The index
+     * @param field The field name
+     * @returns The distinct tags indexed in a Tag field 
+     */
+    async tagvals(index: string, field: string): Promise<string[]> {
         return await this.redis.send_command('FT.TAGVALS', [index, field]);
     }
+
+    /**
+     * 
+     * @param key 
+     * @param string 
+     * @param score 
+     * @param options 
+     */
     async sugadd(key: string, string: string, score: number, options?: SugAddParameters): Promise<number>{
         let args = [key, string, score];
         if(options !== undefined && options.incr !== undefined)
@@ -320,6 +344,13 @@ export class RediSearch {
             args = args.concat(['PAYLOAD', options.payload]);
         return await this.redis.send_command('FT.SUGADD', args);
     }
+
+    /**
+     * 
+     * @param key 
+     * @param prefix 
+     * @param options 
+     */
     async sugget(key: string, prefix: string, options?: SugGetParameters): Promise<string[]> {
         let args = [key, prefix];
         if(options !== undefined && options.fuzzy !== undefined)
@@ -332,21 +363,52 @@ export class RediSearch {
             args.push('WITHPAYLOADS');
         return await this.redis.send_command('FT.SUGGET', args);
     }
+
+    /**
+     * 
+     * @param key 
+     * @param string 
+     */
     async sugdel(key: string, string: string): Promise<number> {
         return await this.redis.send_command('FT.SUGDEL', [key, string]);
     }
+
+    /**
+     * 
+     * @param key 
+     */
     async suglen(key: string): Promise<number> {
         return await this.redis.send_command('FT.SUGLEN', key); 
     }
+
+    /**
+     * 
+     * @param index 
+     * @param groupId 
+     * @param terms 
+     * @param skipInitialScan 
+     */
     async synupdate(index: string, groupId: number, terms: string[], skipInitialScan = false): Promise<'OK'> {
         const args = [index, groupId].concat(terms);
         if(skipInitialScan === true)
             args.push('SKIPINITIALSCAN');
         return await this.redis.send_command('FT.SYNUPDATE', args); 
     }
+
+    /**
+     * 
+     * @param index 
+     */
     async syndump(index: string) {
         return await this.redis.send_command('FT.SYNDUMP', [index]);
     }
+
+    /**
+     * 
+     * @param index 
+     * @param query 
+     * @param options 
+     */
     async spellcheck(index: string, query: string, options?: FTSpellCheck) {
         const args = [index, query];
         if(options !== undefined && options.distance !== undefined)
@@ -359,18 +421,47 @@ export class RediSearch {
         }
         return await this.redis.send_command('FT.SPELLCHECK', args);
     }
+    
+    /**
+     * 
+     * @param dict 
+     * @param terms 
+     */
     async dictadd(dict: string, terms: string[]): Promise<number> {
         return await this.redis.send_command('FT.DICTADD', [dict].concat(terms));
     }
+
+    /**
+     * 
+     * @param dict 
+     * @param terms 
+     */
     async dictdel(dict: string, terms: string[]): Promise<number> {
         return await this.redis.send_command('FT.DICTDEL', [dict].concat(terms));
     }
+
+    /**
+     * 
+     * @param dict 
+     */
     async dictdump(dict: string): Promise<string[]> {
         return await this.redis.send_command('FT.DICTDUMP', [dict]);
     }
+
+    /**
+     * 
+     * @param index 
+     */
     async info(index: string) {
         return await this.redis.send_command('FT.INFO', [index]);
     }
+
+    /**
+     * 
+     * @param command 
+     * @param option 
+     * @param value 
+     */
     async config(command: 'GET' | 'SET' | 'HELP', option: string, value?: string): Promise<string[][]> {
         const args = [command, option];
         if(command === 'SET')
@@ -415,7 +506,7 @@ export type FieldOptions = {
 }
 
 export interface AlterOptions extends FieldOptions {
-    type?: 'TEXT' | 'NUMERIC' | 'TAG' | string
+    fieldType?: 'TEXT' | 'NUMERIC' | 'TAG' | string
 }
 
 export interface SchemaField extends FieldOptions {
