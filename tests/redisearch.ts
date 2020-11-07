@@ -50,7 +50,7 @@ describe('RediSearch Module testing', async function() {
         expect(response).to.equal('@NULL:UNION {  @NULL:name  @NULL:+name(expanded)}', 'The response of the FT.EXPLAINCLI command');
     });
     it('alter function', async () => {
-        const response = await client.alter(index, 'name')
+        const response = await client.alter(index, 'name', 'TEXT')
         expect(response).to.equal('OK', 'The response of the FT.ALTER command');
     });
     
@@ -97,6 +97,7 @@ describe('RediSearch Module testing', async function() {
     });
     it('spellcheck function', async () => {
         const response = await client.spellcheck(index, query);
+        console.log(typeof response)
         expect(response[0].length).to.be.greaterThan(0, 'The response of the FT.SPELLCHECK command')
     });
     it('dictadd function', async () => {

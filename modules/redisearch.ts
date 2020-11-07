@@ -261,13 +261,13 @@ export class RediSearch {
      * Adding a new field to the index
      * @param index The index
      * @param field The field name
+     * @param fieldType The field type
      * @param options The additional optional parameters
      * @returns 'OK'
      */
-    async alter(index: string, field: string, options?: AlterOptions): Promise<'OK'> {
-        let args = [index, 'SCHEMA', 'ADD', field]
+    async alter(index: string, field: string, fieldType: FieldType, options?: FieldOptions): Promise<'OK'> {
+        let args = [index, 'SCHEMA', 'ADD', field, fieldType]
         if(options !== undefined) {
-            if(options.fieldType !== undefined) args.push(options.fieldType);
             if(options.sortable !== undefined) args.push('SORTABLE');
             if(options.noindex !== undefined) args.push('NOINDEX');
             if(options.nostem !== undefined) args.push('NOSTEM');
@@ -330,14 +330,15 @@ export class RediSearch {
     }
 
     /**
-     * 
-     * @param key 
-     * @param string 
-     * @param score 
-     * @param options 
+     * Adds a suggestion string to an auto-complete suggestion dictionary
+     * @param key The key
+     * @param suggestion The suggestion
+     * @param score The score
+     * @param options The additional optional parameters
+     * @returns The current size of the suggestion dictionary
      */
-    async sugadd(key: string, string: string, score: number, options?: SugAddParameters): Promise<number>{
-        let args = [key, string, score];
+    async sugadd(key: string, suggestion: string, score: number, options?: SugAddParameters): Promise<number>{
+        let args = [key, suggestion, score];
         if(options !== undefined && options.incr !== undefined)
             args.push('INCR');
         if(options !== undefined && options.payload !== undefined)
@@ -346,10 +347,11 @@ export class RediSearch {
     }
 
     /**
-     * 
-     * @param key 
-     * @param prefix 
-     * @param options 
+     * Retrieving completion suggestions for a prefix
+     * @param key The key
+     * @param prefix The prefix of the suggestion
+     * @param options The additional optional parameter
+     * @returns A list of the top suggestions matching the prefix, optionally with score after each entry 
      */
     async sugget(key: string, prefix: string, options?: SugGetParameters): Promise<string[]> {
         let args = [key, prefix];
@@ -365,28 +367,29 @@ export class RediSearch {
     }
 
     /**
-     * 
-     * @param key 
-     * @param string 
+     * Deleting a string from a suggestion index
+     * @param key The key
+     * @param suggestion The suggestion
      */
-    async sugdel(key: string, string: string): Promise<number> {
-        return await this.redis.send_command('FT.SUGDEL', [key, string]);
+    async sugdel(key: string, suggestion: string): Promise<number> {
+        return await this.redis.send_command('FT.SUGDEL', [key, suggestion]);
     }
 
     /**
-     * 
-     * @param key 
+     * Retrieving the size of an auto-complete suggestion dictionary
+     * @param key The key
      */
     async suglen(key: string): Promise<number> {
         return await this.redis.send_command('FT.SUGLEN', key); 
     }
 
     /**
-     * 
-     * @param index 
-     * @param groupId 
-     * @param terms 
-     * @param skipInitialScan 
+     * Updating a synonym group
+     * @param index The index
+     * @param groupId The group id
+     * @param terms A list of terms 
+     * @param skipInitialScan If set, we do not scan and index.
+     * @returns 'OK'
      */
     async synupdate(index: string, groupId: number, terms: string[], skipInitialScan = false): Promise<'OK'> {
         const args = [index, groupId].concat(terms);
@@ -396,18 +399,20 @@ export class RediSearch {
     }
 
     /**
-     * 
-     * @param index 
+     * Dumps the contents of a synonym group
+     * @param index The index
+     * @returns A list of synonym terms and their synonym group ids.  
      */
-    async syndump(index: string) {
+    async syndump(index: string): Promise<(string | number)[]> {
         return await this.redis.send_command('FT.SYNDUMP', [index]);
     }
 
     /**
-     * 
-     * @param index 
-     * @param query 
-     * @param options 
+     * Performs spelling correction on a query
+     * @param index The index
+     * @param query The query
+     * @param options The additional optional parameters
+     * @returns An array, in which each element represents a misspelled term from the query
      */
     async spellcheck(index: string, query: string, options?: FTSpellCheck) {
         const args = [index, query];
@@ -423,44 +428,49 @@ export class RediSearch {
     }
     
     /**
-     * 
-     * @param dict 
-     * @param terms 
+     * Adding terms to a dictionary
+     * @param dict The dictionary
+     * @param terms A list of terms
+     * @returns The number of new terms that were added
      */
     async dictadd(dict: string, terms: string[]): Promise<number> {
         return await this.redis.send_command('FT.DICTADD', [dict].concat(terms));
     }
 
     /**
-     * 
-     * @param dict 
-     * @param terms 
+     * Deleting terms from a dictionary
+     * @param dict The dictionary
+     * @param terms A list of terms
+     * @returns The number of terms that were deleted
      */
     async dictdel(dict: string, terms: string[]): Promise<number> {
         return await this.redis.send_command('FT.DICTDEL', [dict].concat(terms));
     }
 
     /**
-     * 
-     * @param dict 
+     * Dumps all terms in the given dictionary
+     * @param dict The dictionary
+     * @returns An array, where each element is term
      */
     async dictdump(dict: string): Promise<string[]> {
         return await this.redis.send_command('FT.DICTDUMP', [dict]);
     }
 
     /**
-     * 
-     * @param index 
+     * Retrieving infromation and statistics on the index
+     * @param index The index
+     * @returns A nested array of keys and values. 
      */
-    async info(index: string) {
+    async info(index: string): Promise<(string | number)[]> {
         return await this.redis.send_command('FT.INFO', [index]);
     }
 
     /**
-     * 
-     * @param command 
-     * @param option 
-     * @param value 
+     * Retrieves, describes and sets runtime configuration options
+     * @param command The command type
+     * @param option The option
+     * @param value In case of 'SET' command, a valid value to set
+     * @returns If 'SET' command, returns 'OK' for valid runtime-settable option names and values. If 'GET' command, returns a string with the current option's value.
      */
     async config(command: 'GET' | 'SET' | 'HELP', option: string, value?: string): Promise<string[][]> {
         const args = [command, option];
@@ -470,6 +480,9 @@ export class RediSearch {
     }
 }
 
+/**
+ * 
+ */
 export type CreateParameters = {
     //index: string,
     //on: 'HASH',
@@ -496,6 +509,15 @@ export type CreateParameters = {
     }
 }
 
+/**
+ * The field parameter
+ * @param sortable The 'SORTABLE' parameter. Numeric, tag or text field can have the optional SORTABLE argument that allows the user to later sort the results by the value of this field (this adds memory overhead so do not declare it on large text fields).
+ * @param nostem The 'NOSTEM' parameter. Text fields can have the NOSTEM argument which will disable stemming when indexing its values. This may be ideal for things like proper names.
+ * @param noindex The 'NOINDEX' parameter. Fields can have the NOINDEX option, which means they will not be indexed. This is useful in conjunction with SORTABLE , to create fields whose update using PARTIAL will not cause full reindexing of the document. If a field has NOINDEX and doesn't have SORTABLE, it will just be ignored by the index.
+ * @param phonetic The 'PHONETIC' parameter. Declaring a text field as PHONETIC will perform phonetic matching on it in searches by default. The obligatory {matcher} argument specifies the phonetic algorithm and language used.
+ * @param weight The 'WEIGHT' parameter. For TEXT fields, declares the importance of this field when calculating result accuracy. This is a multiplication factor, and defaults to 1 if not specified.
+ * @param seperator The 'SEPERATOR' parameter. For TAG fields, indicates how the text contained in the field is to be split into individual tags. The default is , . The value must be a single character.
+ */
 export type FieldOptions = {
     sortable?: boolean,
     noindex?: boolean,
@@ -505,15 +527,25 @@ export type FieldOptions = {
     seperator?: string
 }
 
-export interface AlterOptions extends FieldOptions {
-    fieldType?: 'TEXT' | 'NUMERIC' | 'TAG' | string
-}
-
+/**
+ * The parameters of the 'FT.CREATE' command, schema fields (Field comming after the 'SCHEMA' command)
+ * @param name The name of the field
+ * @param type The type of the field
+ * @param sortable The 'SORTABLE' parameter. Numeric, tag or text field can have the optional SORTABLE argument that allows the user to later sort the results by the value of this field (this adds memory overhead so do not declare it on large text fields).
+ * @param nostem The 'NOSTEM' parameter. Text fields can have the NOSTEM argument which will disable stemming when indexing its values. This may be ideal for things like proper names.
+ * @param noindex The 'NOINDEX' parameter. Fields can have the NOINDEX option, which means they will not be indexed. This is useful in conjunction with SORTABLE , to create fields whose update using PARTIAL will not cause full reindexing of the document. If a field has NOINDEX and doesn't have SORTABLE, it will just be ignored by the index.
+ * @param phonetic The 'PHONETIC' parameter. Declaring a text field as PHONETIC will perform phonetic matching on it in searches by default. The obligatory {matcher} argument specifies the phonetic algorithm and language used.
+ * @param weight The 'WEIGHT' parameter. For TEXT fields, declares the importance of this field when calculating result accuracy. This is a multiplication factor, and defaults to 1 if not specified.
+ * @param seperator The 'SEPERATOR' parameter. For TAG fields, indicates how the text contained in the field is to be split into individual tags. The default is , . The value must be a single character.
+ */
 export interface SchemaField extends FieldOptions {
     name: string,
-    type: 'TEXT' | 'NUMERIC' | 'TAG' | string,
+    type: FieldType,
 }
 
+/**
+ * 
+ */
 export type SearchParameters = {
     noContent?: boolean,
     verbatim?: boolean,
@@ -581,6 +613,9 @@ export type SearchParameters = {
     }
 }
 
+/**
+ * The additional parameter of 'FT.AGGREGATE' command
+ */
 export type AggregateParameters = {
     load?: {
         nargs: string,
@@ -613,17 +648,37 @@ export type AggregateParameters = {
     filter?: string
 }
 
+/**
+ * The additional parameters of 'FT.SUGADD' command
+ * @param incr The 'INCR' parameter. if set, we increment the existing entry of the suggestion by the given score, instead of replacing the score. This is useful for updating the dictionary based on user queries in real time
+ * @param payload The 'PAYLOAD' parameter. If set, we save an extra payload with the suggestion, that can be fetched by adding the WITHPAYLOADS argument to FT.SUGGET
+ */
 export type SugAddParameters = {
     incr: number,
     payload: string
 }
 
+/**
+ * The additional parameters of 'FT.SUGGET' command
+ * @param fuzzy The 'FUZZY' parameter. if set, we do a fuzzy prefix search, including prefixes at Levenshtein distance of 1 from the prefix sent
+ * @param max The 'MAX' parameter. If set, we limit the results to a maximum of num (default: 5).
+ * @param withScores The 'WITHSCORES' parameter. If set, we also return the score of each suggestion. this can be used to merge results from multiple instances
+ * @param withPayloads The 'WITHPAYLOADS' parameter. If set, we return optional payloads saved along with the suggestions. If no payload is present for an entry, we return a Null Reply.
+ */
 export type SugGetParameters = {
     fuzzy: string,
     max: number,
     withScores: boolean,
     withPayloads: boolean
 }
+
+/**
+ * The additional parameters of 'FT.SPELLCHECK' command
+ * @param terms A list of terms
+ * @param terms.type The type of the term
+ * @param terms.dict The dict of the term
+ * @param distance The maximal Levenshtein distance for spelling suggestions (default: 1, max: 4)
+ */
 export type FTSpellCheck = {
     terms?: {
         type: 'INCLUDE' | 'EXCLUDE',
@@ -631,3 +686,11 @@ export type FTSpellCheck = {
     }[],
     distance?: string
 }
+
+/**
+ * The available field types
+ * @param TEXT The text type
+ * @param NUMERIC The number type
+ * @param TAG The tag type
+ */
+export type FieldType = 'TEXT' | 'NUMERIC' | 'TAG' | string;
