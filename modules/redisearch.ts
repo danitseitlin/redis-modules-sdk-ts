@@ -224,7 +224,7 @@ export class RediSearch {
         }
         return await this.redis.send_command('FT.AGGREGATE', args);
     }
-    async explain(index: string, query: string) {
+    async explain(index: string, query: string): Promise<string> {
         return await this.redis.send_command('FT.EXPLAIN', [index, query]);
     }
     async explainCLI(index: string, query: string): Promise<string[]> {
