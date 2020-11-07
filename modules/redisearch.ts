@@ -190,12 +190,12 @@ export class RediSearch {
                 if(parameters.load.property !== undefined)
                     args.push(parameters.load.property);
             }
-            if(parameters.groupBy !== undefined){
+            if(parameters.groupby !== undefined){
                 args.push('GROUPBY')
-                if(parameters.groupBy.nargs !== undefined)
-                    args.push(parameters.groupBy.nargs);
-                if(parameters.groupBy.property !== undefined)
-                    args.push(parameters.groupBy.property);
+                if(parameters.groupby.nargs !== undefined)
+                    args.push(parameters.groupby.nargs);
+                if(parameters.groupby.property !== undefined)
+                    args.push(parameters.groupby.property);
             }
             if(parameters.reduce !== undefined) {
                 args.push('REDUCE')
@@ -615,13 +615,19 @@ export type SearchParameters = {
 
 /**
  * The additional parameter of 'FT.AGGREGATE' command
+ * @param load The 'LOAD' parameter. 
+ * @param groupby The 'GROUPBY' parameter. 
+ * @param sortby The 'SORTBY' parameter. 
+ * @param apply The 'APPLY' parameter. 
+ * @param limit The 'LIMIT' parameter.
+ * @param filter The 'FILTER' parameter.
  */
 export type AggregateParameters = {
     load?: {
         nargs: string,
         property: string
     },
-    groupBy?: {
+    groupby?: {
         nargs: string,
         property: string
     },

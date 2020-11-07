@@ -97,6 +97,7 @@ describe('RediSearch Module testing', async function() {
     });
     it('spellcheck function', async () => {
         const response = await client.spellcheck(index, query);
+        console.log(response)
         console.log(typeof response)
         expect(response[0].length).to.be.greaterThan(0, 'The response of the FT.SPELLCHECK command')
     });
