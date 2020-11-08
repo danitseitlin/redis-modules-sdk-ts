@@ -31,7 +31,7 @@ export class RediSearch {
      * @param schemaFields The filter set after the 'SCHEMA' argument
      * @returns 'OK'
      */
-    async create(index: string, schemaFields: SchemaField[], parameters?: CreateParameters): Promise<'OK'> {
+    async create(index: string, schemaFields: FTSchemaField[], parameters?: FTCreateParameters): Promise<'OK'> {
         let args: string[] = [index]
         args = args.concat(['ON', 'HASH']);
         if(parameters !== undefined) {
@@ -90,7 +90,7 @@ export class RediSearch {
      * @param parameters The additional optional parameter
      * @returns Array reply, where the first element is the total number of results, and then pairs of document id, and a nested array of field/value.
      */
-    async search(index: string, query: string, parameters?: SearchParameters): Promise<number[]> {
+    async search(index: string, query: string, parameters?: FTSearchParameters): Promise<number[]> {
         let args: string[] = [index, query];
         if(parameters !== undefined) {
             if(parameters.noContent === true)
@@ -180,7 +180,7 @@ export class RediSearch {
      * @param parameters The additional optional parameters
      * @returns Array Response. Each row is an array and represents a single aggregate result
      */
-    async aggregate(index: string, query: string, parameters?: AggregateParameters): Promise<number[]> {
+    async aggregate(index: string, query: string, parameters?: FTAggregateParameters): Promise<number[]> {
         let args: string[] = [index, query];
         if(parameters !== undefined) {
             if(parameters.load !== undefined) {
@@ -265,7 +265,7 @@ export class RediSearch {
      * @param options The additional optional parameters
      * @returns 'OK'
      */
-    async alter(index: string, field: string, fieldType: FieldType, options?: FieldOptions): Promise<'OK'> {
+    async alter(index: string, field: string, fieldType: FTFieldType, options?: FTFieldOptions): Promise<'OK'> {
         let args = [index, 'SCHEMA', 'ADD', field, fieldType]
         if(options !== undefined) {
             if(options.sortable !== undefined) args.push('SORTABLE');
@@ -337,7 +337,7 @@ export class RediSearch {
      * @param options The additional optional parameters
      * @returns The current size of the suggestion dictionary
      */
-    async sugadd(key: string, suggestion: string, score: number, options?: SugAddParameters): Promise<number>{
+    async sugadd(key: string, suggestion: string, score: number, options?: FTSugAddParameters): Promise<number>{
         let args = [key, suggestion, score];
         if(options !== undefined && options.incr !== undefined)
             args.push('INCR');
@@ -353,7 +353,7 @@ export class RediSearch {
      * @param options The additional optional parameter
      * @returns A list of the top suggestions matching the prefix, optionally with score after each entry 
      */
-    async sugget(key: string, prefix: string, options?: SugGetParameters): Promise<string[]> {
+    async sugget(key: string, prefix: string, options?: FTSugGetParameters): Promise<string[]> {
         let args = [key, prefix];
         if(options !== undefined && options.fuzzy !== undefined)
             args.push('FUZZY');
@@ -414,7 +414,7 @@ export class RediSearch {
      * @param options The additional optional parameters
      * @returns An array, in which each element represents a misspelled term from the query
      */
-    async spellcheck(index: string, query: string, options?: FTSpellCheck) {
+    async spellcheck(index: string, query: string, options?: FTSpellCheck): Promise<(string | string[])[]> {
         const args = [index, query];
         if(options !== undefined && options.distance !== undefined)
             args.concat(['DISTANCE', options.distance])
@@ -481,11 +481,28 @@ export class RediSearch {
 }
 
 /**
- * 
+ * The 'FT.CREATE' additional optional parameters
+ * @param filter The expression of the 'FILTER' parameter. is a filter expression with the full RediSearch aggregation expression language.
+ * @param payloadField The field of the 'PAYLOAD' parameter. If set indicates the document field that should be used as a binary safe payload string to the document, that can be evaluated at query time by a custom scoring function, or retrieved to the client.
+ * @param maxTextFields The 'MAXTEXTFIELDS' parameter. For efficiency, RediSearch encodes indexes differently if they are created with less than 32 text fields.
+ * @param noOffsets The 'NOFFSETS' parameter. If set, we do not store term offsets for documents (saves memory, does not allow exact searches or highlighting).
+ * @param temporary The 'TEMPORARY' parameter. Create a lightweight temporary index which will expire after the specified period of inactivity.
+ * @param nohl The 'NOHL' parameter. Conserves storage space and memory by disabling highlighting support. If set, we do not store corresponding byte offsets for term positions.
+ * @param noFields The 'NOFIELDS' parameter. If set, we do not store field bits for each term.
+ * @param noFreqs The 'NOFREQS' parameter.  If set, we avoid saving the term frequencies in the index.
+ * @param skipInitialScan The 'SKIPINITIALSCAN' parameter. If set, we do not scan and index. 
+ * @param prefix The 'PREFIX' parameter. tells the index which keys it should index.
+ * @param prefix.count The count argument of the 'PREFIX' parameter. 
+ * @param prefix.name The name argument of the 'PREFIX' parameter. 
+ * @param language The 'LANGUAGE' parameter.  If set indicates the default language for documents in the index.
+ * @param languageField The 'LANGUAGE_FIELD' parameter. If set indicates the document field that should be used as the document language.
+ * @param score The 'SCORE' parameter. If set indicates the default score for documents in the index.
+ * @param scoreField The 'SCORE_FIELD' parameter. If set indicates the document field that should be used as the document's rank based on the user's ranking. 
+ * @param stopwords The 'STOPWORDS' parameter. If set, we set the index with a custom stopword list, to be ignored during indexing and search time.
+ * @param stopwords.num The num argument of the 'STOPWORDS' parameter. 
+ * @param stopwords.stopword The stopword argument of the 'STOPWORDS' parameter.
  */
-export type CreateParameters = {
-    //index: string,
-    //on: 'HASH',
+export type FTCreateParameters = {
     filter?: string,
     payloadField?: string,
     maxTextFields?: number,
@@ -518,7 +535,7 @@ export type CreateParameters = {
  * @param weight The 'WEIGHT' parameter. For TEXT fields, declares the importance of this field when calculating result accuracy. This is a multiplication factor, and defaults to 1 if not specified.
  * @param seperator The 'SEPERATOR' parameter. For TAG fields, indicates how the text contained in the field is to be split into individual tags. The default is , . The value must be a single character.
  */
-export type FieldOptions = {
+export type FTFieldOptions = {
     sortable?: boolean,
     noindex?: boolean,
     nostem?: boolean,
@@ -538,15 +555,67 @@ export type FieldOptions = {
  * @param weight The 'WEIGHT' parameter. For TEXT fields, declares the importance of this field when calculating result accuracy. This is a multiplication factor, and defaults to 1 if not specified.
  * @param seperator The 'SEPERATOR' parameter. For TAG fields, indicates how the text contained in the field is to be split into individual tags. The default is , . The value must be a single character.
  */
-export interface SchemaField extends FieldOptions {
+export interface FTSchemaField extends FTFieldOptions {
     name: string,
-    type: FieldType,
+    type: FTFieldType,
 }
 
 /**
- * 
+ * The parameter of the 'FT.SEARCH' command
+ * @param noContent The 'NOTCONTENT' parameter. If it appears after the query, we only return the document ids and not the content.
+ * @param verbatim The 'VERBATIM' parameter.  if set, we do not try to use stemming for query expansion but search the query terms verbatim.
+ * @param nonStopWords The 'NONSTOPWORDS' parameter. If set, we do not filter stopwords from the query. 
+ * @param withScores The 'WITHSCORES' parameter. If set, we also return the relative internal score of each document.
+ * @param withPayloads The 'WITHPAYLOADS' parameter. If set, we retrieve optional document payloads (see FT.ADD).
+ * @param withSoryKeys The 'WITHSORTKEYS' parameter. Only relevant in conjunction with SORTBY . Returns the value of the sorting key, right after the id and score and /or payload if requested.
+ * @param filter The 'FILTER' parameter.  If set, and numeric_field is defined as a numeric field in FT.CREATE, we will limit results to those having numeric values ranging between min and max. min and max follow ZRANGE syntax, and can be -inf , +inf and use ( for exclusive ranges. 
+ * @param filter.field The numeric_field argument of the 'FILTER' parameter
+ * @param filter.min The min argument of the 'FILTER' parameter
+ * @param filter.max The max argument of the 'FILTER' parameter
+ * @param geoFilter The 'GEOFILTER' parameter. If set, we filter the results to a given radius from lon and lat. Radius is given as a number and units.
+ * @param geoFilter.field The field of the 'GEOFILTER' parameter
+ * @param geoFilter.lon The lon argument of the 'GEOFILTER' parameter
+ * @param geoFilter.lat The lat argument of the 'GEOFILTER' parameter
+ * @param geoFilter.radius The radius argument of the 'GEOFILTER' parameter
+ * @param geoFilter.measurement The measurement argument of the 'GEOFILTER' parameter
+ * @param inKeys The 'INKEYS' parameter. If set, we limit the result to a given set of keys specified in the list. the first argument must be the length of the list, and greater than zero.
+ * @param inKeys.num The num argument of the 'INKEYS' parameter
+ * @param inKeys.field The field argument of the 'INKEYS' parameter
+ * @param inFields The 'INFIELDS' parameter. If set, filter the results to ones appearing only in specific fields of the document, like title or URL.
+ * @param inFields.num The num argument of the 'INFIELDS' parameter
+ * @param inFields.field The field argument of the 'INFIELDS' parameter
+ * @param return The 'RETURN' parameter. Use this keyword to limit which fields from the document are returned.
+ * @param return.num The num argument of the 'RETURN' parameter
+ * @param return.field The field of the 'RETURN' parameter
+ * @param summarize The 'SUMMARIZE' parameter. Use this option to return only the sections of the field which contain the matched text.
+ * @param summarize.fields The fields argument of the 'SUMMARIZE' parameter
+ * @param summarize.fields.num The num argument of the fields argument
+ * @param summarize.fields.field The field argument of the fields argument
+ * @param summarize.frags The fargs argument of the 'SUMMARIZE' parameter
+ * @param summarize.len The len argument of the 'SUMMARIZE' parameter
+ * @param summarize.seperator The seperator argument of the 'SUMMARIZE' parameter
+ * @param highlight The 'HIGHLIGHT' parameter. Use this option to format occurrences of matched text.
+ * @param highlight.fields The fields argument of the 'HIGHLIGHT' parameter
+ * @param highlight.fields.num The num argument of the fields argument
+ * @param highlight.fields.field The field argument of the fields argument
+ * @param highlight.tags The tags argument of the 'HIGHLIGHT' parameter
+ * @param highlight.open The open argument of the tags argument
+ * @param highlight.close The close argument of the tags argument
+ * @param slop The 'SLOP' parameter. If set, we allow a maximum of N intervening number of unmatched offsets between phrase terms.
+ * @param inorder The 'INORDER' parameter. If set, and usually used in conjunction with SLOP, we make sure the query terms appear in the same order in the document as in the query, regardless of the offsets between them. 
+ * @param language The 'LANGUAGE' parameter. If set, we use a stemmer for the supplied language during search for query expansion.
+ * @param expander The 'EXPANDER' parameter. If set, we will use a custom query expander instead of the stemmer.
+ * @param scorer The 'SCORER' parameter. If set, we will use a custom scoring function defined by the user.
+ * @param explainScore The 'EXPLAINSCORE' parameter. If set, will return a textual description of how the scores were calculated.
+ * @param payload The 'PAYLOAD' parameter. Add an arbitrary, binary safe payload that will be exposed to custom scoring functions.
+ * @param sortBy The 'SORTBY' parameter. If specified, the results are ordered by the value of this field. This applies to both text and numeric fields.
+ * @param sortBy.field The <> argument of the 'SORTBY' parameter
+ * @param sortBy.sort The <> argument of the 'SORTBY' parameter
+ * @param limit The 'LIMIT' parameter. If the parameters appear after the query, we limit the results to the offset and number of results given.
+ * @param limit.first The <> argument of the 'LIMIT' parameter
+ * @param limit.num The <> argument of the 'LIMIT' parameter
  */
-export type SearchParameters = {
+export type FTSearchParameters = {
     noContent?: boolean,
     verbatim?: boolean,
     nonStopWords?: boolean,
@@ -616,13 +685,30 @@ export type SearchParameters = {
 /**
  * The additional parameter of 'FT.AGGREGATE' command
  * @param load The 'LOAD' parameter. 
- * @param groupby The 'GROUPBY' parameter. 
+ * @param load.nargs The number of arguments
+ * @param load.property The property name
+ * @param groupby The 'GROUPBY' parameter.
+ * @param groupby.nargs The number of arguments of the 'GROUPBY' parameter
+ * @param groupby.property The property name of the 'GROUPBY' parameter
+ * @param reduce The 'REDUCE' parameter.
+ * @param reduce.function A function of the 'REDUCE' parameter
+ * @param reduce.nargs The number of arguments of the 'REDUCE' parameter
+ * @param reduce.arg The argument of the 'REDUCE' parameter
+ * @param reduce.as The name of the function of the 'REDUCE' parameter
  * @param sortby The 'SORTBY' parameter. 
+ * @param sortby.nargs The number of arguments of the 'SORTBY' parameter
+ * @param sortby.property The property name of the 'SORTBY' parameter
+ * @param sortby.sort The sort type of the 'SORTBY' parameter
+ * @param sortby.max The max of the 'SORTBY' parameter
  * @param apply The 'APPLY' parameter. 
+ * @param apply.expression The expression of the 'APPLY' parameter
+ * @param apply.as The as of the 'APPLY' parameter
  * @param limit The 'LIMIT' parameter.
- * @param filter The 'FILTER' parameter.
+ * @param limit.offset The offset of the 'LIMIT' parameter
+ * @param limit.numberOfResults The number of results of the 'LIMIT' parameter
+ * @param filter The expression of the 'FILTER' parameter.
  */
-export type AggregateParameters = {
+export type FTAggregateParameters = {
     load?: {
         nargs: string,
         property: string
@@ -659,7 +745,7 @@ export type AggregateParameters = {
  * @param incr The 'INCR' parameter. if set, we increment the existing entry of the suggestion by the given score, instead of replacing the score. This is useful for updating the dictionary based on user queries in real time
  * @param payload The 'PAYLOAD' parameter. If set, we save an extra payload with the suggestion, that can be fetched by adding the WITHPAYLOADS argument to FT.SUGGET
  */
-export type SugAddParameters = {
+export type FTSugAddParameters = {
     incr: number,
     payload: string
 }
@@ -671,7 +757,7 @@ export type SugAddParameters = {
  * @param withScores The 'WITHSCORES' parameter. If set, we also return the score of each suggestion. this can be used to merge results from multiple instances
  * @param withPayloads The 'WITHPAYLOADS' parameter. If set, we return optional payloads saved along with the suggestions. If no payload is present for an entry, we return a Null Reply.
  */
-export type SugGetParameters = {
+export type FTSugGetParameters = {
     fuzzy: string,
     max: number,
     withScores: boolean,
@@ -699,4 +785,4 @@ export type FTSpellCheck = {
  * @param NUMERIC The number type
  * @param TAG The tag type
  */
-export type FieldType = 'TEXT' | 'NUMERIC' | 'TAG' | string;
+export type FTFieldType = 'TEXT' | 'NUMERIC' | 'TAG' | string;
