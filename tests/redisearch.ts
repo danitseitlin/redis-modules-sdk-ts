@@ -1,7 +1,7 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
-import { RediSearch } from '../modules/redisearch';
-let client: RediSearch;
+import { Redisearch } from '../modules/redisearch';
+let client: Redisearch;
 let index = 'idx'
 let query = '@text:name'
 let alias = 'alias'
@@ -16,7 +16,7 @@ let dict = {
 }
 describe('RediSearch Module testing', async function() {
     before(async () => {
-        client = new RediSearch({
+        client = new Redisearch({
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });
