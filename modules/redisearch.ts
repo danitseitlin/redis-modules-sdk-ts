@@ -1,7 +1,7 @@
 
 import * as Redis from 'ioredis';
 
-export class RediSearch {
+export class Redisearch {
 
     public redis: Redis.Redis;
 
