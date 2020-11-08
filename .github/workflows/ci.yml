@@ -43,8 +43,8 @@ jobs:
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/redisearch:latest && docker ps -a
-    #- name: Running tests
-    #  run: npm i && npm run rts-module-tests
+    - name: Running tests
+      run: npm i && npm run redisearch-module-tests
   #Build for 'Redis Bloom' module
   RedisBloom:
     runs-on: ubuntu-latest

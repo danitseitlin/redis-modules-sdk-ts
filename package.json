@@ -9,6 +9,7 @@
     "test": "mocha -r ts-node/register",
     "rejson-module-tests": "npm run test tests/rejson.ts -- -- --host=127.0.0.1 --port=6379",
     "rts-module-tests": "npm run test tests/rts.ts -- -- --host=127.0.0.1 --port=6379",
+    "redisearch-module-tests": "npm run test tests/redisearch.ts -- -- --host=127.0.0.1 --port=6379",
     "tests": "npm run rejson-module-tests && npm run rts-module-tests",
     "pre-deploy": "npm run build",
     "deploy": "npm-deploy redis-modules-cli"

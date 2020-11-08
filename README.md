@@ -81,3 +81,48 @@ await client.disconnect();
 | mget       | TS.MGET                     |
 | info       | TS.INFO                     |
 | queryindex | TS.QUERYINDEX               |
+
+## Redisearch module
+### Quick start
+```
+const client = new RediSearch({
+    host: 'hostname',
+    port: 43758,
+});
+
+//Connect to the Redis database with Redisearch module
+await client.connect();
+
+//Setting a key
+const response = await client.aliasdel('key');
+expect(response).to.equal('OK', 'The response of the aliasdel command');
+
+//Disconnect from the Redis database with Redis Times Series module
+await client.disconnect();
+```
+### Functions list
+| Functions   | Redisearch Command  |
+|:----------- |:------------------- |
+| create      | FT.CREATE           |
+| search      | FT.SEARCH           |
+| aggregate   | FT.AGGREGATE        |
+| explain     | FT.EXPLAIN          |
+| explainCLI  | FT.EXPLAINCLI       |
+| alter       | FT.ALTER            |
+| dropindex   | FT.DROPINDEX        |
+| aliasadd    | FT.ALIASADD         |
+| aliasupdate | FT.ALIASUPDATE      |
+| aliasdel    | FT.ALIASDEL         |
+| tagvals     | FT.TAGVALS          |
+| sugadd      | FT.SUGADD           |
+| sugget      | FT.SUGGET           |
+| sugdel      | FT.SUGDEL           |
+| suglen      | FT.SUGLEN           |
+| synupdate   | FT.SYNUPDATE        |
+| syndump     | FT.SYNDUMP          |
+| spellcheck  | FT.SPELLCHECK       |
+| dictadd     | FT.DICTADD          |
+| dictdel     | FT.DICTDEL          |
+| dictdump    | FT.DICTDUMP         |
+| info        | FT.INFO             |
+| config      | FT.CONFIG           |

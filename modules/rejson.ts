@@ -6,7 +6,7 @@ export class ReJSON {
     public redis: Redis.Redis;
 
     /**
-     * Initializing the ReJSON object. Initialization starts an active connection to the Redis database
+     * Initializing the ReJSON object
      * @param options The options of the Redis database.
      */
     constructor(public options: Redis.RedisOptions) {}
