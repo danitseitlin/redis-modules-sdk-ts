@@ -1,194 +1,508 @@
 
 import * as Redis from 'ioredis';
-import { inherits } from 'util';
 
-export class RediSearch extends Redis {
+export class RediSearch {
+
+    public redis: Redis.Redis;
+
     /**
-     * Initializing the RediSearch object. Initialization starts an active connection to the Redis database
+     * Initializing the RediSearch object
      * @param options The options of the Redis database.
      */
-    constructor(options: Redis.RedisOptions) {
-        super(options)
+    constructor(public options: Redis.RedisOptions) {}
+
+    /**
+     * Connecting to the Redis database with ReJSON module
+     */
+    async connect(): Promise<void> {
+        this.redis = new Redis(this.options);
     }
 
-    async createCommand(parameters: CreateParameters, schemaFields: SchemaField[]) {
-        const args = [parameters.index.toString()]
-        args.concat(['ON', parameters.on]);
-        if(parameters.prefix !== undefined) {
-            args.push('PREFIX');
-            for(const prefix of parameters.prefix)
-                args.concat([prefix.count.toString(), prefix.name])
+    /**
+     * Disconnecting from the Redis database with ReJSON module
+     */
+    async disconnect(): Promise<void> {
+        await this.redis.quit();
+    }
+
+    /**
+     * Creating an index with a given spec
+     * @param parameters The additional parameters of the spec
+     * @param schemaFields The filter set after the 'SCHEMA' argument
+     * @returns 'OK'
+     */
+    async create(index: string, schemaFields: FTSchemaField[], parameters?: FTCreateParameters): Promise<'OK'> {
+        let args: string[] = [index]
+        args = args.concat(['ON', 'HASH']);
+        if(parameters !== undefined) {
+            if(parameters.prefix !== undefined) {
+                args.push('PREFIX');
+                for(const prefix of parameters.prefix)
+                    args.concat([prefix.count.toString(), prefix.name])
+            }
+            if(parameters.filter !== undefined)
+                args = args.concat(['FILTER', parameters.filter])
+            if(parameters.language !== undefined)
+                args = args.concat(['LANGUAGE', parameters.language]);
+            if(parameters.languageField !== undefined)
+                args = args.concat(['LANGUAGE_FIELD', parameters.languageField]);
+            if(parameters.score !== undefined)
+                args = args.concat(['SCORE', parameters.score])
+            if(parameters.score !== undefined)
+                args = args.concat(['SCORE_FIELD', parameters.scoreField])
+            if(parameters.payloadField !== undefined)
+                args = args.concat(['PAYLOAD_FIELD', parameters.payloadField])
+            if(parameters.maxTextFields !== undefined)
+                args = args.concat(['MAXTEXTFIELDS', parameters.maxTextFields.toString()])
+            if(parameters.noOffsets !== undefined)
+                args.push('NOOFFSETS');
+            if(parameters.temporary !== undefined)
+                args.push('TEMPORARY');
+            if(parameters.nohl !== undefined)
+                args.push('NOHL');
+            if(parameters.noFields !== undefined)
+                args.push('NOFIELDS');
+            if(parameters.noFreqs !== undefined)
+                args.push('NOFREQS');
+            if(parameters.stopwords !== undefined)
+                args = args.concat(['STOPWORDS', parameters.stopwords.num.toString(), parameters.stopwords.stopword]);
+            if(parameters.skipInitialScan !== undefined)
+                args.push('SKIPINITIALSCAN');
         }
-        if(parameters.filter !== undefined)
-            args.concat(['FILTER', parameters.filter])
-        if(parameters.language !== undefined)
-            args.concat(['LANGUAGE', parameters.language]);
-        if(parameters.languageField !== undefined)
-            args.concat(['LANGUAGE_FIELD', parameters.languageField]);
-        if(parameters.score !== undefined)
-            args.concat(['SCORE', parameters.score])
-        if(parameters.score !== undefined)
-            args.concat(['SCORE_FIELD', parameters.scoreField])
-        if(parameters.payloadField !== undefined)
-            args.concat(['PAYLOAD_FIELD', parameters.payloadField])
-        if(parameters.maxTextFields !== undefined)
-            args.concat(['MAXTEXTFIELDS', parameters.maxTextFields.toString()])
-        if(parameters.noOffsets !== undefined)
-            args.push('NOOFFSETS');
-        if(parameters.temporary !== undefined)
-            args.push('TEMPORARY');
-        if(parameters.nohl !== undefined)
-            args.push('NOHL');
-        if(parameters.noFields !== undefined)
-            args.push('NOFIELDS');
-        if(parameters.noFreqs !== undefined)
-            args.push('NOFREQS');
-        if(parameters.stopwords !== undefined)
-            args.concat(['STOPWORDS', parameters.stopwords.num.toString(), parameters.stopwords.stopword]);
-        if(parameters.skipInitialScan !== undefined)
-            args.push('SKIPINITIALSCAN');
-        args.push(': SCHEMA');
+        args.push('SCHEMA');
         for(const field of schemaFields) {
             args.concat([field.name, field.type]);
             if(field.sortable !== undefined) args.push('SORTABLE');
             if(field.noindex !== undefined) args.push('NOINDEX');
             if(field.nostem !== undefined) args.push('NOSTEM');
-            if(field.phonetic !== undefined) args.concat(['PHONETIC', field.phonetic]);
-            if(field.seperator !== undefined) args.concat(['SEPERATOR', field.seperator]);
+            if(field.phonetic !== undefined) args = args.concat(['PHONETIC', field.phonetic]);
+            if(field.seperator !== undefined) args = args.concat(['SEPERATOR', field.seperator]);
             if(field.weight !== undefined) args.concat(['WEIGHT', field.weight.toString()]);
         }
-        return await this.send_command('FT.CREATE', args);
+        
+        return await  this.redis.send_command('FT.CREATE', args);
     }
 
-    async hsetCommand(hash: string, fields: {[key: string]: string}) {
-        const args = [hash];
-        for(const field in fields) {
-            args.push(field);
-            args.push(fields[field]);
-        }
-        return await this.send_command('HSET', args);
-    }
-
-    async hsetnxCommand(hash: string, fields: {[key: string]: string}) {
-        const args = [hash];
-        for(const field in fields) {
-            args.push(field);
-            args.push(fields[field]);
-        }
-        return await this.send_command('HSETNX', args);
-    }
-
-    async hdelCommand(hash: string, fields: {[key: string]: string}) {
-        const args = [hash];
-        for(const field in fields) {
-            args.push(field);
-            args.push(fields[field]);
-        }
-        return await this.send_command('HDEL', args);
-    }
-
-    async hincrbyCommand(hash: string, fields: {[key: string]: number}) {
-        const args = [hash];
-        for(const field in fields) {
-            args.push(field);
-            args.push(fields[field].toString());
-        }
-        return await this.send_command('HINCRBY', args);
-    }
-
-    async hdecrbyCommand(hash: string, fields: {[key: string]: number}) {
-        const args = [hash];
-        for(const field in fields) {
-            args.push(field);
-            args.push(fields[field].toString());
-        }
-        return await this.send_command('HDECRBY', args);
-    }
-
-    async searchCommand(parameters: SearchParameters) {
-        const args = [parameters.index.toString(), parameters.query];
-        if(parameters.noContent === true)
-            args.push('NOCONTENT')
-        if(parameters.verbatim === true)
-            args.push('VERBARIM')
-        if(parameters.nonStopWords === true)
-            args.push('NOSTOPWORDS')
-        if(parameters.withScores === true)
-            args.push('WITHSCORES')
-        if(parameters.withPayloads === true)
-            args.push('WITHPAYLOADS')
-        if(parameters.withSortKeys === true)
-            args.push('WITHSORTKEYS')
-        if(parameters.filter !== undefined)
-            args.concat(['FILTER', parameters.filter.field, parameters.filter.min.toString(), parameters.filter.max.toString()])
-        if(parameters.geoFilter !== undefined)
-            args.concat([
-                'GEOFILTER',
-                parameters.geoFilter.field,
-                parameters.geoFilter.lon.toString(),
-                parameters.geoFilter.lat.toString(),
-                parameters.geoFilter.radius.toString(),
-                parameters.geoFilter.measurement
-            ])
-        if(parameters.inKeys !== undefined)
-            args.concat(['INKEYS', parameters.inKeys.num.toString(), parameters.inKeys.field])
-        if(parameters.inFields !== undefined)
-            args.concat(['INFIELDS', parameters.inFields.num.toString(), parameters.inFields.field])
-        if(parameters.return !== undefined)
-            args.concat(['RETURN', parameters.return.num.toString(), parameters.return.field])
-        if(parameters.summarize !== undefined) {
-            args.push('SUMMARIZE')
-            if(parameters.summarize.fields !== undefined) {
-                args.push('FIELDS')
-                for(const field of parameters.summarize.fields) {
-                    args.concat([field.num.toString(), field.field]);
+    /**
+     * Searching the index with a textual query
+     * @param index The index
+     * @param query The query
+     * @param parameters The additional optional parameter
+     * @returns Array reply, where the first element is the total number of results, and then pairs of document id, and a nested array of field/value.
+     */
+    async search(index: string, query: string, parameters?: FTSearchParameters): Promise<number[]> {
+        let args: string[] = [index, query];
+        if(parameters !== undefined) {
+            if(parameters.noContent === true)
+                args.push('NOCONTENT')
+            if(parameters.verbatim === true)
+                args.push('VERBARIM')
+            if(parameters.nonStopWords === true)
+                args.push('NOSTOPWORDS')
+            if(parameters.withScores === true)
+                args.push('WITHSCORES')
+            if(parameters.withPayloads === true)
+                args.push('WITHPAYLOADS')
+            if(parameters.withSortKeys === true)
+                args.push('WITHSORTKEYS')
+            if(parameters.filter !== undefined)
+            args = args.concat(['FILTER', parameters.filter.field, parameters.filter.min.toString(), parameters.filter.max.toString()])
+            if(parameters.geoFilter !== undefined)
+                args.concat([
+                    'GEOFILTER',
+                    parameters.geoFilter.field,
+                    parameters.geoFilter.lon.toString(),
+                    parameters.geoFilter.lat.toString(),
+                    parameters.geoFilter.radius.toString(),
+                    parameters.geoFilter.measurement
+                ])
+            if(parameters.inKeys !== undefined)
+                args = args.concat(['INKEYS', parameters.inKeys.num.toString(), parameters.inKeys.field])
+            if(parameters.inFields !== undefined)
+                args = args.concat(['INFIELDS', parameters.inFields.num.toString(), parameters.inFields.field])
+            if(parameters.return !== undefined)
+                args = args.concat(['RETURN', parameters.return.num.toString(), parameters.return.field])
+            if(parameters.summarize !== undefined) {
+                args.push('SUMMARIZE')
+                if(parameters.summarize.fields !== undefined) {
+                    args.push('FIELDS')
+                    for(const field of parameters.summarize.fields) {
+                        args.concat([field.num.toString(), field.field]);
+                    }
+                }
+                if(parameters.summarize.frags !== undefined) 
+                    args = args.concat(['FRAGS', parameters.summarize.frags.toString()])
+                if(parameters.summarize.len !== undefined) 
+                    args = args.concat(['LEN', parameters.summarize.len.toString()])
+                if(parameters.summarize.seperator !== undefined) 
+                    args = args.concat(['SEPARATOR', parameters.summarize.seperator])
+            }
+            if(parameters.highlight !== undefined) {
+                if(parameters.highlight.fields !== undefined) {
+                    args.push('FIELDS')
+                    for(const field of parameters.highlight.fields) {
+                        args = args.concat([field.num.toString(), field.field]);
+                    }
+                }
+                if(parameters.highlight.tags !== undefined) {
+                    args.push('TAGS')
+                    for(const tag of parameters.highlight.tags) {
+                        args = args.concat([tag.open, tag.close]);
+                    }
                 }
             }
-            if(parameters.summarize.frags !== undefined) 
-                args.concat(['FRAGS', parameters.summarize.frags.toString()])
-            if(parameters.summarize.len !== undefined) 
-                args.concat(['LEN', parameters.summarize.len.toString()])
-            if(parameters.summarize.seperator !== undefined) 
-                args.concat(['SEPARATOR', parameters.summarize.seperator])
+            if(parameters.slop !== undefined)
+                args = args.concat(['SLOP', parameters.slop.toString()])
+            if(parameters.inOrder !== undefined)
+                args.push('INORDER')
+            if(parameters.language !== undefined)
+                args = args.concat(['LANGUAGE', parameters.language])
+            if(parameters.expander !== undefined)
+                args = args.concat(['EXPANDER', parameters.expander])
+            if(parameters.scorer !== undefined)
+                args = args.concat(['SCORER', parameters.scorer])
+            if(parameters.explainScore !== undefined)
+                args.push('EXPLAINSCORE')
+            if(parameters.payload)
+                args = args.concat(['PAYLOAD', parameters.payload])
+            if(parameters.sortBy !== undefined)
+                args = args.concat(['SORTBY', parameters.sortBy.field, parameters.sortBy.sort])
+            if(parameters.limit !== undefined)
+                args = args.concat(['LIMIT', parameters.limit.first.toString(), parameters.limit.num.toString()])
         }
-        if(parameters.highlight !== undefined) {
-            if(parameters.highlight.fields !== undefined) {
-                args.push('FIELDS')
-                for(const field of parameters.highlight.fields) {
-                    args.concat([field.num.toString(), field.field]);
-                }
+        return await this.redis.send_command('FT.SEARCH', args);
+    }
+
+    /**
+     * Runs a search query on an index, and performs aggregate transformations on the results, extracting statistics etc from them
+     * @param index The index
+     * @param query The query
+     * @param parameters The additional optional parameters
+     * @returns Array Response. Each row is an array and represents a single aggregate result
+     */
+    async aggregate(index: string, query: string, parameters?: FTAggregateParameters): Promise<number[]> {
+        let args: string[] = [index, query];
+        if(parameters !== undefined) {
+            if(parameters.load !== undefined) {
+                args.push('LOAD')
+                if(parameters.load.nargs !== undefined)
+                    args.push(parameters.load.nargs);
+                if(parameters.load.property !== undefined)
+                    args.push(parameters.load.property);
             }
-            if(parameters.highlight.tags !== undefined) {
-                args.push('TAGS')
-                for(const tag of parameters.highlight.tags) {
-                    args.concat([tag.open, tag.close]);
-                }
+            if(parameters.groupby !== undefined){
+                args.push('GROUPBY')
+                if(parameters.groupby.nargs !== undefined)
+                    args.push(parameters.groupby.nargs);
+                if(parameters.groupby.property !== undefined)
+                    args.push(parameters.groupby.property);
+            }
+            if(parameters.reduce !== undefined) {
+                args.push('REDUCE')
+                if(parameters.reduce.function !== undefined)
+                    args.push(parameters.reduce.function);
+                if(parameters.reduce.nargs !== undefined)
+                    args.push(parameters.reduce.nargs);
+                if(parameters.reduce.arg !== undefined)
+                    args.push(parameters.reduce.arg);
+                if(parameters.reduce.as !== undefined)
+                    args = args.concat(['AS', parameters.reduce.as]);
+            }
+            if(parameters.sortby !== undefined) {
+                args.push('SORTBY')
+                if(parameters.sortby.nargs !== undefined)
+                    args.push(parameters.sortby.nargs);
+                if(parameters.sortby.property !== undefined)
+                    args.push(parameters.sortby.property);
+                if(parameters.sortby.sort !== undefined)
+                    args.push(parameters.sortby.sort);
+                if(parameters.sortby.max !== undefined)
+                    args = args.concat(['MAX', parameters.sortby.max.toString()]);
+            }
+            if(parameters.apply !== undefined) {
+                args.push('APPLY');
+                if(parameters.apply.expression !== undefined)
+                    args.push(parameters.apply.expression);
+                if(parameters.apply.as !== undefined)
+                    args.push(parameters.apply.as);
+            }
+            if(parameters.limit !== undefined) {
+                args.push('LIMIT')
+                if(parameters.limit.offset !== undefined)
+                    args.push(parameters.limit.offset)
+                if(parameters.limit.numberOfResults !== undefined)
+                    args.push(parameters.limit.numberOfResults.toString());
             }
         }
-        if(parameters.slop !== undefined)
-            args.concat(['SLOP', parameters.slop.toString()])
-        if(parameters.inOrder !== undefined)
-            args.push('INORDER')
-        if(parameters.language !== undefined)
-            args.concat(['LANGUAGE', parameters.language])
-        if(parameters.expander !== undefined)
-            args.concat(['EXPANDER', parameters.expander])
-        if(parameters.scorer !== undefined)
-            args.concat(['SCORER', parameters.scorer])
-        if(parameters.explainScore !== undefined)
-            args.push('EXPLAINSCORE')
-        if(parameters.payload)
-            args.concat(['PAYLOAD', parameters.payload])
-        if(parameters.sortBy !== undefined)
-            args.concat(['SORTBY', parameters.sortBy.field, parameters.sortBy.sort])
-        if(parameters.limit !== undefined)
-            args.concat(['LIMIT', parameters.limit.first.toString(), parameters.limit.num.toString()])
+        return await this.redis.send_command('FT.AGGREGATE', args);
+    }
+
+    /**
+     * Retrieving the execution plan for a complex query
+     * @param index The index
+     * @param query The query
+     * @returns Returns the execution plan for a complex query
+     */
+    async explain(index: string, query: string): Promise<string> {
+        return await this.redis.send_command('FT.EXPLAIN', [index, query]);
+    }
+
+    /**
+     * Retrieving the execution plan for a complex query but formatted for easier reading without using redis-cli --raw 
+     * @param index The index
+     * @param query The query
+     * @returns A string representing the execution plan.
+     */
+    async explainCLI(index: string, query: string): Promise<string[]> {
+        return await this.redis.send_command('FT.EXPLAINCLI', [index, query]);
+    }
+
+    /**
+     * Adding a new field to the index
+     * @param index The index
+     * @param field The field name
+     * @param fieldType The field type
+     * @param options The additional optional parameters
+     * @returns 'OK'
+     */
+    async alter(index: string, field: string, fieldType: FTFieldType, options?: FTFieldOptions): Promise<'OK'> {
+        let args = [index, 'SCHEMA', 'ADD', field, fieldType]
+        if(options !== undefined) {
+            if(options.sortable !== undefined) args.push('SORTABLE');
+            if(options.noindex !== undefined) args.push('NOINDEX');
+            if(options.nostem !== undefined) args.push('NOSTEM');
+            if(options.phonetic !== undefined) args = args.concat(['PHONETIC', options.phonetic]);
+            if(options.seperator !== undefined) args = args.concat(['SEPERATOR', options.seperator]);
+            if(options.weight !== undefined) args = args.concat(['WEIGHT', options.weight.toString()]);
+        }
+        return await this.redis.send_command('FT.ALTER', args);
+    }
+
+    /**
+     * Deleting the index
+     * @param index The index
+     * @param deleteHash If set, the drop operation will delete the actual document hashes.
+     * @returns 'OK'
+     */
+    async dropindex(index: string, deleteHash = false): Promise<'OK'> {
+        const args = [index];
+        if(deleteHash === true) args.push('DD')
+        return await this.redis.send_command('FT.DROPINDEX', args);
+    }
+    
+    /**
+     * Adding alias fron an index
+     * @param name The alias name
+     * @param index The alias index
+     * @returns 'OK'
+     */
+    async aliasadd(name: string, index: string): Promise<'OK'> {
+        return await this.redis.send_command('FT.ALIASADD', [name, index]);
+    }
+
+    /**
+     * Updating alias index
+     * @param name The alias name
+     * @param index The alias index
+     * @returns 'OK'
+     */
+    async aliasupdate(name: string, index: string): Promise<'OK'> {
+        return await this.redis.send_command('FT.ALIASUPDATE', [name, index]);
+    }
+
+    /**
+     * Deleting alias fron an index
+     * @param name The alias name
+     * @returns 'OK'
+     */
+    async aliasdel(name: string): Promise<'OK'> {
+        return await this.redis.send_command('FT.ALIASDEL', [name]);
+    }
+    
+    /**
+     * Retrieving the distinct tags indexed in a Tag field
+     * @param index The index
+     * @param field The field name
+     * @returns The distinct tags indexed in a Tag field 
+     */
+    async tagvals(index: string, field: string): Promise<string[]> {
+        return await this.redis.send_command('FT.TAGVALS', [index, field]);
+    }
+
+    /**
+     * Adds a suggestion string to an auto-complete suggestion dictionary
+     * @param key The key
+     * @param suggestion The suggestion
+     * @param score The score
+     * @param options The additional optional parameters
+     * @returns The current size of the suggestion dictionary
+     */
+    async sugadd(key: string, suggestion: string, score: number, options?: FTSugAddParameters): Promise<number>{
+        let args = [key, suggestion, score];
+        if(options !== undefined && options.incr !== undefined)
+            args.push('INCR');
+        if(options !== undefined && options.payload !== undefined)
+            args = args.concat(['PAYLOAD', options.payload]);
+        return await this.redis.send_command('FT.SUGADD', args);
+    }
+
+    /**
+     * Retrieving completion suggestions for a prefix
+     * @param key The key
+     * @param prefix The prefix of the suggestion
+     * @param options The additional optional parameter
+     * @returns A list of the top suggestions matching the prefix, optionally with score after each entry 
+     */
+    async sugget(key: string, prefix: string, options?: FTSugGetParameters): Promise<string[]> {
+        let args = [key, prefix];
+        if(options !== undefined && options.fuzzy !== undefined)
+            args.push('FUZZY');
+        if(options !== undefined && options.max !== undefined)   
+            args = args.concat(['MAX', options.max.toString()]);
+        if(options !== undefined && options.withScores !== undefined)
+            args.push('WITHSCORES');
+        if(options !== undefined && options.withPayloads !== undefined)
+            args.push('WITHPAYLOADS');
+        return await this.redis.send_command('FT.SUGGET', args);
+    }
+
+    /**
+     * Deleting a string from a suggestion index
+     * @param key The key
+     * @param suggestion The suggestion
+     */
+    async sugdel(key: string, suggestion: string): Promise<number> {
+        return await this.redis.send_command('FT.SUGDEL', [key, suggestion]);
+    }
+
+    /**
+     * Retrieving the size of an auto-complete suggestion dictionary
+     * @param key The key
+     */
+    async suglen(key: string): Promise<number> {
+        return await this.redis.send_command('FT.SUGLEN', key); 
+    }
+
+    /**
+     * Updating a synonym group
+     * @param index The index
+     * @param groupId The group id
+     * @param terms A list of terms 
+     * @param skipInitialScan If set, we do not scan and index.
+     * @returns 'OK'
+     */
+    async synupdate(index: string, groupId: number, terms: string[], skipInitialScan = false): Promise<'OK'> {
+        const args = [index, groupId].concat(terms);
+        if(skipInitialScan === true)
+            args.push('SKIPINITIALSCAN');
+        return await this.redis.send_command('FT.SYNUPDATE', args); 
+    }
+
+    /**
+     * Dumps the contents of a synonym group
+     * @param index The index
+     * @returns A list of synonym terms and their synonym group ids.  
+     */
+    async syndump(index: string): Promise<(string | number)[]> {
+        return await this.redis.send_command('FT.SYNDUMP', [index]);
+    }
+
+    /**
+     * Performs spelling correction on a query
+     * @param index The index
+     * @param query The query
+     * @param options The additional optional parameters
+     * @returns An array, in which each element represents a misspelled term from the query
+     */
+    async spellcheck(index: string, query: string, options?: FTSpellCheck): Promise<(string | string[])[]> {
+        const args = [index, query];
+        if(options !== undefined && options.distance !== undefined)
+            args.concat(['DISTANCE', options.distance])
+        if(options !== undefined && options.terms !== undefined) {
+            args.push('TERMS');
+            for(const term of options.terms) {
+                args.concat([term.type, term.dict]);
+            }
+        }
+        return await this.redis.send_command('FT.SPELLCHECK', args);
+    }
+    
+    /**
+     * Adding terms to a dictionary
+     * @param dict The dictionary
+     * @param terms A list of terms
+     * @returns The number of new terms that were added
+     */
+    async dictadd(dict: string, terms: string[]): Promise<number> {
+        return await this.redis.send_command('FT.DICTADD', [dict].concat(terms));
+    }
+
+    /**
+     * Deleting terms from a dictionary
+     * @param dict The dictionary
+     * @param terms A list of terms
+     * @returns The number of terms that were deleted
+     */
+    async dictdel(dict: string, terms: string[]): Promise<number> {
+        return await this.redis.send_command('FT.DICTDEL', [dict].concat(terms));
+    }
+
+    /**
+     * Dumps all terms in the given dictionary
+     * @param dict The dictionary
+     * @returns An array, where each element is term
+     */
+    async dictdump(dict: string): Promise<string[]> {
+        return await this.redis.send_command('FT.DICTDUMP', [dict]);
+    }
+
+    /**
+     * Retrieving infromation and statistics on the index
+     * @param index The index
+     * @returns A nested array of keys and values. 
+     */
+    async info(index: string): Promise<(string | number)[]> {
+        return await this.redis.send_command('FT.INFO', [index]);
+    }
+
+    /**
+     * Retrieves, describes and sets runtime configuration options
+     * @param command The command type
+     * @param option The option
+     * @param value In case of 'SET' command, a valid value to set
+     * @returns If 'SET' command, returns 'OK' for valid runtime-settable option names and values. If 'GET' command, returns a string with the current option's value.
+     */
+    async config(command: 'GET' | 'SET' | 'HELP', option: string, value?: string): Promise<string[][]> {
+        const args = [command, option];
+        if(command === 'SET')
+            args.push(value);
+        return await this.redis.send_command('FT.CONFIG', args);
     }
 }
 
-export type CreateParameters = {
-    index: number,
-    on: 'HASH',
+/**
+ * The 'FT.CREATE' additional optional parameters
+ * @param filter The expression of the 'FILTER' parameter. is a filter expression with the full RediSearch aggregation expression language.
+ * @param payloadField The field of the 'PAYLOAD' parameter. If set indicates the document field that should be used as a binary safe payload string to the document, that can be evaluated at query time by a custom scoring function, or retrieved to the client.
+ * @param maxTextFields The 'MAXTEXTFIELDS' parameter. For efficiency, RediSearch encodes indexes differently if they are created with less than 32 text fields.
+ * @param noOffsets The 'NOFFSETS' parameter. If set, we do not store term offsets for documents (saves memory, does not allow exact searches or highlighting).
+ * @param temporary The 'TEMPORARY' parameter. Create a lightweight temporary index which will expire after the specified period of inactivity.
+ * @param nohl The 'NOHL' parameter. Conserves storage space and memory by disabling highlighting support. If set, we do not store corresponding byte offsets for term positions.
+ * @param noFields The 'NOFIELDS' parameter. If set, we do not store field bits for each term.
+ * @param noFreqs The 'NOFREQS' parameter.  If set, we avoid saving the term frequencies in the index.
+ * @param skipInitialScan The 'SKIPINITIALSCAN' parameter. If set, we do not scan and index. 
+ * @param prefix The 'PREFIX' parameter. tells the index which keys it should index.
+ * @param prefix.count The count argument of the 'PREFIX' parameter. 
+ * @param prefix.name The name argument of the 'PREFIX' parameter. 
+ * @param language The 'LANGUAGE' parameter.  If set indicates the default language for documents in the index.
+ * @param languageField The 'LANGUAGE_FIELD' parameter. If set indicates the document field that should be used as the document language.
+ * @param score The 'SCORE' parameter. If set indicates the default score for documents in the index.
+ * @param scoreField The 'SCORE_FIELD' parameter. If set indicates the document field that should be used as the document's rank based on the user's ranking. 
+ * @param stopwords The 'STOPWORDS' parameter. If set, we set the index with a custom stopword list, to be ignored during indexing and search time.
+ * @param stopwords.num The num argument of the 'STOPWORDS' parameter. 
+ * @param stopwords.stopword The stopword argument of the 'STOPWORDS' parameter.
+ */
+export type FTCreateParameters = {
     filter?: string,
     payloadField?: string,
     maxTextFields?: number,
@@ -212,7 +526,16 @@ export type CreateParameters = {
     }
 }
 
-export type FieldOptions = {
+/**
+ * The field parameter
+ * @param sortable The 'SORTABLE' parameter. Numeric, tag or text field can have the optional SORTABLE argument that allows the user to later sort the results by the value of this field (this adds memory overhead so do not declare it on large text fields).
+ * @param nostem The 'NOSTEM' parameter. Text fields can have the NOSTEM argument which will disable stemming when indexing its values. This may be ideal for things like proper names.
+ * @param noindex The 'NOINDEX' parameter. Fields can have the NOINDEX option, which means they will not be indexed. This is useful in conjunction with SORTABLE , to create fields whose update using PARTIAL will not cause full reindexing of the document. If a field has NOINDEX and doesn't have SORTABLE, it will just be ignored by the index.
+ * @param phonetic The 'PHONETIC' parameter. Declaring a text field as PHONETIC will perform phonetic matching on it in searches by default. The obligatory {matcher} argument specifies the phonetic algorithm and language used.
+ * @param weight The 'WEIGHT' parameter. For TEXT fields, declares the importance of this field when calculating result accuracy. This is a multiplication factor, and defaults to 1 if not specified.
+ * @param seperator The 'SEPERATOR' parameter. For TAG fields, indicates how the text contained in the field is to be split into individual tags. The default is , . The value must be a single character.
+ */
+export type FTFieldOptions = {
     sortable?: boolean,
     noindex?: boolean,
     nostem?: boolean,
@@ -221,14 +544,78 @@ export type FieldOptions = {
     seperator?: string
 }
 
-export interface SchemaField extends FieldOptions {
+/**
+ * The parameters of the 'FT.CREATE' command, schema fields (Field comming after the 'SCHEMA' command)
+ * @param name The name of the field
+ * @param type The type of the field
+ * @param sortable The 'SORTABLE' parameter. Numeric, tag or text field can have the optional SORTABLE argument that allows the user to later sort the results by the value of this field (this adds memory overhead so do not declare it on large text fields).
+ * @param nostem The 'NOSTEM' parameter. Text fields can have the NOSTEM argument which will disable stemming when indexing its values. This may be ideal for things like proper names.
+ * @param noindex The 'NOINDEX' parameter. Fields can have the NOINDEX option, which means they will not be indexed. This is useful in conjunction with SORTABLE , to create fields whose update using PARTIAL will not cause full reindexing of the document. If a field has NOINDEX and doesn't have SORTABLE, it will just be ignored by the index.
+ * @param phonetic The 'PHONETIC' parameter. Declaring a text field as PHONETIC will perform phonetic matching on it in searches by default. The obligatory {matcher} argument specifies the phonetic algorithm and language used.
+ * @param weight The 'WEIGHT' parameter. For TEXT fields, declares the importance of this field when calculating result accuracy. This is a multiplication factor, and defaults to 1 if not specified.
+ * @param seperator The 'SEPERATOR' parameter. For TAG fields, indicates how the text contained in the field is to be split into individual tags. The default is , . The value must be a single character.
+ */
+export interface FTSchemaField extends FTFieldOptions {
     name: string,
-    type: 'TEXT' | 'NUMERIC' | 'TAG' | string,
+    type: FTFieldType,
 }
 
-export type SearchParameters = {
-    index: number,
-    query: string,
+/**
+ * The parameter of the 'FT.SEARCH' command
+ * @param noContent The 'NOTCONTENT' parameter. If it appears after the query, we only return the document ids and not the content.
+ * @param verbatim The 'VERBATIM' parameter.  if set, we do not try to use stemming for query expansion but search the query terms verbatim.
+ * @param nonStopWords The 'NONSTOPWORDS' parameter. If set, we do not filter stopwords from the query. 
+ * @param withScores The 'WITHSCORES' parameter. If set, we also return the relative internal score of each document.
+ * @param withPayloads The 'WITHPAYLOADS' parameter. If set, we retrieve optional document payloads (see FT.ADD).
+ * @param withSoryKeys The 'WITHSORTKEYS' parameter. Only relevant in conjunction with SORTBY . Returns the value of the sorting key, right after the id and score and /or payload if requested.
+ * @param filter The 'FILTER' parameter.  If set, and numeric_field is defined as a numeric field in FT.CREATE, we will limit results to those having numeric values ranging between min and max. min and max follow ZRANGE syntax, and can be -inf , +inf and use ( for exclusive ranges. 
+ * @param filter.field The numeric_field argument of the 'FILTER' parameter
+ * @param filter.min The min argument of the 'FILTER' parameter
+ * @param filter.max The max argument of the 'FILTER' parameter
+ * @param geoFilter The 'GEOFILTER' parameter. If set, we filter the results to a given radius from lon and lat. Radius is given as a number and units.
+ * @param geoFilter.field The field of the 'GEOFILTER' parameter
+ * @param geoFilter.lon The lon argument of the 'GEOFILTER' parameter
+ * @param geoFilter.lat The lat argument of the 'GEOFILTER' parameter
+ * @param geoFilter.radius The radius argument of the 'GEOFILTER' parameter
+ * @param geoFilter.measurement The measurement argument of the 'GEOFILTER' parameter
+ * @param inKeys The 'INKEYS' parameter. If set, we limit the result to a given set of keys specified in the list. the first argument must be the length of the list, and greater than zero.
+ * @param inKeys.num The num argument of the 'INKEYS' parameter
+ * @param inKeys.field The field argument of the 'INKEYS' parameter
+ * @param inFields The 'INFIELDS' parameter. If set, filter the results to ones appearing only in specific fields of the document, like title or URL.
+ * @param inFields.num The num argument of the 'INFIELDS' parameter
+ * @param inFields.field The field argument of the 'INFIELDS' parameter
+ * @param return The 'RETURN' parameter. Use this keyword to limit which fields from the document are returned.
+ * @param return.num The num argument of the 'RETURN' parameter
+ * @param return.field The field of the 'RETURN' parameter
+ * @param summarize The 'SUMMARIZE' parameter. Use this option to return only the sections of the field which contain the matched text.
+ * @param summarize.fields The fields argument of the 'SUMMARIZE' parameter
+ * @param summarize.fields.num The num argument of the fields argument
+ * @param summarize.fields.field The field argument of the fields argument
+ * @param summarize.frags The fargs argument of the 'SUMMARIZE' parameter
+ * @param summarize.len The len argument of the 'SUMMARIZE' parameter
+ * @param summarize.seperator The seperator argument of the 'SUMMARIZE' parameter
+ * @param highlight The 'HIGHLIGHT' parameter. Use this option to format occurrences of matched text.
+ * @param highlight.fields The fields argument of the 'HIGHLIGHT' parameter
+ * @param highlight.fields.num The num argument of the fields argument
+ * @param highlight.fields.field The field argument of the fields argument
+ * @param highlight.tags The tags argument of the 'HIGHLIGHT' parameter
+ * @param highlight.open The open argument of the tags argument
+ * @param highlight.close The close argument of the tags argument
+ * @param slop The 'SLOP' parameter. If set, we allow a maximum of N intervening number of unmatched offsets between phrase terms.
+ * @param inorder The 'INORDER' parameter. If set, and usually used in conjunction with SLOP, we make sure the query terms appear in the same order in the document as in the query, regardless of the offsets between them. 
+ * @param language The 'LANGUAGE' parameter. If set, we use a stemmer for the supplied language during search for query expansion.
+ * @param expander The 'EXPANDER' parameter. If set, we will use a custom query expander instead of the stemmer.
+ * @param scorer The 'SCORER' parameter. If set, we will use a custom scoring function defined by the user.
+ * @param explainScore The 'EXPLAINSCORE' parameter. If set, will return a textual description of how the scores were calculated.
+ * @param payload The 'PAYLOAD' parameter. Add an arbitrary, binary safe payload that will be exposed to custom scoring functions.
+ * @param sortBy The 'SORTBY' parameter. If specified, the results are ordered by the value of this field. This applies to both text and numeric fields.
+ * @param sortBy.field The <> argument of the 'SORTBY' parameter
+ * @param sortBy.sort The <> argument of the 'SORTBY' parameter
+ * @param limit The 'LIMIT' parameter. If the parameters appear after the query, we limit the results to the offset and number of results given.
+ * @param limit.first The <> argument of the 'LIMIT' parameter
+ * @param limit.num The <> argument of the 'LIMIT' parameter
+ */
+export type FTSearchParameters = {
     noContent?: boolean,
     verbatim?: boolean,
     nonStopWords?: boolean,
@@ -294,3 +681,108 @@ export type SearchParameters = {
         num: number
     }
 }
+
+/**
+ * The additional parameter of 'FT.AGGREGATE' command
+ * @param load The 'LOAD' parameter. 
+ * @param load.nargs The number of arguments
+ * @param load.property The property name
+ * @param groupby The 'GROUPBY' parameter.
+ * @param groupby.nargs The number of arguments of the 'GROUPBY' parameter
+ * @param groupby.property The property name of the 'GROUPBY' parameter
+ * @param reduce The 'REDUCE' parameter.
+ * @param reduce.function A function of the 'REDUCE' parameter
+ * @param reduce.nargs The number of arguments of the 'REDUCE' parameter
+ * @param reduce.arg The argument of the 'REDUCE' parameter
+ * @param reduce.as The name of the function of the 'REDUCE' parameter
+ * @param sortby The 'SORTBY' parameter. 
+ * @param sortby.nargs The number of arguments of the 'SORTBY' parameter
+ * @param sortby.property The property name of the 'SORTBY' parameter
+ * @param sortby.sort The sort type of the 'SORTBY' parameter
+ * @param sortby.max The max of the 'SORTBY' parameter
+ * @param apply The 'APPLY' parameter. 
+ * @param apply.expression The expression of the 'APPLY' parameter
+ * @param apply.as The as of the 'APPLY' parameter
+ * @param limit The 'LIMIT' parameter.
+ * @param limit.offset The offset of the 'LIMIT' parameter
+ * @param limit.numberOfResults The number of results of the 'LIMIT' parameter
+ * @param filter The expression of the 'FILTER' parameter.
+ */
+export type FTAggregateParameters = {
+    load?: {
+        nargs: string,
+        property: string
+    },
+    groupby?: {
+        nargs: string,
+        property: string
+    },
+    reduce?: {
+        function: string,
+        nargs: string,
+        arg: string,
+        as: string
+    },
+    sortby?: {
+        nargs: string,
+        property: string,
+        sort: 'ASC' | 'DESC',
+        max: number
+    },
+    apply?: {
+        expression: string,
+        as: string
+    },
+    limit?: {
+        offset: string,
+        numberOfResults: number
+    },
+    filter?: string
+}
+
+/**
+ * The additional parameters of 'FT.SUGADD' command
+ * @param incr The 'INCR' parameter. if set, we increment the existing entry of the suggestion by the given score, instead of replacing the score. This is useful for updating the dictionary based on user queries in real time
+ * @param payload The 'PAYLOAD' parameter. If set, we save an extra payload with the suggestion, that can be fetched by adding the WITHPAYLOADS argument to FT.SUGGET
+ */
+export type FTSugAddParameters = {
+    incr: number,
+    payload: string
+}
+
+/**
+ * The additional parameters of 'FT.SUGGET' command
+ * @param fuzzy The 'FUZZY' parameter. if set, we do a fuzzy prefix search, including prefixes at Levenshtein distance of 1 from the prefix sent
+ * @param max The 'MAX' parameter. If set, we limit the results to a maximum of num (default: 5).
+ * @param withScores The 'WITHSCORES' parameter. If set, we also return the score of each suggestion. this can be used to merge results from multiple instances
+ * @param withPayloads The 'WITHPAYLOADS' parameter. If set, we return optional payloads saved along with the suggestions. If no payload is present for an entry, we return a Null Reply.
+ */
+export type FTSugGetParameters = {
+    fuzzy: string,
+    max: number,
+    withScores: boolean,
+    withPayloads: boolean
+}
+
+/**
+ * The additional parameters of 'FT.SPELLCHECK' command
+ * @param terms A list of terms
+ * @param terms.type The type of the term
+ * @param terms.dict The dict of the term
+ * @param distance The maximal Levenshtein distance for spelling suggestions (default: 1, max: 4)
+ */
+export type FTSpellCheck = {
+    terms?: {
+        type: 'INCLUDE' | 'EXCLUDE',
+        dict?: string
+    }[],
+    distance?: string
+}
+
+/**
+ * The available field types
+ * @param TEXT The text type
+ * @param NUMERIC The number type
+ * @param TAG The tag type
+ */
+export type FTFieldType = 'TEXT' | 'NUMERIC' | 'TAG' | string;
