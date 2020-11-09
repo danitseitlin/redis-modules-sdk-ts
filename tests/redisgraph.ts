@@ -27,7 +27,7 @@ describe('RediSearch Module testing', async function() {
     });
     it('readOnlyQuery function', async () => {
         const response = await client.readOnlyQuery(graphName, 'MATCH (p:Person) WHERE p.age > 80 RETURN p')
-        console.log(response[0][2])
+        console.log(response[0])
         expect(response[0][2][0]).to.equal('Cached execution: 0', 'The response of the GRAPH.RO_QUERY command');
     });
     it('profile function', async () => {
@@ -53,7 +53,7 @@ describe('RediSearch Module testing', async function() {
     it('slowlog function', async () => {
         const response = await client.slowlog(0)
         console.log(response)
-        expect(response).to.equal('OK', 'The response of the GRAPH.SLOWLOG command');
+        expect(response.length).to.equal(0, 'The response of the GRAPH.SLOWLOG command');
     });
     it('delete function', async () => {
         const response = await client.delete(graphName)
