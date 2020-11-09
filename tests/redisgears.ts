@@ -22,11 +22,11 @@ describe('RediGears Module testing', async function() {
         console.log(response)
     });
     it('configSet function', async () => {
-        const response = await client.configSet([['id', id]])
+        const response = await client.configSet([['ProfileExecutions', '1']])
         console.log(response)
     });
     it('configGet function', async () => {
-        const response = await client.configGet(['id'])
+        const response = await client.configGet(['ProfileExecutions'])
         console.log(response)
     });
     /*it('dropExecution function', async () => {
