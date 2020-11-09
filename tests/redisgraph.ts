@@ -18,7 +18,7 @@ describe('RediSearch Module testing', async function() {
 
     it('query function', async () => {
         const response = await client.query(graphName, 'CREATE (p:Person {name: \'Kurt\', age: 27}) RETURN p')
-        console.log(response)
+        console.log(response[1])
         expect(response[0][0]).to.equal('Labels added: 1', 'The response of the GRAPH.QUERY command');
         expect(response[0][1]).to.equal('Nodes created: 1', 'The response of the GRAPH.QUERY command');
         expect(response[0][2]).to.equal('Cached execution: 0', 'The response of the GRAPH.QUERY command');
@@ -31,7 +31,7 @@ describe('RediSearch Module testing', async function() {
     it('profile function', async () => {
         const response = await client.profile(graphName, 'MATCH (p:Person) WHERE p.age > 80 RETURN p')
         console.log(response)
-        expect(response).to.equal('OK', 'The response of the GRAPH.PROFILE command');
+        expect(response[0][0]).to.contain('Results | Records produced: 0', 'The response of the GRAPH.QUERY command');
     });
     it('explain function', async () => {
         const response = await client.explain(graphName, 'MATCH (p:Person) WHERE p.age > 80 RETURN p')
