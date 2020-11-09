@@ -40,7 +40,7 @@ export class RedisGraph {
      * @param query The query to execute
      * @returns Result set
      */
-    async readOnlyQuery(name: string, query: string): Promise<string[][]> {
+    async readonlyQuery(name: string, query: string): Promise<string[][]> {
         return await this.redis.send_command('GRAPH.RO_QUERY', [name, query])
     }
 

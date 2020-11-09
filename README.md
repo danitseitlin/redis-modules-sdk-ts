@@ -149,7 +149,7 @@ await client.disconnect();
 | Functions     | RedisGraph Command  |
 |:------------- |:------------------- |
 | query         | GRAPH.QUERY         |
-| readOnlyQuery | GRAPH.RO_QUERY      |
+| readonlyQuery | GRAPH.RO_QUERY      |
 | profile       | GRAPH.PROFILE       |
 | delete        | GRAPH.DELETE        |
 | explain       | GRAPH.EXPLAIN       |

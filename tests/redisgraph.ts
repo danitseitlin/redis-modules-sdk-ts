@@ -23,8 +23,8 @@ describe('RediSearch Module testing', async function() {
         expect(response[2][2]).to.equal('Properties set: 2', 'The response of the GRAPH.QUERY command');
         expect(response[2][3]).to.equal('Cached execution: 0', 'The response of the GRAPH.QUERY command');
     });
-    it('readOnlyQuery function', async () => {
-        const response = await client.readOnlyQuery(graphName, 'MATCH (p:Person) WHERE p.age > 80 RETURN p')
+    it('readonlyQuery function', async () => {
+        const response = await client.readonlyQuery(graphName, 'MATCH (p:Person) WHERE p.age > 80 RETURN p')
         expect(response[2][0]).to.equal('Cached execution: 0', 'The response of the GRAPH.RO_QUERY command');
     });
     it('profile function', async () => {
