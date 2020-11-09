@@ -45,8 +45,8 @@ jobs:
       run: docker run -p 6379:6379 -d --rm redislabs/redisearch:latest && docker ps -a
     - name: Running tests
       run: npm i && npm run redisearch-module-tests
-  #Build for 'Redis Bloom' module
-  RedisBloom:
+  #Build for 'Redis Graph module
+  RedisGraph:
     runs-on: ubuntu-latest
     steps:
     - uses: docker-practice/actions-setup-docker@master
@@ -55,11 +55,11 @@ jobs:
         docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
-      run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
-    #- name: Running tests
-    #  run: npm i && npm run rts-module-tests
-  #Build for 'Redis Graph module
-  #RedisGraph:
+      run: docker run -p 6379:6379 -d --rm redislabs/redisgraph:latest && docker ps -a
+    - name: Running tests
+      run: npm i && npm run redisgraph-module-tests
+  #Build for 'Redis Bloom' module
+  #RedisBloom:
   #  runs-on: ubuntu-latest
   #  steps:
   #  - uses: docker-practice/actions-setup-docker@master
@@ -68,7 +68,8 @@ jobs:
   #      docker_nightly_version: snapshot-20200915
   #  - uses: actions/checkout@v2
   #  - name: Setting up Redis
-  #    run: docker run -p 30001:30001 -p 30002:30002 -p 30003:30003 redislabs/rgcluster:latest && docker ps -a
+  #    run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
     #- name: Running tests
     #  run: npm i && npm run rts-module-tests
+  
 

@@ -54,7 +54,7 @@ const client = new RedisTimesSeies({
 //Connect to the Redis database with Redis Times Series module
 await client.connect();
 
-//Setting a key
+//Deleting a key
 const response = await client.del('key');
 expect(response).to.equal('OK', 'The response of the del command');
 
@@ -93,11 +93,11 @@ const client = new RediSearch({
 //Connect to the Redis database with Redisearch module
 await client.connect();
 
-//Setting a key
+//Deleting an alias
 const response = await client.aliasdel('key');
 expect(response).to.equal('OK', 'The response of the aliasdel command');
 
-//Disconnect from the Redis database with Redis Times Series module
+//Disconnect from the Redis database with Redisearch module
 await client.disconnect();
 ```
 ### Functions list
@@ -126,3 +126,31 @@ await client.disconnect();
 | dictdump    | FT.DICTDUMP         |
 | info        | FT.INFO             |
 | config      | FT.CONFIG           |
+
+## RedisGraph module
+### Quick start
+```
+const client = new RedisGraph({
+    host: 'hostname',
+    port: 43758,
+});
+
+//Connect to the Redis database with RedisGraph module
+await client.connect();
+
+//Executing a query
+const response = await client.query(graphName, 'CREATE (p:Person {name: \'Kurt\', age: 27}) RETURN p');
+expect(response[2][0]).to.equal('Labels added: 1', 'The response of the GRAPH.QUERY command');
+
+//Disconnect from the Redis database with RedisGraph module
+await client.disconnect();
+```
+### Functions list
+| Functions     | RedisGraph Command  |
+|:------------- |:------------------- |
+| query         | GRAPH.QUERY         |
+| readonlyQuery | GRAPH.RO_QUERY      |
+| profile       | GRAPH.PROFILE       |
+| delete        | GRAPH.DELETE        |
+| explain       | GRAPH.EXPLAIN       |
+| slowlog       | GRAPH.SLOWLOG       |
