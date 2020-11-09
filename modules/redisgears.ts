@@ -117,6 +117,7 @@ export class RedisGears {
         const args = [func];
         if(options !== undefined && options.unblocking === true) args.push('UNBLOCKING');
         if(options !== undefined && options.requirements !== undefined) args.concat(['REQUIREMENTS'].concat(options.requirements));
+        console.log(args)
         return await this.redis.send_command('RG.PYEXECUTE', args);
     }
 

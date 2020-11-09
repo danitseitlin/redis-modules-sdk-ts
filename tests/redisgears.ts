@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import { RedisGears } from '../modules/redisgears';
 let client: RedisGears;
 
-describe('RediSearch Module testing', async function() {
+describe('RediGears Module testing', async function() {
     before(async () => {
         client = new RedisGears({
             host: cliArguments.host,
@@ -16,7 +16,7 @@ describe('RediSearch Module testing', async function() {
     })
 
     it('pyexecute function', async () => {
-        const response = await client.pyexecute('"GB().register()"', {
+        const response = await client.pyexecute('"GB().run()"', {
             unblocking: true
         })
         console.log(response)
