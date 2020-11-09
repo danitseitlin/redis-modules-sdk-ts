@@ -28,6 +28,7 @@ export class RedisGraph {
      * Executing the given query against a specific graph
      * @param name The name of the graph
      * @param query The query to execute
+     * @returns Result set
      */
     async query(name: string, query: string): Promise<string[][]> {
         return await this.redis.send_command('GRAPH.QUERY', [name, query])
@@ -37,6 +38,7 @@ export class RedisGraph {
      * Executing the given readonly query against a specific graph
      * @param name The name of the graph
      * @param query The query to execute
+     * @returns Result set
      */
     async readOnlyQuery(name: string, query: string): Promise<string[][]> {
         return await this.redis.send_command('GRAPH.RO_QUERY', [name, query])
@@ -76,7 +78,7 @@ export class RedisGraph {
      * @param id The id of the graph
      * @returns A list containing up to 10 of the slowest queries issued against the given graph ID. 
      */
-    async slowlog(id: number) {
+    async slowlog(id: number): Promise<string[]> {
         return await this.redis.send_command('GRAPH.SLOWLOG', [id])
     }
 }
