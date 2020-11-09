@@ -18,17 +18,14 @@ describe('RediSearch Module testing', async function() {
 
     it('query function', async () => {
         const response = await client.query(graphName, 'CREATE (p:Person {name: \'Kurt\', age: 27}) RETURN p')
-        console.log(response[1][0])
-        console.log(response[1][1])
-        console.log(response[1][2])
-        expect(response[0][0]).to.equal('Labels added: 1', 'The response of the GRAPH.QUERY command');
-        expect(response[0][1]).to.equal('Nodes created: 1', 'The response of the GRAPH.QUERY command');
-        expect(response[0][2]).to.equal('Cached execution: 0', 'The response of the GRAPH.QUERY command');
+        expect(response[2][0]).to.equal('Labels added: 1', 'The response of the GRAPH.QUERY command');
+        expect(response[2][1]).to.equal('Nodes created: 1', 'The response of the GRAPH.QUERY command');
+        expect(response[2][2]).to.equal('Cached execution: 0', 'The response of the GRAPH.QUERY command');
     });
     it('readOnlyQuery function', async () => {
         const response = await client.readOnlyQuery(graphName, 'MATCH (p:Person) WHERE p.age > 80 RETURN p')
         console.log(response[0])
-        expect(response[0][2][0]).to.equal('Cached execution: 0', 'The response of the GRAPH.RO_QUERY command');
+        expect(response[2][0]).to.equal('Cached execution: 0', 'The response of the GRAPH.RO_QUERY command');
     });
     it('profile function', async () => {
         const response = await client.profile(graphName, 'MATCH (p:Person) WHERE p.age > 80 RETURN p')
