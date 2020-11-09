@@ -18,26 +18,32 @@ describe('RediSearch Module testing', async function() {
 
     it('query function', async () => {
         const response = await client.query(graphName, 'CREATE (:Person {name: \'Kurt\', age: 27})')
+        console.log(response)
         expect(response).to.equal('OK', 'The response of the GRAPH.QUERY command');
     });
     it('readOnlyQuery function', async () => {
         const response = await client.readOnlyQuery(graphName, 'MATCH (p:Person) WHERE p.age > 80 RETURN p')
+        console.log(response)
         expect(response).to.equal('OK', 'The response of the GRAPH.RO_QUERY command');
     });
     it('profile function', async () => {
         const response = await client.profile(graphName, 'CREATE (:Person {name: \'Kurt\', age: 27})')
+        console.log(response)
         expect(response).to.equal('OK', 'The response of the GRAPH.PROFILE command');
     });
     it('explain function', async () => {
         const response = await client.explain(graphName, 'MATCH (p:Person) WHERE p.age > 80 RETURN p')
+        console.log(response)
         expect(response).to.equal('OK', 'The response of the GRAPH.EXPLAIN command');
     });
     it('slowlog function', async () => {
         const response = await client.slowlog(1)
+        console.log(response)
         expect(response).to.equal('OK', 'The response of the GRAPH.SLOWLOG command');
     });
     it('delete function', async () => {
         const response = await client.delete(graphName)
+        console.log(response)
         expect(response).to.equal('OK', 'The response of the GRAPH.DELETE command');
     });
 });
