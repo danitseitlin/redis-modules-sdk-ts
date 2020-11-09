@@ -21,6 +21,8 @@ describe('RediSearch Module testing', async function() {
         console.log(response[2])
         expect(response[2][0]).to.equal('Labels added: 1', 'The response of the GRAPH.QUERY command');
         expect(response[2][1]).to.equal('Nodes created: 1', 'The response of the GRAPH.QUERY command');
+        //Properties set: 2
+        expect(response[2][1]).to.equal('Properties set: 2', 'The response of the GRAPH.QUERY command');
         expect(response[2][2]).to.equal('Cached execution: 0', 'The response of the GRAPH.QUERY command');
     });
     it('readOnlyQuery function', async () => {
