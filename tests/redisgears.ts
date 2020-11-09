@@ -16,7 +16,7 @@ describe('RediGears Module testing', async function() {
     })
 
     it('pyexecute function', async () => {
-        const response = await client.pyexecute('"GB().register()"', {
+        const response = await client.pyexecute('"GB().register().run()"', {
             unblocking: true
         })
         console.log(response)
@@ -63,8 +63,8 @@ describe('RediGears Module testing', async function() {
         const response = await client.pydumpreqs()
         console.log(response)
     });
-    it('refreshcluster function', async () => {
-        const response = await client.refreshcluster()
+    it('refreshCluster function', async () => {
+        const response = await client.refreshCluster()
         console.log(response)
     });
    /* it('trigger function', async () => {

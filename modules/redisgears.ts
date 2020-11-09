@@ -138,7 +138,7 @@ export class RedisGears {
     /**
      * Refreshing the node's view of the cluster's topology
      */
-    async refreshcluster(): Promise<'OK'> {
+    async refreshCluster(): Promise<'OK'> {
         return await this.redis.send_command('RG.REFRESHCLUSTER');
     }
 
