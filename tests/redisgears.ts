@@ -16,7 +16,9 @@ describe('RediSearch Module testing', async function() {
     })
 
     it('pyexecute function', async () => {
-        const response = await client.pyexecute('"GB().run()"')
+        const response = await client.pyexecute('"GB().run()"', {
+            unblocking: true
+        })
         console.log(response)
     });
     /*it('abortExecution function', async () => {

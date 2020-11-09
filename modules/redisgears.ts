@@ -80,8 +80,8 @@ export class RedisGears {
      */
     async getExecution(id: number, options?: RGGetExecutionParameters): Promise<string[][]> {
         const args = [id.toString()];
-        if(options !== undefined && options.shard !== undefined) args.push('SHARD');
-        if(options !== undefined && options.cluster !== undefined) args.push('CLUSTER');
+        if(options !== undefined && options.shard === true) args.push('SHARD');
+        if(options !== undefined && options.cluster === true) args.push('CLUSTER');
         return await this.redis.send_command('RG.GETEXECUTION', args);
     }
 
@@ -115,7 +115,7 @@ export class RedisGears {
      */
     async pyexecute(func: string, options?: RGPyExecuteParameters): Promise<string> {
         const args = [func];
-        if(options !== undefined && options.unblocking !== undefined) args.push('UNBLOCKING');
+        if(options !== undefined && options.unblocking === true) args.push('UNBLOCKING');
         if(options !== undefined && options.requirements !== undefined) args.concat(['REQUIREMENTS'].concat(options.requirements));
         return await this.redis.send_command('RG.PYEXECUTE', args);
     }
