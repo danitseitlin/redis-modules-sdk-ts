@@ -2,7 +2,7 @@ import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { RedisGears } from '../modules/redisgears';
 let client: RedisGears;
-
+const id = '0000000000000000000000000000000000000000-0';
 describe('RediGears Module testing', async function() {
     before(async () => {
         client = new RedisGears({
@@ -21,19 +21,15 @@ describe('RediGears Module testing', async function() {
         })
         console.log(response)
     });
-    /*it('abortExecution function', async () => {
-        const response = await client.abortExecution()
+    it('configSet function', async () => {
+        const response = await client.configSet([['id', id]])
         console.log(response)
     });
     it('configGet function', async () => {
-        const response = await client.configGet('')
+        const response = await client.configGet(['id'])
         console.log(response)
     });
-    it('configSet function', async () => {
-        const response = await client.configSet('')
-        console.log(response)
-    });
-    it('dropExecution function', async () => {
+    /*it('dropExecution function', async () => {
         const response = await client.dropExecution('')
         console.log(response)
     });
@@ -52,26 +48,30 @@ describe('RediGears Module testing', async function() {
     it('getResultsBlocking function', async () => {
         const response = await client.getResultsBlocking('')
         console.log(response)
-    });
+    });*/
     it('infocluster function', async () => {
-        const response = await client.infocluster('')
+        const response = await client.infocluster()
         console.log(response)
     });
     
     it('pystats function', async () => {
-        const response = await client.pystats('')
+        const response = await client.pystats()
         console.log(response)
     });
     it('pydumpreqs function', async () => {
-        const response = await client.pydumpreqs('')
+        const response = await client.pydumpreqs()
         console.log(response)
     });
     it('refreshcluster function', async () => {
-        const response = await client.refreshcluster('')
+        const response = await client.refreshcluster()
         console.log(response)
     });
-    it('trigger function', async () => {
+   /* it('trigger function', async () => {
         const response = await client.trigger('')
+        console.log(response)
+    });
+    it('abortExecution function', async () => {
+        const response = await client.abortExecution()
         console.log(response)
     });
     it('unregister function', async () => {

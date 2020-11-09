@@ -28,7 +28,7 @@ export class RedisGears {
      * Aborting an existing execution
      * @param id The id of the execution
      */
-    async abortExecution(id: number): Promise<'OK'> {
+    async abortExecution(id: string): Promise<'OK'> {
         return await this.redis.send_command('RG.ABORTEXECUTION', [id]);
     }
 
@@ -55,7 +55,7 @@ export class RedisGears {
      * Dropping an existing execution
      * @param id The id of the execution
      */
-    async dropExecution(id: number): Promise<'OK'> {
+    async dropExecution(id: string): Promise<'OK'> {
         return await this.redis.send_command('RG.DROPEXECUTION', [id]);
     }
 
@@ -78,7 +78,7 @@ export class RedisGears {
      * @param id The id of the execution
      * @param options The additional optional parameters
      */
-    async getExecution(id: number, options?: RGGetExecutionParameters): Promise<string[][]> {
+    async getExecution(id: string, options?: RGGetExecutionParameters): Promise<string[][]> {
         const args = [id.toString()];
         if(options !== undefined && options.shard === true) args.push('SHARD');
         if(options !== undefined && options.cluster === true) args.push('CLUSTER');
@@ -89,7 +89,7 @@ export class RedisGears {
      * Retrieving the results 
      * @param id The id of the execution
      */
-    async getResults(id: number): Promise<string> {
+    async getResults(id: string): Promise<string> {
         return await this.redis.send_command('RG.GETRESULTS', [id])
     }
 
@@ -97,7 +97,7 @@ export class RedisGears {
      * Retrieving the results that have 'UNBLOCKING' argument (And removing it)
      * @param id The id of the execution
      */
-    async getResultsBlocking(id: number): Promise<string> {
+    async getResultsBlocking(id: string): Promise<string> {
         return await this.redis.send_command('RG.GETRESULTSBLOCKING', [id])
     }
     
@@ -155,7 +155,7 @@ export class RedisGears {
      * Removing the registration of a function
      * @param id The id of the execution
      */
-    async unregister(id: number): Promise<'OK'> {
+    async unregister(id: string): Promise<'OK'> {
         return await this.redis.send_command('RG.UNREGISTER', [id]);
     }
 }
