@@ -55,7 +55,7 @@ export class ReJSON {
      * @param parameters Additional parameters to arrange the returned values
      * @returns The value at path in JSON serialized form.
      */
-    async get(key: string, path?: string, parameters?: GetCommandParameters): Promise<string>{
+    async get(key: string, path?: string, parameters?: ReJSONGetParameters): Promise<string>{
         const args = [key];
         for(const parameter in parameters) {
             const name = parameter.toUpperCase();
@@ -304,7 +304,7 @@ export class ReJSON {
  * @param space Sets the string that's put between a key and a value 
  * @param noescape Will disable the sending of \uXXXX escapes for non-ascii characters
  */
-export type GetCommandParameters = {
+export type ReJSONGetParameters = {
     indent?: string,
     newline?: string,
     space?: string,
