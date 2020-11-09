@@ -29,7 +29,7 @@ export class RedisGraph {
      * @param name The name of the graph
      * @param query The query to execute
      */
-    async query(name: string, query: string) {
+    async query(name: string, query: string): Promise<string[][]> {
         return await this.redis.send_command('GRAPH.QUERY', [name, query])
     }
 
@@ -38,7 +38,7 @@ export class RedisGraph {
      * @param name The name of the graph
      * @param query The query to execute
      */
-    async readOnlyQuery(name: string, query: string) {
+    async readOnlyQuery(name: string, query: string): Promise<string[][]> {
         return await this.redis.send_command('GRAPH.RO_QUERY', [name, query])
     }
 
@@ -67,7 +67,7 @@ export class RedisGraph {
      * @param query The query to execute 
      * @returns String representation of a query execution plan
      */
-    async explain(name: string, query: string): Promise<string> {
+    async explain(name: string, query: string): Promise<string[]> {
         return await this.redis.send_command('GRAPH.EXPLAIN', [name, query])
     }
 
