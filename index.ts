@@ -6,3 +6,4 @@ export {
     Redisearch, FTCreateParameters, FTFieldOptions, FTSchemaField, FTSearchParameters, FTAggregateParameters, FTSugAddParameters, FTSugGetParameters, FTSpellCheck, FTFieldType
 } from './modules/redisearch'
 export { RedisGraph } from './modules/redisgraph'
+export { RedisGears, RGGetExecutionParameters, RGPyExecuteParameters } from './modules/redisgears'
