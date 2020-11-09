@@ -59,7 +59,7 @@ jobs:
     - name: Running tests
       run: npm i && npm run redisgraph-module-tests
   #Build for 'RedisGears' module
-  RedisGraph:
+  RedisGears:
     runs-on: ubuntu-latest
     steps:
     - uses: docker-practice/actions-setup-docker@master
