@@ -48,7 +48,7 @@ export class RedisGraph {
      * @param query The query to execute 
      * @returns String representation of a query execution plan, with details on results produced by and time spent in each operation.
      */
-    async profile(name: string, query: string): Promise<string> {
+    async profile(name: string, query: string): Promise<string[]> {
         return await this.redis.send_command('GRAPH.PROFILE', [name, query])
     }
 
