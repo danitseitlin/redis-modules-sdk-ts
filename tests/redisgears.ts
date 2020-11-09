@@ -16,7 +16,7 @@ describe('RediGears Module testing', async function() {
     })
 
     it('pyexecute function', async () => {
-        const response = await client.pyexecute('"GB().run()"', {
+        const response = await client.pyexecute('"GB().register()"', {
             unblocking: true
         })
         console.log(response)
