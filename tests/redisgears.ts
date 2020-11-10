@@ -2,7 +2,8 @@ import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { RedisGears } from '../modules/redisgears';
 let client: RedisGears;
-let id: string;
+let executionId1: string;
+let executionId2: string;
 describe('RediGears Module testing', async function() {
     before(async () => {
         client = new RedisGears({
@@ -16,10 +17,14 @@ describe('RediGears Module testing', async function() {
     })
 
     it('pyexecute function', async () => {
-        id = await client.pyexecute('GB().run()', {
+        executionId1 = await client.pyexecute('GB().run()', {
             unblocking: true
         })
-        console.log(`Execution ID: ${id}`)
+        console.log(`Execution ID: ${executionId1}`)
+        executionId2 = await client.pyexecute('GB().run()', {
+            unblocking: true
+        })
+        console.log(`Execution ID: ${executionId2}`)
     });
     it('configSet function', async () => {
         const response = await client.configSet([['ProfileExecutions', '1']])
@@ -30,11 +35,11 @@ describe('RediGears Module testing', async function() {
         console.log(response)
     });
     it('getExecution function', async () => {
-        const response = await client.getExecution(id)
+        const response = await client.getExecution(executionId1)
         console.log(response)
     });
     it('dropExecution function', async () => {
-        const response = await client.dropExecution('')
+        const response = await client.dropExecution(executionId1)
         console.log(response)
     });
     it('dumpExecutions function', async () => {
@@ -47,11 +52,11 @@ describe('RediGears Module testing', async function() {
     });
     
     it('getResults function', async () => {
-        const response = await client.getResults(id)
+        const response = await client.getResults(executionId1)
         console.log(response)
     });
     it('getResultsBlocking function', async () => {
-        const response = await client.getResultsBlocking(id)
+        const response = await client.getResultsBlocking(executionId1)
         console.log(response)
     });
     it('infocluster function', async () => {
@@ -71,16 +76,19 @@ describe('RediGears Module testing', async function() {
         const response = await client.refreshCluster()
         console.log(response)
     });
-    /*it('trigger function', async () => {
-        const response = await client.trigger('')
+    it('trigger function', async () => {
+        const triggerId = await client.pyexecute("'GB('CommandReader').register(trigger='mytrigger')'", {
+            unblocking: true
+        })
+        const response = await client.trigger('mytrigger', ['foo', 'bar'])
         console.log(response)
-    });*/
+    });
     it('abortExecution function', async () => {
-        const response = await client.abortExecution(id)
+        const response = await client.abortExecution(executionId1)
         console.log(response)
     });
     it('unregister function', async () => {
-        const response = await client.unregister(id)
+        const response = await client.unregister(executionId2)
         console.log(response)
     });
 });
