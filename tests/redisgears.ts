@@ -26,11 +26,7 @@ describe('RediGears Module testing', async function() {
             unblocking: true
         })
         console.log(`Execution ID: ${executionId2}`)
-        executionId3 = await client.pyexecute('GB().run()', {
-            unblocking: true
-        })
-        console.log(`Execution ID: ${executionId3}`)
-        await client.pyexecute("'GB('CommandReader').register(trigger='mytrigger')'", {
+        executionId3 = await client.pyexecute('GB(\'CommandReader\').register(trigger=\'mytrigger\')', {
             unblocking: true
         })
     });
