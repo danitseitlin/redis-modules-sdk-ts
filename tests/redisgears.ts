@@ -28,7 +28,7 @@ describe('RediGears Module testing', async function() {
         })
         console.log(`Execution ID: ${executionId2}`)
         expect(executionId2).to.equal('0000000000000000000000000000000000000000-1', 'The execution id')
-        executionId3 = await client.pyexecute('"GB(\'CommandReader\').register(trigger=\'mytrigger\')"', {
+        executionId3 = await client.pyexecute("GB('CommandReader').register(trigger='mytrigger')", {
             unblocking: true
         })
         console.log(`Execution ID: ${executionId3}`)
@@ -96,7 +96,7 @@ describe('RediGears Module testing', async function() {
     it('trigger function', async () => {
         const response = await client.trigger('mytrigger', ['foo', 'bar'])
         console.log(response)
-        expect(response[0]).to.equal('"[\'mytrigger\', \'foo\', \'bar\']"', 'The response of the \'RG.DROPEXECUTION\' Command')
+        expect(response[0]).to.equal('[\'mytrigger\', \'foo\', \'bar\']', 'The response of the \'RG.DROPEXECUTION\' Command')
     });
     it('dropExecution function', async () => {
         const response = await client.dropExecution(executionId1)
