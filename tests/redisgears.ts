@@ -4,6 +4,7 @@ import { RedisGears } from '../modules/redisgears';
 let client: RedisGears;
 let executionId1: string;
 let executionId2: string;
+let executionId3: string;
 describe('RediGears Module testing', async function() {
     before(async () => {
         client = new RedisGears({
@@ -25,6 +26,13 @@ describe('RediGears Module testing', async function() {
             unblocking: true
         })
         console.log(`Execution ID: ${executionId2}`)
+        executionId3 = await client.pyexecute('GB().run()', {
+            unblocking: true
+        })
+        console.log(`Execution ID: ${executionId3}`)
+        await client.pyexecute("'GB('CommandReader').register(trigger='mytrigger')'", {
+            unblocking: true
+        })
     });
     it('configSet function', async () => {
         const response = await client.configSet([['ProfileExecutions', '1']])
@@ -38,10 +46,7 @@ describe('RediGears Module testing', async function() {
         const response = await client.getExecution(executionId1)
         console.log(response)
     });
-    it('dropExecution function', async () => {
-        const response = await client.dropExecution(executionId1)
-        console.log(response)
-    });
+    
     it('dumpExecutions function', async () => {
         const response = await client.dumpExecutions()
         console.log(response)
@@ -77,18 +82,19 @@ describe('RediGears Module testing', async function() {
         console.log(response)
     });
     it('trigger function', async () => {
-        const triggerId = await client.pyexecute("'GB('CommandReader').register(trigger='mytrigger')'", {
-            unblocking: true
-        })
         const response = await client.trigger('mytrigger', ['foo', 'bar'])
         console.log(response)
     });
+    it('dropExecution function', async () => {
+        const response = await client.dropExecution(executionId1)
+        console.log(response)
+    });
     it('abortExecution function', async () => {
-        const response = await client.abortExecution(executionId1)
+        const response = await client.abortExecution(executionId2)
         console.log(response)
     });
     it('unregister function', async () => {
-        const response = await client.unregister(executionId2)
+        const response = await client.unregister(executionId3)
         console.log(response)
     });
 });
