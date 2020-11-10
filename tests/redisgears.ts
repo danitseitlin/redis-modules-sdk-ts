@@ -29,20 +29,20 @@ describe('RediGears Module testing', async function() {
         const response = await client.configGet(['ProfileExecutions'])
         console.log(response)
     });
-    it('getExecution function', async () => {
+    /*it('getExecution function', async () => {
         const response = await client.getExecution(id)
         console.log(response)
     });
-    /*it('dropExecution function', async () => {
+    it('dropExecution function', async () => {
         const response = await client.dropExecution('')
         console.log(response)
-    });
+    });*/
     it('dumpExecutions function', async () => {
-        const response = await client.dumpExecutions('')
+        const response = await client.dumpExecutions()
         console.log(response)
     });
     
-    it('getResults function', async () => {
+    /*it('getResults function', async () => {
         const response = await client.getResults('')
         console.log(response)
     });
