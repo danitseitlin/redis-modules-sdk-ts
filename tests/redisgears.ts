@@ -41,6 +41,10 @@ describe('RediGears Module testing', async function() {
         const response = await client.dumpExecutions()
         console.log(response)
     });
+    it('dumpRegistrations function', async () => {
+        const response = await client.dumpRegistrations()
+        console.log(response)
+    });
     
     /*it('getResults function', async () => {
         const response = await client.getResults('')
