@@ -2,7 +2,7 @@ import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { RedisGears } from '../modules/redisgears';
 let client: RedisGears;
-const id = '0000000000000000000000000000000000000000-0';
+let id: string;
 describe('RediGears Module testing', async function() {
     before(async () => {
         client = new RedisGears({
@@ -16,10 +16,10 @@ describe('RediGears Module testing', async function() {
     })
 
     it('pyexecute function', async () => {
-        const response = await client.pyexecute('GB().run()', {
+        id = await client.pyexecute('GB().run()', {
             unblocking: true
         })
-        console.log(response)
+        console.log(`Execution ID: ${id}`)
     });
     it('configSet function', async () => {
         const response = await client.configSet([['ProfileExecutions', '1']])
@@ -29,14 +29,14 @@ describe('RediGears Module testing', async function() {
         const response = await client.configGet(['ProfileExecutions'])
         console.log(response)
     });
-    /*it('getExecution function', async () => {
+    it('getExecution function', async () => {
         const response = await client.getExecution(id)
         console.log(response)
     });
     it('dropExecution function', async () => {
         const response = await client.dropExecution('')
         console.log(response)
-    });*/
+    });
     it('dumpExecutions function', async () => {
         const response = await client.dumpExecutions()
         console.log(response)
@@ -46,14 +46,14 @@ describe('RediGears Module testing', async function() {
         console.log(response)
     });
     
-    /*it('getResults function', async () => {
-        const response = await client.getResults('')
+    it('getResults function', async () => {
+        const response = await client.getResults(id)
         console.log(response)
     });
     it('getResultsBlocking function', async () => {
-        const response = await client.getResultsBlocking('')
+        const response = await client.getResultsBlocking(id)
         console.log(response)
-    });*/
+    });
     it('infocluster function', async () => {
         const response = await client.infocluster()
         console.log(response)
@@ -71,16 +71,16 @@ describe('RediGears Module testing', async function() {
         const response = await client.refreshCluster()
         console.log(response)
     });
-   /* it('trigger function', async () => {
+    /*it('trigger function', async () => {
         const response = await client.trigger('')
         console.log(response)
-    });
+    });*/
     it('abortExecution function', async () => {
-        const response = await client.abortExecution()
+        const response = await client.abortExecution(id)
         console.log(response)
     });
     it('unregister function', async () => {
-        const response = await client.unregister('')
+        const response = await client.unregister(id)
         console.log(response)
-    });*/
+    });
 });
