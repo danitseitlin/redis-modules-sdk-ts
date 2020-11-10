@@ -28,7 +28,7 @@ describe('RediGears Module testing', async function() {
         })
         console.log(`Execution ID: ${executionId2}`)
         expect(executionId2).to.equal('0000000000000000000000000000000000000000-1', 'The execution id')
-        executionId3 = await client.pyexecute('GB(\'CommandReader\').register(trigger=\'mytrigger\')', {
+        executionId3 = await client.pyexecute('"GB(\'CommandReader\').register(trigger=\'mytrigger\')"', {
             unblocking: true
         })
         console.log(`Execution ID: ${executionId3}`)
@@ -53,8 +53,8 @@ describe('RediGears Module testing', async function() {
     it('dumpExecutions function', async () => {
         const response = await client.dumpExecutions()
         console.log(response)
-        expect(response[0][1]).to.equal(executionId1, 'The execution id')
-        expect(response[1][1]).to.equal(executionId2, 'The execution id')
+        expect(response[1][1]).to.equal(executionId1, 'The execution id')
+        expect(response[0][1]).to.equal(executionId2, 'The execution id')
     });
     it('dumpRegistrations function', async () => {
         const response = await client.dumpRegistrations()
