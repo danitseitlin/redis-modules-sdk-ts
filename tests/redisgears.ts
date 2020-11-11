@@ -5,7 +5,7 @@ let client: RedisGears;
 let executionId1: string;
 let executionId2: string;
 let executionId3: string;
-describe('RediGears Module testing', async function() {
+describe('RedisGears Module testing', async function() {
     before(async () => {
         client = new RedisGears({
             host: cliArguments.host,
