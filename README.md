@@ -43,7 +43,7 @@ await client.disconnect();
 | forget    | JSON.FORGET     |
 | resp      | JSON.RESP       |
 
-## <img src='https://oss.redislabs.com/rts/images/logo.svg' style='max-width:100%;' height='30'/> Redis Times Series module
+## <img src='https://oss.redislabs.com/redistimeseries/images/logo.svg' style='max-width:100%;' height='30'/> Redis Times Series module
 ### Quick start
 ```
 const client = new RedisTimesSeies({
@@ -82,7 +82,7 @@ await client.disconnect();
 | info       | TS.INFO                     |
 | queryindex | TS.QUERYINDEX               |
 
-## <img src='https://oss.redislabs.com/redisearch/images/logo.svg' style='max-width:100%;' height='30'/> Redisearch module
+## <img src='https://oss.redislabs.com/redisearch/img/logo.svg' style='max-width:100%;' height='30'/> Redisearch module
 ### Quick start
 ```
 const client = new RediSearch({
@@ -155,7 +155,7 @@ await client.disconnect();
 | explain       | GRAPH.EXPLAIN       |
 | slowlog       | GRAPH.SLOWLOG       |
 
-## <img src='https://oss.redislabs.com/redisgears/images/logo.svg' style='max-width:100%;' height='30'/> RedisGears module
+## <img src='https://oss.redislabs.com/redisgears/images/RedisGears.png' style='max-width:100%;' height='30'/> RedisGears module
 ### Quick start
 ```
 const client = new RedisGears({
