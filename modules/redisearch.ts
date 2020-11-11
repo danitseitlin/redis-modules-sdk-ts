@@ -12,14 +12,14 @@ export class Redisearch {
     constructor(public options: Redis.RedisOptions) {}
 
     /**
-     * Connecting to the Redis database with ReJSON module
+     * Connecting to the Redis database with RediSearch module
      */
     async connect(): Promise<void> {
         this.redis = new Redis(this.options);
     }
 
     /**
-     * Disconnecting from the Redis database with ReJSON module
+     * Disconnecting from the Redis database with RediSearch module
      */
     async disconnect(): Promise<void> {
         await this.redis.quit();

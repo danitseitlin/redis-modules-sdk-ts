@@ -5,20 +5,20 @@ export class RedisGears {
     public redis: Redis.Redis;
 
     /**
-     * Initializing the RediSearch object
+     * Initializing the RedisGears object
      * @param options The options of the Redis database.
      */
     constructor(public options: Redis.RedisOptions) {}
 
     /**
-     * Connecting to the Redis database with ReJSON module
+     * Connecting to the Redis database with RedisGears module
      */
     async connect(): Promise<void> {
         this.redis = new Redis(this.options);
     }
 
     /**
-     * Disconnecting from the Redis database with ReJSON module
+     * Disconnecting from the Redis database with RedisGears module
      */
     async disconnect(): Promise<void> {
         await this.redis.quit();
