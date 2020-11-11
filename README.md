@@ -1,7 +1,7 @@
 # Redis modules project
 A project meant for connecting to Redis databases with modules easily, built with Typescript.
 
-## <img src='https://oss.redislabs.com/redisjson/images/logo.svg' height='30'/> ReJSON module
+## <img src='https://oss.redislabs.com/redisjson/images/logo.svg' style='max-width:100%;' height='30'/> ReJSON module
 ### Quick start
 ```
 const client = new ReJSON({
