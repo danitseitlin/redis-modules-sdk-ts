@@ -4,7 +4,7 @@ import { RedisGraph } from '../modules/redisgraph';
 let client: RedisGraph;
 const graphName = 'Test'
 
-describe('RediSearch Module testing', async function() {
+describe('RedisGraph Module testing', async function() {
     before(async () => {
         client = new RedisGraph({
             host: cliArguments.host,

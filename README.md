@@ -154,3 +154,41 @@ await client.disconnect();
 | delete        | GRAPH.DELETE        |
 | explain       | GRAPH.EXPLAIN       |
 | slowlog       | GRAPH.SLOWLOG       |
+
+## RedisGears module
+### Quick start
+```
+const client = new RedisGears({
+    host: 'hostname',
+    port: 43758,
+});
+
+//Connect to the Redis database with RedisGears module
+await client.connect();
+
+//Executing a query
+const response = await client.query(graphName, 'CREATE (p:Person {name: \'Kurt\', age: 27}) RETURN p');
+expect(response[2][0]).to.equal('Labels added: 1', 'The response of the GRAPH.QUERY command');
+
+//Disconnect from the Redis database with RedisGears module
+await client.disconnect();
+```
+### Functions list
+| Functions          | RedisGears Command    |
+|:------------------ |:--------------------- |
+| abortExecution     | RG.ABORTEXECUTION     |
+| configGet          | RG.RG.CONFIGGET       |
+| configSet          | RG.RG.CONFIGSET       |
+| dropExecution      | RG.DROPEXECUTION      |
+| dumpExecutions     | RG.DUMPEXECUTIONS     |
+| dumpRegistrations  | RG.DUMPREGISTRATIONS  |
+| getExecution       | RG.GETEXECUTION       |
+| getResults         | RG.GETRESULTS         |
+| getResultsBlocking | RG.GETRESULTSBLOCKING |
+| infocluster        | RG.INFOCLUSTER        |
+| pyexecute          | RG.PYEXECUTE          |
+| pystats            | RG.PYSTATS            |
+| pydumpreqs         | RG.PYDUMPREQS         |
+| refreshCluster     | RG.REFRESHCLUSTER     |
+| trigger            | RG.TRIGGER            |
+| unregister         | RG.UNREGISTER         |

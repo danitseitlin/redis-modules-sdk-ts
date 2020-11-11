@@ -4,7 +4,7 @@ import { RedisTimeSeries } from '../modules/rts';
 let client: RedisTimeSeries;
 const key1 = 'key:2:32';
 const key2 = 'key:2:33';
-describe('RedisTimesSeries Module testing', async function() {
+describe('RTS Module testing', async function() {
     before(async () => {
         client = new RedisTimeSeries({
             host: cliArguments.host,
