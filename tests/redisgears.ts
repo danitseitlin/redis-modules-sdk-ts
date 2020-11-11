@@ -111,8 +111,7 @@ describe('RediGears Module testing', async function() {
         console.log(response)
         expect(response).to.equal('OK', 'The response of the \'RG.ABORTEXECUTION\' Command')
     });
-    it('unregister function', async () => {
-        
+    it.skip('unregister function', async () => {
         const response = await client.unregister(executionId3)
         console.log(response)
     });
