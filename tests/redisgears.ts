@@ -109,7 +109,10 @@ describe('RediGears Module testing', async function() {
         expect(response).to.equal('OK', 'The response of the \'RG.ABORTEXECUTION\' Command')
     });
     it('unregister function', async () => {
-        const response = await client.unregister(executionId3)
+        const id = await client.pyexecute('GB().run()', {
+            unblocking: true
+        })
+        const response = await client.unregister(id)
         console.log(response)
     });
 });
