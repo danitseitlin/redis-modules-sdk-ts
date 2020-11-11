@@ -59,7 +59,7 @@ describe('RediGears Module testing', async function() {
     it('dumpRegistrations function', async () => {
         const response = await client.dumpRegistrations()
         console.log(response)
-        expect(response[0][1]).to.equal(executionId3, 'The execution id')
+        expect(response.length).to.equal(executionId3, 'The response count of the \'RG.DUMPREGISTRATIONS\' Command')
     });
     
     it('getResults function', async () => {
@@ -94,7 +94,6 @@ describe('RediGears Module testing', async function() {
         expect(response).to.equal('OK', 'The response of the \'RG.REFRESHCLUSTER\' Command')
     });
     it('trigger function', async () => {
-        //"GB('CommandReader').register(trigger='mytrigger')"
         await client.pyexecute("GB('CommandReader').register(trigger='mytrigger')", {
             unblocking: true
         })
