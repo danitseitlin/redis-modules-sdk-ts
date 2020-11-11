@@ -94,6 +94,10 @@ describe('RediGears Module testing', async function() {
         expect(response).to.equal('OK', 'The response of the \'RG.REFRESHCLUSTER\' Command')
     });
     it('trigger function', async () => {
+        //"GB('CommandReader').register(trigger='mytrigger')"
+        await client.pyexecute("GB('CommandReader').register(trigger='mytrigger')", {
+            unblocking: true
+        })
         const response = await client.trigger('mytrigger', ['foo', 'bar'])
         console.log(response)
         expect(response[0]).to.equal('[\'mytrigger\', \'foo\', \'bar\']', 'The response of the \'RG.DROPEXECUTION\' Command')
