@@ -59,7 +59,7 @@ describe('RediGears Module testing', async function() {
     it('dumpRegistrations function', async () => {
         const response = await client.dumpRegistrations()
         console.log(response)
-        expect(response.length).to.equal(executionId3, 'The response count of the \'RG.DUMPREGISTRATIONS\' Command')
+        expect(response.length).to.equal(0, 'The response count of the \'RG.DUMPREGISTRATIONS\' Command')
     });
     
     it('getResults function', async () => {
