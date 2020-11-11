@@ -7,7 +7,7 @@ const key2 = 'key2';
 const key3 = 'arrkey';
 const path = '.';
 
-describe('RedisJSON Module testing', async function() {
+describe('ReJSON Module testing', async function() {
     before(async () => {
         client = new ReJSON({
             host: cliArguments.host,
