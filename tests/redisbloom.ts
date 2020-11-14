@@ -59,7 +59,7 @@ describe('RedisBloom Module testing', async function() {
     });
     it('loadchunk function', async () => {
         await client.redis.del(key1);
-        const response = await client.loadchunk(key1, dataIterator, data)
+        const response = await client.loadchunk(key1, 1, data)
         console.log(response)
         
     });
