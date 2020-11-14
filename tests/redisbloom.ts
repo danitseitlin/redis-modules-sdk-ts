@@ -51,7 +51,7 @@ describe('RedisBloom Module testing', async function() {
         expect(response[1]).to.equal(100, 'The capacity')
     });
     it('scandump function', async () => {
-        const response = await client.scandump(key1, 1)
+        const response = await client.scandump(key1, 0)
         console.log(response)
         dataIterator = parseInt(response[0])
         data = response[1];
@@ -59,8 +59,7 @@ describe('RedisBloom Module testing', async function() {
     });
     it('loadchunk function', async () => {
         await client.redis.del(key1);
-        const response = await client.loadchunk(key1, 1, data)
+        const response = await client.loadchunk(key1, dataIterator, data)
         console.log(response)
-        
     });
 });
