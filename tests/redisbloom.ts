@@ -44,6 +44,12 @@ describe('RedisBloom Module testing', async function() {
         console.log(response)
         expect(response[0]).to.equal(1, 'The response of the command (Success)')
     });
+    it('info function', async () => {
+        const response = await client.info(key1)
+        console.log(response)
+        expect(response[0]).to.equal('Capacity', 'The first item of the response')
+        expect(response[1]).to.equal(100, 'The capacity')
+    });
     it('scandump function', async () => {
         const response = await client.scandump(key1, 1)
         console.log(response)
@@ -52,15 +58,9 @@ describe('RedisBloom Module testing', async function() {
         expect(data).to.not.equal('', 'The chunk value')
     });
     it('loadchunk function', async () => {
+        await client.redis.del(key1);
         const response = await client.loadchunk(key1, dataIterator, data)
         console.log(response)
         
     });
-    it('info function', async () => {
-        const response = await client.info(key1)
-        console.log(response)
-        expect(response[0]).to.equal('Capacity', 'The first item of the response')
-        expect(response[1]).to.equal(100, 'The capacity')
-    });
-    
 });
