@@ -39,12 +39,12 @@ describe('RedisBloom Module testing', async function() {
         console.log(response)
     });
     it('scandump function', async () => {
-        const response = await client.scandump(key1, 0.1)
+        const response = await client.scandump(key1, 1)
         console.log(response)
         data = response;
     });
     it('loadchunk function', async () => {
-        const response = await client.loadchunk(key1, 0.1, data)
+        const response = await client.loadchunk(key1, 1, data)
         console.log(response)
     });
     it('info function', async () => {

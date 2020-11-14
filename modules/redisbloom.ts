@@ -59,6 +59,7 @@ export class RedisBloom {
             args.push('NOCREATE');
         if(options !== undefined && options.noscaling !== undefined)
             args.push('NOSCALING');
+        args.push('ITEMS')
         return await this.redis.send_command('BF.INSERT', args.concat(items));
     }
 
