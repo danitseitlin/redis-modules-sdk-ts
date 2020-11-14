@@ -4,6 +4,7 @@ import { RedisBloom } from '../modules/redisbloom';
 let client: RedisBloom;
 const key1 = 'key1';
 const item1 = 'item1';
+let dataIterator: number;
 let data: string;
 
 describe('RedisBloom Module testing', async function() {
@@ -26,7 +27,7 @@ describe('RedisBloom Module testing', async function() {
     it('madd function', async () => {
         const response = await client.madd(key1, [item1])
         console.log(response)
-        expect(response[0]).to.equal(1, 'The response of the command (Failed)')
+        expect(response[0]).to.equal(0, 'The response of the command (Failed)')
     });
     it('insert function', async () => {
         const response = await client.insert(key1, [item1])
@@ -36,22 +37,24 @@ describe('RedisBloom Module testing', async function() {
     it('exists function', async () => {
         const response = await client.exists(key1, item1)
         console.log(response)
-        expect(response).to.equal(0, 'The response of the command (Failed)')
+        expect(response).to.equal(1, 'The response of the command (Success)')
     });
     it('mexists function', async () => {
         const response = await client.mexists(key1, [item1])
         console.log(response)
-        expect(response[0]).to.equal(0, 'The response of the command (Failed)')
+        expect(response[0]).to.equal(1, 'The response of the command (Success)')
     });
     it('scandump function', async () => {
         const response = await client.scandump(key1, 1)
         console.log(response)
+        dataIterator = parseInt(response[0])
         data = response[1];
-        expect(data).to.contain('x00', 'A piece of the returned chunk')
+        expect(data).to.not.equal('', 'The chunk value')
     });
     it('loadchunk function', async () => {
-        const response = await client.loadchunk(key1, 1, data)
+        const response = await client.loadchunk(key1, dataIterator, data)
         console.log(response)
+        
     });
     it('info function', async () => {
         const response = await client.info(key1)
