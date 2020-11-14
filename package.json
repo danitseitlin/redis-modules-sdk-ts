@@ -12,6 +12,11 @@
     "redisearch-module-tests": "npm run test tests/redisearch.ts -- -- --host=127.0.0.1 --port=6379",
     "redisgraph-module-tests": "npm run test tests/redisgraph.ts -- -- --host=127.0.0.1 --port=6379",
     "redisgears-module-tests": "npm run test tests/redisgears.ts -- -- --host=127.0.0.1 --port=6379",
+    "redisbloom-module-tests": "npm run redisbloom-filter-tests && npm run redisbloom-topk-filter-tests && npm run redisbloom-cuckoo-filter-tests && npm run redisbloom-cmk-filter-tests",
+    "redisbloom-filter-tests": "npm run test tests/redisbloom.ts -- -- --host=127.0.0.1 --port=6379",
+    "redisbloom-topk-filter-tests": "npm run test tests/redisbloom-topk.ts -- -- --host=127.0.0.1 --port=6379",
+    "redisbloom-cuckoo-filter-tests": "npm run test tests/redisbloom-cuckoo.ts -- -- --host=127.0.0.1 --port=6379",
+    "redisbloom-cmk-filter-tests": "npm run test tests/redisbloom-cmk.ts -- -- --host=127.0.0.1 --port=6379",
     "tests": "npm run rejson-module-tests && npm run rts-module-tests && npm run redisearch-module-tests && npm run redisgraph-module-tests && npm run redisgears-module-tests",
     "pre-deploy": "npm run build",
     "deploy": "npm-deploy redis-modules-cli"
