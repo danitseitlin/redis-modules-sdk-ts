@@ -25,18 +25,18 @@ export class RedisBloomCuckoo {
     }
 
     /**
-     * Adds an item to the cuckoo filter, creating the filter if it does not exist.
-     * @param key The key of the 'CF.ADD' command
-     * @param item The item of the 'CF.ADD' command
+     * Adding an item to the cuckoo filter, creating the filter if it does not exist.
+     * @param key The name of the filter
+     * @param item The item to add
      */
     async add(key: string, item: string): Promise<CFResponse> {
         return await this.redis.send_command('CF.ADD', [key, item])
     }
 
     /**
-     * Adds an item to a cuckoo filter if the item did not exist previously.
-     * @param key The key of the 'CF.ADD' command
-     * @param item The item of the 'CF.ADD' command
+     * Adding an item to a cuckoo filter if the item did not exist previously.
+     * @param key The name of the filter
+     * @param item The item to add
      */
     async addnx(key: string, item: string): Promise<CFResponse> {
         return await this.redis.send_command('CF.ADDNX', [key, item])
@@ -44,8 +44,8 @@ export class RedisBloomCuckoo {
 
     /**
      * Adding one or more items to a cuckoo filter, allowing the filter to be created with a custom capacity if it does not yet exist.
-     * @param key The key of the 'CF.INSERT' command
-     * @param items The items of the 'CF.INSERT' command
+     * @param key The name of the filter
+     * @param items Begin the list of items to add
      * @param options The additional optional parameters of the 'CF.INSERT' command
      */
     async insert(key: string, items: string[], options?: CFInsertParameters): Promise<CFResponse[]> {
@@ -58,9 +58,24 @@ export class RedisBloomCuckoo {
     }
 
     /**
+     * Adding one or more items to a cuckoo filter, allowing the filter to be created with a custom capacity if it does not yet exist.
+     * @param key The name of the filter
+     * @param items The items of the 'CF.INSERT' command
+     * @param options The additional optional parameters of the 'CF.INSERTNX' command
+     */
+    async insertnx(key: string, items: string[], options?: CFInsertParameters): Promise<CFResponse[]> {
+        const args = [key];
+        if(options !== undefined && options.capacity !== undefined)
+            args.concat(['CAPACITY', options.capacity.toString()]);
+        if(options !== undefined && options.nocreate !== undefined)
+            args.push('NOCREATE');
+        return await this.redis.send_command('CF.INSERTNX', args.concat(items));
+    }
+
+    /**
      * Determining whether an item may exist in the Cuckoo Filter or not.
-     * @param key The key of the 'CF.EXISTS' command
-     * @param item The key of the 'CF.EXISTS' command
+     * @param key The name of the filter
+     * @param item The item to check for
      */
     async exists(key: string, item: string): Promise<CFResponse> {
         return await this.redis.send_command('CF.EXISTS', [key, item]);
@@ -68,26 +83,26 @@ export class RedisBloomCuckoo {
 
     /**
      * Deleting an item once from the filter. If the item exists only once, it will be removed from the filter.
-     * @param key The key of the 'CF.DEL' command
-     * @param item The item of the 'CF.DEL' command
+     * @param key The name of the filter
+     * @param item The item to delete from the filter
      */
-    async del(key: string, item: string) {
+    async del(key: string, item: string): Promise<CFResponse> {
         return await this.redis.send_command('CF.DEL', [key, item]);
     }
 
     /**
      * Returning the number of times an item may be in the filter.
-     * @param key The key of the 'CF.COUNT' command
-     * @param item The item of the 'CF.COUNT' command
+     * @param key The name of the filter
+     * @param item The item to count
      */
-    async count(key: string, item: string) {
+    async count(key: string, item: string): Promise<number> {
         return await this.redis.send_command('CF.COUNT', [key, item]);
     }
 
     /**
      * Begining an incremental save of the Cuckoo filter
-     * @param key The key of the 'CF.SCANDUMP' command
-     * @param iterator The iterator of the 'CF.SCANDUMP' command
+     * @param key The name of the filter
+     * @param iterator Iterator value. This is either 0, or the iterator from a previous invocation of this command
      */
     async scandump(key: string, iterator: number): Promise<string[]> {
         return await this.redis.send_command('CF.SCANDUMP', [key, iterator])
@@ -95,9 +110,9 @@ export class RedisBloomCuckoo {
 
     /**
      * Restoring a filter previously saved using SCANDUMP.
-     * @param key The key of the 'CF.LOADCHUNK' command
-     * @param iterator The iterator of the 'CF.LOADCHUNK' command
-     * @param data The data of the 'CF.LOADCHUNK' command
+     * @param key The name of the key to restore
+     * @param iterator The iterator value associated with data (returned by SCANDUMP )
+     * @param data The current data chunk (returned by SCANDUMP ) 
      */
     async loadchunk(key: string, iterator: number, data: string): Promise<'OK'> {
         return await this.redis.send_command('CF.LOADCHUNK', [key, iterator, data]);
@@ -105,7 +120,7 @@ export class RedisBloomCuckoo {
     
     /**
      * Returning information about a key 
-     * @param key The key of the 'CF.INFO' command
+     * @param key The name of the filter
      */
     async info(key: string): Promise<string[]> {
         return await this.redis.send_command('CF.INFO', [key]);
