@@ -97,7 +97,7 @@ export class RedisBloom {
      * @param data The data of the 'BF.LOADCHUNK' command
      */
     async loadchunk(key: string, iterator: number, data: string): Promise<'OK'> {
-        return await this.redis.send_command('BF.LOADCHUNK', [key, iterator, `"${data}"`]);
+        return await this.redis.send_command('BF.LOADCHUNK', [key, iterator, data]);
     }
 
     /**
