@@ -29,8 +29,8 @@ export class RedisBloomTopK {
      * @param key Name of sketch where item is added.
      * @param items Item/s to be added.
      */
-    async add(key: string, items: string[]): Promise<string[]> {
-        return await this.redis.send_command('TPK.ADD', [key].concat(items))
+    async add(key: string, items: (number | string)[]): Promise<string[]> {
+        return await this.redis.send_command('TOPK.ADD', [key].concat(items as string[]))
     }
 
     /**
@@ -41,7 +41,7 @@ export class RedisBloomTopK {
     async incrby(key: string, items: TOPKIncrbyItems[]): Promise<string[]> {
         const args = [key];
         for(const item of items)
-            args.concat([item.item, item.increment.toString()])
+            args.concat([item.item as string, item.increment.toString()])
         return await this.redis.send_command('TOPK.INCRBY', args);
     }
     
@@ -50,8 +50,8 @@ export class RedisBloomTopK {
      * @param key Name of sketch where item is queried.
      * @param items Item/s to be queried.
      */
-    async query(key: string, items: string[]): Promise<TOPKResponse[]> {
-        return await this.redis.send_command('TOPK.QUERY', [key].concat(items))
+    async query(key: string, items: (string | number)[]): Promise<TOPKResponse[]> {
+        return await this.redis.send_command('TOPK.QUERY', [key].concat(items as string[]))
     }
 
     /**
@@ -59,8 +59,8 @@ export class RedisBloomTopK {
      * @param key Name of sketch where item is counted.
      * @param items Item/s to be counted.
      */
-    async count(key: string, items: string[]): Promise<number[]> {
-        return await this.redis.send_command('TOPK.COUNT', [key].concat(items));
+    async count(key: string, items: (string | number)[]): Promise<number[]> {
+        return await this.redis.send_command('TOPK.COUNT', [key].concat(items as string[]));
     }
 
     /**
@@ -93,6 +93,6 @@ type TOPKResponse = '1' | '0';
  * @param increment The counter to be increased by this integer.
  */
 export type TOPKIncrbyItems = {
-    item: string,
+    item: string | number,
     increment: number
 }
