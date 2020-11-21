@@ -14,9 +14,11 @@ describe('RedisBloom Top-K filter testing', async function() {
         bloomClient = new RedisBloom(options);
         client = new RedisBloomTopK(options);
         await client.connect();
+        await bloomClient.connect();
     })
     after(async () => {
         await client.disconnect();
+        await bloomClient.disconnect();
     })
 
     it('add function', async () => {
