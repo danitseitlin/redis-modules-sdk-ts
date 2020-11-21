@@ -25,8 +25,6 @@ describe('RedisBloom Cuckoo filter testing', async function() {
     });
     it('exists function', async () => {
     });
-    it('del function', async () => {
-    });
     it('count function', async () => {
     });
     it('scandump function', async () => {
@@ -34,5 +32,7 @@ describe('RedisBloom Cuckoo filter testing', async function() {
     it('loadchunk function', async () => {
     });
     it('info function', async () => {
+    });
+    it('del function', async () => {
     });
 });

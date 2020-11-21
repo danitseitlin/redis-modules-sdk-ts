@@ -72,7 +72,7 @@ jobs:
     - name: Running tests
       run: npm i && npm run redisgears-module-tests
   #Build for 'Redis Bloom' module
-  RedisBloom:
+  ReBloom:
     runs-on: ubuntu-latest
     steps:
     - uses: docker-practice/actions-setup-docker@master
@@ -83,4 +83,40 @@ jobs:
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
     - name: Running tests
-      run: npm i && npm run redisbloom-module-tests
+      run: npm i && npm run redisbloom-filter-tests
+  ReBloomTopK:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_channel: nightly
+        docker_nightly_version: snapshot-20200915
+    - uses: actions/checkout@v2
+    - name: Setting up Redis
+      run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
+    - name: Running tests
+      run: npm i && npm run redisbloom-topk-filter-tests
+  ReBloomCMK:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_channel: nightly
+        docker_nightly_version: snapshot-20200915
+    - uses: actions/checkout@v2
+    - name: Setting up Redis
+      run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
+    - name: Running tests
+      run: npm i && npm run redisbloom-cmk-filter-tests
+  RedisBloomCuckoo:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_channel: nightly
+        docker_nightly_version: snapshot-20200915
+    - uses: actions/checkout@v2
+    - name: Setting up Redis
+      run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
+    - name: Running tests
+      run: npm i && npm run redisbloom-cuckoo-filter-tests
