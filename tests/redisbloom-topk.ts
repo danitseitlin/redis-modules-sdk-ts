@@ -21,7 +21,7 @@ describe('RedisBloom Top-K filter testing', async function() {
         //await bloomClient.disconnect();
     })
     it('reserve function', async() => {
-        const response = await client.reserve(key1, 1, 2, 3, 0);
+        const response = await client.reserve(key1, 1, 2, 3, 0.1);
         console.log(response)
     })
     it('add function', async () => {
