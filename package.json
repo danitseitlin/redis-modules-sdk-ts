@@ -19,7 +19,7 @@
     "redisbloom-cmk-filter-tests": "npm run test tests/redisbloom-cmk.ts -- -- --host=127.0.0.1 --port=6379",
     "tests": "npm run rejson-module-tests && npm run rts-module-tests && npm run redisearch-module-tests && npm run redisgraph-module-tests && npm run redisgears-module-tests",
     "pre-deploy": "npm run build",
-    "deploy": "npm-deploy redis-modules-cli"
+    "deploy": "npm-deploy redis-modules-sdk"
   },
   "repository": {
     "type": "git",
