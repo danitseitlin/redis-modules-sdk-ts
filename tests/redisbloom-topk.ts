@@ -1,14 +1,18 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { RedisBloomTopK } from '../modules/redisbloom-topk';
+import { RedisBloom } from '../modules/redisbloom';
+let bloomClient: RedisBloom;
 let client: RedisBloomTopK;
 const key1 = 'key1topk';
 describe('RedisBloom Top-K filter testing', async function() {
     before(async () => {
-        client = new RedisBloomTopK({
+        const options = {
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
-        });
+        }
+        bloomClient = new RedisBloom(options);
+        client = new RedisBloomTopK(options);
         await client.connect();
     })
     after(async () => {
@@ -16,7 +20,8 @@ describe('RedisBloom Top-K filter testing', async function() {
     })
 
     it('add function', async () => {
-        const response = await client.add(key1, ['foo', 'bar', 42])
+        await bloomClient.add(key1, 'foo')
+        const response = await client.add(key1, ['bar', 42])
         console.log(response)
     });
     it('incrby function', async () => {
