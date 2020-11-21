@@ -18,14 +18,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/danitseitlin/redis-modules.git"
+    "url": "git+https://github.com/danitseitlin/redis-modules-sdk.git"
   },
   "author": "Dani Tseitlin",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/danitseitlin/redis-modules/issues"
+    "url": "https://github.com/danitseitlin/redis-modules-sdk/issues"
   },
-  "homepage": "https://github.com/danitseitlin/redis-modules#readme",
+  "homepage": "https://github.com/danitseitlin/redis-modules-sdk#readme",
   "devDependencies": {
     "@types/chai": "^4.2.14",
     "@types/ioredis": "^4.17.6",
