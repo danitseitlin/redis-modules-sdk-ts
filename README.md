@@ -1,5 +1,5 @@
-# Redis modules project
-A project meant for connecting to Redis databases with modules easily, built with Typescript.
+# Redis Modules SDK
+A Software development kit for easier connection and execution of Redis Modules commands.
 
 ## <img src='https://oss.redislabs.com/redisjson/images/logo.svg' style='max-width:100%;' height='30'/> ReJSON module
 ### Quick start

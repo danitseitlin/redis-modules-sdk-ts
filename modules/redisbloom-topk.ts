@@ -25,6 +25,18 @@ export class RedisBloomTopK {
     }
 
     /**
+     * Initializing a TopK with specified parameters
+     * @param key The key under which the sketch is to be found. 
+     * @param topk The number of top occurring items to keep. 
+     * @param width The number of counters kept in each array. 
+     * @param depth The number of arrays. 
+     * @param decay The probability of reducing a counter in an occupied bucket. It is raised to power of it's counter (decay ^ bucket[i].counter). Therefore, as the counter gets higher, the chance of a reduction is being reduced. 
+     */
+    async reserve(key: string, topk: number, width: number, depth: number, decay: number): Promise<'OK'> {
+        return await this.redis.send_command('TOPK.RESERVE', [key, topk, width, depth, decay]);
+    }
+
+    /**
      * Adding an item to the data structure. 
      * @param key Name of sketch where item is added.
      * @param items Item/s to be added.
@@ -41,7 +53,7 @@ export class RedisBloomTopK {
     async incrby(key: string, items: TOPKIncrbyItems[]): Promise<string[]> {
         const args = [key];
         for(const item of items)
-            args.concat([item.item as string, item.increment.toString()])
+            args.concat([item.item.toString(), item.increment.toString()])
         return await this.redis.send_command('TOPK.INCRBY', args);
     }
     
