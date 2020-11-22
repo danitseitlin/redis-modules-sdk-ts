@@ -52,9 +52,9 @@ export class RedisBloomTopK {
      */
     async incrby(key: string, items: TOPKIncrbyItems[]): Promise<string[]> {
         const args = [key];
-        for(const item of items) {
-            args.concat([item.item.toString(), item.increment.toString()])
-        }
+        for(const item of items) 
+            args.concat([item.name.toString(), item.increment.toString()])
+        
         console.log(args) 
         return await this.redis.send_command('TOPK.INCRBY', args);
     }
@@ -103,10 +103,10 @@ type TOPKResponse = '1' | '0';
 
 /**
  * The sets of the incrby items (and increments)
- * @param item The item which counter to be increased.
+ * @param item The item name which counter to be increased.
  * @param increment The counter to be increased by this integer.
  */
 export type TOPKIncrbyItems = {
-    item: string | number,
+    name: string | number,
     increment: number
 }

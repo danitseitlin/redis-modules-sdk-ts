@@ -37,11 +37,11 @@ export class RedisBloomCMK {
     /**
      * Initializes a Count-Min Sketch to accommodate requested capacity.
      * @param key The name of the sketch.
-     * @param error Estimate size of error. The error is a percent of total counted items. This effects the width of the sketch.
+     * @param errorSize Estimate size of error. The error is a percent of total counted items. This effects the width of the sketch.
      * @param probability The desired probability for inflated count.
      */
-    async initbyprob(key: string, error: string, probability: string): Promise<'OK'> {
-        return await this.redis.send_command('CMS.INITBYPROB', [key, error, probability]);
+    async initbyprob(key: string, errorSize: number, probability: number): Promise<'OK'> {
+        return await this.redis.send_command('CMS.INITBYPROB', [key, errorSize, probability]);
     }
 
     /**
@@ -52,7 +52,7 @@ export class RedisBloomCMK {
     async incrby(key: string, items: CMSIncrbyItems[]) {
         const args = [key];
         for(const item of items)
-            args.concat([item.item, item.increment.toString()])
+            args.concat([item.name.toString(), item.increment.toString()])
         return await this.redis.send_command('CMS.INCRBY', args);
     }
 
@@ -94,10 +94,10 @@ export class RedisBloomCMK {
 
 /**
  * The sets of the incrby items (and increments)
- * @param item The item which counter to be increased.
+ * @param name The item name which counter to be increased.
  * @param increment The counter to be increased by this integer.
  */
 export type CMSIncrbyItems = {
-    item: string,
+    name: string,
     increment: number
 }

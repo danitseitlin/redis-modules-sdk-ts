@@ -33,11 +33,10 @@ describe('RedisBloom Top-K filter testing', async function() {
     });
     it('incrby function', async () => {
         const response = await client.incrby(key1, [{
-            item: 42,
+            name: 42,
             increment: 1
         }])
         console.log(response)
-        
     });
     it('query function', async () => {
         const response = await client.query(key1, [42, 'nonexist'])
