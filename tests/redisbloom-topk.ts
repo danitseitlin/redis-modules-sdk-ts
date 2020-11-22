@@ -33,7 +33,7 @@ describe('RedisBloom Top-K filter testing', async function() {
     it('query function', async () => {
         const response = await client.query(key1, [42, 'nonexist'])
         console.log(response)
-        expect(response[0]).to.equal(0, 'The query response of key 42');
+        expect(response[0]).to.equal(1, 'The query response of key 42');
         expect(response[1]).to.equal(0, 'The query response of key nonexist');
     });
     it('count function', async () => {
