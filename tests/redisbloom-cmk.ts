@@ -38,7 +38,7 @@ describe('RedisBloom Count-Min-Sketch filter testing', async function() {
         console.log(response)
     });
     it('merge function', async () => {
-        const response = await client.merge('dest', 2, [key1]);
+        const response = await client.merge('dest', 1, [key1]);
         console.log(response)
     });
     it('info function', async () => {
