@@ -1,4 +1,5 @@
 import * as Redis from 'ioredis';
+import { stringify } from 'querystring';
 
 export class RedisBloomTopK {
 
@@ -52,9 +53,11 @@ export class RedisBloomTopK {
      */
     async incrby(key: string, items: TOPKIncrbyItems[]): Promise<string[]> {
         const args = [key];
-        for(const item of items) 
+        console.log(`items: ${JSON.stringify(items)}`)
+        for(const item of items) {
+            console.log(`item: ${JSON.stringify(item)}`)
             args.concat([item.name.toString(), item.increment.toString()])
-        
+        }
         console.log(args) 
         return await this.redis.send_command('TOPK.INCRBY', args);
     }

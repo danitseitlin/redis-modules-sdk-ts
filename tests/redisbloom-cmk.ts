@@ -3,6 +3,8 @@ import { expect } from 'chai'
 import { RedisBloomCMK } from '../modules/redisbloom-cmk';
 let client: RedisBloomCMK;
 const key1 = 'key1cmk'
+const key2 = 'key1cmk2';
+
 describe('RedisBloom Count-Min-Sketch filter testing', async function() {
     before(async () => {
         client = new RedisBloomCMK({
@@ -20,7 +22,7 @@ describe('RedisBloom Count-Min-Sketch filter testing', async function() {
         console.log(response)
     });
     it('initbyprob function', async () => {
-        const response = await client.initbyprob(key1, 0.001,0.01);
+        const response = await client.initbyprob(key2, 0.001,0.01);
         console.log(response)
     });
     it('incrby function', async () => {
