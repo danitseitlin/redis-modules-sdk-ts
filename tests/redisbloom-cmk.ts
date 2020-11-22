@@ -18,11 +18,12 @@ describe('RedisBloom Count-Min-Sketch filter testing', async function() {
     })
 
     it('initbydim function', async () => {
-        const response = await client.initbydim(key1, 1,2);
+        let response = await client.initbydim('dest', 1, 2);
+        response = await client.initbydim(key1, 1, 2);
         console.log(response)
     });
     it('initbyprob function', async () => {
-        const response = await client.initbyprob(key2, 0.001,0.01);
+        const response = await client.initbyprob(key2, 0.001, 0.01);
         console.log(response)
     });
     it('incrby function', async () => {

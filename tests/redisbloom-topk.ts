@@ -28,22 +28,23 @@ describe('RedisBloom Top-K filter testing', async function() {
             name: 42,
             increment: 1
         }])
-        console.log(response)
+        expect(response).to.equal('bar', 'The response of the TOPK.INCRBY command');
     });
     it('query function', async () => {
         const response = await client.query(key1, [42, 'nonexist'])
-        expect(response[0]).to.equal(0, 'The response of the TOPK.QUERY command');
-        expect(response[1]).to.equal(0, 'The response of the TOPK.QUERY command');
+        console.log(response)
+        expect(response[0]).to.equal(0, 'The query response of key 42');
+        expect(response[1]).to.equal(0, 'The query response of key nonexist');
     });
     it('count function', async () => {
         const response = await client.count(key1, ['foo', 42, 'nonexist'])
         expect(response[0]).to.equal(0, 'The response of the TOPK.COUNT command');
-        expect(response[1]).to.equal(1, 'The response of the TOPK.COUNT command');
+        expect(response[1]).to.equal(2, 'The response of the TOPK.COUNT command');
         expect(response[2]).to.equal(0, 'The response of the TOPK.COUNT command');
     });
     it('list function', async () => {
         const response = await client.list(key1);
-        expect(response[0]).to.equal('bar', 'The response of the TOPK.LIST command');
+        expect(response[0]).to.equal(42, 'The response of the TOPK.LIST command');
     });
     it('info function', async () => {
         const response = await client.info(key1);
