@@ -44,7 +44,7 @@ describe('RedisBloom Top-K filter testing', async function() {
     });
     it('list function', async () => {
         const response = await client.list(key1);
-        expect(response[0]).to.equal(42, 'The response of the TOPK.LIST command');
+        expect(response[0]).to.equal('42', 'The response of the TOPK.LIST command');
     });
     it('info function', async () => {
         const response = await client.info(key1);
