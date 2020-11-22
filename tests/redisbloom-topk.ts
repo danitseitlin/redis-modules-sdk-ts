@@ -3,7 +3,6 @@ import { expect } from 'chai'
 import { RedisBloomTopK } from '../modules/redisbloom-topk';
 let client: RedisBloomTopK;
 const key1 = 'key1topk';
-const key2 = 'key1topk2';
 
 describe('RedisBloom Top-K filter testing', async function() {
     before(async () => {

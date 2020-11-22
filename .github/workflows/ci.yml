@@ -108,7 +108,7 @@ jobs:
       run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
     - name: Running tests
       run: npm i && npm run redisbloom-cmk-filter-tests
-  RedisBloomCuckoo:
+  ReBloomCuckoo:
     runs-on: ubuntu-latest
     steps:
     - uses: docker-practice/actions-setup-docker@master

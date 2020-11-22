@@ -50,9 +50,9 @@ export class RedisBloomCMK {
      * @param items A list of item and increment set's
      */
     async incrby(key: string, items: CMSIncrbyItems[]) {
-        const args = [key];
+        let args = [key];
         for(const item of items)
-            args.concat([item.name.toString(), item.increment.toString()])
+            args = args.concat([item.name.toString(), item.increment.toString()])
         return await this.redis.send_command('CMS.INCRBY', args);
     }
 
@@ -73,13 +73,12 @@ export class RedisBloomCMK {
      * @param weights A multiple of each sketch. Default =1.
      */
     async merge(dest: string, numKeys: number, sources: string[], weights?: number[]) {
-        const args = [dest, numKeys];
-        args.concat(sources);
+        let args = [dest, numKeys];
+        args = args.concat(sources);
         if(weights !== undefined && weights.length > 0) {
             args.push('WEIGHTS');
             for(const weight of weights)
                 args.push(weight.toString());
-            console.log(args);
         }
         return await this.redis.send_command('CMS.MERGE', args);
     }

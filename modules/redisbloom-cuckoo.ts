@@ -49,9 +49,9 @@ export class RedisBloomCuckoo {
      * @param options The additional optional parameters of the 'CF.INSERT' command
      */
     async insert(key: string, items: string[], options?: CFInsertParameters): Promise<CFResponse[]> {
-        const args = [key];
+        let args = [key];
         if(options !== undefined && options.capacity !== undefined)
-            args.concat(['CAPACITY', options.capacity.toString()]);
+            args = args.concat(['CAPACITY', options.capacity.toString()]);
         if(options !== undefined && options.nocreate !== undefined)
             args.push('NOCREATE');
         return await this.redis.send_command('CF.INSERT', args.concat(items));
@@ -64,9 +64,9 @@ export class RedisBloomCuckoo {
      * @param options The additional optional parameters of the 'CF.INSERTNX' command
      */
     async insertnx(key: string, items: string[], options?: CFInsertParameters): Promise<CFResponse[]> {
-        const args = [key];
+        let args = [key];
         if(options !== undefined && options.capacity !== undefined)
-            args.concat(['CAPACITY', options.capacity.toString()]);
+            args = args.concat(['CAPACITY', options.capacity.toString()]);
         if(options !== undefined && options.nocreate !== undefined)
             args.push('NOCREATE');
         return await this.redis.send_command('CF.INSERTNX', args.concat(items));

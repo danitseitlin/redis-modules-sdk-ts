@@ -48,13 +48,13 @@ export class RedisBloom {
      * @param options The additional optional parameters of the 'BF.INSERT' command
      */
     async insert(key: string, items: string[], options?: BFInsertParameters): Promise<BFResponse[]> {
-        const args = [key];
+        let args = [key];
         if(options !== undefined && options.capacity !== undefined)
-            args.concat(['CAPACITY', options.capacity.toString()]);
+            args = args.concat(['CAPACITY', options.capacity.toString()]);
         if(options !== undefined && options.error !== undefined)
-            args.concat(['ERROR', options.error]);
+            args = args.concat(['ERROR', options.error]);
         if(options !== undefined && options.expansion !== undefined)
-            args.concat(['EXPANSION', options.expansion]);
+            args = args.concat(['EXPANSION', options.expansion]);
         if(options !== undefined && options.nocreate !== undefined)
             args.push('NOCREATE');
         if(options !== undefined && options.noscaling !== undefined)
