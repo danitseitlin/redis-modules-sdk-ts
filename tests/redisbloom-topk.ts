@@ -28,7 +28,7 @@ describe('RedisBloom Top-K filter testing', async function() {
             name: 42,
             increment: 1
         }])
-        expect(response).to.equal('bar', 'The response of the TOPK.INCRBY command');
+        expect(response[0]).to.equal('bar', 'The response of the TOPK.INCRBY command');
     });
     it('query function', async () => {
         const response = await client.query(key1, [42, 'nonexist'])
