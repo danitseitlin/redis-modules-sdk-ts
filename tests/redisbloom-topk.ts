@@ -37,7 +37,7 @@ describe('RedisBloom Top-K filter testing', async function() {
             increment: 1
         }])
         console.log(response)
-
+        
     });
     it('query function', async () => {
         const response = await client.query(key1, [42, 'nonexist'])

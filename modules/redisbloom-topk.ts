@@ -52,9 +52,10 @@ export class RedisBloomTopK {
      */
     async incrby(key: string, items: TOPKIncrbyItems[]): Promise<string[]> {
         const args = [key];
-        for(const item of items)
+        for(const item of items) {
             args.concat([item.item.toString(), item.increment.toString()])
-        console.log(args)
+        }
+        console.log(args) 
         return await this.redis.send_command('TOPK.INCRBY', args);
     }
     
