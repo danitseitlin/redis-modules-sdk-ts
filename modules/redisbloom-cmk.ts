@@ -79,6 +79,7 @@ export class RedisBloomCMK {
             args.push('WEIGHTS');
             for(const weight of weights)
                 args.push(weight.toString());
+            console.log(args);
         }
         return await this.redis.send_command('CMS.MERGE', args);
     }
