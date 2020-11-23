@@ -56,7 +56,7 @@ describe('RedisBloom Module testing', async function() {
         data = response[1];
         expect(data).to.not.equal('', 'The chunk data')
     });
-    it.skip('loadchunk function', async () => {
+    it('loadchunk function', async () => {
         await client.redis.del(key2);
         const response = await client.loadchunk(key2, dataIterator, data)
         console.log(response)
