@@ -50,7 +50,7 @@ describe('RediSearch Module testing', async function() {
         expect(response).to.equal('@NULL:UNION {  @NULL:name  @NULL:+name(expanded)}', 'The response of the FT.EXPLAINCLI command');
     });
     it('alter function', async () => {
-        const response = await client.alter(index, 'name', 'TEXT')
+        const response = await client.alter(index, 'name', 'TAG')
         expect(response).to.equal('OK', 'The response of the FT.ALTER command');
     });
     
