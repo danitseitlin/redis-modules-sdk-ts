@@ -5,6 +5,7 @@ let client: RedisBloom;
 const key1 = 'key1bloom';
 const key2 = 'key2bloom';
 const item1 = 'item1';
+const responses = []
 let dataIterator: number;
 let data: string;
 
@@ -49,7 +50,7 @@ describe('RedisBloom Module testing', async function() {
         expect(response[1]).to.equal(100, 'The value of the \'Capacity\' item')
     });
     it('scandump function', async () => {
-        const responses = [];
+        //responses = [];
         let response = await client.scandump(key2, 0)
         console.log(response)
         dataIterator = parseInt(response[0])
@@ -68,7 +69,10 @@ describe('RedisBloom Module testing', async function() {
     });
     it('loadchunk function', async () => {
         await client.redis.del(key2);
-        const response = await client.loadchunk(key2, dataIterator, data)
-        console.log(response)
+        for(const res of responses) {
+            console.log(await client.loadchunk(key2, res[0], res[1]))
+        }
+        //const response = await client.loadchunk(key2, dataIterator, data)
+        //console.log(response)
     });
 });
