@@ -99,7 +99,7 @@ describe('RedisGears Module testing', async function() {
         expect(response).to.equal('OK', 'The response of the \'RG.ABORTEXECUTION\' Command')
     });
     it('unregister function', async () => {
-        executionId3 = await client.pyexecute('GB().run()', {
+        executionId3 = await client.pyexecute('GB().register()', {
             unblocking: true
         })
         const response = await client.unregister(executionId3)
