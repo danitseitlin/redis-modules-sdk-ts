@@ -56,15 +56,6 @@ export class RedisTimeSeries {
     }
 
     /**
-     * Deleting an existing TS key
-     * @param key The key
-     * @returns 1 if successful
-     */
-    async del(key: string): Promise<number> {
-        return await this.redis.send_command('DEL', [key])
-    }
-
-    /**
      * Altering an existing TS key
      * @param key Required. The key
      * @param retention Optional. The retention time
