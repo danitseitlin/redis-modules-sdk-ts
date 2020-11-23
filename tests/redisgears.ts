@@ -102,6 +102,7 @@ describe('RedisGears Module testing', async function() {
         executionId3 = await client.pyexecute('GB().register()', {
             unblocking: true
         })
+        console.log(executionId3)
         const response = await client.unregister(executionId3)
         console.log(response)
     });
