@@ -50,7 +50,7 @@ describe('RedisBloom Cuckoo filter testing', async function() {
         console.log(response)
         expect(response).to.equal(1, 'The response of the CF.COUNT command');
     });
-    it('scandump function', async () => {
+    it.skip('scandump function', async () => {
         await client.add(key2, 'item');
         await client.redis.del(key2);
         const response = await client.scandump(key1, 123)
@@ -60,7 +60,7 @@ describe('RedisBloom Cuckoo filter testing', async function() {
         data = response[1];
         expect(data).to.not.equal('', 'The chunk data')
     });
-    it('loadchunk function', async () => {
+    it.skip('loadchunk function', async () => {
         const response = await client.loadchunk(key2, dataIterator, data);
         console.log(response)
     });
