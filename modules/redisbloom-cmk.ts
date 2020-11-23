@@ -49,7 +49,7 @@ export class RedisBloomCMK {
      * @param key The name of the sketch.
      * @param items A list of item and increment set's
      */
-    async incrby(key: string, items: CMSIncrbyItems[]): Promise<number[]> {
+    async incrby(key: string, items: CMKIncrbyItems[]): Promise<number[]> {
         let args = [key];
         for(const item of items)
             args = args.concat([item.name.toString(), item.increment.toString()])
@@ -97,7 +97,7 @@ export class RedisBloomCMK {
  * @param name The item name which counter to be increased.
  * @param increment The counter to be increased by this integer.
  */
-export type CMSIncrbyItems = {
+export type CMKIncrbyItems = {
     name: string,
     increment: number
 }

@@ -130,4 +130,4 @@ export type BFInsertParameters = {
  * @param 1 Stands for 'true'
  * @param 0 Stands for 'false'
  */
-type BFResponse = '1' | '0';
+export type BFResponse = '1' | '0';

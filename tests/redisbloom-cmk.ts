@@ -48,5 +48,4 @@ describe('RedisBloom Count-Min-Sketch filter testing', async function() {
         expect(response[3]).to.equal(2, 'The depth of the key');
         expect(response[5]).to.equal(10, 'The count of the key');
     });
-    
 });

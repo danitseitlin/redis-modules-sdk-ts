@@ -142,4 +142,4 @@ export type CFInsertParameters = {
  * @param 1 Stands for 'true'
  * @param 0 Stands for 'false'
  */
-type CFResponse = '1' | '0';
+export type CFResponse = '1' | '0';

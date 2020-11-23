@@ -99,7 +99,7 @@ export class RedisBloomTopK {
  * @param 1 Stands for 'true'
  * @param 0 Stands for 'false'
  */
-type TOPKResponse = '1' | '0';
+export type TOPKResponse = '1' | '0';
 
 /**
  * The sets of the incrby items (and increments)
