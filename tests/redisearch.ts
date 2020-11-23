@@ -85,7 +85,7 @@ describe('RediSearch Module testing', async function() {
     });
     it('tagvalgs function', async () => {
         const response = await client.tagvals(index, 'name')
-        console.log(response)
+        expect(response.length).to.equal(0, 'The response of the FT.TAGVALS command')
     });
     it('synupdate function', async () => {
         const response = await client.synupdate(index, 0, ['term1'])

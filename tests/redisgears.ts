@@ -97,7 +97,7 @@ describe('RedisGears Module testing', async function() {
         const response = await client.abortExecution(executionId2)
         expect(response).to.equal('OK', 'The response of the \'RG.ABORTEXECUTION\' Command')
     });
-    it.skip('unregister function', async () => {
+    it('unregister function', async () => {
         const response = await client.unregister(executionId3)
         console.log(response)
     });
