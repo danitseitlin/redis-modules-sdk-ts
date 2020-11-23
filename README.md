@@ -193,7 +193,7 @@ await client.disconnect();
 | trigger            | RG.TRIGGER            |
 | unregister         | RG.UNREGISTER         |
 
-## <img src='https://oss.redislabs.com/redisbloom/images/logo.svg' style='max-width:100%;' height='30'/> RedisBloom module
+## <img src='https://oss.redislabs.com/redisbloom/images/logo.svg' style='max-width:100%;' height='30'/> RedisBloom Bloom filter
 ### Quick start
 ```
 const client = new RedisBloom({
@@ -249,7 +249,7 @@ await client.disconnect();
 | list      | TOPK.LIST               |
 | info      | TOPK.INFO               |
  
-## <img src='https://oss.redislabs.com/redisbloom/images/logo.svg'style='max-width:100%;' height='30'/> RedisBloom Cuckoo filter
+## <img src='https://oss.redislabs.com/redisbloom/images/logo.svg' style='max-width:100%;' height='30'/> RedisBloom Cuckoo filter
 ### Quick start
 ```
 const client = new RedisBloomCuckoo({
@@ -280,7 +280,7 @@ await client.disconnect();
 | loadchunk | CF.LOADCHUNK              |
 | info      | CF.INFO                   |
 
-## <img src='https://oss.redislabs.com/redisbloom/images/logo.svg'style='max-width:100%;' height='30'/> RedisBloom Count-Min Sketch filter
+## <img src='https://oss.redislabs.com/redisbloom/images/logo.svg' style='max-width:100%;' height='30'/> RedisBloom Count-Min Sketch filter
 ### Quick start
 ```
 const client = new RedisBloomCMK({
