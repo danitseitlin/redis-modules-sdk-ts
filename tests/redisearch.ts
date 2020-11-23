@@ -83,8 +83,8 @@ describe('RediSearch Module testing', async function() {
         const response = await client.sugdel(sug.key, sug.string)
         expect(response).to.equal(1, 'The response of the FT.SUGDEL command');
     });
-    it.skip('tagvalgs function', async () => {
-        const response = await client.tagvals(index, sug.key)
+    it('tagvalgs function', async () => {
+        const response = await client.tagvals(index, 'name')
         console.log(response)
     });
     it('synupdate function', async () => {
