@@ -44,7 +44,7 @@ describe('RedisGears Module testing', async function() {
     });
     it('getExecution function', async () => {
         const response = await client.getExecution(executionId1)
-        expect(response[0][3][1]).to.equal('done', 'The response count of the \'RG.GETRESULTS\' Command')
+        expect(response[0][3][1]).to.equal('done', 'The response count of the \'RG.GETEXECUTION\' Command')
     });
     
     it('dumpExecutions function', async () => {
@@ -83,11 +83,11 @@ describe('RedisGears Module testing', async function() {
         expect(response).to.equal('OK', 'The response of the \'RG.REFRESHCLUSTER\' Command')
     });
     it('trigger function', async () => {
-        executionId3 = await client.pyexecute("GB('CommandReader').register(trigger='mytrigger')", {
+        await client.pyexecute("GB('CommandReader').register(trigger='mytrigger')", {
             unblocking: true
         })
         const response = await client.trigger('mytrigger', ['foo', 'bar'])
-        expect(response[0]).to.equal('[\'mytrigger\', \'foo\', \'bar\']', 'The response of the \'RG.DROPEXECUTION\' Command')
+        expect(response[0]).to.equal('[\'mytrigger\', \'foo\', \'bar\']', 'The response of the \'RG.TRIGGER\' Command')
     });
     it('dropExecution function', async () => {
         const response = await client.dropExecution(executionId1)
@@ -98,8 +98,9 @@ describe('RedisGears Module testing', async function() {
         expect(response).to.equal('OK', 'The response of the \'RG.ABORTEXECUTION\' Command')
     });
     it('unregister function', async () => {
-        console.log(executionId3)
-        const response = await client.unregister('0000000000000000000000000000000000000000-3')
+        const registrationId = `${executionId3.split('-')[0]}-${parseInt(executionId3.split('-')[1])+1}`
+        console.log(registrationId)
+        const response = await client.unregister(registrationId)
         console.log(response)
     });
 });
