@@ -49,13 +49,20 @@ describe('RedisBloom Module testing', async function() {
         expect(response[1]).to.equal(100, 'The value of the \'Capacity\' item')
     });
     it('scandump function', async () => {
-        const response = await client.scandump(key2, 0)
+        const responses = [];
+        let response = await client.scandump(key2, 0)
         console.log(response)
         dataIterator = parseInt(response[0])
         expect(dataIterator).to.equal(1, 'The chunk data iterator');
-        const buffer = Buffer.from(response[1], 'hex');
-        console.log(buffer.toString())
-        data = buffer.toString('hex')//Buffer.from(response[1], 'utf16');//Buffer.from(response[1]).toString();
+        while(parseInt(response[0]) > 0){
+            responses.push(response);
+            response = await client.scandump(key2, dataIterator)
+            dataIterator = parseInt(response[0])
+            console.log(response)
+        }
+        //const buffer = Buffer.from(response[1], 'hex');
+        //console.log(buffer.toString())
+        //data = buffer.toString('hex')//Buffer.from(response[1], 'utf16');//Buffer.from(response[1]).toString();
         console.log(data)
         expect(data).to.not.equal('', 'The chunk data')
     });
