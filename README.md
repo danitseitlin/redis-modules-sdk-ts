@@ -65,7 +65,6 @@ await client.disconnect();
 | Functions  | Redis Times Series Command  |
 |:---------- |:--------------------------- |
 | create     | TS.CREATE                   |
-| del        | DEL                         |
 | alter      | TS.ALTER                    |
 | add        | TS.ADD                      |
 | madd       | TS.MADD                     |
