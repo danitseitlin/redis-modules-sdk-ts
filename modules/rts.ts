@@ -278,7 +278,7 @@ export class RedisTimeSeries {
      * @param options.withLabels The 'WITHLABELS' optional parameter
      */
     async mrevrange(key: string, fromTimestamp: string, toTimestamp: string, filter: string, options?: TSMRangeOptions): Promise<(string | number)[][]> {
-        let args = [key, fromTimestamp.toString(), toTimestamp.toString()];
+        let args = [key, fromTimestamp, toTimestamp];
         if(options !== undefined && options.count !== undefined)
             args = args.concat(['COUNT', options.count.toString()]);
         if(options !== undefined && options.aggregation !== undefined)
