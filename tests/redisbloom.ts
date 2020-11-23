@@ -53,9 +53,9 @@ describe('RedisBloom Module testing', async function() {
         console.log(response)
         dataIterator = parseInt(response[0])
         expect(dataIterator).to.equal(1, 'The chunk data iterator');
-        const buffer = Buffer.from(response[1], 'binary');
+        const buffer = Buffer.from(response[1], 'utf16le');
         console.log(buffer.toString())
-        data = buffer.toString('binary')//Buffer.from(response[1], 'utf16');//Buffer.from(response[1]).toString();
+        data = buffer.toString('utf16le')//Buffer.from(response[1], 'utf16');//Buffer.from(response[1]).toString();
         console.log(data)
         expect(data).to.not.equal('', 'The chunk data')
     });
