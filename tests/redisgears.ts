@@ -99,7 +99,7 @@ describe('RedisGears Module testing', async function() {
     });
     it('unregister function', async () => {
         console.log(executionId3)
-        const response = await client.unregister(executionId3)
+        const response = await client.unregister('0000000000000000000000000000000000000000-3')
         console.log(response)
     });
 });
