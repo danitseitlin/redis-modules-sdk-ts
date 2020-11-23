@@ -78,7 +78,7 @@ describe('RedisBloom Module testing', async function() {
             console.log(Buffer.from(res[1], 'utf16le').toString('utf-8'))
             console.log(Buffer.from(res[1], 'utf16le').toString('utf8'))
             console.log(Buffer.from(res[1], 'utf16le').toString('utf16le'))
-            console.log(await client.loadchunk(key2, res[0], res[1]))
+            console.log(await client.loadchunk(key2, res[0], Buffer.from(res[1], 'utf16le').toString('utf16le')))
         }
         //const response = await client.loadchunk(key2, dataIterator, data)
         //console.log(response)
