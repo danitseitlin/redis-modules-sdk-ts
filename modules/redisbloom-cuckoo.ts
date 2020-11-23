@@ -54,7 +54,7 @@ export class RedisBloomCuckoo {
             args = args.concat(['CAPACITY', options.capacity.toString()]);
         if(options !== undefined && options.nocreate !== undefined)
             args.push('NOCREATE');
-        return await this.redis.send_command('CF.INSERT', args.concat(items));
+        return await this.redis.send_command('CF.INSERT', args.concat(['ITEMS']).concat(items));
     }
 
     /**
@@ -69,7 +69,7 @@ export class RedisBloomCuckoo {
             args = args.concat(['CAPACITY', options.capacity.toString()]);
         if(options !== undefined && options.nocreate !== undefined)
             args.push('NOCREATE');
-        return await this.redis.send_command('CF.INSERTNX', args.concat(items));
+        return await this.redis.send_command('CF.INSERTNX', args.concat(['ITEMS']).concat(items));
     }
 
     /**
