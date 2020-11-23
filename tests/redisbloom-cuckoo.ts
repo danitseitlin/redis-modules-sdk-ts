@@ -22,32 +22,26 @@ describe('RedisBloom Cuckoo filter testing', async function() {
 
     it('add function', async () => {
         const response = await client.add(key1, 'item');
-        console.log(response)
         expect(response).to.equal(1, 'The response of the CF.ADD command');
     });
     it('addnx function', async () => {
         const response = await client.addnx(key1, 'item1');
-        console.log(response)
         expect(response).to.equal(1, 'The response of the CF.ADDNX command');
     });
     it('insert function', async () => {
         const response = await client.insert(key1, ['item4', 'item5'])
-        console.log(response)
         expect(response[0]).to.equal(1, 'The response of the CF.INSERT command');
     });
     it('insertnx function', async () => {
         const response = await client.insertnx(key3, ['item'])
-        console.log(response)
         expect(response[0]).to.equal(1, 'The response of the CF.INSERTNX command');
     });
     it('exists function', async () => {
         const response = await client.exists(key1, 'item1');
-        console.log(response)
         expect(response).to.equal(1, 'The response of the CF.EXISTS command');
     });
     it('count function', async () => {
         const response = await client.count(key1, 'item1');
-        console.log(response)
         expect(response).to.equal(1, 'The response of the CF.COUNT command');
     });
     it.skip('scandump function', async () => {
@@ -66,13 +60,11 @@ describe('RedisBloom Cuckoo filter testing', async function() {
     });
     it('info function', async () => {
         const response = await client.info(key1);
-        console.log(response)
         expect(response[1]).to.equal(1080, 'The size of the key');
         expect(response[3]).to.equal(512, 'The number of buckets of the key');
     });
     it('del function', async () => {
         const response = await client.del(key1, 'item1');
-        console.log(response)
         expect(response).to.equal(1, 'The response of the CF.DEL command');
     });
 });
