@@ -116,8 +116,4 @@ describe('RTS Module testing', async function() {
         const response = await client.queryindex('label=value')
         expect(response.length).eql(1, 'The response of the queryindex command');
     });
-    it('del function', async () => {
-        const response = await client.del(key1);
-        expect(response).to.equal(1, 'The response of the del command');
-    });
 });
