@@ -59,7 +59,6 @@ describe('RedisGears Module testing', async function() {
     
     it('getResults function', async () => {
         const response = await client.getResults(executionId1)
-        console.log(response)
         expect(response.length).to.equal(2, 'The response count of the \'RG.GETRESULTS\' Command')
     });
     it('getResultsBlocking function', async () => {
@@ -84,7 +83,7 @@ describe('RedisGears Module testing', async function() {
         expect(response).to.equal('OK', 'The response of the \'RG.REFRESHCLUSTER\' Command')
     });
     it('trigger function', async () => {
-        await client.pyexecute("GB('CommandReader').register(trigger='mytrigger')", {
+        executionId3 = await client.pyexecute("GB('CommandReader').register(trigger='mytrigger')", {
             unblocking: true
         })
         const response = await client.trigger('mytrigger', ['foo', 'bar'])
@@ -99,9 +98,6 @@ describe('RedisGears Module testing', async function() {
         expect(response).to.equal('OK', 'The response of the \'RG.ABORTEXECUTION\' Command')
     });
     it('unregister function', async () => {
-        executionId3 = await client.pyexecute('GB().register()', {
-            unblocking: true
-        })
         console.log(executionId3)
         const response = await client.unregister(executionId3)
         console.log(response)
