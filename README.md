@@ -1,5 +1,5 @@
-# Redis modules project
-A project meant for connecting to Redis databases with modules easily, built with Typescript.
+# Redis Modules SDK
+A Software development kit for easier connection and execution of Redis Modules commands.
 
 ## <img src='https://oss.redislabs.com/redisjson/images/logo.svg' style='max-width:100%;' height='30'/> ReJSON module
 ### Quick start
@@ -65,7 +65,6 @@ await client.disconnect();
 | Functions  | Redis Times Series Command  |
 |:---------- |:--------------------------- |
 | create     | TS.CREATE                   |
-| del        | DEL                         |
 | alter      | TS.ALTER                    |
 | add        | TS.ADD                      |
 | madd       | TS.MADD                     |
@@ -192,3 +191,117 @@ await client.disconnect();
 | refreshCluster     | RG.REFRESHCLUSTER     |
 | trigger            | RG.TRIGGER            |
 | unregister         | RG.UNREGISTER         |
+
+## <img src='https://oss.redislabs.com/redisbloom/images/logo.svg' style='max-width:100%;' height='30'/> RedisBloom Bloom filter
+### Quick start
+```
+const client = new RedisBloom({
+    host: 'hostname',
+    port: 43758,
+});
+
+//Connect to the Redis database with RedisBloom module
+await client.connect();
+
+//Adding a key
+const response = await client.add('key1', 'item1')
+
+//Disconnect from the Redis database with RedisBloom module
+await client.disconnect();
+```
+### Functions list
+| Functions  | RedisBloom Command |
+|:---------- |:------------------ |
+| add        | BF.ADD             |
+| madd       | BF.MADD            |
+| insert     | BF.INSERT          |
+| exists     | BF.EXISTS          |
+| mexists    | BF.MEXISTS         |
+| scandump   | BF.SCANDUMP        |
+| loadchunk  | BF.LOADCHUNK       |
+| info       | BF.INFO            |
+
+## <img src='https://oss.redislabs.com/redisbloom/images/logo.svg' style='max-width:100%;' height='30'/> RedisBloom TopK filter
+### Quick start
+```
+const client = new RedisBloomTopK({
+    host: 'hostname',
+    port: 43758,
+});
+
+//Connect to the Redis database with RedisBloom TopK filter
+await client.connect();
+
+//Adding a key
+const response = await client.reserve(key1, 1, 2, 3, 0.1);
+
+//Disconnect from the Redis database with RedisBloom TopK filter
+await client.disconnect();
+```
+### Functions list
+| Functions | RedisBloom TopK Command |
+|:--------- |:----------------------- |
+| reserve   | TOPK.RESERVE            |
+| add       | TOPK.ADD                |
+| incrby    | TOPK.INCRBY             |
+| query     | TOPK.QUERY              |
+| list      | TOPK.LIST               |
+| info      | TOPK.INFO               |
+ 
+## <img src='https://oss.redislabs.com/redisbloom/images/logo.svg' style='max-width:100%;' height='30'/> RedisBloom Cuckoo filter
+### Quick start
+```
+const client = new RedisBloomCuckoo({
+    host: 'hostname',
+    port: 43758,
+});
+
+//Connect to the Redis database with RedisBloom Cuckoo filter
+await client.connect();
+
+//Adding a key
+const response = await client.add('key1', 'item');
+
+//Disconnect from the Redis database with RedisBloom Cuckoo filter
+await client.disconnect();
+```
+### Functions list
+| Functions | RedisBloom Cuckoo Command |
+|:--------- |:------------------------- |
+| add       | CF.ADD                    |
+| addnx     | CF.ADDNX                  |
+| insert    | CF.INSERT                 |
+| insertnx  | CF.INSERTNX               |
+| exists    | CF.EXISTS                 |
+| del       | CF.DEL                    |
+| count     | CF.COUNT                  |
+| scandump  | CF.SCANDUMP               |
+| loadchunk | CF.LOADCHUNK              |
+| info      | CF.INFO                   |
+
+## <img src='https://oss.redislabs.com/redisbloom/images/logo.svg' style='max-width:100%;' height='30'/> RedisBloom Count-Min Sketch filter
+### Quick start
+```
+const client = new RedisBloomCMK({
+    host: 'hostname',
+    port: 43758,
+});
+
+//Connect to the Redis database with RedisBloom Count-Min Sketch filter
+await client.connect();
+
+//Adding a key
+const response = await client.initbydim('dest', 1, 2);
+
+//Disconnect from the Redis database with RedisBloom Count-Min Sketch filter
+await client.disconnect();
+```
+### Functions list
+| Functions  | RedisBloom Count-Min Sketch Command |
+|:---------- |:----------------------------------- |
+| initbydim  | CMS.INITBYDIM                       |
+| initbyprob | CMS.INITBYPROB                      |
+| incrby     | CMS.INCRBY                          |
+| query      | CMS.QUERY                           |
+| merge      | CMS.MERGE                           |
+| info       | CMS.INFO                            |
