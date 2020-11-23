@@ -75,23 +75,27 @@ describe('RTS Module testing', async function() {
         const response = await client.deleterule(key1, key2);
         expect(response).to.equal('OK', 'The response of the deleterule command');
     });
-    it.skip('range function', async () => {
+    it('range function', async () => {
         const data = await client.get(key1);
+        console.log(data)
         const response = await client.range(key1, data[0].toString(), data[1].toString())
         console.log(response)
     });
-    it.skip('revrange function', async () => {
+    it('revrange function', async () => {
         const data = await client.get(key1);
+        console.log(data)
         const response = await client.revrange(key1, data[0].toString(), data[1].toString())
         console.log(response)
     });
-    it.skip('mrange function', async () => {
+    it('mrange function', async () => {
         const info = await client.info(key1);
+        console.log(info)
         const response = await client.mrange(key1, info.firstTimestamp.toString(), info.lastTimestamp.toString(), 'label=value')
         console.log(response)
     });
-    it.skip('mrevrange function', async () => {
+    it('mrevrange function', async () => {
         const info = await client.info(key1);
+        console.log(info)
         const response = await client.mrevrange(key1, info.firstTimestamp.toString(), info.lastTimestamp.toString(), 'label=value')
         console.log(response)
     });
