@@ -47,7 +47,8 @@ on:
 jobs:
   #Build for 'ReJSON' module
   ReJSON:
-    if: contains(github.event.inputs.tests, 'rejson') || github.event.inputs.tests == 'All'
+    #If the list contains rejson, All, blank this job will trigger. blank stands for a 
+    #if: contains(github.event.inputs.tests, 'rejson') || github.event.inputs.tests == 'All' || github.event.inputs.tests == ''
     #if: github.even.inputs.tests.includes('rejson') == true || github.even.inputs.tests == 'All'
     #if: github.event.inputs.rejson == 'Yes' || github.event.inputs.rejson == ''
     runs-on: ubuntu-latest
@@ -57,6 +58,8 @@ jobs:
         docker_channel: nightly
         docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
+    - name: Var
+      run: echo "type - ${{github.event.type}}, inputs - ${{github.event.inputs}}, even - ${{github.event}}"
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/rejson:latest && docker ps -a
     - name: Running tests
