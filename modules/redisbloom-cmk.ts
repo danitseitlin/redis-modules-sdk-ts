@@ -6,7 +6,7 @@ export class RedisBloomCMK {
 
     /**
      * Initializing the RedisBloom Count-Min Sketch object
-     * @param options The options of the Redis database.
+     * @param options The options of the Redis database.hhhh
      */
     constructor(public options: Redis.RedisOptions) {}
 
