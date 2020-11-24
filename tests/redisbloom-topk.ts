@@ -22,7 +22,7 @@ describe('RedisBloom Top-K filter testing', async function() {
     it('add function', async () => {
         const response = await client.add(key1, ['bar', 42])
         expect(response[0]).to.equal(null, 'The response of the TOPK.ADD command')
-    });
+    }); 
     it('incrby function', async () => {
         const response = await client.incrby(key1, [{
             name: 42,
