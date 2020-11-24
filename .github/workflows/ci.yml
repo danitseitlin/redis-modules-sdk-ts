@@ -65,7 +65,7 @@ jobs:
         docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Var
-      run: echo "type - ${{github.event.type}}, inputs - ${{github.event.inputs}}, even - ${{github.event_name}} rejson - $is_selected, rejson - $rejson_tests, github.env.rejson_tests == true"
+      run: echo "type - ${{github.event.type}}, inputs - ${{github.event.inputs}}, even - ${{github.event_name}} rejson - $is_selected, rejson - $rejson_tests, ${{github.env.rejson_tests}}"
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/rejson:latest && docker ps -a
     - name: Running tests
