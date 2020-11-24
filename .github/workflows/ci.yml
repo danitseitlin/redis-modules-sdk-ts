@@ -48,6 +48,7 @@ jobs:
   #Verifying build and compilation
   Compilation:
     runs-on: ubuntu-latest
+    - uses: actions/checkout@v2
     - name: Running build
       run: npm run build
   #Build for 'ReJSON' module
