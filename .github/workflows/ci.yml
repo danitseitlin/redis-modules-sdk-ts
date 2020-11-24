@@ -46,6 +46,18 @@ on:
     branches: [master]
 jobs:
   #Verifying build and compilation
+  fetch-changes:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Fetching files changed
+      id: files
+      run: echo "::set-output name=files::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }}| xargs)"
+    - name: echo the changed files
+        run: |
+          for i in ${{ steps.files.outputs.files }}
+          do
+              echo $i
+          done
   Compilation:
     runs-on: ubuntu-latest
     steps:
