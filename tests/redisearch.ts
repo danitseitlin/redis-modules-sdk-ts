@@ -50,7 +50,7 @@ describe('RediSearch Module testing', async function() {
         expect(response).to.equal('@NULL:UNION {  @NULL:name  @NULL:+name(expanded)}', 'The response of the FT.EXPLAINCLI command');
     });
     it('alter function', async () => {
-        const response = await client.alter(index, 'name', 'TEXT')
+        const response = await client.alter(index, 'name', 'TAG')
         expect(response).to.equal('OK', 'The response of the FT.ALTER command');
     });
     
@@ -83,9 +83,9 @@ describe('RediSearch Module testing', async function() {
         const response = await client.sugdel(sug.key, sug.string)
         expect(response).to.equal(1, 'The response of the FT.SUGDEL command');
     });
-    it.skip('tagvalgs function', async () => {
-        const response = await client.tagvals(index, sug.key)
-        console.log(response)
+    it('tagvalgs function', async () => {
+        const response = await client.tagvals(index, 'name')
+        expect(response.length).to.equal(0, 'The response of the FT.TAGVALS command')
     });
     it('synupdate function', async () => {
         const response = await client.synupdate(index, 0, ['term1'])

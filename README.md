@@ -166,8 +166,8 @@ const client = new RedisGears({
 await client.connect();
 
 //Executing a query
-const response = await client.query(graphName, 'CREATE (p:Person {name: \'Kurt\', age: 27}) RETURN p');
-expect(response[2][0]).to.equal('Labels added: 1', 'The response of the GRAPH.QUERY command');
+const executionId = await client.pyexecute('GB().run()', { unblocking: true })
+console.log(`Execution ID: ${executionId}`)
 
 //Disconnect from the Redis database with RedisGears module
 await client.disconnect();
@@ -175,6 +175,7 @@ await client.disconnect();
 ### Functions list
 | Functions          | RedisGears Command    |
 |:------------------ |:--------------------- |
+| pyexecute          | RG.PYEXECUTE          |
 | abortExecution     | RG.ABORTEXECUTION     |
 | configGet          | RG.RG.CONFIGGET       |
 | configSet          | RG.RG.CONFIGSET       |
@@ -185,7 +186,6 @@ await client.disconnect();
 | getResults         | RG.GETRESULTS         |
 | getResultsBlocking | RG.GETRESULTSBLOCKING |
 | infocluster        | RG.INFOCLUSTER        |
-| pyexecute          | RG.PYEXECUTE          |
 | pystats            | RG.PYSTATS            |
 | pydumpreqs         | RG.PYDUMPREQS         |
 | refreshCluster     | RG.REFRESHCLUSTER     |
@@ -212,6 +212,7 @@ await client.disconnect();
 ### Functions list
 | Functions  | RedisBloom Command |
 |:---------- |:------------------ |
+| reserve    | BF.RESERVE         |
 | add        | BF.ADD             |
 | madd       | BF.MADD            |
 | insert     | BF.INSERT          |

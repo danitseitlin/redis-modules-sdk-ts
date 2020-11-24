@@ -2,6 +2,7 @@ import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { RedisTimeSeries } from '../modules/rts';
 let client: RedisTimeSeries;
+const date = new Date(2019, 11, 24, 19).getTime();
 const key1 = 'key:2:32';
 const key2 = 'key:2:33';
 describe('RTS Module testing', async function() {
@@ -38,8 +39,8 @@ describe('RTS Module testing', async function() {
         expect(response).to.equal('OK', 'The response of the alter command');
     });
     it('add function', async () => {
-        const response = await client.add(key1, '1548149180000', '26')
-        expect(response).to.equal(1548149180000, 'The response of the add command');
+        const response = await client.add(key1, date.toString(), '26')
+        expect(response).to.equal(date, 'The response of the add command');
     });
     it('madd function', async () => {
         const info = await client.info(key1);
@@ -75,24 +76,28 @@ describe('RTS Module testing', async function() {
         const response = await client.deleterule(key1, key2);
         expect(response).to.equal('OK', 'The response of the deleterule command');
     });
-    it.skip('range function', async () => {
+    it('range function', async () => {
         const data = await client.get(key1);
         const response = await client.range(key1, data[0].toString(), data[1].toString())
-        console.log(response)
+        expect(response.length).to.equal(0, 'The range items length of the response')
     });
-    it.skip('revrange function', async () => {
+    it('revrange function', async () => {
         const data = await client.get(key1);
         const response = await client.revrange(key1, data[0].toString(), data[1].toString())
-        console.log(response)
+        expect(response.length).to.equal(0, 'The range items length of the response')
     });
     it.skip('mrange function', async () => {
+        const data = await client.get(key1);
+        console.log(data)
         const info = await client.info(key1);
-        const response = await client.mrange(key1, info.firstTimestamp.toString(), info.lastTimestamp.toString(), 'label=value')
+        console.log(info)
+        const response = await client.mrange(key1, (info.firstTimestamp-1).toString(), (info.lastTimestamp+10000).toString(), 'label!=x')
         console.log(response)
     });
     it.skip('mrevrange function', async () => {
         const info = await client.info(key1);
-        const response = await client.mrevrange(key1, info.firstTimestamp.toString(), info.lastTimestamp.toString(), 'label=value')
+        console.log(info)
+        const response = await client.mrevrange(key1, (date-10).toString(), (date+10000).toString(), 'label!=x')
         console.log(response)
     });
     it('get function', async () => {
