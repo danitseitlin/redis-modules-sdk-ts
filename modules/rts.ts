@@ -260,7 +260,6 @@ export class RedisTimeSeries {
         if(options !== undefined && options.withLabels !== undefined)
             args.push('WITHLABELS')
         args = args.concat(['FILTER', filter])
-        console.log(`TS.MRANGE: ${args}`)
         return await this.redis.send_command('TS.MRANGE', args)
     }
     
@@ -286,7 +285,6 @@ export class RedisTimeSeries {
         if(options !== undefined && options.withLabels !== undefined)
             args.push('WITHLABELS')
         args = args.concat(['FILTER', filter])
-        console.log(`TS.MREVRANGE: ${args}`)
         return await this.redis.send_command('TS.MREVRANGE', args)
     }
 
