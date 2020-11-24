@@ -147,7 +147,7 @@ export type BFInsertParameters = {
  * @param nonscaling Prevents the filter from creating additional sub-filters if initial capacity is reached.
  */
 export type BFReserveParameter = {
-    expansion?: 2,
+    expansion?: number,
     nonscaling?: boolean
 }
 
