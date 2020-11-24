@@ -49,12 +49,12 @@ jobs:
   fetch-changes:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Fetching files changed
-      id: files
-      run: echo "::set-output name=files::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }}| xargs)"
-    - name: echo the changed files
-      run: echo "${{ steps.files.outputs.files }}"
+      - uses: actions/checkout@v2
+      - name: Set the value
+        id: step_one
+        run: echo "::set-output name=FOO::BAR"
+      - name: Use it
+        run: echo ${{ steps.step_one.outputs.FOO }}
   Compilation:
     runs-on: ubuntu-latest
     steps:
