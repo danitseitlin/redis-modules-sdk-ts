@@ -53,11 +53,7 @@ jobs:
       id: files
       run: echo "::set-output name=files::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }}| xargs)"
     - name: echo the changed files
-        run: |
-          for i in ${{ steps.files.outputs.files }}
-          do
-              echo $i
-          done
+      run: echo "${{ steps.files.outputs.files }}"
   Compilation:
     runs-on: ubuntu-latest
     steps:
