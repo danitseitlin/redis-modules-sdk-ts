@@ -53,11 +53,12 @@ jobs:
       rejson-selected: ${{(github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rejson') || github.event.inputs.tests == 'All'))}}
       rejson-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, 'rejson.ts')}}
     steps:
+      - if: github.event_name == 'workflow_dispatch'
       - uses: actions/checkout@v2
       - id: files
         uses: jitterbit/get-changed-files@v1
       - run: "echo ${{ steps.files.outputs.all }}"
-  compilation:
+  Compilation:
     runs-on: ubuntu-latest
     needs: Setup
     steps:
@@ -82,6 +83,7 @@ jobs:
       run: npm i && npm run rejson-module-tests
   #Build for 'Redis Times Series' module
   RTS:
+    needs: Setup
     if: (github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rts') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
@@ -96,6 +98,7 @@ jobs:
       run: npm i && npm run rts-module-tests
   #Build for 'Redis Search' module
   Redisearch:
+    needs: Setup
     if: (github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'redisearch') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
@@ -110,6 +113,7 @@ jobs:
       run: npm i && npm run redisearch-module-tests
   #Build for 'Redis Graph module
   RedisGraph:
+    needs: Setup
     if: (github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'redisgraph') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
@@ -124,6 +128,7 @@ jobs:
       run: npm i && npm run redisgraph-module-tests
   #Build for 'RedisGears' module
   RedisGears:
+    needs: Setup
     if: (github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'redisgears') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
@@ -138,6 +143,7 @@ jobs:
       run: npm i && npm run redisgears-module-tests
   #Build for 'Redis Bloom' module
   ReBloom:
+    needs: Setup
     if: (github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'redisbloom') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
@@ -152,6 +158,7 @@ jobs:
       run: npm i && npm run redisbloom-filter-tests
   #Build for 'Redis Bloom TopK' filter
   ReBloomTopK:
+    needs: Setup
     if: (github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rebloomTopK') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
@@ -166,6 +173,7 @@ jobs:
       run: npm i && npm run redisbloom-topk-filter-tests
   #Build for 'Redis Bloom CMK' filter
   ReBloomCMK:
+    needs: Setup
     if: (github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rebloomCMK') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
@@ -180,6 +188,7 @@ jobs:
       run: npm i && npm run redisbloom-cmk-filter-tests
   #Build for 'Redis Bloom Cuckoo' filter
   ReBloomCuckoo:
+    needs: Setup
     if: (github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rebloomCuckoo') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
