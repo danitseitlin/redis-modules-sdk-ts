@@ -93,7 +93,7 @@ describe('RTS Module testing', async function() {
         console.log(data)
         const info = await client.info(key1);
         console.log(info)
-        const response = await client.mrange(key1, data[0].toString(), data[1].toString(), 'label!=x')
+        const response = await client.mrange(key1, (info.firstTimestamp-1).toString(), (info.lastTimestamp+10000).toString(), 'label!=x')
         console.log(response)
     });
     it('mrevrange function', async () => {
