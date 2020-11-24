@@ -53,10 +53,11 @@ jobs:
       rejson-selected: ${{(github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rejson') || github.event.inputs.tests == 'All'))}}
       rejson-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, 'rejson.ts')}}
     steps:
-      - if: github.event_name == 'workflow_dispatch'
+      
       - uses: actions/checkout@v2
       - id: files
         uses: jitterbit/get-changed-files@v1
+        if: github.event_name == 'workflow_dispatch'
       - run: "echo ${{ steps.files.outputs.all }}"
   Compilation:
     runs-on: ubuntu-latest
