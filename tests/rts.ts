@@ -78,15 +78,13 @@ describe('RTS Module testing', async function() {
     });
     it('range function', async () => {
         const data = await client.get(key1);
-        console.log(data)
         const response = await client.range(key1, data[0].toString(), data[1].toString())
-        console.log(response)
+        expect(response.length).to.equal(0, 'The range items length of the response')
     });
     it('revrange function', async () => {
         const data = await client.get(key1);
-        console.log(data)
         const response = await client.revrange(key1, data[0].toString(), data[1].toString())
-        console.log(response)
+        expect(response.length).to.equal(0, 'The range items length of the response')
     });
     it.skip('mrange function', async () => {
         const data = await client.get(key1);

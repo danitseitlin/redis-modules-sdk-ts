@@ -212,6 +212,7 @@ await client.disconnect();
 ### Functions list
 | Functions  | RedisBloom Command |
 |:---------- |:------------------ |
+| reserve    | BF.RESERVE         |
 | add        | BF.ADD             |
 | madd       | BF.MADD            |
 | insert     | BF.INSERT          |
