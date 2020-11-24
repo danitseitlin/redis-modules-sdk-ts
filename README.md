@@ -2,16 +2,16 @@
 A Software development kit for easier connection and execution of Redis Modules commands.
 <p align='center'>
   <a href='https://github.com/danitseitlin/redis-modules-sdk/blob/master/LICENSE'>
-    <img src='https://img.shields.io/badge/license-BSD%203%20Clause-blue.svg' target='_blank' />
+    <img src='https://img.shields.io/badge/license-BSD%203%20Clause-blue.svg?style=plastic' target='_blank' />
   </a>
   <a href='https://npmjs.org/package/redis-modules-sdk'>
-    <img src='http://img.shields.io/npm/v/redis-modules-sdk.svg?style=flat' target='_blank' />
+    <img src='https://img.shields.io/npm/v/redis-modules-sdk/latest?style=plastic' target='_blank' />
   </a>
   <a href='https://npmjs.org/package/redis-modules-sdk' style='width:25px;height:20px;'>
-    <img src='https://img.shields.io/npm/dm/redis-modules-sdk.svg?color=blue' target='_blank' />
+    <img src='https://img.shields.io/npm/dm/redis-modules-sdk.svg?color=blue&style=plastic' target='_blank' />
   </a>
   <a href='https://npmjs.org/package/redis-modules-sdk' style='width:25px;height:20px;'>
-    <img src='https://img.shields.io/bitbucket/issues/danitseitlin/redis-modules-sdk' target='_blank' />
+    <img src='https://img.shields.io/bitbucket/issues/danitseitlin/redis-modules-sdk?style=plastic' target='_blank' />
   </a>
 </p></p>
 
