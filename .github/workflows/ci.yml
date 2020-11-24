@@ -44,9 +44,9 @@ on:
         default: 'Yes'
   pull_request: 
     branches: [master]
+env: 
+  rejson_tests: (github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rejson') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'
 jobs:
-  env: 
-    rejson_tests: (github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rejson') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'
   #Build for 'ReJSON' module
   ReJSON:
     #If the list contains rejson, All, blank this job will trigger. blank stands for a 
