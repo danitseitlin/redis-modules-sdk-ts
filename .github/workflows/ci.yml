@@ -3,60 +3,51 @@ on:
   workflow_dispatch:
     inputs:
       tests:
-        description: What tests to run. The list is -> rejson, rts
+        description: "What tests to run. Available options: rejson, rts, redisearch, redisgraph, redisgears, rebloom, rebloomTopK, rebloomCMK, rebloomCuckoo. Use 'All' to run all tests."
         required: true
         default: 'All'
-      rejson:
-        description: 'Run ReJSON tests'
-        required: true
-        default: 'Yes'
-      rts:
-        description: 'Run RTS tests'
-        required: true
-        default: 'Yes'
-      redisearch:
-        description: 'Run RediSearch tests'
-        required: true
-        default: 'Yes'
-      redisgraph:
-        description: 'Run RedisGraph tests'
-        required: true
-        default: 'Yes'
-      redisgears:
-        description: 'Run RedisGears tests'
-        required: true
-        default: 'Yes'
-      redisbloom:
-        description: 'Run RedisBloom tests'
-        required: true
-        default: 'Yes'
-      redisbloomtopk:
-        description: 'Run RedisBloom TopK tests'
-        required: true
-        default: 'Yes'
-      redisbloomcmk:
-        description: 'Run RedisBloom CMK tests'
-        required: true
-        default: 'Yes'
-      redisbloomcuckoo:
-        description: 'Run RedisBloom Cuckoo tests'
-        required: true
-        default: 'Yes'
+      #rejson:
+      #  description: 'Run ReJSON tests'
+      #  required: true
+      #  default: 'Yes'
+      #rts:
+      #  description: 'Run RTS tests'
+      #  required: true
+      #  default: 'Yes'
+      #redisearch:
+      #  description: 'Run RediSearch tests'
+      #  required: true
+      #  default: 'Yes'
+      #redisgraph:
+      #  description: 'Run RedisGraph tests'
+      #  required: true
+      #  default: 'Yes'
+      #redisgears:
+      #  description: 'Run RedisGears tests'
+      #  required: true
+      #  default: 'Yes'
+      #redisbloom:
+      #  description: 'Run RedisBloom tests'
+      #  required: true
+      #  default: 'Yes'
+      #redisbloomtopk:
+      #  description: 'Run RedisBloom TopK tests'
+      #  required: true
+      #  default: 'Yes'
+      #redisbloomcmk:
+      #  description: 'Run RedisBloom CMK tests'
+      #  required: true
+      #  default: 'Yes'
+      #redisbloomcuckoo:
+      #  description: 'Run RedisBloom Cuckoo tests'
+      #  required: true
+      #  default: 'Yes'
   pull_request: 
     branches: [master]
-env: 
-  rejson_tests: ${{(github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rejson') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'}}
 jobs:
   #Build for 'ReJSON' module
   ReJSON:
-    #If the list contains rejson, All, blank this job will trigger. blank stands for a 
-    #if: ${{ github.env.rejson_tests == true}}
-    #env: 
-    #  is_selected: ${{(github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rejson') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'}}
-    #if: (github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rejson') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'
-    #if: contains(github.event.inputs.tests, 'rejson') || github.event.inputs.tests == 'All' || github.event.inputs.tests == ''
-    #if: github.even.inputs.tests.includes('rejson') == true || github.even.inputs.tests == 'All'
-    #if: github.event.inputs.rejson == 'Yes' || github.event.inputs.rejson == ''
+    if: (github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rejson') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
     - uses: docker-practice/actions-setup-docker@master
@@ -70,113 +61,112 @@ jobs:
       run: docker run -p 6379:6379 -d --rm redislabs/rejson:latest && docker ps -a
     - name: Running tests
       run: npm i && npm run rejson-module-tests
-      
   #Build for 'Redis Times Series' module
-  #RTS:
-  #  if: github.event.inputs.rts == 'Yes' || github.event.inputs.rts == ''
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #  - uses: docker-practice/actions-setup-docker@master
-  #    with:
-  #      docker_channel: nightly
-  #      docker_nightly_version: snapshot-20200915
-  #  - uses: actions/checkout@v2
-  #  - name: Setting up Redis
-  #    run: docker run -p 6379:6379 -d --rm redislabs/redistimeseries && docker ps -a
-  #  - name: Running tests
-  #    run: npm i && npm run rts-module-tests
-  ##Build for 'Redis Search' module
-  #Redisearch:
-  #  if: github.event.inputs.redisearch == 'Yes' || github.event.inputs.redisearch == ''
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #  - uses: docker-practice/actions-setup-docker@master
-  #    with:
-  #      docker_channel: nightly
-  #      docker_nightly_version: snapshot-20200915
-  #  - uses: actions/checkout@v2
-  #  - name: Setting up Redis
-  #    run: docker run -p 6379:6379 -d --rm redislabs/redisearch:latest && docker ps -a
-  #  - name: Running tests
-  #    run: npm i && npm run redisearch-module-tests
-  ##Build for 'Redis Graph module
-  #RedisGraph:
-  #  if: github.event.inputs.redisgraph == 'Yes' || github.event.inputs.redisgraph == ''
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #  - uses: docker-practice/actions-setup-docker@master
-  #    with:
-  #      docker_channel: nightly
-  #      docker_nightly_version: snapshot-20200915
-  #  - uses: actions/checkout@v2
-  #  - name: Setting up Redis
-  #    run: docker run -p 6379:6379 -d --rm redislabs/redisgraph:latest && docker ps -a
-  #  - name: Running tests
-  #    run: npm i && npm run redisgraph-module-tests
-  ##Build for 'RedisGears' module
-  #RedisGears:
-  #  if: github.event.inputs.redisgears == 'Yes' || github.event.inputs.redisgears == ''
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #  - uses: docker-practice/actions-setup-docker@master
-  #    with:
-  #      docker_channel: nightly
-  #      docker_nightly_version: snapshot-20200915
-  #  - uses: actions/checkout@v2
-  #  - name: Setting up Redis
-  #    run: docker run -p 6379:6379 -d --rm redislabs/redisgears:latest && docker ps -a
-  #  - name: Running tests
-  #    run: npm i && npm run redisgears-module-tests
-  ##Build for 'Redis Bloom' module
-  #ReBloom:
-  #  if: github.event.inputs.redisbloom == 'Yes' || github.event.inputs.redisbloom == ''
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #  - uses: docker-practice/actions-setup-docker@master
-  #    with:
-  #      docker_channel: nightly
-  #      docker_nightly_version: snapshot-20200915
-  #  - uses: actions/checkout@v2
-  #  - name: Setting up Redis
-  #    run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
-  #  - name: Running tests
-  #    run: npm i && npm run redisbloom-filter-tests
-  #ReBloomTopK:
-  #  if: github.event.inputs.redisbloomtopk == 'Yes' || github.event.inputs.redisbloomtopk == ''
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #  - uses: docker-practice/actions-setup-docker@master
-  #    with:
-  #      docker_channel: nightly
-  #      docker_nightly_version: snapshot-20200915
-  #  - uses: actions/checkout@v2
-  #  - name: Setting up Redis
-  #    run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
-  #  - name: Running tests
-  #    run: npm i && npm run redisbloom-topk-filter-tests
-  #ReBloomCMK:
-  #  if: github.event.inputs.redisbloomcmk == 'Yes' || github.event.inputs.redisbloomcmk == ''
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #  - uses: docker-practice/actions-setup-docker@master
-  #    with:
-  #      docker_channel: nightly
-  #      docker_nightly_version: snapshot-20200915
-  #  - uses: actions/checkout@v2
-  #  - name: Setting up Redis
-  #    run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
-  #  - name: Running tests
-  #    run: npm i && npm run redisbloom-cmk-filter-tests
-  #ReBloomCuckoo:
-  #  if: github.event.inputs.redisbloomcuckoo == 'Yes' || github.event.inputs.redisbloomcuckoo == ''
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #  - uses: docker-practice/actions-setup-docker@master
-  #    with:
-  #      docker_channel: nightly
-  #      docker_nightly_version: snapshot-20200915
-  #  - uses: actions/checkout@v2
-  #  - name: Setting up Redis
-  #    run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
-  #  - name: Running tests
-  #    run: npm i && npm run redisbloom-cuckoo-filter-tests
+  RTS:
+    if: (github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rts') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_channel: nightly
+        docker_nightly_version: snapshot-20200915
+    - uses: actions/checkout@v2
+    - name: Setting up Redis
+      run: docker run -p 6379:6379 -d --rm redislabs/redistimeseries && docker ps -a
+    - name: Running tests
+      run: npm i && npm run rts-module-tests
+  #Build for 'Redis Search' module
+  Redisearch:
+    if: (github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'redisearch') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_channel: nightly
+        docker_nightly_version: snapshot-20200915
+    - uses: actions/checkout@v2
+    - name: Setting up Redis
+      run: docker run -p 6379:6379 -d --rm redislabs/redisearch:latest && docker ps -a
+    - name: Running tests
+      run: npm i && npm run redisearch-module-tests
+  #Build for 'Redis Graph module
+  RedisGraph:
+    if: (github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'redisgraph') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_channel: nightly
+        docker_nightly_version: snapshot-20200915
+    - uses: actions/checkout@v2
+    - name: Setting up Redis
+      run: docker run -p 6379:6379 -d --rm redislabs/redisgraph:latest && docker ps -a
+    - name: Running tests
+      run: npm i && npm run redisgraph-module-tests
+  #Build for 'RedisGears' module
+  RedisGears:
+    if: (github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'redisgears') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_channel: nightly
+        docker_nightly_version: snapshot-20200915
+    - uses: actions/checkout@v2
+    - name: Setting up Redis
+      run: docker run -p 6379:6379 -d --rm redislabs/redisgears:latest && docker ps -a
+    - name: Running tests
+      run: npm i && npm run redisgears-module-tests
+  #Build for 'Redis Bloom' module
+  ReBloom:
+    if: (github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rebloom') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_channel: nightly
+        docker_nightly_version: snapshot-20200915
+    - uses: actions/checkout@v2
+    - name: Setting up Redis
+      run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
+    - name: Running tests
+      run: npm i && npm run redisbloom-filter-tests
+  ReBloomTopK:
+    if: (github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rebloomTopK') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_channel: nightly
+        docker_nightly_version: snapshot-20200915
+    - uses: actions/checkout@v2
+    - name: Setting up Redis
+      run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
+    - name: Running tests
+      run: npm i && npm run redisbloom-topk-filter-tests
+  ReBloomCMK:
+    if: (github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rebloomCMK') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_channel: nightly
+        docker_nightly_version: snapshot-20200915
+    - uses: actions/checkout@v2
+    - name: Setting up Redis
+      run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
+    - name: Running tests
+      run: npm i && npm run redisbloom-cmk-filter-tests
+  ReBloomCuckoo:
+    if: (github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rebloomCuckoo') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_channel: nightly
+        docker_nightly_version: snapshot-20200915
+    - uses: actions/checkout@v2
+    - name: Setting up Redis
+      run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
+    - name: Running tests
+      run: npm i && npm run redisbloom-cuckoo-filter-tests
