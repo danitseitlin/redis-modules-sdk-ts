@@ -14,6 +14,7 @@ A Software development kit for easier connection and execution of Redis Modules 
     <img src='https://img.shields.io/bitbucket/issues/danitseitlin/redis-modules-sdk' target='_blank' />
   </a>
 </p></p>
+
 ## <img src='https://oss.redislabs.com/redisjson/images/logo.svg' style='max-width:100%;' height='30'/> ReJSON module
 ### Quick start
 ```
