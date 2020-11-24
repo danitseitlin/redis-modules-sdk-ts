@@ -2,6 +2,7 @@ import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { RedisTimeSeries } from '../modules/rts';
 let client: RedisTimeSeries;
+const date = new Date(2019, 11, 24, 19).getTime().toString();
 const key1 = 'key:2:32';
 const key2 = 'key:2:33';
 describe('RTS Module testing', async function() {
@@ -17,6 +18,7 @@ describe('RTS Module testing', async function() {
     })
 
     it('create function', async () => {
+        
         let response = await client.create(key1, {
             labels:[{
                 name: 'label',
@@ -90,13 +92,13 @@ describe('RTS Module testing', async function() {
     it('mrange function', async () => {
         const info = await client.info(key1);
         console.log(info)
-        const response = await client.mrange(key1, '1548149180000', info.lastTimestamp.toString(), 'label!=x')
+        const response = await client.mrange(key1, date, date+10000, 'label!=x')
         console.log(response)
     });
     it('mrevrange function', async () => {
         const info = await client.info(key1);
         console.log(info)
-        const response = await client.mrevrange(key1, '1548149180000', info.lastTimestamp.toString(), 'label!=x')
+        const response = await client.mrevrange(key1, date, date+10000, 'label!=x')
         console.log(response)
     });
     it('get function', async () => {
