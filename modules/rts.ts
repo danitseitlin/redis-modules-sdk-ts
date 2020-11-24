@@ -260,7 +260,6 @@ export class RedisTimeSeries {
         if(options !== undefined && options.withLabels !== undefined)
             args.push('WITHLABELS')
         args = args.concat(['FILTER', filter])
-        console.log(`TS.MRANGE: ${args}`)
         return await this.redis.send_command('TS.MRANGE', args)
     }
     
@@ -278,7 +277,7 @@ export class RedisTimeSeries {
      * @param options.withLabels The 'WITHLABELS' optional parameter
      */
     async mrevrange(key: string, fromTimestamp: string, toTimestamp: string, filter: string, options?: TSMRangeOptions): Promise<(string | number)[][]> {
-        let args = [key, fromTimestamp.toString(), toTimestamp.toString()];
+        let args = [key, fromTimestamp, toTimestamp];
         if(options !== undefined && options.count !== undefined)
             args = args.concat(['COUNT', options.count.toString()]);
         if(options !== undefined && options.aggregation !== undefined)
@@ -286,7 +285,6 @@ export class RedisTimeSeries {
         if(options !== undefined && options.withLabels !== undefined)
             args.push('WITHLABELS')
         args = args.concat(['FILTER', filter])
-        console.log(`TS.MREVRANGE: ${args}`)
         return await this.redis.send_command('TS.MREVRANGE', args)
     }
 
