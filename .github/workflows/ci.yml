@@ -46,7 +46,7 @@ on:
     branches: [master]
 jobs:
   #Verifying build and compilation
-  setup:
+  Setup:
     runs-on: ubuntu-latest
     outputs:
       files: ${{ steps.files.outputs.all }}
