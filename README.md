@@ -1,9 +1,6 @@
 # Redis Modules SDK
 A Software development kit for easier connection and execution of Redis Modules commands.
 <p align='center'>
-  <a href='https://github.com/danitseitlin/redis-modules-sdk/blob/master/LICENSE'>
-    <img src='https://img.shields.io/badge/license-BSD%203%20Clause-blue.svg?style=plastic' target='_blank' />
-  </a>
   <a href='https://npmjs.org/package/redis-modules-sdk'>
     <img src='https://img.shields.io/npm/v/redis-modules-sdk/latest?style=plastic' target='_blank' />
   </a>
@@ -12,6 +9,15 @@ A Software development kit for easier connection and execution of Redis Modules 
   </a>
   <a href='https://npmjs.org/package/redis-modules-sdk' style='width:25px;height:20px;'>
     <img src='https://img.shields.io/github/issues/danitseitlin/redis-modules-sdk?style=plastic' target='_blank' />
+  </a>
+  <a href='https://npmjs.org/package/redis-modules-sdk' style='width:25px;height:20px;'>
+    <img src='https://img.shields.io/bundlephobia/min/redis-modules-sdk/latest?style=plastic' target='_blank' />
+  </a>
+  <a>
+    <img src='https://img.shields.io/github/last-commit/danitseitlin/redis-modules-sdk?style=plastic' />
+  </a>
+  <a href='https://github.com/danitseitlin/redis-modules-sdk/blob/master/LICENSE'>
+    <img src='https://img.shields.io/badge/license-BSD%203%20Clause-blue.svg?style=plastic' target='_blank' />
   </a>
 </p></p>
 
