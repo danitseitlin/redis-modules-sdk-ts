@@ -1,6 +1,43 @@
 name: CI
 on:
   workflow_dispatch:
+    inputs:
+      rejson:
+        description: 'Run ReJSON tests'
+        required: true
+        default: 'Yes'
+      rts:
+        description: 'Run RTS tests'
+        required: true
+        default: 'Yes'
+      redisearch:
+        description: 'Run RediSearch tests'
+        required: true
+        default: 'Yes'
+      redisgraph:
+        description: 'Run RedisGraph tests'
+        required: true
+        default: 'Yes'
+      redisgears:
+        description: 'Run RedisGears tests'
+        required: true
+        default: 'Yes'
+      redisbloom:
+        description: 'Run RedisBloom tests'
+        required: true
+        default: 'Yes'
+      redisbloomtopk:
+        description: 'Run RedisBloom TopK tests'
+        required: true
+        default: 'Yes'
+      redisbloomcmk:
+        description: 'Run RedisBloom CMK tests'
+        required: true
+        default: 'Yes'
+      redisbloomcuckoo:
+        description: 'Run RedisBloom Cuckoo tests'
+        required: true
+        default: 'Yes'
   push: 
     branches: [master]
   pull_request: 
@@ -8,6 +45,7 @@ on:
 jobs:
   #Build for 'ReJSON' module
   ReJSON:
+   # if: github.event.inputs.rejson === 'Yes' || github.event.inputs.rejson === 'null'
     runs-on: ubuntu-latest
     steps:
     - uses: docker-practice/actions-setup-docker@master
@@ -15,10 +53,13 @@ jobs:
         docker_channel: nightly
         docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
+    - name: Var
+      run: echo "${{github.event.inputs.rejson}}"
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/rejson:latest && docker ps -a
     - name: Running tests
       run: npm i && npm run rejson-module-tests
+      
   #Build for 'Redis Times Series' module
   RTS:
     runs-on: ubuntu-latest
