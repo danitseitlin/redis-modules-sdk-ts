@@ -69,7 +69,7 @@ jobs:
   #Build for 'ReJSON' module
   ReJSON:
     needs: Setup
-    if: ${{needs.Setup.outputs.rejson-selected || needs.Setup.outputs.rejson-changes}}
+    if: needs.Setup.outputs.rejson-selected == 'true' || needs.Setup.outputs.rejson-changes == 'true'
     runs-on: ubuntu-latest
     steps:
     - uses: docker-practice/actions-setup-docker@master
