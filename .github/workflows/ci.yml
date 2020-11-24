@@ -45,6 +45,11 @@ on:
   pull_request: 
     branches: [master]
 jobs:
+  #Verifying build and compilation
+  Compilation:
+    runs-on: ubuntu-latest
+    - name: Running build
+      run: npm run build
   #Build for 'ReJSON' module
   ReJSON:
     if: (github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rejson') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'
