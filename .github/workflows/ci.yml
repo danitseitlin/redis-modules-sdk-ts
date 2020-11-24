@@ -50,7 +50,7 @@ jobs:
   #Build for 'ReJSON' module
   ReJSON:
     #If the list contains rejson, All, blank this job will trigger. blank stands for a 
-    if: ${{ github.env.rejson_tests == true}}
+    #if: ${{ github.env.rejson_tests == true}}
     #env: 
     #  is_selected: ${{(github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rejson') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'}}
     #if: (github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rejson') || github.event.inputs.tests == 'All')) || github.event_name == 'pull_request'
@@ -65,7 +65,7 @@ jobs:
         docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Var
-      run: echo "type - ${{github.event.type}}, inputs - ${{github.event.inputs}}, even - ${{github.event_name}} rejson - $is_selected, rejson - $rejson_tests"
+      run: echo "type - ${{github.event.type}}, inputs - ${{github.event.inputs}}, even - ${{github.event_name}} rejson - $is_selected, rejson - $rejson_tests, github.env.rejson_tests == true"
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/rejson:latest && docker ps -a
     - name: Running tests
