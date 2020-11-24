@@ -6,42 +6,6 @@ on:
         description: "What tests to run. Available options: rejson, rts, redisearch, redisgraph, redisgears, redisbloom, rebloom-topk, rebloom-cmk, rebloom-cuckoo. Use 'All' to run all tests."
         required: true
         default: 'All'
-      #rejson:
-      #  description: 'Run ReJSON tests'
-      #  required: true
-      #  default: 'Yes'
-      #rts:
-      #  description: 'Run RTS tests'
-      #  required: true
-      #  default: 'Yes'
-      #redisearch:
-      #  description: 'Run RediSearch tests'
-      #  required: true
-      #  default: 'Yes'
-      #redisgraph:
-      #  description: 'Run RedisGraph tests'
-      #  required: true
-      #  default: 'Yes'
-      #redisgears:
-      #  description: 'Run RedisGears tests'
-      #  required: true
-      #  default: 'Yes'
-      #redisbloom:
-      #  description: 'Run RedisBloom tests'
-      #  required: true
-      #  default: 'Yes'
-      #redisbloomtopk:
-      #  description: 'Run RedisBloom TopK tests'
-      #  required: true
-      #  default: 'Yes'
-      #redisbloomcmk:
-      #  description: 'Run RedisBloom CMK tests'
-      #  required: true
-      #  default: 'Yes'
-      #redisbloomcuckoo:
-      #  description: 'Run RedisBloom Cuckoo tests'
-      #  required: true
-      #  default: 'Yes'
   pull_request: 
     branches: [master]
 jobs:
@@ -85,13 +49,6 @@ jobs:
       - run: "echo ${{ steps.files.outputs.all }}"
       - name: Setup & build
         run: npm i && npm run build
-  #Compilation:
-  #  runs-on: ubuntu-latest
-  #  needs: Setup
-  #  steps:
-  #  - uses: actions/checkout@v2
-  #  - run: "echo ${{ needs.Setup.outputs.files }}"
-    
   #Build for 'ReJSON' module
   ReJSON:
     needs: Setup
