@@ -89,9 +89,11 @@ describe('RTS Module testing', async function() {
         console.log(response)
     });
     it('mrange function', async () => {
+        const data = await client.get(key1);
+        console.log(data)
         const info = await client.info(key1);
         console.log(info)
-        const response = await client.mrange(key1, (date-10).toString(), (date+10000).toString(), 'label!=x')
+        const response = await client.mrange(key1, data[0].toString(), data[1].toString(), 'label!=x')
         console.log(response)
     });
     it('mrevrange function', async () => {
