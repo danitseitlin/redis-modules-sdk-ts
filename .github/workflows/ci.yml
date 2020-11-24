@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       files: ${{ steps.files.outputs.all }}
-      rejson-selected: ${{(github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rejson') || github.event.inputs.tests == 'All'))
+      rejson-selected: ${{(github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rejson') || github.event.inputs.tests == 'All'))}}
       rejson-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, 'rejson.ts')}}
     steps:
       - uses: actions/checkout@v2
