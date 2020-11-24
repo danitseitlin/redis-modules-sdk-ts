@@ -57,6 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - run: "echo ${{ steps.files.outputs.all }}"
     - name: Setup & build
       run: npm i && npm run build
   #Build for 'ReJSON' module
