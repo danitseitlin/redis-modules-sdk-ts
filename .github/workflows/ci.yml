@@ -50,7 +50,7 @@ jobs:
   #Build for 'ReJSON' module
   ReJSON:
     #If the list contains rejson, All, blank this job will trigger. blank stands for a 
-    if: jobs.env.is_selected == true
+    - if: jobs.env.is_selected == true
     with: 
       is_selected: ${{rejson_tests}}
     #env: 
