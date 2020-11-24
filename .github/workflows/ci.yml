@@ -45,7 +45,7 @@ on:
 jobs:
   #Build for 'ReJSON' module
   ReJSON:
-    if: github.event.inputs.rejson === 'Yes' || github.event.inputs.rejson === ''
+    if: github.event.inputs.rejson == 'Yes' || github.event.inputs.rejson == ''
     runs-on: ubuntu-latest
     steps:
     - uses: docker-practice/actions-setup-docker@master
