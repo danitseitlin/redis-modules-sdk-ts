@@ -26,8 +26,8 @@ describe('RTS Module testing', async function() {
         expect(response).to.equal('OK', 'The response of the create command');
         response = await client.create(key2, {
             labels:[{
-                name: 'label1',
-                value: 'value1'
+                name: 'label',
+                value: 'value'
             }]
         })
         expect(response).to.equal('OK', 'The response of the create command');
