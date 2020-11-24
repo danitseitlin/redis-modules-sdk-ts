@@ -11,7 +11,7 @@ A Software development kit for easier connection and execution of Redis Modules 
     <img src='https://img.shields.io/npm/dm/redis-modules-sdk.svg?color=blue&style=plastic' target='_blank' />
   </a>
   <a href='https://npmjs.org/package/redis-modules-sdk' style='width:25px;height:20px;'>
-    <img src='https://img.shields.io/bitbucket/issues/danitseitlin/redis-modules-sdk?style=plastic' target='_blank' />
+    <img src='https://img.shields.io/github/issues/danitseitlin/redis-modules-sdk?style=plastic' target='_blank' />
   </a>
 </p></p>
 
