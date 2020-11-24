@@ -25,7 +25,7 @@
     "url": "git+https://github.com/danitseitlin/redis-modules-sdk.git"
   },
   "author": "Dani Tseitlin",
-  "license": "ISC",
+  "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/danitseitlin/redis-modules-sdk/issues"
   },
