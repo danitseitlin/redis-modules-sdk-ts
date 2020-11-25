@@ -1,5 +1,4 @@
 # Redis Modules SDK
-A Software development kit for easier connection and execution of Redis Modules commands.
 <p align='center'>
   <a href='https://www.npmjs.com/package/redis-modules-sdk'>
     <img src='https://img.shields.io/npm/v/redis-modules-sdk/latest?style=plastic' target='_blank' />
@@ -20,6 +19,9 @@ A Software development kit for easier connection and execution of Redis Modules 
     <img src='https://img.shields.io/badge/license-BSD%203%20Clause-blue.svg?style=plastic' target='_blank' />
   </a>
 </p></p>
+A Software development kit for easier connection and execution of Redis Modules commands.
+
+<img href='/images/logo.png' />
 
 ## <img src='https://oss.redislabs.com/redisjson/images/logo.svg' style='max-width:100%;' height='30'/> ReJSON module
 ### Quick start
