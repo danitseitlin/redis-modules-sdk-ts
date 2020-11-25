@@ -26,7 +26,7 @@
 </p>
 
 
-<h2>A few words</h2>
+<h2 style='text-decoration: underline;'>A few words</h2>
 
 <p>  </p>
 
