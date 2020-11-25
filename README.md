@@ -18,11 +18,16 @@
     <img src='https://img.shields.io/badge/license-BSD%203%20Clause-blue.svg?style=plastic' target='_blank' />
   </a>
 </p></p>
-<h1> Redis Modules SDK</h1> <img src='https://github.com/danitseitlin/redis-modules-sdk/blob/readme-powerlifts/.github/workflows/images/logo-2.png' />
+<h1> Redis Modules SDK</h1>
+<p>
+  <img src='https://github.com/danitseitlin/redis-modules-sdk/blob/readme-powerlifts/.github/workflows/images/logo-2.png' />
+  <span>A Software development kit for easier connection and execution of Redis Modules commands.</span>
+</p>
 
 
-A Software development kit for easier connection and execution of Redis Modules commands.
+<h2>A few words</h2>
 
+<p>  </p>
 
 ## <img src='https://oss.redislabs.com/redisjson/images/logo.svg' style='max-width:100%;' height='30'/> ReJSON module
 ### Quick start
