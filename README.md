@@ -37,7 +37,35 @@ An open source SDK of all the available Redis modules, built with TypeScript for
 Installation can be done via NPM with `npm install redis-modules-sdk@latest` for the latest version.<br>
 Specific version can be found [here](https://www.npmjs.com/package/redis-modules-sdk?activeTab=versions) and big releases will be found [here](https://github.com/danitseitlin/redis-modules-sdk/releases)
 
-# Documentation
+# Documentation :book:
+1. [ReJSON](#-rejson-module)
+  1. [Quick start]()
+  2. [Functions]()
+2. [RedisTimeSeries]()
+  1. [Quick start]()
+  2. [Functions]()
+3. [RediSearch]()
+  1. [Quick start]()
+  2. [Functions]()
+4. [RedisGraph]()
+  1. [Quick start]()
+  2. [Functions]()
+5. [RedisGears]()
+  1. [Quick start]()
+  2. [Functions]()
+6. [RedisBloom]()
+  1. [Bloom filter]()
+    1. [Quick start]()
+    2. [Functions]()
+  2. [TopK filter]()
+    1. [Quick start]()
+    2. [Functions]()
+  3. [Cuckoo filter]()
+    1. [Quick start]()
+    2. [Functions]()
+  4. [Count-Min-Sketch filter]()
+    1. [Quick start]()
+    2. [Functions]()
 ## <img src='https://oss.redislabs.com/redisjson/images/logo.svg' style='max-width:100%;' height='30'/> ReJSON module
 ### Quick start
 ```
@@ -80,26 +108,26 @@ await client.disconnect();
 | forget    | JSON.FORGET     |
 | resp      | JSON.RESP       |
 
-## <img src='https://oss.redislabs.com/redistimeseries/images/logo.svg' style='max-width:100%;' height='30'/> Redis Times Series module
+## <img src='https://oss.redislabs.com/redistimeseries/images/logo.svg' style='max-width:100%;' height='30'/> RedisTimeSeries module
 ### Quick start
 ```
-const client = new RedisTimesSeies({
+const client = new RedisTimeSeies({
     host: 'hostname',
     port: 43758,
 });
 
-//Connect to the Redis database with Redis Times Series module
+//Connect to the Redis database with RedisTimeSeries module
 await client.connect();
 
 //Deleting a key
 const response = await client.del('key');
 expect(response).to.equal('OK', 'The response of the del command');
 
-//Disconnect from the Redis database with Redis Times Series module
+//Disconnect from the Redis database with RedisTimeSeries module
 await client.disconnect();
 ```
 ### Functions list
-| Functions  | Redis Times Series Command  |
+| Functions  | RedisTimeSeries Command  |
 |:---------- |:--------------------------- |
 | create     | TS.CREATE                   |
 | alter      | TS.ALTER                    |
@@ -228,9 +256,9 @@ await client.disconnect();
 | refreshCluster     | RG.REFRESHCLUSTER     |
 | trigger            | RG.TRIGGER            |
 | unregister         | RG.UNREGISTER         |
-
-## <img src='https://oss.redislabs.com/redisbloom/images/logo.svg' style='max-width:100%;' height='30'/> RedisBloom Bloom filter
-### Quick start
+## <img src='https://oss.redislabs.com/redisbloom/images/logo.svg' style='max-width:100%;' height='30'/> RedisBloom
+### Bloom filter
+#### Quick start
 ```
 const client = new RedisBloom({
     host: 'hostname',
@@ -246,7 +274,7 @@ const response = await client.add('key1', 'item1')
 //Disconnect from the Redis database with RedisBloom module
 await client.disconnect();
 ```
-### Functions list
+#### Functions list
 | Functions  | RedisBloom Command |
 |:---------- |:------------------ |
 | reserve    | BF.RESERVE         |
@@ -259,8 +287,8 @@ await client.disconnect();
 | loadchunk  | BF.LOADCHUNK       |
 | info       | BF.INFO            |
 
-## <img src='https://oss.redislabs.com/redisbloom/images/logo.svg' style='max-width:100%;' height='30'/> RedisBloom TopK filter
-### Quick start
+### TopK filter
+#### Quick start
 ```
 const client = new RedisBloomTopK({
     host: 'hostname',
@@ -276,7 +304,7 @@ const response = await client.reserve(key1, 1, 2, 3, 0.1);
 //Disconnect from the Redis database with RedisBloom TopK filter
 await client.disconnect();
 ```
-### Functions list
+#### Functions list
 | Functions | RedisBloom TopK Command |
 |:--------- |:----------------------- |
 | reserve   | TOPK.RESERVE            |
@@ -286,8 +314,8 @@ await client.disconnect();
 | list      | TOPK.LIST               |
 | info      | TOPK.INFO               |
  
-## <img src='https://oss.redislabs.com/redisbloom/images/logo.svg' style='max-width:100%;' height='30'/> RedisBloom Cuckoo filter
-### Quick start
+### Cuckoo filter
+#### Quick start
 ```
 const client = new RedisBloomCuckoo({
     host: 'hostname',
@@ -303,7 +331,7 @@ const response = await client.add('key1', 'item');
 //Disconnect from the Redis database with RedisBloom Cuckoo filter
 await client.disconnect();
 ```
-### Functions list
+#### Functions list
 | Functions | RedisBloom Cuckoo Command |
 |:--------- |:------------------------- |
 | add       | CF.ADD                    |
@@ -317,8 +345,8 @@ await client.disconnect();
 | loadchunk | CF.LOADCHUNK              |
 | info      | CF.INFO                   |
 
-## <img src='https://oss.redislabs.com/redisbloom/images/logo.svg' style='max-width:100%;' height='30'/> RedisBloom Count-Min Sketch filter
-### Quick start
+### Count-Min Sketch filter
+#### Quick start
 ```
 const client = new RedisBloomCMK({
     host: 'hostname',
@@ -334,7 +362,7 @@ const response = await client.initbydim('dest', 1, 2);
 //Disconnect from the Redis database with RedisBloom Count-Min Sketch filter
 await client.disconnect();
 ```
-### Functions list
+#### Functions list
 | Functions  | RedisBloom Count-Min Sketch Command |
 |:---------- |:----------------------------------- |
 | initbydim  | CMS.INITBYDIM                       |
