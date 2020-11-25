@@ -38,34 +38,34 @@ Installation can be done via NPM with `npm install redis-modules-sdk@latest` for
 Specific version can be found [here](https://www.npmjs.com/package/redis-modules-sdk?activeTab=versions) and big releases will be found [here](https://github.com/danitseitlin/redis-modules-sdk/releases)
 
 # Documentation :book:
-1. [ReJSON](#-rejson-module)
-  1. [Quick start]()
-  2. [Functions]()
-2. [RedisTimeSeries]()
-  1. [Quick start]()
-  2. [Functions]()
-3. [RediSearch]()
-  1. [Quick start]()
-  2. [Functions]()
-4. [RedisGraph]()
-  1. [Quick start]()
-  2. [Functions]()
-5. [RedisGears]()
-  1. [Quick start]()
-  2. [Functions]()
-6. [RedisBloom]()
-  1. [Bloom filter]()
-    1. [Quick start]()
-    2. [Functions]()
-  2. [TopK filter]()
-    1. [Quick start]()
-    2. [Functions]()
-  3. [Cuckoo filter]()
-    1. [Quick start]()
-    2. [Functions]()
-  4. [Count-Min-Sketch filter]()
-    1. [Quick start]()
-    2. [Functions]()
+1. [ReJSON](#-rejson-module)<br>
+  1. [Quick start]()<br>
+  2. [Functions]()<br>
+2. [RedisTimeSeries]()<br>
+  1. [Quick start]()<br>
+  2. [Functions]()<br>
+3. [RediSearch]()<br>
+  1. [Quick start]()<br>
+  2. [Functions]()<br>
+4. [RedisGraph]()<br>
+  1. [Quick start]()<br>
+  2. [Functions]()<br>
+5. [RedisGears]()<br>
+  1. [Quick start]()<br>
+  2. [Functions]()<br>
+6. [RedisBloom]()<br>
+  1. [Bloom filter]()<br>
+    1. [Quick start]()<br>
+    2. [Functions]()<br>
+  2. [TopK filter]()<br>
+    1. [Quick start]()<br>
+    2. [Functions]()<br>
+  3. [Cuckoo filter]()<br>
+    1. [Quick start]()<br>
+    2. [Functions]()<br>
+  4. [Count-Min-Sketch filter]()<br>
+    1. [Quick start]()<br>
+    2. [Functions]()<br>
 ## <img src='https://oss.redislabs.com/redisjson/images/logo.svg' style='max-width:100%;' height='30'/> ReJSON module
 ### Quick start
 ```
