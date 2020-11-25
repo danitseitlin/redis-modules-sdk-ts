@@ -1,4 +1,4 @@
-<h1> Redis Modules SDK <img src='https://github.com/danitseitlin/redis-modules-sdk/blob/readme-powerlifts/.github/workflows/images/logo-2.png' /> </h1>
+<h1> Redis Modules SDK</h1> <img src='https://github.com/danitseitlin/redis-modules-sdk/blob/readme-powerlifts/.github/workflows/images/logo-2.png' />
 
 <p align='center'>
   <a href='https://www.npmjs.com/package/redis-modules-sdk'>
