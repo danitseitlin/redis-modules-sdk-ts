@@ -21,9 +21,8 @@
 
 ### A Software development kit for easier connection and execution of Redis Modules commands
 
-<p>
+<p align='center'>
   <img src='https://github.com/danitseitlin/redis-modules-sdk/blob/readme-powerlifts/.github/workflows/images/logo-2.png' />
-  
 </p>
 
 
