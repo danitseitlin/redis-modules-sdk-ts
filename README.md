@@ -22,14 +22,22 @@
 ### A Software development kit for easier connection and execution of Redis Modules commands
 
 <p align='center'>
-  <img src='https://github.com/danitseitlin/redis-modules-sdk/blob/readme-powerlifts/.github/workflows/images/logo-2.png' />
+  <img src='https://github.com/danitseitlin/redis-modules-sdk/blob/readme-powerlifts/.github/workflows/images/logo.png' />
 </p>
 
+# A few words :star:
+An open source SDK of all the available Redis modules, built with TypeScript for better typing experiences and better usages.
+## Benefits :zap:
+1. All in 1, all Redis modules are covered in 1 project
+2. Amazing :fire: typing experiences, all types are well documented and easy to use!
+3. Easy to find your Redis command, each Redis module command has a referenced function in it's class!
 
-<h2 style='text-decoration: underline;'>A few words</h2>
+# Let's get started :memo:
+## Installation
+Installation can be done via NPM with `npm install redis-modules-sdk@latest` for the latest version.<br>
+Specific version can be found [here](https://www.npmjs.com/package/redis-modules-sdk?activeTab=versions) and big releases will be found [here](https://github.com/danitseitlin/redis-modules-sdk/releases)
 
-<p>  </p>
-
+# Documentation
 ## <img src='https://oss.redislabs.com/redisjson/images/logo.svg' style='max-width:100%;' height='30'/> ReJSON module
 ### Quick start
 ```
