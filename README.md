@@ -1,4 +1,5 @@
-# Redis Modules SDK
+# Redis Modules SDK ![logo]('https://github.com/danitseitlin/redis-modules-sdk/blob/readme-powerlifts/.github/workflows/images/logo-2.png')
+
 <p align='center'>
   <a href='https://www.npmjs.com/package/redis-modules-sdk'>
     <img src='https://img.shields.io/npm/v/redis-modules-sdk/latest?style=plastic' target='_blank' />
@@ -21,7 +22,6 @@
 </p></p>
 A Software development kit for easier connection and execution of Redis Modules commands.
 
-<img src='https://github.com/danitseitlin/redis-modules-sdk/blob/readme-powerlifts/.github/workflows/images/logo-2.png' />
 
 ## <img src='https://oss.redislabs.com/redisjson/images/logo.svg' style='max-width:100%;' height='30'/> ReJSON module
 ### Quick start
