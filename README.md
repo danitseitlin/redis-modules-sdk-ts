@@ -18,7 +18,9 @@
     <img src='https://img.shields.io/badge/license-BSD%203%20Clause-blue.svg?style=plastic' target='_blank' />
   </a>
 </p></p>
-<h1> Redis Modules SDK <span>A Software development kit for easier connection and execution of Redis Modules commands.</span></h1>
+
+### A Software development kit for easier connection and execution of Redis Modules commands
+
 <p>
   <img src='https://github.com/danitseitlin/redis-modules-sdk/blob/readme-powerlifts/.github/workflows/images/logo-2.png' />
   
