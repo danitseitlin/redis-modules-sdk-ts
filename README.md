@@ -19,7 +19,7 @@
   </a>
 </p></p>
 
-### A Software development kit for easier connection and execution of Redis Modules commands
+#### A Software development kit for easier connection and execution of Redis Modules commands
 
 <p align='center'>
   <img src='https://github.com/danitseitlin/redis-modules-sdk/blob/readme-powerlifts/.github/workflows/images/logo.png' />
@@ -38,34 +38,35 @@ Installation can be done via NPM with `npm install redis-modules-sdk@latest` for
 Specific version can be found [here](https://www.npmjs.com/package/redis-modules-sdk?activeTab=versions) and big releases will be found [here](https://github.com/danitseitlin/redis-modules-sdk/releases)
 
 # Documentation :book:
+## Links :bulb:
   1. [ReJSON](#-rejson-module)<br>
-    1. [Quick start]()<br>
-    2. [Functions]()<br>
-  2. [RedisTimeSeries]()<br>
-    1. [Quick start]()<br>
-    2. [Functions]()<br>
-  3. [RediSearch]()<br>
-    1. [Quick start]()<br>
-    2. [Functions]()<br>
-  4. [RedisGraph]()<br>
-    1. [Quick start]()<br>
-    2. [Functions]()<br>
-  5. [RedisGears]()<br>
-    1. [Quick start]()<br>
-    2. [Functions]()<br>
-  6. [RedisBloom]()<br>
-    1. [Bloom filter]()<br>
-      1. [Quick start]()<br>
-      2. [Functions]()<br>
-    2. [TopK filter]()<br>
-      1. [Quick start]()<br>
-      2. [Functions]()<br>
-    3. [Cuckoo filter]()<br>
-      1. [Quick start]()<br>
-      2. [Functions]()<br>
-    4. [Count-Min-Sketch filter]()<br>
-      1. [Quick start]()<br>
-      2. [Functions]()<br>
+    1. [Quick start](#quick-start)<br>
+    2. [Functions](#functions-list)<br>
+  2. [RedisTimeSeries](#-redistimeseries-module)<br>
+    1. [Quick start](#quick-start-1)<br>
+    2. [Functions](#functions-list-1)<br>
+  3. [RediSearch](#-redisearch-module)<br>
+    1. [Quick start](#quick-start-2)<br>
+    2. [Functions](#functions-list-2)<br>
+  4. [RedisGraph](#-redisgraph-module)<br>
+    1. [Quick start](#quick-start-3)<br>
+    2. [Functions](#functions-list-3)<br>
+  5. [RedisGears](#-redisgears-module)<br>
+    1. [Quick start](#quick-start-4)<br>
+    2. [Functions](#functions-list-4)<br>
+  6. [RedisBloom](#-redisbloom-module)<br>
+    1. [Bloom filter](#bloom-filter)<br>
+      1. [Quick start](#quick-start-5)<br>
+      2. [Functions](#functions-list-5)<br>
+    2. [TopK filter](#topk-filter)<br>
+      1. [Quick start](#quick-start-6)<br>
+      2. [Functions](#functions-list-6)<br>
+    3. [Cuckoo filter](#cuckoo-filter)<br>
+      1. [Quick start](#quick-start-7)<br>
+      2. [Functions](#functions-list-7)<br>
+    4. [Count-Min-Sketch filter](#count-min-sketch-filter)<br>
+      1. [Quick start](#quick-start-8)<br>
+      2. [Functions](#functions-list-8)<br>
 ## <img src='https://oss.redislabs.com/redisjson/images/logo.svg' style='max-width:100%;' height='30'/> ReJSON module
 ### Quick start
 ```
@@ -256,7 +257,8 @@ await client.disconnect();
 | refreshCluster     | RG.REFRESHCLUSTER     |
 | trigger            | RG.TRIGGER            |
 | unregister         | RG.UNREGISTER         |
-## <img src='https://oss.redislabs.com/redisbloom/images/logo.svg' style='max-width:100%;' height='30'/> RedisBloom
+
+## <img src='https://oss.redislabs.com/redisbloom/images/logo.svg' style='max-width:100%;' height='30'/> RedisBloom module
 ### Bloom filter
 #### Quick start
 ```
