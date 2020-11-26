@@ -3,7 +3,7 @@
 Hi! I'm happy that you are interested in contributing to Redis Modules SDK. Before submitting your contribution, please make sure to take a moment and read through the following guidelines:
 
 - [Pull Request Guidelines](#pull-request-guidelines)
-- [Development Setup](#development-setup)
+- [Development](#development)
 - [Continuous integration](#continuous-integration)
 - [Deploy Bot](#deploy-bot)
 
