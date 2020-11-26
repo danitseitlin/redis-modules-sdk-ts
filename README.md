@@ -33,7 +33,6 @@ An open source SDK of all the available Redis modules, built with TypeScript for
 3. Easy to find your Redis command, each Redis module command has a referenced function in it's class!
 
 # Let's get started :memo:
-## Installation
 ### Installing latest version:<br>
 ```
 npm install redis-modules-sdk@latest
