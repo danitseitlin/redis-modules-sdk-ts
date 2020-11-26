@@ -2,15 +2,15 @@ import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { Redisearch } from '../modules/redisearch';
 let client: Redisearch;
-let index = 'idx'
-let query = '@text:name'
-let alias = 'alias'
-let sug = {
+const index = 'idx'
+const query = '@text:name'
+const alias = 'alias'
+const sug = {
     key: 'k',
     string: 'str',
     score: 11
 }
-let dict = {
+const dict = {
     name: 'dictX',
     term: 'termY'
 }

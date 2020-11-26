@@ -1,5 +1,4 @@
 import * as Redis from 'ioredis';
-import { stringify } from 'querystring';
 
 export class RedisBloomTopK {
 
