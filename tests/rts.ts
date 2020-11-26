@@ -87,18 +87,16 @@ describe('RTS Module testing', async function() {
         expect(response.length).to.equal(0, 'The range items length of the response')
     });
     it('mrange function', async () => {
-        const data = await client.get(key1);
-        console.log(data)
         const info = await client.info(key1);
-        console.log(info)
         const response = await client.mrange((info.firstTimestamp-1).toString(), (info.lastTimestamp+10000).toString(), 'label=value')
         console.log(response)
+        expect(response[0][0]).to.equal('key:2:32', 'The filtered key name');
     });
     it('mrevrange function', async () => {
         const info = await client.info(key1);
-        console.log(info)
-        const response = await client.mrevrange((date-10).toString(), (date+10000).toString(), 'label=value')
+        const response = await client.mrevrange((info.firstTimestamp-1).toString(), (info.lastTimestamp+10000).toString(), 'label=value')
         console.log(response)
+        expect(response[0][0]).to.equal('key:2:32', 'The filtered key name');
     });
     it('get function', async () => {
         const response = await client.get(key1);
