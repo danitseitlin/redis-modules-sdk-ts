@@ -91,13 +91,13 @@ describe('RTS Module testing', async function() {
         console.log(data)
         const info = await client.info(key1);
         console.log(info)
-        const response = await client.mrange(key1, (info.firstTimestamp-1).toString(), (info.lastTimestamp+10000).toString(), 'label!=x')
+        const response = await client.mrange((info.firstTimestamp-1).toString(), (info.lastTimestamp+10000).toString(), 'label!=x')
         console.log(response)
     });
     it.skip('mrevrange function', async () => {
         const info = await client.info(key1);
         console.log(info)
-        const response = await client.mrevrange(key1, (date-10).toString(), (date+10000).toString(), 'label!=x')
+        const response = await client.mrevrange((date-10).toString(), (date+10000).toString(), 'label!=x')
         console.log(response)
     });
     it('get function', async () => {
