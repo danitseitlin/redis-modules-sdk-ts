@@ -44,32 +44,32 @@ npm install redis-modules-sdk@latest
 # Documentation :book:
 ## Links :bulb:
   1. [ReJSON](#-rejson-module)<br>
-    1. [Quick start](#quick-start)<br>
+    1. [Quick start](#quick-start-toolbox)<br>
     2. [Functions](#functions-list)<br>
   2. [RedisTimeSeries](#-redistimeseries-module)<br>
-    1. [Quick start](#quick-start-1)<br>
-    2. [Functions](#functions-list-1)<br>
+    1. [Quick start](#quick-start-1-toolbox)<br>
+    2. [Functions](#functions-list-1-floppy_disk)<br>
   3. [RediSearch](#-redisearch-module)<br>
-    1. [Quick start](#quick-start-2)<br>
-    2. [Functions](#functions-list-2)<br>
+    1. [Quick start](#quick-start-2-toolbox)<br>
+    2. [Functions](#functions-list-2-floppy_disk)<br>
   4. [RedisGraph](#-redisgraph-module)<br>
-    1. [Quick start](#quick-start-3)<br>
-    2. [Functions](#functions-list-3)<br>
+    1. [Quick start](#quick-start-3-toolbox)<br>
+    2. [Functions](#functions-list-3-floppy_disk)<br>
   5. [RedisGears](#-redisgears-module)<br>
-    1. [Quick start](#quick-start-4)<br>
-    2. [Functions](#functions-list-4)<br>
+    1. [Quick start](#quick-start-4-toolbox)<br>
+    2. [Functions](#functions-list-4-floppy_disk)<br>
   6. [RedisBloom Bloom filter](#bloom-filter)<br>
-    1. [Quick start](#quick-start-5)<br>
-    2. [Functions](#functions-list-5)<br>
+    1. [Quick start](#quick-start-5-toolbox)<br>
+    2. [Functions](#functions-list-5-floppy_disk)<br>
   7. [RedisBloom TopK filter](#topk-filter)<br>
-    1. [Quick start](#quick-start-6)<br>
-    2. [Functions](#functions-list-6)<br>
+    1. [Quick start](#quick-start-6-toolbox)<br>
+    2. [Functions](#functions-list-6-floppy_disk)<br>
   8. [RedisBloom Cuckoo filter](#cuckoo-filter)<br>
-    1. [Quick start](#quick-start-7)<br>
-    2. [Functions](#functions-list-7)<br>
+    1. [Quick start](#quick-start-7-toolbox)<br>
+    2. [Functions](#functions-list-7-floppy_disk)<br>
   9. [RedisBloom Count-Min-Sketch filter](#count-min-sketch-filter)<br>
-    1. [Quick start](#quick-start-8)<br>
-    2. [Functions](#functions-list-8)<br>
+    1. [Quick start](#quick-start-8-toolbox)<br>
+    2. [Functions](#functions-list-8-floppy_disk)<br>
 ## <img src='https://oss.redislabs.com/redisjson/images/logo.svg' style='max-width:100%;' height='30'/> ReJSON module
 ### Quick start :toolbox:
 ```
