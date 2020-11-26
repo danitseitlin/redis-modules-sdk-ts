@@ -62,6 +62,8 @@ $ npm run test <path>
 - The CI has a workflow_dispatch where you can select all tests or specific ones, 'Setup' build is run by default.
 - It is recommended you will open a PR only when most of the development is done, in order to prevent from running a lot of GitHub Action triggers.
 
+![CI]()
+
 ## Deploy Bot
 
 - The Bot auto triggers on push to default (master) branch
