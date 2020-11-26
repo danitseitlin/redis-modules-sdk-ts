@@ -14,8 +14,9 @@ Hi! I'm happy that you are interested in contributing to Redis Modules SDK. Befo
 - For every newly added function, add tests coverage
 - Make sure the merged commit and PR title are identical
 
-## Development Setup
+## Development
 
+### Setup
 - Install [Node.js](http://nodejs.org) **version 8+**
 - Clone the repo
 - Inside the repo and run 
@@ -24,14 +25,12 @@ npm i #Install dependencies of the project
 ```
 
 ### Committing Changes
-
 Each merged commit needs to be in the following format: `[Subject][Action] Description`
 - Subject: Something that links the commit to a specific part of the project, i.e. RedisGears, README, ESLint.etc.
 - Action: What was done, i.e. Bug Fix, Feature.etc.
 - Description: A short description as a title of what was actually done via code
 
 ### Commonly used NPM scripts
-
 ``` bash
 # Building the project using tsc
 $ npm run build
@@ -55,7 +54,6 @@ $ npm run test <path>
 - **.github/workflows** folders - All GitHub workflows
 
 ## Continuous integration
-
 - The CI auto triggers on pull request changes
 - The CI triggers a 'Setup' job that verified linting and build and gathers edited files
 - The CI selectively chooses which tests to run according to the changes done
@@ -65,7 +63,6 @@ $ npm run test <path>
 ![CI](https://github.com/danitseitlin/redis-modules-sdk/blob/dtseitlin--adding-contributing-doc/.github/images/ci.png)
 
 ## Deploy Bot
-
 - The Bot auto triggers on push to default (master) branch
 - The Bot verified the package is buildable
 - The Bot is deploying a new version using 'npm-package-deployer'. The versions are updated in a patch level. i.e. 0.1.9 -> 0.2.0 -> 0.2.1
