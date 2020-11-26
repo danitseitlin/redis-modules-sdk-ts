@@ -56,20 +56,17 @@ Specific version can be found [here](https://www.npmjs.com/package/redis-modules
     2. [Functions](#functions-list-4)<br>
   6. [RedisBloom](#-redisbloom-module)<br>
     1. [Bloom filter](#bloom-filter)<br>
-      1. [Quick start](#quick-start-5)<br>
-      2. [Functions](#functions-list-5)<br>
-
+      i. [Quick start](#quick-start-5)<br>
+      ii. [Functions](#functions-list-5)<br>
     2. [TopK filter](#topk-filter)<br>
-      1. [Quick start](#quick-start-6)<br>
-      2. [Functions](#functions-list-6)<br>
-
+      i. [Quick start](#quick-start-6)<br>
+      ii. [Functions](#functions-list-6)<br>
     3. [Cuckoo filter](#cuckoo-filter)<br>
-      1. [Quick start](#quick-start-7)<br>
-      2. [Functions](#functions-list-7)<br>
-      
+      i. [Quick start](#quick-start-7)<br>
+      ii. [Functions](#functions-list-7)<br>
     4. [Count-Min-Sketch filter](#count-min-sketch-filter)<br>
-      1. [Quick start](#quick-start-8)<br>
-      2. [Functions](#functions-list-8)<br>
+      i. [Quick start](#quick-start-8)<br>
+      ii. [Functions](#functions-list-8)<br>
 ## <img src='https://oss.redislabs.com/redisjson/images/logo.svg' style='max-width:100%;' height='30'/> ReJSON module
 ### Quick start
 ```
