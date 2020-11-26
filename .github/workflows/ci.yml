@@ -48,7 +48,9 @@ jobs:
         uses: jitterbit/get-changed-files@v1
       - run: "echo ${{ steps.files.outputs.all }}"
       - name: Setup & build
-        run: npm i && ./node_modules/.bin/eslint . && npm run build
+        run: npm i && npm run build
+      - name: Linting
+        run: ./node_modules/.bin/eslint .
   #Build for 'ReJSON' module
   ReJSON:
     needs: Setup
