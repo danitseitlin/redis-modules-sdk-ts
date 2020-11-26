@@ -183,4 +183,4 @@ jobs:
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
     - name: Running tests
-      run: npm i && npm run redisbloom-cuckoo-filter-tests
+      run: npm i && eslint . && npm run redisbloom-cuckoo-filter-tests

@@ -32,15 +32,19 @@
   "homepage": "https://github.com/danitseitlin/redis-modules-sdk#readme",
   "devDependencies": {
     "@types/chai": "^4.2.14",
+    "@types/eslint": "^7.2.5",
     "@types/ioredis": "^4.17.6",
     "@types/mocha": "^8.0.3",
     "@types/node": "^14.14.1",
+    "@typescript-eslint/eslint-plugin": "^4.8.2",
+    "@typescript-eslint/parser": "^4.8.2",
     "chai": "^4.2.0",
     "cli-argument-parser": "^0.3.4",
+    "eslint": "^7.14.0",
     "mocha": "^8.2.0",
     "npm-package-deployer": "^0.2.9",
     "ts-node": "^9.0.0",
-    "typescript": "^4.0.3"
+    "typescript": "^4.1.2"
   },
   "dependencies": {
     "ioredis": "^4.17.3"
