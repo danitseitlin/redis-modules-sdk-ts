@@ -48,7 +48,7 @@ jobs:
         uses: jitterbit/get-changed-files@v1
       - run: "echo ${{ steps.files.outputs.all }}"
       - name: Setup & build
-        run: npm i && npm run build
+        run: npm i && eslint . && npm run build
   #Build for 'ReJSON' module
   ReJSON:
     needs: Setup
@@ -183,4 +183,4 @@ jobs:
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
     - name: Running tests
-      run: npm i && eslint . && npm run redisbloom-cuckoo-filter-tests
+      run: npm i && npm run redisbloom-cuckoo-filter-tests
