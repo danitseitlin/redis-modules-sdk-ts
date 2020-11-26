@@ -7,3 +7,4 @@ tests
 package-lock.json
 index.ts
 tsconfig.json
+.eslintrc.json
