@@ -84,7 +84,7 @@ expect(response).to.equal('OK', 'The response of the set command');
 //Disconnect from the Redis database with ReJSON module
 await client.disconnect();
 ```
-### Functions list
+### Functions list :floppy_disk:
 | Functions | ReJSON Command  |
 |:--------- |:--------------- |
 | del       | JSON.DEL        |
@@ -126,7 +126,7 @@ expect(response).to.equal('OK', 'The response of the del command');
 //Disconnect from the Redis database with RedisTimeSeries module
 await client.disconnect();
 ```
-### Functions list
+### Functions list :floppy_disk:
 | Functions  | RedisTimeSeries Command  |
 |:---------- |:--------------------------- |
 | create     | TS.CREATE                   |
@@ -164,7 +164,7 @@ expect(response).to.equal('OK', 'The response of the aliasdel command');
 //Disconnect from the Redis database with Redisearch module
 await client.disconnect();
 ```
-### Functions list
+### Functions list :floppy_disk:
 | Functions   | Redisearch Command  |
 |:----------- |:------------------- |
 | create      | FT.CREATE           |
@@ -209,7 +209,7 @@ expect(response[2][0]).to.equal('Labels added: 1', 'The response of the GRAPH.QU
 //Disconnect from the Redis database with RedisGraph module
 await client.disconnect();
 ```
-### Functions list
+### Functions list :floppy_disk:
 | Functions     | RedisGraph Command  |
 |:------------- |:------------------- |
 | query         | GRAPH.QUERY         |
@@ -237,7 +237,7 @@ console.log(`Execution ID: ${executionId}`)
 //Disconnect from the Redis database with RedisGears module
 await client.disconnect();
 ```
-### Functions list
+### Functions list :floppy_disk:
 | Functions          | RedisGears Command    |
 |:------------------ |:--------------------- |
 | pyexecute          | RG.PYEXECUTE          |
@@ -275,7 +275,7 @@ const response = await client.add('key1', 'item1')
 //Disconnect from the Redis database with RedisBloom module
 await client.disconnect();
 ```
-#### Functions list
+#### Functions list :floppy_disk:
 | Functions  | RedisBloom Command |
 |:---------- |:------------------ |
 | reserve    | BF.RESERVE         |
@@ -305,7 +305,7 @@ const response = await client.reserve(key1, 1, 2, 3, 0.1);
 //Disconnect from the Redis database with RedisBloom TopK filter
 await client.disconnect();
 ```
-#### Functions list
+#### Functions list :floppy_disk:
 | Functions | RedisBloom TopK Command |
 |:--------- |:----------------------- |
 | reserve   | TOPK.RESERVE            |
@@ -332,7 +332,7 @@ const response = await client.add('key1', 'item');
 //Disconnect from the Redis database with RedisBloom Cuckoo filter
 await client.disconnect();
 ```
-#### Functions list
+#### Functions list :floppy_disk:
 | Functions | RedisBloom Cuckoo Command |
 |:--------- |:------------------------- |
 | add       | CF.ADD                    |
@@ -363,7 +363,7 @@ const response = await client.initbydim('dest', 1, 2);
 //Disconnect from the Redis database with RedisBloom Count-Min Sketch filter
 await client.disconnect();
 ```
-#### Functions list
+#### Functions list :floppy_disk:
 | Functions  | RedisBloom Count-Min Sketch Command |
 |:---------- |:----------------------------------- |
 | initbydim  | CMS.INITBYDIM                       |
