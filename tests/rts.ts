@@ -86,7 +86,7 @@ describe('RTS Module testing', async function() {
         const response = await client.revrange(key1, data[0].toString(), data[1].toString())
         expect(response.length).to.equal(0, 'The range items length of the response')
     });
-    it.skip('mrange function', async () => {
+    it('mrange function', async () => {
         const data = await client.get(key1);
         console.log(data)
         const info = await client.info(key1);
@@ -94,7 +94,7 @@ describe('RTS Module testing', async function() {
         const response = await client.mrange((info.firstTimestamp-1).toString(), (info.lastTimestamp+10000).toString(), 'label!=x')
         console.log(response)
     });
-    it.skip('mrevrange function', async () => {
+    it('mrevrange function', async () => {
         const info = await client.info(key1);
         console.log(info)
         const response = await client.mrevrange((date-10).toString(), (date+10000).toString(), 'label!=x')
