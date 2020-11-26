@@ -47,10 +47,12 @@ jobs:
         if: github.event_name != 'workflow_dispatch'
         uses: jitterbit/get-changed-files@v1
       - run: "echo ${{ steps.files.outputs.all }}"
-      - name: Setup & build
-        run: npm i && npm run build
+      - name: Setup
+        run: npm i 
       - name: Linting
         run: ./node_modules/.bin/eslint .
+      - name: Build
+        run: npm run build
   #Build for 'ReJSON' module
   ReJSON:
     needs: Setup
