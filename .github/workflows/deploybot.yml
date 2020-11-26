@@ -15,7 +15,7 @@ jobs:
         NPM_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
     - name: Setup
       run: npm install
-    - name: Running verifications
-      run: npm run pre-deploy
+    - name: Build
+      run: npm run build
     - name: Deploying version
       run: npm run deploy
