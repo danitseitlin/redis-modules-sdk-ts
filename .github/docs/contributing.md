@@ -26,8 +26,8 @@ npm i #Install dependencies of the project
 
 ### Committing Changes
 Each merged commit needs to be in the following format: `[Subject][Action] Description`
-- Subject: Something that links the commit to a specific part of the project, i.e. RedisGears, README, ESLint.etc.
-- Action: What was done, i.e. Bug Fix, Feature.etc.
+- Subject: Something that links the commit to a specific part of the project, i.e. RedisGears, README, ESLint .etc.
+- Action: What was done, i.e. Bug Fix, Feature .etc.
 - Description: A short description as a title of what was actually done via code
 
 ### Commonly used NPM scripts
@@ -47,7 +47,7 @@ $ npm run test <path>
 
 ### Project structure
 - **modules** folder - All Redis Modules SDK classes are located there
-- **test** folder - All Redis Modules SDK tests are located here
+- **tests** folder - All Redis Modules SDK tests are located here
 - **index.ts** - All exported classes/types/enums/interfaces are exported here
 - **.github/docs** folder - All documentations are located here
 - **.github/images** folder - All documentation related images
