@@ -44,5 +44,5 @@ npm install redis-modules-sdk@latest
 # Documentation :book:
 Come and read our documentation [here](https://github.com/danitseitlin/redis-modules-sdk/blob/master/.github/docs/doc.md#documentation-book) before starting
 
-# Contributing
+# Contributing :raised_hands:
 Interested in contributing? awesome! start with reading our guidelines [here](https://github.com/danitseitlin/redis-modules-sdk/blob/master/.github/docs/contributing.md)
