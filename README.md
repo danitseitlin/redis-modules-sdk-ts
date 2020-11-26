@@ -34,8 +34,13 @@ An open source SDK of all the available Redis modules, built with TypeScript for
 
 # Let's get started :memo:
 ## Installation
-Installation can be done via NPM with `npm install redis-modules-sdk@latest` for the latest version.<br>
-Specific version can be found [here](https://www.npmjs.com/package/redis-modules-sdk?activeTab=versions) and big releases will be found [here](https://github.com/danitseitlin/redis-modules-sdk/releases)
+### Installing latest version:<br>
+```
+npm install redis-modules-sdk@latest
+```
+### Versions & Releases
+* A list of existing versions can be found [here](https://www.npmjs.com/package/redis-modules-sdk?activeTab=versions)
+* A list of releases will be found [here](https://github.com/danitseitlin/redis-modules-sdk/releases)
 
 # Documentation :book:
 ## Links :bulb:
