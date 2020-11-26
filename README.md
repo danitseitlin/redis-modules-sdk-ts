@@ -109,7 +109,7 @@ await client.disconnect();
 | resp      | JSON.RESP       |
 
 ## <img src='https://oss.redislabs.com/redistimeseries/images/logo.svg' style='max-width:100%;' height='30'/> RedisTimeSeries module
-### Quick start
+### Quick start :toolbox:
 ```
 const client = new RedisTimeSeies({
     host: 'hostname',
@@ -147,7 +147,7 @@ await client.disconnect();
 | queryindex | TS.QUERYINDEX               |
 
 ## <img src='https://oss.redislabs.com/redisearch/img/logo.svg' style='max-width:100%;' height='30'/> Redisearch module
-### Quick start
+### Quick start :toolbox:
 ```
 const client = new RediSearch({
     host: 'hostname',
@@ -192,7 +192,7 @@ await client.disconnect();
 | config      | FT.CONFIG           |
 
 ## <img src='https://oss.redislabs.com/redisgraph/images/logo.svg' style='max-width:100%;' height='30'/> RedisGraph module
-### Quick start
+### Quick start :toolbox:
 ```
 const client = new RedisGraph({
     host: 'hostname',
@@ -220,7 +220,7 @@ await client.disconnect();
 | slowlog       | GRAPH.SLOWLOG       |
 
 ## <img src='https://oss.redislabs.com/redisgears/images/RedisGears.png' style='max-width:100%;' height='30'/> RedisGears module
-### Quick start
+### Quick start :toolbox:
 ```
 const client = new RedisGears({
     host: 'hostname',
@@ -259,7 +259,7 @@ await client.disconnect();
 
 ## <img src='https://oss.redislabs.com/redisbloom/images/logo.svg' style='max-width:100%;' height='30'/> RedisBloom module
 ### Bloom filter
-#### Quick start
+#### Quick start :toolbox:
 ```
 const client = new RedisBloom({
     host: 'hostname',
@@ -289,7 +289,7 @@ await client.disconnect();
 | info       | BF.INFO            |
 
 ### TopK filter
-#### Quick start
+#### Quick start :toolbox:
 ```
 const client = new RedisBloomTopK({
     host: 'hostname',
@@ -316,7 +316,7 @@ await client.disconnect();
 | info      | TOPK.INFO               |
  
 ### Cuckoo filter
-#### Quick start
+#### Quick start :toolbox:
 ```
 const client = new RedisBloomCuckoo({
     host: 'hostname',
@@ -347,7 +347,7 @@ await client.disconnect();
 | info      | CF.INFO                   |
 
 ### Count-Min Sketch filter
-#### Quick start
+#### Quick start :toolbox:
 ```
 const client = new RedisBloomCMK({
     host: 'hostname',
