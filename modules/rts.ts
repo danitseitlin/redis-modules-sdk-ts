@@ -240,7 +240,6 @@ export class RedisTimeSeries {
 
     /**
      * Querying a range across multiple time-series by filters in forward directions
-     * @param key The key
      * @param fromTimestamp The starting timestamp
      * @param toTimestamp The ending timestamp
      * @param filter The filter
@@ -251,8 +250,8 @@ export class RedisTimeSeries {
      * @param options.aggregation.timeBucket The time bucket of the 'AGGREGATION' command
      * @param options.withLabels The 'WITHLABELS' optional parameter
      */
-    async mrange(key: string, fromTimestamp: string, toTimestamp: string, filter: string, options?: TSMRangeOptions): Promise<(string | number)[][]> {
-        let args = [key, fromTimestamp, toTimestamp];
+    async mrange(fromTimestamp: string, toTimestamp: string, filter: string, options?: TSMRangeOptions): Promise<(string | number)[][]> {
+        let args = [fromTimestamp, toTimestamp];
         if(options !== undefined && options.count !== undefined)
             args = args.concat(['COUNT', options.count.toString()]);
         if(options !== undefined && options.aggregation !== undefined)
@@ -265,7 +264,6 @@ export class RedisTimeSeries {
     
     /**
      * Querying a range across multiple time-series by filters in reverse directions
-     * @param key The key
      * @param fromTimestamp The starting timestamp
      * @param toTimestamp The ending timestamp
      * @param filter The filter
@@ -276,8 +274,8 @@ export class RedisTimeSeries {
      * @param options.aggregation.timeBucket The time bucket of the 'AGGREGATION' command
      * @param options.withLabels The 'WITHLABELS' optional parameter
      */
-    async mrevrange(key: string, fromTimestamp: string, toTimestamp: string, filter: string, options?: TSMRangeOptions): Promise<(string | number)[][]> {
-        let args = [key, fromTimestamp, toTimestamp];
+    async mrevrange(fromTimestamp: string, toTimestamp: string, filter: string, options?: TSMRangeOptions): Promise<(string | number)[][]> {
+        let args = [fromTimestamp, toTimestamp];
         if(options !== undefined && options.count !== undefined)
             args = args.concat(['COUNT', options.count.toString()]);
         if(options !== undefined && options.aggregation !== undefined)

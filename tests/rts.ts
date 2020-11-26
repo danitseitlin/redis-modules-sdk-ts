@@ -86,19 +86,15 @@ describe('RTS Module testing', async function() {
         const response = await client.revrange(key1, data[0].toString(), data[1].toString())
         expect(response.length).to.equal(0, 'The range items length of the response')
     });
-    it.skip('mrange function', async () => {
-        const data = await client.get(key1);
-        console.log(data)
+    it('mrange function', async () => {
         const info = await client.info(key1);
-        console.log(info)
-        const response = await client.mrange(key1, (info.firstTimestamp-1).toString(), (info.lastTimestamp+10000).toString(), 'label!=x')
-        console.log(response)
+        const response = await client.mrange((info.firstTimestamp-1).toString(), (info.lastTimestamp+10000).toString(), 'label=value')
+        expect(response[0][0]).to.equal('key:2:32', 'The filtered key name');
     });
-    it.skip('mrevrange function', async () => {
+    it('mrevrange function', async () => {
         const info = await client.info(key1);
-        console.log(info)
-        const response = await client.mrevrange(key1, (date-10).toString(), (date+10000).toString(), 'label!=x')
-        console.log(response)
+        const response = await client.mrevrange((info.firstTimestamp-1).toString(), (info.lastTimestamp+10000).toString(), 'label=value')
+        expect(response[0][0]).to.equal('key:2:32', 'The filtered key name');
     });
     it('get function', async () => {
         const response = await client.get(key1);
@@ -106,7 +102,6 @@ describe('RTS Module testing', async function() {
     });
     it('mget function', async () => {
         const response = await client.mget('label=value');
-        console.log(response)
         expect(response.length).to.equal(1, 'The response of the mget command');
     });
     it('info function', async () => {
