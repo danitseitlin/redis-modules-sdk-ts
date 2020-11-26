@@ -25,9 +25,9 @@
   <img src='https://github.com/danitseitlin/redis-modules-sdk/blob/readme-powerlifts/.github/workflows/images/logo.png' />
 </p>
 
-# A few words :star:
+# A few words :speech_balloon:
 An open source SDK of all the available Redis modules, built with TypeScript for better typing experiences and better usages.
-## Benefits :zap:
+## Benefits :zap: :speak_no_evil:
 1. All in 1, all Redis modules are covered in 1 project
 2. Amazing :fire: typing experiences, all types are well documented and easy to use!
 3. Easy to find your Redis command, each Redis module command has a referenced function in it's class!
@@ -67,7 +67,7 @@ Specific version can be found [here](https://www.npmjs.com/package/redis-modules
     1. [Quick start](#quick-start-8)<br>
     2. [Functions](#functions-list-8)<br>
 ## <img src='https://oss.redislabs.com/redisjson/images/logo.svg' style='max-width:100%;' height='30'/> ReJSON module
-### Quick start
+### Quick start :toolbox:
 ```
 const client = new ReJSON({
     host: 'hostname',
