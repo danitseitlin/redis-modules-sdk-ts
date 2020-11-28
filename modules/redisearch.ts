@@ -1,28 +1,15 @@
 
 import * as Redis from 'ioredis';
+import { Module } from './module.base';
 
-export class Redisearch {
-
-    public redis: Redis.Redis;
+export class Redisearch extends Module {
 
     /**
      * Initializing the RediSearch object
      * @param options The options of the Redis database.
      */
-    constructor(public options: Redis.RedisOptions) {}
-
-    /**
-     * Connecting to the Redis database with RediSearch module
-     */
-    async connect(): Promise<void> {
-        this.redis = new Redis(this.options);
-    }
-
-    /**
-     * Disconnecting from the Redis database with RediSearch module
-     */
-    async disconnect(): Promise<void> {
-        await this.redis.quit();
+    constructor(options: Redis.RedisOptions) {
+        super(options)
     }
 
     /**

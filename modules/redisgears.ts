@@ -1,27 +1,14 @@
 import * as Redis from 'ioredis';
+import { Module } from './module.base';
 
-export class RedisGears {
-
-    public redis: Redis.Redis;
+export class RedisGears extends Module {
 
     /**
      * Initializing the RedisGears object
      * @param options The options of the Redis database.
      */
-    constructor(public options: Redis.RedisOptions) {}
-
-    /**
-     * Connecting to the Redis database with RedisGears module
-     */
-    async connect(): Promise<void> {
-        this.redis = new Redis(this.options);
-    }
-
-    /**
-     * Disconnecting from the Redis database with RedisGears module
-     */
-    async disconnect(): Promise<void> {
-        await this.redis.quit();
+    constructor(options: Redis.RedisOptions) {
+        super(options)
     }
 
     /**
