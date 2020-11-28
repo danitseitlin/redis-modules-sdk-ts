@@ -1,27 +1,14 @@
 import * as Redis from 'ioredis';
+import { Module } from './module.base';
 
-export class RedisBloomCuckoo {
-
-    public redis: Redis.Redis;
+export class RedisBloomCuckoo extends Module {
     
     /**
      * Initializing the RedisCuckoo Cuckoo object
      * @param options The options of the Redis database.
      */
-    constructor(public options: Redis.RedisOptions) {}
-
-    /**
-     * Connecting to the Redis database with RedisBloom Cuckoo module
-     */
-    async connect(): Promise<void> {
-        this.redis = new Redis(this.options);
-    }
-
-    /**
-     * Disconnecting from the Redis database with RedisCuckoo Cuckoo module
-     */
-    async disconnect(): Promise<void> {
-        await this.redis.quit();
+    constructor(options: Redis.RedisOptions) {
+        super(options)
     }
 
     /**
