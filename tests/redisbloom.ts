@@ -4,8 +4,9 @@ import { RedisBloom } from '../modules/redisbloom';
 let client: RedisBloom;
 const key1 = 'key1bloom';
 const key2 = 'key2bloom';
+const key3 = '1';
 const item1 = 'item1';
-const responses = []
+const responses: string[][] = []
 let dataIterator: number;
 let data: string;
 
@@ -21,7 +22,9 @@ describe('RedisBloom Module testing', async function() {
         await client.disconnect();
     })
     it('reserve function', async () => {
-        const response = await client.reserve(key2, 0.1, 1);
+        let response = await client.reserve(key2, 0.1, 1);
+        expect(response).to.equal('OK', 'The response of the \'BF.RESERVE\' command');
+        response = await client.reserve(key3, 1, 1);
         expect(response).to.equal('OK', 'The response of the \'BF.RESERVE\' command');
     })
     it('add function', async () => {
@@ -50,16 +53,14 @@ describe('RedisBloom Module testing', async function() {
         expect(response[1]).to.equal(100, 'The value of the \'Capacity\' item')
     });
     it('scandump function', async () => {
-        //responses = [];
-        let response = await client.scandump(key2, 0)
+        let response = await client.scandump(key3, 0)
         console.log(response)
         
         dataIterator = parseInt(response[0])
         expect(dataIterator).to.equal(1, 'The chunk data iterator');
         while(parseInt(response[0]) > 0){
-            console.log(Buffer.from(response[1], 'utf16le').toString('utf-8'))
             responses.push(response);
-            response = await client.scandump(key2, dataIterator)
+            response = await client.scandump(key3, dataIterator)
             dataIterator = parseInt(response[0])
             console.log(response)
         }
@@ -73,8 +74,8 @@ describe('RedisBloom Module testing', async function() {
         expect(data).to.not.equal('', 'The chunk data')
     });
     it('loadchunk function', async () => {
-        await client.redis.del(key2);
-        //for(const res of responses) {
+        await client.redis.del(key3);
+        for(const res of responses) {
             //console.log(`\n=== ${res[0]} ===`)
             //console.log(Buffer.from(res[1], 'ascii').toString('hex'))
             //console.log(Buffer.from(res[1], 'ascii').toString('ascii'))
@@ -83,8 +84,8 @@ describe('RedisBloom Module testing', async function() {
             //console.log(Buffer.from(res[1], 'ascii').toString('utf-8'))
             //console.log(Buffer.from(res[1], 'ascii').toString('utf8'))
             //console.log(Buffer.from(res[1], 'ascii').toString('utf16le'))
-            console.log(await client.loadchunk(key2, responses[1][0], responses[1][1]))
-        //}
+            console.log(await client.loadchunk(key3, parseInt(res[0]), res[1]))
+        }
         //const response = await client.loadchunk(key2, dataIterator, data)
         //console.log(response)
     });
