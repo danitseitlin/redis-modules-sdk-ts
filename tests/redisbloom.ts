@@ -24,13 +24,13 @@ describe('RedisBloom Module testing', async function() {
     it('reserve function', async () => {
         let response = await client.reserve(key2, 0.1, 1);
         expect(response).to.equal('OK', 'The response of the \'BF.RESERVE\' command');
-        response = await client.reserve(key3, 0.1, 1);
+        response = await client.reserve(key3, 0.01, 100);
         expect(response).to.equal('OK', 'The response of the \'BF.RESERVE\' command');
     })
     it('add function', async () => {
         let response = await client.add(key1, item1)
         expect(response).to.equal(1, 'The response of the \'BF.ADD\' command')
-        response = await client.add(key2, item1)
+        response = await client.add(key3, '1')
         expect(response).to.equal(1, 'The response of the \'BF.ADD\' command')
     });
     it('madd function', async () => {
