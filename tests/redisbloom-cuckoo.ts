@@ -48,7 +48,8 @@ describe('RedisBloom Cuckoo filter testing', async function() {
         await client.add(key2, 'item');
         await client.redis.del(key2);
         const response = await client.scandump(key1, 123)
-        console.log(Buffer.from(response).toString('binary'))
+        console.log(response)
+        console.log(Buffer.from(response[1]).toString('binary'))
         dataIterator = parseInt(response[0])
         expect(dataIterator).to.equal(1, 'The chunk data iterator');
         data = response[1];
