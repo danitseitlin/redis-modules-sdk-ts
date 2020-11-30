@@ -9,7 +9,7 @@ const item1 = 'item1';
 const responses: string[][] = []
 let dataIterator: number;
 let data: string;
-
+import { StringDecoder } from 'string_decoder'
 describe('RedisBloom Module testing', async function() {
     before(async () => {
         client = new RedisBloom({
@@ -64,10 +64,9 @@ describe('RedisBloom Module testing', async function() {
             responses.push(response);
             response = await client.scandump(key3, dataIterator)
             dataIterator = parseInt(response[0])
-            console.log(response[1].normalize('NFC'))
-            console.log(response[1].normalize('NFD'))
-            console.log(response[1].normalize('NFKC'))
-            console.log(response[1].normalize('NFKD'))
+            const decoder = new StringDecoder('utf8');
+            const cent = Buffer.from(response[1]);
+            console.log(decoder.write(cent));
         }
         //for(let i = 0; i < responses[0][1].length; i++) {
         //    console.log(responses[0][1][i]);
