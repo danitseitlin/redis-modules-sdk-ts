@@ -89,7 +89,7 @@ export class RedisBloom extends Module {
      * @param key The key of the 'BF.SCANDUMP' command
      * @param iterator The iterator of the 'BF.SCANDUMP' command
      */
-    async scandump(key: string, iterator: number): Promise<any[]> {
+    async scandump(key: string, iterator: number): Promise<string[]> {
         return await this.redis.send_command('BF.SCANDUMP', [key, iterator])
     }
 
