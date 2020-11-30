@@ -65,6 +65,9 @@ describe('RedisBloom Module testing', async function() {
             response = await client.scandump(key3, dataIterator)
             dataIterator = parseInt(response[0])
             console.log(response[1].normalize('NFC'))
+            console.log(response[1].normalize('NFD'))
+            console.log(response[1].normalize('NFKC'))
+            console.log(response[1].normalize('NFKD'))
         }
         //for(let i = 0; i < responses[0][1].length; i++) {
         //    console.log(responses[0][1][i]);
