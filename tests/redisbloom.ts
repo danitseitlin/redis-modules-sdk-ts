@@ -57,7 +57,7 @@ describe('RedisBloom Module testing', async function() {
         dataIterator = parseInt(response[0])
         expect(dataIterator).to.equal(1, 'The chunk data iterator');
         while(parseInt(response[0]) > 0){
-            console.log(Buffer.from(response[1], 'utf16le').toString('binary'))
+            console.log(response[1].normalize())
             responses.push(response);
             response = await client.scandump(key2, dataIterator)
             dataIterator = parseInt(response[0])
