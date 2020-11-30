@@ -64,7 +64,7 @@ describe('RedisBloom Module testing', async function() {
             responses.push(response);
             response = await client.scandump(key3, dataIterator)
             dataIterator = parseInt(response[0])
-            const decoder = new StringDecoder('ascii');
+            const decoder = new StringDecoder('utf16le');
             const cent = Buffer.from(response[1]);
             console.log(decoder.write(cent));
         }
