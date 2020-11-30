@@ -4,7 +4,7 @@ import { RedisBloom } from '../modules/redisbloom';
 let client: RedisBloom;
 const key1 = 'key1bloom';
 const key2 = 'key2bloom';
-const key3 = '1';
+const key3 = 'k1';
 const item1 = 'item1';
 const responses: string[][] = []
 let dataIterator: number;
@@ -66,9 +66,9 @@ describe('RedisBloom Module testing', async function() {
             dataIterator = parseInt(response[0])
             console.log(response)
         }
-        for(let i = 0; i < responses[0][1].length; i++) {
-            console.log(responses[0][1][i]);
-        }
+        //for(let i = 0; i < responses[0][1].length; i++) {
+        //    console.log(responses[0][1][i]);
+        //}
         //const buffer = Buffer.from(response[1], 'hex');
         //console.log(buffer.toString())
         //data = buffer.toString('hex')//Buffer.from(response[1], 'utf16');//Buffer.from(response[1]).toString();
