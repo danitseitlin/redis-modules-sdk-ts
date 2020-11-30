@@ -63,6 +63,9 @@ describe('RedisBloom Module testing', async function() {
             dataIterator = parseInt(response[0])
             console.log(response)
         }
+        for(let i = 0; i < responses[0][1].length; i++) {
+            console.log(responses[0][1][0]);
+        }
         //const buffer = Buffer.from(response[1], 'hex');
         //console.log(buffer.toString())
         //data = buffer.toString('hex')//Buffer.from(response[1], 'utf16');//Buffer.from(response[1]).toString();
