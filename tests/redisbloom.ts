@@ -64,7 +64,7 @@ describe('RedisBloom Module testing', async function() {
             console.log(response)
         }
         for(let i = 0; i < responses[0][1].length; i++) {
-            console.log(responses[0][1][0]);
+            console.log(responses[0][1][i]);
         }
         //const buffer = Buffer.from(response[1], 'hex');
         //console.log(buffer.toString())
