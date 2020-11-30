@@ -69,19 +69,19 @@ describe('RedisBloom Module testing', async function() {
         console.log(data)
         expect(data).to.not.equal('', 'The chunk data')
     });
-    it.skip('loadchunk function', async () => {
+    it('loadchunk function', async () => {
         await client.redis.del(key2);
-        for(const res of responses) {
-            console.log(`\n=== ${res[0]} ===`)
-            console.log(Buffer.from(res[1], 'ascii').toString('hex'))
-            console.log(Buffer.from(res[1], 'ascii').toString('ascii'))
-            console.log(Buffer.from(res[1], 'ascii').toString('base64'))
-            console.log(Buffer.from(res[1], 'ascii').toString('binary'))
-            console.log(Buffer.from(res[1], 'ascii').toString('utf-8'))
-            console.log(Buffer.from(res[1], 'ascii').toString('utf8'))
-            console.log(Buffer.from(res[1], 'ascii').toString('utf16le'))
-            console.log(await client.loadchunk(key2, res[0], Buffer.from(res[1], 'ascii').toString('utf8')))
-        }
+        //for(const res of responses) {
+            //console.log(`\n=== ${res[0]} ===`)
+            //console.log(Buffer.from(res[1], 'ascii').toString('hex'))
+            //console.log(Buffer.from(res[1], 'ascii').toString('ascii'))
+            //console.log(Buffer.from(res[1], 'ascii').toString('base64'))
+            //console.log(Buffer.from(res[1], 'ascii').toString('binary'))
+            //console.log(Buffer.from(res[1], 'ascii').toString('utf-8'))
+            //console.log(Buffer.from(res[1], 'ascii').toString('utf8'))
+            //console.log(Buffer.from(res[1], 'ascii').toString('utf16le'))
+            console.log(await client.loadchunk(key2, responses[1][0], responses[1][1]))
+        //}
         //const response = await client.loadchunk(key2, dataIterator, data)
         //console.log(response)
     });
