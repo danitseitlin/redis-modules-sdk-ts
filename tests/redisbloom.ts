@@ -30,7 +30,7 @@ describe('RedisBloom Module testing', async function() {
     it('add function', async () => {
         let response = await client.add(key1, item1)
         expect(response).to.equal(1, 'The response of the \'BF.ADD\' command')
-        response = await client.add(key1, item1)
+        response = await client.add(key2, item1)
         expect(response).to.equal(1, 'The response of the \'BF.ADD\' command')
     });
     it('madd function', async () => {
