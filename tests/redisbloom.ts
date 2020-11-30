@@ -49,7 +49,7 @@ describe('RedisBloom Module testing', async function() {
         expect(response[0]).to.equal('Capacity', 'The first item of the information')
         expect(response[1]).to.equal(100, 'The value of the \'Capacity\' item')
     });
-    it.skip('scandump function', async () => {
+    it('scandump function', async () => {
         //responses = [];
         let response = await client.scandump(key2, 0)
         console.log(response)
