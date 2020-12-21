@@ -31,7 +31,7 @@ export class Module {
      * @param error The message of the error
      */
     handleError(error: string): any {
-        if(this.throwError) 
+        if(this.throwError)
             throw new Error(error);
         return error;
     }
