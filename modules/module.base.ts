@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as Redis from 'ioredis';
 
 export class Module {
@@ -27,12 +28,11 @@ export class Module {
     /**
      * Handling a error
      * @param module The name of the module
-     * @param error 
+     * @param error The message of the error
      */
     handleError(error: string): any {
-        if(this.throwError) {
+        if(this.throwError) 
             throw new Error(error);
-        }
         return error;
     }
 }
