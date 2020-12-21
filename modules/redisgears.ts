@@ -6,9 +6,10 @@ export class RedisGears extends Module {
     /**
      * Initializing the RedisGears object
      * @param options The options of the Redis database.
+     * @param throwError If to throw an exception on error.
      */
-    constructor(options: Redis.RedisOptions) {
-        super(options)
+    constructor(options: Redis.RedisOptions, throwError = true) {
+        super(options, throwError)
     }
 
     /**
@@ -16,7 +17,12 @@ export class RedisGears extends Module {
      * @param id The id of the execution
      */
     async abortExecution(id: string): Promise<'OK'> {
-        return await this.redis.send_command('RG.ABORTEXECUTION', [id]);
+        try {
+            return await this.redis.send_command('RG.ABORTEXECUTION', [id]);
+        }
+        catch(error) {
+            return this.handleError(`${RedisGears.name}: ${error}`);
+        }
     }
 
     /**
@@ -24,7 +30,12 @@ export class RedisGears extends Module {
      * @param key A list of keys
      */
     async configGet(key: string[]): Promise<number> {
-        return await this.redis.send_command('RG.CONFIGGET', key);
+        try {
+            return await this.redis.send_command('RG.CONFIGGET', key);
+        }
+        catch(error) {
+            return this.handleError(`${RedisGears.name}: ${error}`);
+        }
     }
 
     /**
@@ -32,10 +43,15 @@ export class RedisGears extends Module {
      * @param keyvalue A key value array, i.e. [['key', 'value]]
      */
     async configSet(keyvalues: string[][]): Promise<'OK'[]> {
-        const args = [];
-        for(const keyvalue of keyvalues)
-            args.concat(keyvalue)
-        return await this.redis.send_command('RG.CONFIGSET', args);
+        try {
+            const args = [];
+            for(const keyvalue of keyvalues)
+                args.concat(keyvalue)
+            return await this.redis.send_command('RG.CONFIGSET', args);
+        }
+        catch(error) {
+            return this.handleError(`${RedisGears.name}: ${error}`);
+        }
     }
 
     /**
@@ -43,21 +59,36 @@ export class RedisGears extends Module {
      * @param id The id of the execution
      */
     async dropExecution(id: string): Promise<'OK'> {
-        return await this.redis.send_command('RG.DROPEXECUTION', [id]);
+        try {
+            return await this.redis.send_command('RG.DROPEXECUTION', [id]);
+        }
+        catch(error) {
+            return this.handleError(`${RedisGears.name}: ${error}`);
+        }
     }
 
     /**
      * Dumping all of the executions
      */
     async dumpExecutions(): Promise<string[][]> {
-        return await this.redis.send_command('RG.DUMPEXECUTIONS');
+        try {
+            return await this.redis.send_command('RG.DUMPEXECUTIONS');
+        }
+        catch(error) {
+            return this.handleError(`${RedisGears.name}: ${error}`);
+        }
     }
 
     /**
      * Dumping all of the registrations
      */
     async dumpRegistrations(): Promise<string[][]> {
-        return await this.redis.send_command('RG.DUMPREGISTRATIONS');
+        try {
+            return await this.redis.send_command('RG.DUMPREGISTRATIONS');
+        }
+        catch(error) {
+            return this.handleError(`${RedisGears.name}: ${error}`);
+        }
     }
 
     /**
@@ -66,10 +97,15 @@ export class RedisGears extends Module {
      * @param options The additional optional parameters
      */
     async getExecution(id: string, options?: RGGetExecutionParameters): Promise<string[][]> {
-        const args = [id.toString()];
-        if(options !== undefined && options.shard === true) args.push('SHARD');
-        if(options !== undefined && options.cluster === true) args.push('CLUSTER');
-        return await this.redis.send_command('RG.GETEXECUTION', args);
+        try {
+            const args = [id.toString()];
+            if(options !== undefined && options.shard === true) args.push('SHARD');
+            if(options !== undefined && options.cluster === true) args.push('CLUSTER');
+            return await this.redis.send_command('RG.GETEXECUTION', args);
+        }
+        catch(error) {
+            return this.handleError(`${RedisGears.name}: ${error}`);
+        }
     }
 
     /**
@@ -77,7 +113,12 @@ export class RedisGears extends Module {
      * @param id The id of the execution
      */
     async getResults(id: string): Promise<string> {
-        return await this.redis.send_command('RG.GETRESULTS', [id])
+        try {
+            return await this.redis.send_command('RG.GETRESULTS', [id])
+        }
+        catch(error) {
+            return this.handleError(`${RedisGears.name}: ${error}`);
+        }
     }
 
     /**
@@ -85,14 +126,24 @@ export class RedisGears extends Module {
      * @param id The id of the execution
      */
     async getResultsBlocking(id: string): Promise<string> {
-        return await this.redis.send_command('RG.GETRESULTSBLOCKING', [id])
+        try {
+            return await this.redis.send_command('RG.GETRESULTSBLOCKING', [id])
+        }
+        catch(error) {
+            return this.handleError(`${RedisGears.name}: ${error}`);
+        }
     }
     
     /**
      * Retrieving information about the cluster
      */
     async infocluster(): Promise<string[]> {
-        return await this.redis.send_command('RG.INFOCLUSTER')
+        try {
+            return await this.redis.send_command('RG.INFOCLUSTER')
+        }
+        catch(error) {
+            return this.handleError(`${RedisGears.name}: ${error}`);
+        }
     }
 
     /**
@@ -101,31 +152,51 @@ export class RedisGears extends Module {
      * @param options The additional optional arguments
      */
     async pyexecute(func: string, options?: RGPyExecuteParameters): Promise<string> {
-        const args = [func];
-        if(options !== undefined && options.unblocking === true) args.push('UNBLOCKING');
-        if(options !== undefined && options.requirements !== undefined) args.concat(['REQUIREMENTS'].concat(options.requirements));
-        return await this.redis.send_command('RG.PYEXECUTE', args);
+        try {
+            const args = [func];
+            if(options !== undefined && options.unblocking === true) args.push('UNBLOCKING');
+            if(options !== undefined && options.requirements !== undefined) args.concat(['REQUIREMENTS'].concat(options.requirements));
+            return await this.redis.send_command('RG.PYEXECUTE', args);
+        }
+        catch(error) {
+            return this.handleError(`${RedisGears.name}: ${error}`);
+        }
     }
 
     /**
      * Retrieving memory usage statistics from the 'Python interpreter'
      */
     async pystats(): Promise<string[]> {
-        return await this.redis.send_command('RG.PYSTATS');
+        try {
+            return await this.redis.send_command('RG.PYSTATS');
+        }
+        catch(error) {
+            return this.handleError(`${RedisGears.name}: ${error}`);
+        }
     }
 
     /**
      * Retrieving a list of all the python requirements available
      */
     async pydumpreqs(): Promise<string[]> {
-        return await this.redis.send_command('RG.PYDUMPREQS');
+        try {
+            return await this.redis.send_command('RG.PYDUMPREQS');
+        }
+        catch(error) {
+            return this.handleError(`${RedisGears.name}: ${error}`);
+        }
     }
 
     /**
      * Refreshing the node's view of the cluster's topology
      */
     async refreshCluster(): Promise<'OK'> {
-        return await this.redis.send_command('RG.REFRESHCLUSTER');
+        try {
+            return await this.redis.send_command('RG.REFRESHCLUSTER');
+        }
+        catch(error) {
+            return this.handleError(`${RedisGears.name}: ${error}`);
+        }
     }
 
     /**
@@ -134,7 +205,12 @@ export class RedisGears extends Module {
      * @param args The additional arguments
      */
     async trigger(trigger: string, args: string[]): Promise<string[]> {
-        return await this.redis.send_command('RG.TRIGGER', [trigger].concat(args));
+        try {
+            return await this.redis.send_command('RG.TRIGGER', [trigger].concat(args));
+        }
+        catch(error) {
+            return this.handleError(`${RedisGears.name}: ${error}`);
+        }
     }
 
     /**
@@ -142,7 +218,12 @@ export class RedisGears extends Module {
      * @param id The id of the execution
      */
     async unregister(id: string): Promise<'OK'> {
-        return await this.redis.send_command('RG.UNREGISTER', [id]);
+        try {
+            return await this.redis.send_command('RG.UNREGISTER', [id]);
+        }
+        catch(error) {
+            return this.handleError(`${RedisGears.name}: ${error}`);
+        }
     }
 }
 

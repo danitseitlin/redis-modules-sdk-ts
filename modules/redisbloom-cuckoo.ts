@@ -6,9 +6,10 @@ export class RedisBloomCuckoo extends Module {
     /**
      * Initializing the RedisCuckoo Cuckoo object
      * @param options The options of the Redis database.
+     * @param throwError If to throw an exception on error.
      */
-    constructor(options: Redis.RedisOptions) {
-        super(options)
+    constructor(options: Redis.RedisOptions, throwError = true) {
+        super(options, throwError)
     }
 
     /**
@@ -17,7 +18,12 @@ export class RedisBloomCuckoo extends Module {
      * @param item The item to add
      */
     async add(key: string, item: string): Promise<CFResponse> {
-        return await this.redis.send_command('CF.ADD', [key, item])
+        try {
+            return await this.redis.send_command('CF.ADD', [key, item])
+        }
+        catch(error) {
+            return this.handleError(`${RedisBloomCuckoo.name}: ${error}`);
+        }
     }
 
     /**
@@ -26,7 +32,12 @@ export class RedisBloomCuckoo extends Module {
      * @param item The item to add
      */
     async addnx(key: string, item: string): Promise<CFResponse> {
-        return await this.redis.send_command('CF.ADDNX', [key, item])
+        try {
+            return await this.redis.send_command('CF.ADDNX', [key, item])
+        }
+        catch(error) {
+            return this.handleError(`${RedisBloomCuckoo.name}: ${error}`);
+        }
     }
 
     /**
@@ -36,12 +47,17 @@ export class RedisBloomCuckoo extends Module {
      * @param options The additional optional parameters of the 'CF.INSERT' command
      */
     async insert(key: string, items: string[], options?: CFInsertParameters): Promise<CFResponse[]> {
-        let args = [key];
-        if(options !== undefined && options.capacity !== undefined)
-            args = args.concat(['CAPACITY', options.capacity.toString()]);
-        if(options !== undefined && options.nocreate !== undefined)
-            args.push('NOCREATE');
-        return await this.redis.send_command('CF.INSERT', args.concat(['ITEMS']).concat(items));
+        try {
+            let args = [key];
+            if(options !== undefined && options.capacity !== undefined)
+                args = args.concat(['CAPACITY', options.capacity.toString()]);
+            if(options !== undefined && options.nocreate !== undefined)
+                args.push('NOCREATE');
+            return await this.redis.send_command('CF.INSERT', args.concat(['ITEMS']).concat(items));
+        }
+        catch(error) {
+            return this.handleError(`${RedisBloomCuckoo.name}: ${error}`);
+        }
     }
 
     /**
@@ -51,12 +67,17 @@ export class RedisBloomCuckoo extends Module {
      * @param options The additional optional parameters of the 'CF.INSERTNX' command
      */
     async insertnx(key: string, items: string[], options?: CFInsertParameters): Promise<CFResponse[]> {
-        let args = [key];
-        if(options !== undefined && options.capacity !== undefined)
-            args = args.concat(['CAPACITY', options.capacity.toString()]);
-        if(options !== undefined && options.nocreate !== undefined)
-            args.push('NOCREATE');
-        return await this.redis.send_command('CF.INSERTNX', args.concat(['ITEMS']).concat(items));
+        try {
+            let args = [key];
+            if(options !== undefined && options.capacity !== undefined)
+                args = args.concat(['CAPACITY', options.capacity.toString()]);
+            if(options !== undefined && options.nocreate !== undefined)
+                args.push('NOCREATE');
+            return await this.redis.send_command('CF.INSERTNX', args.concat(['ITEMS']).concat(items));
+        }
+        catch(error) {
+            return this.handleError(`${RedisBloomCuckoo.name}: ${error}`);
+        }
     }
 
     /**
@@ -65,7 +86,12 @@ export class RedisBloomCuckoo extends Module {
      * @param item The item to check for
      */
     async exists(key: string, item: string): Promise<CFResponse> {
-        return await this.redis.send_command('CF.EXISTS', [key, item]);
+        try {
+            return await this.redis.send_command('CF.EXISTS', [key, item]);
+        }
+        catch(error) {
+            return this.handleError(`${RedisBloomCuckoo.name}: ${error}`);
+        }
     }
 
     /**
@@ -74,7 +100,12 @@ export class RedisBloomCuckoo extends Module {
      * @param item The item to delete from the filter
      */
     async del(key: string, item: string): Promise<CFResponse> {
-        return await this.redis.send_command('CF.DEL', [key, item]);
+        try {
+            return await this.redis.send_command('CF.DEL', [key, item]);
+        }
+        catch(error) {
+            return this.handleError(`${RedisBloomCuckoo.name}: ${error}`);
+        }
     }
 
     /**
@@ -83,7 +114,12 @@ export class RedisBloomCuckoo extends Module {
      * @param item The item to count
      */
     async count(key: string, item: string): Promise<number> {
-        return await this.redis.send_command('CF.COUNT', [key, item]);
+        try {
+            return await this.redis.send_command('CF.COUNT', [key, item]);
+        }
+        catch(error) {
+            return this.handleError(`${RedisBloomCuckoo.name}: ${error}`);
+        }
     }
 
     /**
@@ -92,7 +128,12 @@ export class RedisBloomCuckoo extends Module {
      * @param iterator Iterator value. This is either 0, or the iterator from a previous invocation of this command
      */
     async scandump(key: string, iterator: number): Promise<string[]> {
-        return await this.redis.send_command('CF.SCANDUMP', [key, iterator])
+        try {
+            return await this.redis.send_command('CF.SCANDUMP', [key, iterator])
+        }
+        catch(error) {
+            return this.handleError(`${RedisBloomCuckoo.name}: ${error}`);
+        }
     }
 
     /**
@@ -102,7 +143,12 @@ export class RedisBloomCuckoo extends Module {
      * @param data The current data chunk (returned by SCANDUMP ) 
      */
     async loadchunk(key: string, iterator: number, data: string): Promise<'OK'> {
-        return await this.redis.send_command('CF.LOADCHUNK', [key, iterator, data]);
+        try {
+            return await this.redis.send_command('CF.LOADCHUNK', [key, iterator, data]);
+        }
+        catch(error) {
+            return this.handleError(`${RedisBloomCuckoo.name}: ${error}`);
+        }
     }
     
     /**
@@ -110,7 +156,12 @@ export class RedisBloomCuckoo extends Module {
      * @param key The name of the filter
      */
     async info(key: string): Promise<string[]> {
-        return await this.redis.send_command('CF.INFO', [key]);
+        try {
+            return await this.redis.send_command('CF.INFO', [key]);
+        }
+        catch(error) {
+            return this.handleError(`${RedisBloomCuckoo.name}: ${error}`);
+        }
     }
 }
 
