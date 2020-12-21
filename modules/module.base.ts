@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as Redis from 'ioredis';
 
 export class Module {
@@ -6,8 +7,9 @@ export class Module {
     /**
      * Initializing the module object
      * @param options The options of the Redis database
+     * @param throwError If to throw an exception on error.
      */
-    constructor(public options: Redis.RedisOptions) {}
+    constructor(public options: Redis.RedisOptions, public throwError: boolean) {}
 
     /**
      * Connecting to the Redis database with the module
@@ -21,5 +23,16 @@ export class Module {
      */
     async disconnect(): Promise<void> {
         await this.redis.quit();
+    }
+
+    /**
+     * Handling a error
+     * @param module The name of the module
+     * @param error The message of the error
+     */
+    handleError(error: string): any {
+        if(this.throwError)
+            throw new Error(error);
+        return error;
     }
 }
