@@ -130,9 +130,9 @@ export class RedisAI extends Module {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async scriptdel() {
+    async scriptdel(key: string) {
         try {
-            
+            return await this.redis.send_command('AI.SCRIPTDEL', [key]);
         }
         catch(error) {
             return this.handleError(`${RedisAI.name}: ${error}`);
