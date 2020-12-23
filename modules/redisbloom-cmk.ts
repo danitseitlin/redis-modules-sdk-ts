@@ -6,9 +6,10 @@ export class RedisBloomCMK extends Module {
     /**
      * Initializing the RedisBloom Count-Min Sketch object
      * @param options The options of the Redis database.
+     * @param throwError If to throw an exception on error.
      */
-    constructor(options: Redis.RedisOptions) {
-        super(options)
+    constructor(options: Redis.RedisOptions, throwError = true) {
+        super(options, throwError)
     }
 
     /**
@@ -18,7 +19,12 @@ export class RedisBloomCMK extends Module {
      * @param depth The number of counter-arrays. Reduces the probability for an error of a certain size (percentage of total count).
      */
     async initbydim(key: string, width: number, depth: number): Promise<'OK'> {
-        return await this.redis.send_command('CMS.INITBYDIM', [key, width, depth]);
+        try {
+            return await this.redis.send_command('CMS.INITBYDIM', [key, width, depth]);
+        }
+        catch(error) {
+            return this.handleError(`${RedisBloomCMK.name}: ${error}`);
+        }
     }
 
     /**
@@ -28,7 +34,12 @@ export class RedisBloomCMK extends Module {
      * @param probability The desired probability for inflated count.
      */
     async initbyprob(key: string, errorSize: number, probability: number): Promise<'OK'> {
-        return await this.redis.send_command('CMS.INITBYPROB', [key, errorSize, probability]);
+        try {
+            return await this.redis.send_command('CMS.INITBYPROB', [key, errorSize, probability]);
+        }
+        catch(error) {
+            return this.handleError(`${RedisBloomCMK.name}: ${error}`);
+        }
     }
 
     /**
@@ -37,10 +48,15 @@ export class RedisBloomCMK extends Module {
      * @param items A list of item and increment set's
      */
     async incrby(key: string, items: CMKIncrbyItems[]): Promise<number[]> {
-        let args = [key];
-        for(const item of items)
-            args = args.concat([item.name.toString(), item.increment.toString()])
-        return await this.redis.send_command('CMS.INCRBY', args);
+        try {
+            let args = [key];
+            for(const item of items)
+                args = args.concat([item.name.toString(), item.increment.toString()])
+            return await this.redis.send_command('CMS.INCRBY', args);
+        }
+        catch(error) {
+            return this.handleError(`${RedisBloomCMK.name}: ${error}`);
+        }
     }
 
     /**
@@ -49,7 +65,12 @@ export class RedisBloomCMK extends Module {
      * @param items A list of items.
      */
     async query(key: string, items: string[]): Promise<number[]> {
-        return await this.redis.send_command('CMS.QUERY', [key].concat(items));
+        try {
+            return await this.redis.send_command('CMS.QUERY', [key].concat(items));
+        }
+        catch(error) {
+            return this.handleError(`${RedisBloomCMK.name}: ${error}`);
+        }
     }
 
     /**
@@ -60,14 +81,19 @@ export class RedisBloomCMK extends Module {
      * @param weights A multiple of each sketch. Default =1.
      */
     async merge(dest: string, numKeys: number, sources: string[], weights?: number[]): Promise<'OK'> {
-        let args = [dest, numKeys];
-        args = args.concat(sources);
-        if(weights !== undefined && weights.length > 0) {
-            args.push('WEIGHTS');
-            for(const weight of weights)
-                args.push(weight.toString());
+        try {
+            let args = [dest, numKeys];
+            args = args.concat(sources);
+            if(weights !== undefined && weights.length > 0) {
+                args.push('WEIGHTS');
+                for(const weight of weights)
+                    args.push(weight.toString());
+            }
+            return await this.redis.send_command('CMS.MERGE', args);
         }
-        return await this.redis.send_command('CMS.MERGE', args);
+        catch(error) {
+            return this.handleError(`${RedisBloomCMK.name}: ${error}`);
+        }
     }
 
     /**
@@ -75,7 +101,12 @@ export class RedisBloomCMK extends Module {
      * @param key The key of the 'CMS.INFO' command
      */
     async info(key: string): Promise<string[]> {
-        return await this.redis.send_command('CMS.INFO', [key]);
+        try {
+            return await this.redis.send_command('CMS.INFO', [key]);
+        }
+        catch(error) {
+            return this.handleError(`${RedisBloomCMK.name}: ${error}`);
+        }
     }
 }
 
