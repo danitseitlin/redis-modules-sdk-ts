@@ -66,7 +66,7 @@ export class Redisearch extends Module {
                 if(field.nostem !== undefined) args.push('NOSTEM');
                 if(field.phonetic !== undefined) args = args.concat(['PHONETIC', field.phonetic]);
                 if(field.seperator !== undefined) args = args.concat(['SEPERATOR', field.seperator]);
-                if(field.weight !== undefined) args.concat(['WEIGHT', field.weight.toString()]);
+                if(field.weight !== undefined) args = args.concat(['WEIGHT', field.weight.toString()]);
             }
             return await  this.redis.send_command('FT.CREATE', args);
         }
@@ -490,11 +490,11 @@ export class Redisearch extends Module {
         try {
             const args = [index, query];
             if(options !== undefined && options.distance !== undefined)
-                args.concat(['DISTANCE', options.distance])
+                args = args.concat(['DISTANCE', options.distance])
             if(options !== undefined && options.terms !== undefined) {
                 args.push('TERMS');
                 for(const term of options.terms) {
-                    args.concat([term.type, term.dict]);
+                    args = args.concat([term.type, term.dict]);
                 }
             }
             return await this.redis.send_command('FT.SPELLCHECK', args);
