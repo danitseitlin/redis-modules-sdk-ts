@@ -60,13 +60,13 @@ export class Redisearch extends Module {
             }
             args.push('SCHEMA');
             for(const field of schemaFields) {
-                args.concat([field.name, field.type]);
+                args = args.concat([field.name, field.type]);
                 if(field.sortable !== undefined) args.push('SORTABLE');
                 if(field.noindex !== undefined) args.push('NOINDEX');
                 if(field.nostem !== undefined) args.push('NOSTEM');
                 if(field.phonetic !== undefined) args = args.concat(['PHONETIC', field.phonetic]);
                 if(field.seperator !== undefined) args = args.concat(['SEPERATOR', field.seperator]);
-                if(field.weight !== undefined) args.concat(['WEIGHT', field.weight.toString()]);
+                if(field.weight !== undefined) args = args.concat(['WEIGHT', field.weight.toString()]);
             }
             return await  this.redis.send_command('FT.CREATE', args);
         }
@@ -101,7 +101,7 @@ export class Redisearch extends Module {
                 if(parameters.filter !== undefined)
                 args = args.concat(['FILTER', parameters.filter.field, parameters.filter.min.toString(), parameters.filter.max.toString()])
                 if(parameters.geoFilter !== undefined)
-                    args.concat([
+                    args = args.concat([
                         'GEOFILTER',
                         parameters.geoFilter.field,
                         parameters.geoFilter.lon.toString(),
@@ -120,7 +120,7 @@ export class Redisearch extends Module {
                     if(parameters.summarize.fields !== undefined) {
                         args.push('FIELDS')
                         for(const field of parameters.summarize.fields) {
-                            args.concat([field.num.toString(), field.field]);
+                            args = args.concat([field.num.toString(), field.field]);
                         }
                     }
                     if(parameters.summarize.frags !== undefined) 
@@ -488,13 +488,13 @@ export class Redisearch extends Module {
      */
     async spellcheck(index: string, query: string, options?: FTSpellCheck): Promise<(string | string[])[]> {
         try {
-            const args = [index, query];
+            let args = [index, query];
             if(options !== undefined && options.distance !== undefined)
-                args.concat(['DISTANCE', options.distance])
+                args = args.concat(['DISTANCE', options.distance])
             if(options !== undefined && options.terms !== undefined) {
                 args.push('TERMS');
                 for(const term of options.terms) {
-                    args.concat([term.type, term.dict]);
+                    args = args.concat([term.type, term.dict]);
                 }
             }
             return await this.redis.send_command('FT.SPELLCHECK', args);
