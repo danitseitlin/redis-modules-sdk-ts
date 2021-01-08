@@ -60,7 +60,7 @@ export class Redisearch extends Module {
             }
             args.push('SCHEMA');
             for(const field of schemaFields) {
-                args.concat([field.name, field.type]);
+                args = args.concat([field.name, field.type]);
                 if(field.sortable !== undefined) args.push('SORTABLE');
                 if(field.noindex !== undefined) args.push('NOINDEX');
                 if(field.nostem !== undefined) args.push('NOSTEM');
@@ -101,7 +101,7 @@ export class Redisearch extends Module {
                 if(parameters.filter !== undefined)
                 args = args.concat(['FILTER', parameters.filter.field, parameters.filter.min.toString(), parameters.filter.max.toString()])
                 if(parameters.geoFilter !== undefined)
-                    args.concat([
+                    args = args.concat([
                         'GEOFILTER',
                         parameters.geoFilter.field,
                         parameters.geoFilter.lon.toString(),
@@ -120,7 +120,7 @@ export class Redisearch extends Module {
                     if(parameters.summarize.fields !== undefined) {
                         args.push('FIELDS')
                         for(const field of parameters.summarize.fields) {
-                            args.concat([field.num.toString(), field.field]);
+                            args = args.concat([field.num.toString(), field.field]);
                         }
                     }
                     if(parameters.summarize.frags !== undefined) 
