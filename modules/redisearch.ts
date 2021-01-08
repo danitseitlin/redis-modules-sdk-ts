@@ -488,7 +488,7 @@ export class Redisearch extends Module {
      */
     async spellcheck(index: string, query: string, options?: FTSpellCheck): Promise<(string | string[])[]> {
         try {
-            const args = [index, query];
+            let args = [index, query];
             if(options !== undefined && options.distance !== undefined)
                 args = args.concat(['DISTANCE', options.distance])
             if(options !== undefined && options.terms !== undefined) {
