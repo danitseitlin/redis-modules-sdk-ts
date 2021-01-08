@@ -27,7 +27,7 @@ export class Redisearch extends Module {
                 if(parameters.prefix !== undefined) {
                     args.push('PREFIX');
                     for(const prefix of parameters.prefix)
-                        args.concat([prefix.count.toString(), prefix.name])
+                        args = args.concat([prefix.count.toString(), prefix.name])
                 }
                 if(parameters.filter !== undefined)
                     args = args.concat(['FILTER', parameters.filter])
