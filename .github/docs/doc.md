@@ -110,7 +110,7 @@ await client.disconnect();
 ## <img src='https://oss.redislabs.com/redisearch/img/logo.svg' style='max-width:100%;' height='30'/> Redisearch module
 ### Quick start :toolbox:
 ```
-const client = new RediSearch({
+const client = new Redisearch({
     host: 'hostname',
     port: 43758,
 });
