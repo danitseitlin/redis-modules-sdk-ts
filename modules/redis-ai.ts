@@ -138,9 +138,9 @@ export class RedisAI extends Module {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async scriptrun() {
+    async scriptrun(key: string, functionName: string, inputs: string[], outputs: string[]): Promise<'OK'> {
         try {
-            
+            return await this.redis.send_command('AI.SCRIPTRUN', [key, functionName].concat(inputs).concat(outputs));
         }
         catch(error) {
             return this.handleError(`${RedisAI.name}: ${error}`);
@@ -148,39 +148,55 @@ export class RedisAI extends Module {
     }
     async scriptscan() {
         try {
-            
+            return await this.redis.send_command('AI._SCRIPTSCAN')
         }
         catch(error) {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async dagrun() {
+    async dagrun(commands: string[], load?: AIDagrunOarameters, persist?: AIDagrunOarameters) {
         try {
-            
+            let args: string[] = [];
+            if(load !== undefined){
+                args = args.concat(['LOAD', load.keyCount.toString()].concat(load.keys))
+            }
+            if(persist !== undefined){
+                args = args.concat(['PERSIST', persist.keyCount.toString()].concat(persist.keys))
+            }
+            return await this.redis.send_command('AI.DAGRUN', args.concat(commands))
         }
         catch(error) {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async dagrunRO() {
+    async dagrunRO(commands: string[], load?: AIDagrunOarameters) {
         try {
-            
+            let args: string[] = [];
+            if(load !== undefined){
+                args = args.concat(['LOAD', load.keyCount.toString()].concat(load.keys))
+            }
+            return await this.redis.send_command('AI.DAGRUN_RO', args.concat(commands))
         }
         catch(error) {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async info() {
+    async info(key: string, RESETSTAT: boolean) {
         try {
-            
+            const args = [key]
+            if(RESETSTAT === true) args.push('RESETSTAT')
+            return await this.redis.send_command('AI.INFO', args)
         }
         catch(error) {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async config() {
+    async config(backendsPath: string, loadBackend: string, loadBackendPath: string) {
         try {
-            
+            return await this.redis.send_command('AI.CONFIG', [
+                'BACKENDSPATH', backendsPath,
+                'LOADBACKEND', loadBackend, backendsPath
+            ])
         }
         catch(error) {
             return this.handleError(`${RedisAI.name}: ${error}`);
@@ -207,4 +223,9 @@ export type AIScriptSetParameters = {
     device: string,
     tag?: string,
     script: string
+}
+
+export type AIDagrunOarameters = {
+    keyCount: number,
+    keys: string[]
 }
