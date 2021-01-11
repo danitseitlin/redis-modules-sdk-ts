@@ -18,9 +18,9 @@ describe('AI testing', async function() {
     })
 
     it(' function', async () => {
-        let response = await client.tensorset('my-key', 'DOUBLE', '1.1')
+        let response = await client.tensorset('my-key', 'DOUBLE', ['1.1'])
         console.log(response)
-        response = await client.tensorset('my-key2', 'DOUBLE', Buffer.from('1.1'))
+        response = await client.tensorset('my-key2', 'DOUBLE', [Buffer.from('1.1')])
         console.log(response)
     });
     //it(' function', async () => {
