@@ -17,15 +17,18 @@ describe('AI testing', async function() {
         await client.disconnect();
     })
 
-    it(' function', async () => {
+    it('tensorset function', async () => {
         let response = await client.tensorset('my-key', 'DOUBLE', ['1.1'])
-        console.log(response)
+        expect(response).eql('OK', 'The response of tensorset')
         response = await client.tensorset('my-key2', 'DOUBLE', [Buffer.from('1.1')])
+        expect(response).eql('OK', 'The response of tensorset')
+    });
+    it('tensorget function', async () => {
+        let response = await client.tensorget('my-key', 'VALUES')
+        console.log(response)
+        response = await client.tensorget('my-key', 'BLOB')
         console.log(response)
     });
-    //it(' function', async () => {
-    //    
-    //});
     //it(' function', async () => {
     //    
     //});

@@ -12,8 +12,14 @@ export class RedisAI extends Module {
         super(options, throwError)
     }
 
-    //TBD, not sure how.
-    async tensorset(key: string, type: TensorType, data?: string[] | Buffer[], shape?: string) {
+    /**
+     * 
+     * @param key 
+     * @param type 
+     * @param data 
+     * @param shape 
+     */
+    async tensorset(key: string, type: TensorType, data?: string[] | Buffer[], shape?: string): Promise<void> {
         try {
             let args: (string | Buffer)[] = [key, type];
             if(shape !== undefined)
@@ -23,11 +29,6 @@ export class RedisAI extends Module {
                 for(const item of data) {
                     args.push(item instanceof Buffer ? item.toString(): item)
                 }
-                //if(data instanceof Buffer)
-                //    args = args.concat(['BLOB', data.toString()]);
-                //else
-                //    args = args.concat(['VALUES'].concat(data));
-
             }
             return await this.redis.send_command('AI.TENSORSET', args);  
         }
@@ -42,7 +43,7 @@ export class RedisAI extends Module {
      * @param meta 
      * @param format 
      */
-    async tensorget(key: string, meta?: boolean, format?: 'BLOB' | 'VALUES') {
+    async tensorget(key: string, format?: 'BLOB' | 'VALUES', meta?: boolean) {
         try {
             const args = [key];
             if(meta === true)
