@@ -26,7 +26,7 @@ describe('AI testing', async function() {
     it('tensorget function', async () => {
         let response = await client.tensorget('my-key', 'VALUES')
         console.log(response)
-        response = await client.tensorget('my-key', 'BLOB')
+        response = await client.tensorget('my-key2', 'BLOB')
         console.log(response)
     });
     //it(' function', async () => {
