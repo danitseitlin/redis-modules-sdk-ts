@@ -166,14 +166,17 @@ export class RedisAI extends Module {
     }
     async dagrun(commands: string[], load?: AIDagrunOarameters, persist?: AIDagrunOarameters) {
         try {
-            let args: string[] = [];
-            if(load !== undefined){
-                args = args.concat(['LOAD', load.keyCount.toString()].concat(load.keys))
-            }
-            if(persist !== undefined){
-                args = args.concat(['PERSIST', persist.keyCount.toString()].concat(persist.keys))
-            }
-            return await this.redis.send_command('AI.DAGRUN', args.concat(commands))
+            //let args: string[] = [];
+            //if(load !== undefined){
+            //    args = args.concat(['LOAD', load.keyCount.toString()].concat(load.keys))
+            //}
+            //if(persist !== undefined){
+            //    args = args.concat(['PERSIST', persist.keyCount.toString()].concat(persist.keys))
+            //}
+            //commands.forEach(command => {
+            //    args = args.concat([command, '|>'])
+            //});
+            return await this.redis.send_command('AI.DAGRUN', this.generateDagrun(commands, load, persist))
         }
         catch(error) {
             return this.handleError(`${RedisAI.name}: ${error}`);
@@ -181,17 +184,30 @@ export class RedisAI extends Module {
     }
     async dagrunRO(commands: string[], load?: AIDagrunOarameters) {
         try {
-            let args: string[] = [];
-            if(load !== undefined){
-                args = args.concat(['LOAD', load.keyCount.toString()].concat(load.keys))
-            }
-            return await this.redis.send_command('AI.DAGRUN_RO', args.concat(commands))
+            //let args: string[] = [];
+            //if(load !== undefined){
+            //    args = args.concat(['LOAD', load.keyCount.toString()].concat(load.keys))
+            //}
+            return await this.redis.send_command('AI.DAGRUN_RO', this.generateDagrun(commands, load))
         }
         catch(error) {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async info(key: string, RESETSTAT: boolean) {
+    private generateDagrun(commands: string[], load?: AIDagrunOarameters, persist?: AIDagrunOarameters) {
+        let args: string[] = [];
+        if(load !== undefined){
+            args = args.concat(['LOAD', load.keyCount.toString()].concat(load.keys))
+        }
+        if(persist !== undefined){
+            args = args.concat(['PERSIST', persist.keyCount.toString()].concat(persist.keys))
+        }
+        commands.forEach(command => {
+            args = args.concat([command, '|>'])
+        });
+        return args
+    }
+    async info(key: string, RESETSTAT?: boolean) {
         try {
             const args = [key]
             if(RESETSTAT === true) args.push('RESETSTAT')
@@ -201,12 +217,20 @@ export class RedisAI extends Module {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async config(backendsPath: string, loadBackend: string, loadBackendPath: string) {
+
+    /**
+     * 
+     * @param path 
+     * @param backend 
+     */
+    async config(path: string, backend?: 'TF' | 'TFLITE' | 'TORCH' | 'ONNX'): Promise<'OK'> {
         try {
-            return await this.redis.send_command('AI.CONFIG', [
-                'BACKENDSPATH', backendsPath,
-                'LOADBACKEND', loadBackend, backendsPath
-            ])
+            let args: string[] = []
+            if(backend !== undefined)
+                args = args.concat(['LOADBACKEND', backend, path])
+            else
+                args = args.concat(['BACKENDSPATH', path])
+            return await this.redis.send_command('AI.CONFIG', args)
         }
         catch(error) {
             return this.handleError(`${RedisAI.name}: ${error}`);
