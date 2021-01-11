@@ -30,11 +30,14 @@ describe('AI testing', async function() {
         console.log(response)
     });
     it('modelset function', async () => {
-        const response = await client.modelset('my-key', 'TF', 'CPU', 'my-model')
+        const response = await client.modelset('my-key', 'TF', 'CPU', 'BLOB', {
+            inputs: ['mytensor'],
+            outputs: ['classes', 'predictions']
+        })
         console.log(response)
     });
     it('modelget function', async () => {
-        const response = await client.modelget('my-key');
+        const response = await client.modelget('my-key', true);
         console.log(response);
     });
     it('modelrun function', async () => {

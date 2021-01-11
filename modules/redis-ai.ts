@@ -56,7 +56,7 @@ export class RedisAI extends Module {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async modelset(key: string, backend: ModelSetBackend, device: ModelSetDevice, model: string, options?: ModelSetOptions) {
+    async modelset(key: string, backend: ModelSetBackend, device: ModelSetDevice, model: string, options: ModelSetOptions) {
         try {
             let args = [key, backend, device];
             if(options !== undefined) {
@@ -78,7 +78,7 @@ export class RedisAI extends Module {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async modelget(key: string, meta?: string, blob?: string) {
+    async modelget(key: string, meta?: boolean, blob?: boolean) {
         try {
             const args = [key];
             if(meta !== undefined)
@@ -121,6 +121,7 @@ export class RedisAI extends Module {
             let args = [key, parameters.device];
             if(parameters.tag !== undefined)
                 args = args.concat(['TAG', parameters.tag])
+            parameters.script = parameters.script.indexOf('"') === -1 ? `"${parameters.script}"`: parameters.script; 
             return await this.redis.send_command('AI.SCRIPTSET', args.concat(['SOURCE', parameters.script]));
         }
         catch(error) {
@@ -246,8 +247,8 @@ export type ModelSetOptions = {
         size: string,
         minSize?: string
     },
-    inputs?: string[],
-    outputs?: string[],
+    inputs: string[],
+    outputs: string[],
 }
 
 export type ModelSetBackend = 'TF' | 'TFLITE' | 'TORCH' | 'ONNX';
