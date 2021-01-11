@@ -13,12 +13,12 @@ export class RedisAI extends Module {
     }
 
     //TBD, not sure how.
-    async tensorset(key: string, type: TensorType, data: string | string[]) {
+    async tensorset(key: string, type: TensorType, data: string | Buffer) {
         try {
             let args = [key, type];
-            if(typeof data === 'string')
-                args = args.concat(['BLOB', data]);
-            else if(typeof data === 'object')
+            if(data instanceof Buffer)
+                args = args.concat(['BLOB', data.toString()]);
+            else
                 args = args.concat(['VALUES'].concat(data));
             return await this.redis.send_command('AI.TENSORSET', args);  
         }
