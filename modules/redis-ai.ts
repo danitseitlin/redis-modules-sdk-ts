@@ -28,7 +28,7 @@ export class RedisAI extends Module {
             //if(shape !== undefined)
             //    args = args.concat(['shape', shape])
             if(data !== undefined) {
-                args.push(data instanceof Buffer ? 'BLOBL': 'VALUES');
+                args.push(data instanceof Buffer ? 'BLOB': 'VALUES');
                 for(const item of data) {
                     args.push(item instanceof Buffer ? item.toString(): item)
                 }
