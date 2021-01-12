@@ -131,6 +131,7 @@ export class Redisearch extends Module {
                         args = args.concat(['SEPARATOR', parameters.summarize.seperator])
                 }
                 if(parameters.highlight !== undefined) {
+                    args.push('HIGHLIGHT')
                     if(parameters.highlight.fields !== undefined) {
                         args.push('FIELDS')
                         for(const field of parameters.highlight.fields) {
