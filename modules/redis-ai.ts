@@ -33,6 +33,7 @@ export class RedisAI extends Module {
                     args.push(item instanceof Buffer ? item.toString(): item)
                 }
             }
+            console.log(`AI.TENSORSET ${args}`)
             return await this.redis.send_command('AI.TENSORSET', args);  
         }
         catch(error) {
