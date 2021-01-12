@@ -18,10 +18,10 @@ describe('AI testing', async function() {
     })
 
     it('tensorset function', async () => {
-        let response = await client.tensorset('my-key', 'DOUBLE', ['1.1'])
+        let response = await client.tensorset('my-key', 'FLOAT', [2, 2], [1, 2 ,3, 4])
         expect(response).eql('OK', 'The response of tensorset')
-        response = await client.tensorset('my-key2', 'DOUBLE', [Buffer.from('1.1')])
-        expect(response).eql('OK', 'The response of tensorset')
+        //response = await client.tensorset('my-key2', 'DOUBLE', [Buffer.from(1.1)])
+        //expect(response).eql('OK', 'The response of tensorset')
     });
     it('tensorget function', async () => {
         let response = await client.tensorget('my-key', 'VALUES')
