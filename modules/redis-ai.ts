@@ -19,11 +19,14 @@ export class RedisAI extends Module {
      * @param data 
      * @param shape 
      */
-    async tensorset(key: string, type: TensorType, data?: string[] | Buffer[], shape?: string): Promise<void> {
+    async tensorset(key: string, type: TensorType, shapes: number[], data?: string[] | Buffer[], ): Promise<void> {
         try {
-            let args: (string | Buffer)[] = [key, type];
-            if(shape !== undefined)
-                args = args.concat(['shape', shape])
+            const args: (string | Buffer)[] = [key, type];
+            shapes.forEach(shape => {
+                args.push(shape.toString())
+            });
+            //if(shape !== undefined)
+            //    args = args.concat(['shape', shape])
             if(data !== undefined) {
                 args.push(data instanceof Buffer ? 'BLOBL': 'VALUES');
                 for(const item of data) {
