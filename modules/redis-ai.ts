@@ -22,16 +22,16 @@ export class RedisAI extends Module {
     async tensorset(key: string, type: TensorType, shapes: number[], data?: number[] | Buffer[]): Promise<void> {
         try {
             const args: (number | string | Buffer)[] = [key, type];
-            shapes.forEach(shape => {
-                args.push(shape.toString())
-            });
+            shapes.forEach(shape => {args.push(shape.toString())});
             //if(shape !== undefined)
             //    args = args.concat(['shape', shape])
             if(data !== undefined) {
                 args.push(data instanceof Buffer ? 'BLOB': 'VALUES');
-                for(const item of data) {
-                    args.push(item instanceof Buffer ? item.toString(): item)
-                }
+                data.forEach((value: (number | string | Buffer)) => {args.push(value.toString())});
+
+                //for(const item of data) {
+                //    args.push(item)
+                //}
             }
             console.log(`AI.TENSORSET ${args}`)
             return await this.redis.send_command('AI.TENSORSET', args);  
