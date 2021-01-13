@@ -1,6 +1,7 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { RedisAI } from '../modules/redis-ai';
+import * as fs from 'fs';
 let client: RedisAI;
 const key1 = 'key1cmk'
 const key2 = 'key1cmk2';
@@ -18,30 +19,32 @@ describe('AI testing', async function() {
     })
 
     it('tensorset function', async () => {
-        let response = await client.tensorset('my-key', 'FLOAT', [2, 2], [1, 2 ,3, 4])
+        let response = await client.tensorset('values-key', 'FLOAT', [2, 2], [1, 2 ,3, 4])
         expect(response).eql('OK', 'The response of tensorset')
-        response = await client.tensorset('my-key2', 'FLOAT', [1], [Buffer.from('1.11111')])
+        response = await client.tensorset('blob-key', 'FLOAT', [1], [Buffer.from('1.11111')])
         expect(response).eql('OK', 'The response of tensorset')
     });
     it('tensorget function', async () => {
-        let response = await client.tensorget('my-key', 'VALUES')
+        let response = await client.tensorget('values-key', 'VALUES')
         console.log(response)
-        response = await client.tensorget('my-key2', 'BLOB')
+        response = await client.tensorget('blob-key', 'BLOB')
         console.log(response)
     });
     it('modelset function', async () => {
-        const response = await client.modelset('my-key', 'TF', 'CPU', 'BLOB', {
+        //you need to import a model file via fs.readFileAsync
+        const file = fs.readFileSync('../models/model1.onnx')
+        const response = await client.modelset('blob-key', 'TF', 'CPU', file, {
             inputs: ['mytensor'],
             outputs: ['classes', 'predictions']
         })
         console.log(response)
     });
     it('modelget function', async () => {
-        const response = await client.modelget('my-key', true);
+        const response = await client.modelget('values-key', true);
         console.log(response);
     });
     it('modelrun function', async () => {
-        const response = await client.modelrun('my-key', ['mytensor'], ['classes', 'predictions'])
+        const response = await client.modelrun('values-key', ['mytensor'], ['classes', 'predictions'])
         console.log(response)
     });
     it('modelscan function', async () => {
@@ -49,26 +52,26 @@ describe('AI testing', async function() {
         console.log(response);
     });
     it('modeldel function', async () => {
-        const response = await client.modeldel('my-key');
+        const response = await client.modeldel('values-key');
         console.log(response)
     });
     it('scriptset function', async () => {
-        const response = await client.scriptset('my-key', {
+        const response = await client.scriptset('values-key', {
             device: 'CPU',
             script: 'addtwo.py'
         })
         console.log(response)
     });
     it('scriptget function', async () => {
-        const response = await client.scriptget('my-key');
+        const response = await client.scriptget('values-key');
         console.log(response)
     });
     it('scriptdel function', async () => {
-        const response = await client.scriptdel('my-key');
+        const response = await client.scriptdel('values-key');
         console.log(response)
     });
     it('scriptrun function', async () => {
-        const response = await client.scriptrun('my-key', 'addtwo', ['mytensor1', 'mytensor2'], ['result'])
+        const response = await client.scriptrun('values-key', 'addtwo', ['mytensor1', 'mytensor2'], ['result'])
         console.log(response)
     });
     it('scriptscan function', async () => {
@@ -94,9 +97,9 @@ describe('AI testing', async function() {
         console.log(response)
     }); 
     it('info function', async () => {
-        let response = await client.info('my-key');
+        let response = await client.info('values-key');
         console.log(response)
-        response = await client.info('my-key', true);
+        response = await client.info('values-key', true);
         console.log(response)
     });
     it('config function', async () => {

@@ -33,7 +33,6 @@ export class RedisAI extends Module {
                 //    args.push(item)
                 //}
             }
-            console.log(`AI.TENSORSET ${args}`)
             return await this.redis.send_command('AI.TENSORSET', args);  
         }
         catch(error) {
@@ -60,9 +59,9 @@ export class RedisAI extends Module {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async modelset(key: string, backend: ModelSetBackend, device: ModelSetDevice, model: string, options: ModelSetOptions) {
+    async modelset(key: string, backend: ModelSetBackend, device: ModelSetDevice, model: Buffer, options: ModelSetOptions) {
         try {
-            let args = [key, backend, device];
+            let args: (string | Buffer)[] = [key, backend, device];
             if(options !== undefined) {
                 if(options.tag !== undefined)
                     args = args.concat(['TAG', options.tag]);
