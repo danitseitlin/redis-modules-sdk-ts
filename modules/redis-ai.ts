@@ -75,7 +75,7 @@ export class RedisAI extends Module {
                 if(options.outputs !== undefined && options.outputs.length > 0)
                     args = args.concat(['OUTPUTS'].concat(options.outputs));
             }
-            return await this.redis.send_command('AI.MODELSET', args.concat(['BLOB', model])); 
+            return await this.redis.send_command('AI.MODELSET', args.concat(['BLOB', model.toString()])); 
         }
         catch(error) {
             return this.handleError(`${RedisAI.name}: ${error}`);
