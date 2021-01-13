@@ -20,7 +20,7 @@ describe('AI testing', async function() {
     it('tensorset function', async () => {
         let response = await client.tensorset('my-key', 'FLOAT', [2, 2], [1, 2 ,3, 4])
         expect(response).eql('OK', 'The response of tensorset')
-        response = await client.tensorset('my-key2', 'FLOAT', [2, 2], [Buffer.from('1.1')])
+        response = await client.tensorset('my-key2', 'FLOAT', [1], [Buffer.from('1.11111')])
         expect(response).eql('OK', 'The response of tensorset')
     });
     it('tensorget function', async () => {
