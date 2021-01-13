@@ -59,7 +59,7 @@ export class RedisAI extends Module {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async modelset(key: string, backend: ModelSetBackend, device: ModelSetDevice, model: Buffer, options: ModelSetOptions) {
+    async modelset(key: string, backend: ModelSetBackend, device: ModelSetDevice, model: Buffer, options?: ModelSetOptions) {
         try {
             let args: (string | Buffer)[] = [key, backend, device];
             if(options !== undefined) {
@@ -250,8 +250,8 @@ export type ModelSetOptions = {
         size: string,
         minSize?: string
     },
-    inputs: string[],
-    outputs: string[],
+    inputs?: string[],
+    outputs?: string[],
 }
 
 export type ModelSetBackend = 'TF' | 'TFLITE' | 'TORCH' | 'ONNX';
