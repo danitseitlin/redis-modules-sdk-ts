@@ -70,9 +70,9 @@ export class RedisAI extends Module {
                     if(options.batch.minSize !== undefined)
                         args = args.concat(['MINBATCHSIZE', options.batch.minSize]);
                 }
-                if(options.inputs !== undefined)
+                if(options.inputs !== undefined && options.inputs.length > 0)
                     args = args.concat(['INPUTS'].concat(options.inputs));
-                if(options.outputs !== undefined)
+                if(options.outputs !== undefined && options.outputs.length > 0)
                     args = args.concat(['OUTPUTS'].concat(options.outputs));
             }
             return await this.redis.send_command('AI.MODELSET', args.concat(['BLOB', model])); 

@@ -33,10 +33,7 @@ describe('AI testing', async function() {
     it('modelset function', async () => {
         //you need to import a model file via fs.readFileAsync
         const file = fs.readFileSync('./models/model1.onnx')
-        const response = await client.modelset('blob-key', 'TF', 'CPU', file, {
-            inputs: [],
-            outputs: []
-        })
+        const response = await client.modelset('blob-key', 'ONNX', 'CPU', file)
         console.log(response)
     });
     it('modelget function', async () => {
