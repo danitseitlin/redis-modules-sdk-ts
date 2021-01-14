@@ -73,7 +73,7 @@ export class RedisAI extends Module {
             const outputItems = ['backend', 'device', 'tag', 'batchsize', 'minbatchsize', 'inputs', 'outputs'];
             const outputObject = {};
             outputItems.forEach(item => {
-                const index = outputItems.findIndex(outputItem => outputItem === item);
+                const index = response.findIndex(outputItem => outputItem === item);
                 outputObject[item] = outputItems[index+1];
             });
             return outputObject
