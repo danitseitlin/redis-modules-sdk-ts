@@ -41,15 +41,15 @@ describe('AI testing', async function() {
         //console.log(file.toString('ucs-2'))
         //console.log(file.toString('ucs2'))
         //console.log(file.toString('utf-8'))
-        const response = await client.modelset('blob-key', 'ONNX', 'CPU', file)
+        const response = await client.modelset('blob-model', 'ONNX', 'CPU', file)
         console.log(response)
     });
     it('modelget function', async () => {
-        const response = await client.modelget('values-key', true);
+        const response = await client.modelget('blob-model', true);
         console.log(response);
     });
     it('modelrun function', async () => {
-        const response = await client.modelrun('values-key', ['mytensor'], ['classes', 'predictions'])
+        const response = await client.modelrun('blob-model', ['mytensor'], ['classes', 'predictions'])
         console.log(response)
     });
     it('modelscan function', async () => {
@@ -57,7 +57,7 @@ describe('AI testing', async function() {
         console.log(response);
     });
     it('modeldel function', async () => {
-        const response = await client.modeldel('values-key');
+        const response = await client.modeldel('blob-model');
         console.log(response)
     });
     it('scriptset function', async () => {
