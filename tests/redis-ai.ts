@@ -70,24 +70,24 @@ describe('AI testing', async function() {
         const scriptStr = 'def bar(a, b):\n    return a + b\n';
         await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3]);
         await client.tensorset('tensorB', 'FLOAT', [1, 2], [3, 5]);
-        await client.scriptset('myscript', {
-            device: 'CPU',
-            script: scriptFileStr
-        });
-        //await client.scriptset('myscript-wtag', {
+        //await client.scriptset('myscript', {
         //    device: 'CPU',
-        //    script: scriptStr,
-        //    tag: 'test_tag'
+        //    script: scriptFileStr
         //});
-        const response = await client.scriptrun('myscript', 'bar', ['tensorA', 'tensorB'], ['tensorC'])
-        console.log(response)
-        //response = await client.scriptrun(
-        //  'myscript-wtag',
-        //  'bar',
-        //  ['tensorA', 'tensorB'],
-        //  ['tensorD'],
-        //);//await client.scriptrun('values-key', 'addtwo', ['mytensor1', 'mytensor2'], ['result'])
+        await client.scriptset('myscript-wtag', {
+            device: 'CPU',
+            script: scriptStr,
+            tag: 'test_tag'
+        });
+        //let response = await client.scriptrun('myscript', 'bar', ['tensorA', 'tensorB'], ['tensorC'])
         //console.log(response)
+        const response = await client.scriptrun(
+          'myscript-wtag',
+          'bar',
+          ['tensorA', 'tensorB'],
+          ['tensorD'],
+        );//await client.scriptrun('values-key', 'addtwo', ['mytensor1', 'mytensor2'], ['result'])
+        console.log(response)
     });
     it('scriptscan function', async () => {
         const response = await client.scriptscan();
