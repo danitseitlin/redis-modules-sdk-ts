@@ -23,15 +23,9 @@ export class RedisAI extends Module {
         try {
             const args: (number | string | Buffer)[] = [key, type];
             shapes.forEach(shape => {args.push(shape.toString())});
-            //if(shape !== undefined)
-            //    args = args.concat(['shape', shape])
             if(data !== undefined) {
                 args.push(data instanceof Buffer ? 'BLOB': 'VALUES');
                 data.forEach((value: (number | string | Buffer)) => {args.push(value.toString())});
-
-                //for(const item of data) {
-                //    args.push(item)
-                //}
             }
             return await this.redis.send_command('AI.TENSORSET', args);  
         }
@@ -75,7 +69,7 @@ export class RedisAI extends Module {
                 if(options.outputs !== undefined && options.outputs.length > 0)
                     args = args.concat(['OUTPUTS'].concat(options.outputs));
             }
-            return await this.redis.send_command('AI.MODELSET', args.concat(['BLOB', model.toString('binary')])); 
+            return await this.redis.send_command('AI.MODELSET', args.concat(['BLOB', model])); 
         }
         catch(error) {
             return this.handleError(`${RedisAI.name}: ${error}`);
