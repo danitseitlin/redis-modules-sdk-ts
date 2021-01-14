@@ -33,14 +33,6 @@ describe('AI testing', async function() {
     it('modelset function', async () => {
         //you need to import a model file via fs.readFileAsync
         const file = fs.readFileSync('./models/model1.onnx')
-        //console.log(file.toString('ascii'))
-        //console.log(file.toString('base64'))
-        //console.log(file.toString('binary'))
-        //console.log(file.toString('hex'))
-        //console.log(file.toString('latin1'))
-        //console.log(file.toString('ucs-2'))
-        //console.log(file.toString('ucs2'))
-        //console.log(file.toString('utf-8'))
         const response = await client.modelset('blob-model', 'ONNX', 'CPU', file)
         console.log(response)
     });
@@ -49,7 +41,7 @@ describe('AI testing', async function() {
         console.log(response);
     });
     it('modelrun function', async () => {
-        const response = await client.modelrun('blob-model', ['mytensor'], ['classes', 'predictions'])
+        const response = await client.modelrun('blob-key', ['blob-key'], ['classes', 'predictions'])
         console.log(response)
     });
     it('modelscan function', async () => {
