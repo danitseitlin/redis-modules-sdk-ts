@@ -74,20 +74,20 @@ describe('AI testing', async function() {
             device: 'CPU',
             script: scriptFileStr
         });
-        await client.scriptset('myscript-wtag', {
-            device: 'CPU',
-            script: scriptStr,
-            tag: 'test_tag'
-        });
-        let response = await client.scriptrun('myscript', 'bar', ['tensorA', 'tensorB'], ['tensorC'])
+        //await client.scriptset('myscript-wtag', {
+        //    device: 'CPU',
+        //    script: scriptStr,
+        //    tag: 'test_tag'
+        //});
+        const response = await client.scriptrun('myscript', 'bar', ['tensorA', 'tensorB'], ['tensorC'])
         console.log(response)
-        response = await client.scriptrun(
-          'myscript-wtag',
-          'bar',
-          ['tensorA', 'tensorB'],
-          ['tensorD'],
-        );//await client.scriptrun('values-key', 'addtwo', ['mytensor1', 'mytensor2'], ['result'])
-        console.log(response)
+        //response = await client.scriptrun(
+        //  'myscript-wtag',
+        //  'bar',
+        //  ['tensorA', 'tensorB'],
+        //  ['tensorD'],
+        //);//await client.scriptrun('values-key', 'addtwo', ['mytensor1', 'mytensor2'], ['result'])
+        //console.log(response)
     });
     it('scriptscan function', async () => {
         const response = await client.scriptscan();
