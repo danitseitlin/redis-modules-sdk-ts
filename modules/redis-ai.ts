@@ -69,14 +69,7 @@ export class RedisAI extends Module {
                 if(options.outputs !== undefined && options.outputs.length > 0)
                     args = args.concat(['OUTPUTS'].concat(options.outputs));
             }
-            const response = await this.redis.send_command('AI.MODELSET', args.concat(['BLOB', model]));
-            const outputItems = ['backend', 'device', 'tag', 'batchsize', 'minbatchsize', 'inputs', 'outputs'];
-            const outputObject = {};
-            outputItems.forEach(item => {
-                const index = response.findIndex(outputItem => outputItem === item);
-                outputObject[item] = outputItems[index+1];
-            });
-            return outputObject
+            return await this.redis.send_command('AI.MODELSET', args.concat(['BLOB', model])); 
         }
         catch(error) {
             return this.handleError(`${RedisAI.name}: ${error}`);
@@ -89,7 +82,14 @@ export class RedisAI extends Module {
                 args.push('META');
             if(blob !== undefined)
                 args.push('BLOB');
-            return await this.redis.send_command('AI.MODELGET', args);
+            const response = await this.redis.send_command('AI.MODELGET', args);
+            const outputItems = ['backend', 'device', 'tag', 'batchsize', 'minbatchsize', 'inputs', 'outputs'];
+            const outputObject = {};
+            outputItems.forEach(item => {
+                const index = response.findIndex(outputItem => outputItem === item);
+                outputObject[item] = outputItems[index+1];
+            });
+            return outputObject
         }
         catch(error) {
             return this.handleError(`${RedisAI.name}: ${error}`);
