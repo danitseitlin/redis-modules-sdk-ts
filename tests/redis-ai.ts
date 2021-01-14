@@ -41,7 +41,7 @@ describe('AI testing', async function() {
         console.log(response);
     });
     it('modelrun function', async () => {
-        const response = await client.modelrun('blob-key', ['blob-key'], ['classes', 'predictions'])
+        const response = await client.modelrun('blob-model', [], [])
         console.log(response)
     });
     it('modelscan function', async () => {
@@ -75,6 +75,17 @@ describe('AI testing', async function() {
         const response = await client.scriptscan();
         console.log(response)
     });
+     
+    it('info function', async () => {
+        let response = await client.info('values-key');
+        console.log(response)
+        response = await client.info('values-key', true);
+        console.log(response)
+    });
+    it('config function', async () => {
+        const response = await client.config('d/my-path', 'TF')
+        console.log(response)
+    });
     it('dagrun function', async () => {
         const response = await client.dagrun([
             'AI.TENSORSET mytensor FLOAT 1 2 VALUES 5 10'
@@ -91,16 +102,6 @@ describe('AI testing', async function() {
             keyCount: 1,
             keys: ['predictions']
         })
-        console.log(response)
-    }); 
-    it('info function', async () => {
-        let response = await client.info('values-key');
-        console.log(response)
-        response = await client.info('values-key', true);
-        console.log(response)
-    });
-    it('config function', async () => {
-        const response = await client.config('d/my-path', 'TF')
         console.log(response)
     });
 })
