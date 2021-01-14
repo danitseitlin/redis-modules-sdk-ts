@@ -74,6 +74,7 @@ export class RedisAI extends Module {
             model.forEach(byte => {
                 blob+=byte;
             })
+            console.log(blob)
             return await this.redis.send_command('AI.MODELSET', args.concat(['BLOB', blob])); 
         }
         catch(error) {
