@@ -44,7 +44,7 @@ export class Module {
     convertArrayResponseToJson(response: string[]): {[key: string]: (string | number)} {
         console.log('converting...')
         const obj = {}
-        for(let i = 0; i < response.length; i+2) {
+        for(let i = 0; i < response.length; i+=2) {
             if(response[i+1] !== '' && response[i+1] !== undefined)
                 obj[response[i]] = response[i+1];
         }
