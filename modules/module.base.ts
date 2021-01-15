@@ -41,7 +41,7 @@ export class Module {
      * @param response The array response from the module
      * @param keys The keys of the key-value JS object
      */
-    convertArrayResponseToJson(response: string[], keys: (string | number)[]): {[key: string]: (string | number)} {
+    convertArrayResponseToJson(response: string[]): {[key: string]: (string | number)} {
         const obj = {}
         for(let i = 0; i < response.length; i+2) {
             if(response[i+1] !== '')
