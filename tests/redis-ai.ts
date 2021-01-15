@@ -36,7 +36,7 @@ describe('AI testing', async function() {
         console.log(response)
     });
     it('modelget function', async () => {
-        const response = await client.modelget('blob-model', true/*, false, true*/);
+        const response = await client.modelget('blob-model', true, true/*, false, true*/);
         console.log(response);
     });
     it.skip('modelrun function', async () => {
