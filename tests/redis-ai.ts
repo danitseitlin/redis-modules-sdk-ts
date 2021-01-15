@@ -39,7 +39,7 @@ describe('AI testing', async function() {
         console.log(response);
     });
     it('modelrun function', async () => {
-        const response = await client.modelrun('blob-model', ['blob-key'], [])
+        const response = await client.modelrun('blob-model', ['blob-key'], ['blob-key-output'])
         console.log(response)
     });
     it('modelscan function', async () => {
