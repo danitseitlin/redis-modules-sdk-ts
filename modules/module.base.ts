@@ -44,14 +44,9 @@ export class Module {
     convertArrayResponseToJson(response: string[]): {[key: string]: (string | number)} {
         const obj = {}
         for(let i = 0; i < response.length; i+2) {
-            if(response[i+1] !== '')
+            if(response[i+1] !== '' && response[i+1] !== undefined)
                 obj[response[i]] = response[i+1];
         }
-        //keys.forEach(item => {
-        //    const index = response.findIndex(outputItem => outputItem === item);
-        //    if(index !== -1)
-        //        obj[item] = response[index+1];
-        //});
         return obj
     }
 }

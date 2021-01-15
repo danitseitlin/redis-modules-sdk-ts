@@ -34,7 +34,7 @@ describe('AI testing', async function() {
         const response = await client.modelset('blob-model', 'ONNX', 'CPU', file)
         console.log(response)
     });
-    it('modelget function', async () => {
+    it.skip('modelget function', async () => {
         const response = await client.modelget('blob-model', true);
         console.log(response);
     });
