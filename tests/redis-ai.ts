@@ -65,7 +65,7 @@ describe('AI testing', async function() {
         const response = await client.scriptdel('values-key');
         console.log(response)
     });
-    it('scriptrun function', async () => {
+    it.skip('scriptrun function', async () => {
         const scriptFileStr = fs.readFileSync('./scripts/script.txt').toString();
         const scriptStr = 'def bar(a, b):\n    return a + b\n';
         await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3]);
