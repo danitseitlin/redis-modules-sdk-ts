@@ -5,7 +5,7 @@ import * as fs from 'fs';
 let client: RedisAI;
 
 describe('AI testing', async function() {
-    this.timeout('2m');
+    this.timeout(60);
     before(async () => {
         client = new RedisAI({
             host: cliArguments.host,
@@ -24,7 +24,7 @@ describe('AI testing', async function() {
         expect(response).eql('OK', 'The response of tensorset')
     });
     it('tensorget function', async () => {
-        let response = await client.tensorget('values-key', 'VALUES')
+        let response = await client.tensorget('values-key', 'VALUES', true)
         console.log(response)
         response = await client.tensorget('blob-key', 'BLOB')
         console.log(response)
