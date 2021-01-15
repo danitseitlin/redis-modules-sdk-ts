@@ -47,6 +47,7 @@ export class Module {
             if(response[i+1] !== '' && response[i+1] !== undefined)
                 obj[response[i]] = response[i+1];
         }
+        console.log(obj)
         return obj
     }
 }

@@ -24,9 +24,9 @@ describe('AI testing', async function() {
         expect(response).eql('OK', 'The response of tensorset')
     });
     it('tensorget function', async () => {
-        //let response = await client.tensorget('values-key', 'VALUES', true)
-        //console.log(response)
-        const response = await client.tensorget('blob-key', 'BLOB')
+        let response = await client.tensorget('values-key', 'VALUES', true)
+        console.log(response)
+        /*const */response = await client.tensorget('blob-key', 'BLOB')
         console.log(response)
     });
     it('modelset function', async () => {
@@ -35,7 +35,7 @@ describe('AI testing', async function() {
         const response = await client.modelset('blob-model', 'ONNX', 'CPU', file)
         console.log(response)
     });
-    it('modelget function', async () => {
+    it.skip('modelget function', async () => {
         const response = await client.modelget('blob-model', true, true/*, false, true*/);
         console.log(response);
     });
