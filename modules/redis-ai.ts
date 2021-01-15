@@ -53,7 +53,7 @@ export class RedisAI extends Module {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async modelset(key: string, backend: ModelSetBackend, device: ModelSetDevice, model: Buffer, options?: ModelSetOptions) {
+    async modelset(key: string, backend: ModelBackend, device: ModelSetDevice, model: Buffer, options?: ModelSetOptions): Promise<'OK'> {
         try {
             let args: (string | Buffer)[] = [key, backend, device];
             if(options !== undefined) {
@@ -91,7 +91,7 @@ export class RedisAI extends Module {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async modeldel(key: string) {
+    async modeldel(key: string): Promise<'OK'> {
         try {
             return await this.redis.send_command('AI.MODELDEL', [key]);
         }
@@ -99,7 +99,7 @@ export class RedisAI extends Module {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async modelrun(key: string, inputs: string[], outputs: string[]) {
+    async modelrun(key: string, inputs: string[], outputs: string[]): Promise<'OK'> {
         try {
             const args = [key, 'INPUTS'].concat(inputs).concat(['OUTPUTS']).concat(outputs);
             return await this.redis.send_command('AI.MODELRUN', args);
@@ -116,7 +116,7 @@ export class RedisAI extends Module {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async scriptset(key: string, parameters: AIScriptSetParameters) {
+    async scriptset(key: string, parameters: AIScriptSetParameters): Promise<'OK'> {
         try {
             let args = [key, parameters.device];
             if(parameters.tag !== undefined)
@@ -208,7 +208,7 @@ export class RedisAI extends Module {
         });
         return args
     }
-    async info(key: string, RESETSTAT?: boolean) {
+    async info(key: string, RESETSTAT?: boolean): Promise<'OK'> {
         try {
             const args = [key]
             if(RESETSTAT === true) args.push('RESETSTAT')
@@ -224,7 +224,7 @@ export class RedisAI extends Module {
      * @param path 
      * @param backend 
      */
-    async config(path: string, backend?: 'TF' | 'TFLITE' | 'TORCH' | 'ONNX'): Promise<'OK'> {
+    async config(path: string, backend?: ModelBackend): Promise<'OK'> {
         try {
             let args: string[] = []
             if(backend !== undefined)
@@ -251,7 +251,7 @@ export type ModelSetOptions = {
     outputs?: string[],
 }
 
-export type ModelSetBackend = 'TF' | 'TFLITE' | 'TORCH' | 'ONNX';
+export type ModelBackend = 'TF' | 'TFLITE' | 'TORCH' | 'ONNX';
 export type ModelSetDevice = 'CPU' | 'GPU' | string
 
 export type AIScriptSetParameters = {
@@ -266,7 +266,7 @@ export type AIDagrunOarameters = {
 }
 
 export type AIModel = {
-    backend?: ModelSetBackend,
+    backend?: ModelBackend,
     device?: ModelSetDevice,
     tag?: string,
     batchsize?: number,
