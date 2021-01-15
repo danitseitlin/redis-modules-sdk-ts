@@ -37,12 +37,13 @@ export class Module {
     }
 
     /**
-     * 
-     * @param array 
+     * Converting an array to a key-value JS object based on response
+     * @param response The array response from the module
+     * @param keys The keys of the key-value JS object
      */
-    convertResponseToJson(response: string[], array: string[]): {[key: string]: (string | number)} {
+    convertArrayResponseToJson(response: string[], keys: (string | number)[]): {[key: string]: (string | number)} {
         const obj = {}
-        array.forEach(item => {
+        keys.forEach(item => {
             const index = response.findIndex(outputItem => outputItem === item);
             if(index !== -1)
                 obj[item] = response[index+1];
