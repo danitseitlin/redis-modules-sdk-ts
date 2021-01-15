@@ -82,7 +82,7 @@ export class RedisAI extends Module {
                 args.push('META');
             if(blob !== undefined)
                 args.push('BLOB');
-            const response = await this.redis.send_command('AI.MODELGET', args);
+            const response: string[] = await this.redis.send_command('AI.MODELGET', args);
             const outputItems = ['backend', 'device', 'tag', 'batchsize', 'minbatchsize', 'inputs', 'outputs'];
             const outputObject: AIModel = {};
             outputItems.forEach(item => {
