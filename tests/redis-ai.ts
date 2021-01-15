@@ -67,7 +67,7 @@ describe('AI testing', async function() {
     });
     it('scriptrun function', async () => {
         const scriptFileStr = fs.readFileSync('./scripts/script.txt').toString();
-        const scriptStr = 'def bar(a, b):\n return a + b\n';
+        const scriptStr = 'def bar(a, b):\n    return a + b\n';
         await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3]);
         await client.tensorset('tensorB', 'FLOAT', [1, 2], [3, 5]);
         //await client.scriptset('myscript', {
@@ -95,10 +95,10 @@ describe('AI testing', async function() {
     });
      
     it('info function', async () => {
-        let response = await client.info('values-key');
+        const response = await client.info('blob-key');
         console.log(response)
-        response = await client.info('values-key', true);
-        console.log(response)
+        //response = await client.info('values-key', true);
+        //console.log(response)
     });
     it('config function', async () => {
         const response = await client.config('d/my-path', 'TF')
