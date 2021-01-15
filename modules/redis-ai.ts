@@ -78,9 +78,9 @@ export class RedisAI extends Module {
     async modelget(key: string, meta?: boolean, blob?: boolean): Promise<AIModel> {
         try {
             const args = [key];
-            if(meta !== undefined)
+            if(meta === true)
                 args.push('META');
-            if(blob !== undefined)
+            if(blob === true)
                 args.push('BLOB');
             //const outputItems = ['backend', 'device', 'tag', 'batchsize', 'minbatchsize', 'inputs', 'outputs'];
             //const outputObject: AIModel = this.convertArrayResponseToJson(response);
