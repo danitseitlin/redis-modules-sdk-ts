@@ -84,12 +84,13 @@ export class RedisAI extends Module {
                 args.push('BLOB');
             const response: string[] = await this.redis.send_command('AI.MODELGET', args);
             const outputItems = ['backend', 'device', 'tag', 'batchsize', 'minbatchsize', 'inputs', 'outputs'];
-            const outputObject: AIModel = {};
-            outputItems.forEach(item => {
-                const index = response.findIndex(outputItem => outputItem === item);
-                if(index !== -1)
-                    outputObject[item] = response[index+1];
-            });
+            //const outputObject: AIModel = {};
+            //outputItems.forEach(item => {
+            //    const index = response.findIndex(outputItem => outputItem === item);
+            //    if(index !== -1)
+            //        outputObject[item] = response[index+1];
+            //});
+            const outputObject: AIModel = this.convertResponseToJson(response, outputItems);
             return outputObject
         }
         catch(error) {

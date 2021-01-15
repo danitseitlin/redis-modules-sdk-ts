@@ -35,4 +35,18 @@ export class Module {
             throw new Error(error);
         return error;
     }
+
+    /**
+     * 
+     * @param array 
+     */
+    convertResponseToJson(response: string[], array: string[]): {[key: string]: (string | number)} {
+        const obj = {}
+        array.forEach(item => {
+            const index = response.findIndex(outputItem => outputItem === item);
+            if(index !== -1)
+                obj[item] = response[index+1];
+        });
+        return obj
+    }
 }
