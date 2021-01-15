@@ -43,11 +43,15 @@ export class Module {
      */
     convertArrayResponseToJson(response: string[], keys: (string | number)[]): {[key: string]: (string | number)} {
         const obj = {}
-        keys.forEach(item => {
-            const index = response.findIndex(outputItem => outputItem === item);
-            if(index !== -1)
-                obj[item] = response[index+1];
-        });
+        for(let i = 0; i < response.length; i+2) {
+            if(response[i+1] !== '')
+                obj[response[i]] = response[i+1];
+        }
+        //keys.forEach(item => {
+        //    const index = response.findIndex(outputItem => outputItem === item);
+        //    if(index !== -1)
+        //        obj[item] = response[index+1];
+        //});
         return obj
     }
 }
