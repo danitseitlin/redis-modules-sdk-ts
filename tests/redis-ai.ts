@@ -5,6 +5,7 @@ import * as fs from 'fs';
 let client: RedisAI;
 
 describe('AI testing', async function() {
+    this.timeout('2m');
     before(async () => {
         client = new RedisAI({
             host: cliArguments.host,
@@ -34,34 +35,34 @@ describe('AI testing', async function() {
         const response = await client.modelset('blob-model', 'ONNX', 'CPU', file)
         console.log(response)
     });
-    it.skip('modelget function', async () => {
+    it('modelget function', async () => {
         const response = await client.modelget('blob-model', false, true);
         console.log(response);
     });
-    it('modelrun function', async () => {
+    it.skip('modelrun function', async () => {
         const response = await client.modelrun('blob-model', ['blob-key'], ['blob-key-output'])
         console.log(response)
     });
-    it('modelscan function', async () => {
+    it.skip('modelscan function', async () => {
         const response = await client.modelscan();
         console.log(response);
     });
-    it('modeldel function', async () => {
+    it.skip('modeldel function', async () => {
         const response = await client.modeldel('blob-model');
         console.log(response)
     });
-    it('scriptset function', async () => {
+    it.skip('scriptset function', async () => {
         const response = await client.scriptset('values-key', {
             device: 'CPU',
             script: 'addtwo.py'
         })
         console.log(response)
     });
-    it('scriptget function', async () => {
+    it.skip('scriptget function', async () => {
         const response = await client.scriptget('values-key');
         console.log(response)
     });
-    it('scriptdel function', async () => {
+    it.skip('scriptdel function', async () => {
         const response = await client.scriptdel('values-key');
         console.log(response)
     });
@@ -89,22 +90,22 @@ describe('AI testing', async function() {
         );//await client.scriptrun('values-key', 'addtwo', ['mytensor1', 'mytensor2'], ['result'])
         console.log(response)
     });
-    it('scriptscan function', async () => {
+    it.skip('scriptscan function', async () => {
         const response = await client.scriptscan();
         console.log(response)
     });
      
-    it('info function', async () => {
+    it.skip('info function', async () => {
         const response = await client.info('blob-key');
         console.log(response)
         //response = await client.info('values-key', true);
         //console.log(response)
     });
-    it('config function', async () => {
+    it.skip('config function', async () => {
         const response = await client.config('d/my-path', 'TF')
         console.log(response)
     });
-    it('dagrun function', async () => {
+    it.skip('dagrun function', async () => {
         const response = await client.dagrun([
             'AI.TENSORSET mytensor FLOAT 1 2 VALUES 5 10'
         ], undefined, {
@@ -113,7 +114,7 @@ describe('AI testing', async function() {
         })
         console.log(response)
     });
-    it('dagrunRO function', async () => {
+    it.skip('dagrunRO function', async () => {
         const response = await client.dagrun([
             'AI.TENSORSET mytensor FLOAT 1 2 VALUES 5 10'
         ], undefined, {
