@@ -75,7 +75,7 @@ export class RedisAI extends Module {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async modelget(key: string, meta?: boolean, blob?: boolean) {
+    async modelget(key: string, meta?: boolean, blob?: boolean): Promise<AIModel> {
         try {
             const args = [key];
             if(meta !== undefined)
@@ -84,10 +84,11 @@ export class RedisAI extends Module {
                 args.push('BLOB');
             const response = await this.redis.send_command('AI.MODELGET', args);
             const outputItems = ['backend', 'device', 'tag', 'batchsize', 'minbatchsize', 'inputs', 'outputs'];
-            const outputObject = {};
+            const outputObject: AIModel = {};
             outputItems.forEach(item => {
                 const index = response.findIndex(outputItem => outputItem === item);
-                outputObject[item] = response[index+1];
+                if(index !== -1)
+                    outputObject[item] = response[index+1];
             });
             return outputObject
         }
@@ -268,3 +269,13 @@ export type AIDagrunOarameters = {
     keyCount: number,
     keys: string[]
 }
+
+export type AIModel = {
+    backend?: ModelSetBackend,
+    device?: ModelSetDevice,
+    tag?: string,
+    batchsize?: number,
+    minbatchsize?: number,
+    inputs?: string[],
+    outputs?: string[]
+} 
