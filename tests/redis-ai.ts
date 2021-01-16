@@ -67,7 +67,7 @@ describe('AI testing', async function() {
         console.log(response)
     });
     it('scriptget function', async () => {
-        const response = await client.scriptget('myscript');
+        const response = await client.scriptget('myscript', true, true);
         console.log(response)
     });
     

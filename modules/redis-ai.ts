@@ -129,12 +129,12 @@ export class RedisAI extends Module {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async scriptget(key: string, meta?: string, source?: string) {
+    async scriptget(key: string, meta?: boolean, source?: boolean) {
         try {
             const args = [key];
-            if(meta !== undefined)
+            if(meta === true)
                 args.push('META');
-            if(source !== undefined)
+            if(source === true)
                 args.push('SOURCE');
             return await this.redis.send_command('AI.SCRIPTGET', args);
         }
