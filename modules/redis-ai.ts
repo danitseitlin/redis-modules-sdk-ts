@@ -47,7 +47,7 @@ export class RedisAI extends Module {
                 args.push('META');
             if(format !== undefined)
                 args.push(format);
-            const response: string[] = await this.redis.send_command('AI.TENSORGET', args);
+            const response: string[] | string = await this.redis.send_command('AI.TENSORGET', args);
             return this.convertArrayResponseToJson(response);
         }
         catch(error) {

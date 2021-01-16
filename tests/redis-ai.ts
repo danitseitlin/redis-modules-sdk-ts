@@ -33,7 +33,8 @@ describe('AI testing', async function() {
         //you need to import a model file via fs.readFileAsync
         const file = fs.readFileSync('./models/model1.onnx')
         const response = await client.modelset('blob-model', 'ONNX', 'CPU', file)
-        console.log(response)
+        expect(response).eql('OK', 'The response of modelset')
+        //console.log(response)
     });
     it('modelget function', async () => {
         const response = await client.modelget('blob-model', true, true/*, false, true*/);
@@ -48,7 +49,8 @@ describe('AI testing', async function() {
             outputs: ['c']
         })
         response = await client.modelrun('mymodel', ['tensorA', 'tensorB'], ['tensorC'])
-        console.log(response)
+        expect(response).eql('OK', 'The response of modelrun')
+        //console.log(response)
     });
     it('modelscan function', async () => {
         const response = await client.modelscan();
@@ -56,7 +58,8 @@ describe('AI testing', async function() {
     });
     it('modeldel function', async () => {
         const response = await client.modeldel('blob-model');
-        console.log(response)
+        expect(response).eql('OK', 'The response of modeldel')
+        //console.log(response)
     });
     it('scriptset function', async () => {
         const scriptFileStr = fs.readFileSync('./scripts/script.txt').toString();
@@ -64,7 +67,8 @@ describe('AI testing', async function() {
             device: 'CPU',
             script: scriptFileStr
         });
-        console.log(response)
+        expect(response).eql('OK', 'The response of scriptset')
+        //console.log(response)
     });
     it('scriptget function', async () => {
         const response = await client.scriptget('myscript', true, true);
@@ -85,7 +89,8 @@ describe('AI testing', async function() {
         //    tag: 'test_tag'
         //});
         const response = await client.scriptrun('myscript', 'bar', ['tensorA', 'tensorB'], ['tensorC'])
-        console.log(response)
+        expect(response).eql('OK', 'The response of scriptrun')
+        //console.log(response)
         //const response = await client.scriptrun(
         //  'myscript-wtag',
         //  'bar',
@@ -106,11 +111,13 @@ describe('AI testing', async function() {
     });
     it('scriptdel function', async () => {
         const response = await client.scriptdel('myscript');
+        expect(response).eql('OK', 'The response of scriptdel')
         console.log(response)
     });
     it('config function', async () => {
         const response = await client.config('/usr/lib/redis/modules/backends/')
-        console.log(response)
+        expect(response).eql('OK', 'The response of config')
+        //console.log(response)
     });
     it('dagrun function', async () => {
         const response = await client.dagrun([
