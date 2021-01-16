@@ -40,7 +40,7 @@ export class RedisAI extends Module {
      * @param meta 
      * @param format 
      */
-    async tensorget(key: string, format?: 'BLOB' | 'VALUES', meta?: boolean): Promise<AITensor | string[]> {
+    async tensorget(key: string, format?: 'BLOB' | 'VALUES', meta?: boolean): Promise<AITensor | string[] | string> {
         try {
             const args = [key];
             if(meta === true)
@@ -76,7 +76,7 @@ export class RedisAI extends Module {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async modelget(key: string, meta?: boolean, blob?: boolean): Promise<AIModel | string[]> {
+    async modelget(key: string, meta?: boolean, blob?: boolean): Promise<AIModel | string[] | string> {
         try {
             const args = [key];
             if(meta === true)
@@ -130,7 +130,7 @@ export class RedisAI extends Module {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async scriptget(key: string, meta?: boolean, source?: boolean): Promise<AIScript | string[]> {
+    async scriptget(key: string, meta?: boolean, source?: boolean): Promise<AIScript | string[] | string> {
         try {
             const args = [key];
             if(meta === true)
@@ -214,7 +214,7 @@ export class RedisAI extends Module {
         });
         return args
     }
-    async info(key: string, RESETSTAT?: boolean): Promise<AIScriptInfo | string[]> {
+    async info(key: string, RESETSTAT?: boolean): Promise<AIScriptInfo | string[] | string> {
         try {
             const args = [key]
             if(RESETSTAT === true) args.push('RESETSTAT')
