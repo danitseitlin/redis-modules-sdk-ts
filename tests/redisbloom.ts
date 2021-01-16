@@ -91,7 +91,7 @@ describe('RedisBloom Module testing', async function() {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         const decode = require('unidecode');
         const data = "\x03\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x05\x00\x00\x00\x02\x00\x00\x00\x90\x00\x00\x00\x00\x00\x00\x00\x80\x04\x00\x00\x00\x00\x00\x00\x03\x00\x00\x00\x00\x00\x00\x00{\x14\xaeG\xe1zt?\xe9\x86/\xb25\x0e&@\b\x00\x00\x00d\x00\x00\x00\x00\x00\x00\x00\x00";
-        console.log(decode(data))
+        console.log(decode(data.toString()))
         const buffer = Buffer.from(data, 'binary');
         console.log(buffer.toString('ascii'))
         console.log(buffer.toString('binary'))
