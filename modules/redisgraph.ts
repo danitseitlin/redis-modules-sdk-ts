@@ -6,9 +6,10 @@ export class RedisGraph extends Module {
     /**
      * Initializing the RedisGraph object
      * @param options The options of the Redis database.
+     * @param throwError If to throw an exception on error.
      */
-    constructor(options: Redis.RedisOptions) {
-        super(options)
+    constructor(options: Redis.RedisOptions, throwError = true) {
+        super(options, throwError)
     }
 
     /**
@@ -18,7 +19,12 @@ export class RedisGraph extends Module {
      * @returns Result set
      */
     async query(name: string, query: string): Promise<string[][]> {
-        return await this.redis.send_command('GRAPH.QUERY', [name, query])
+        try {
+            return await this.redis.send_command('GRAPH.QUERY', [name, query])
+        }
+        catch(error) {
+            return this.handleError(`${RedisGraph.name}: ${error}`);
+        }
     }
 
     /**
@@ -28,7 +34,12 @@ export class RedisGraph extends Module {
      * @returns Result set
      */
     async readonlyQuery(name: string, query: string): Promise<string[][]> {
-        return await this.redis.send_command('GRAPH.RO_QUERY', [name, query])
+        try {
+            return await this.redis.send_command('GRAPH.RO_QUERY', [name, query])
+        }
+        catch(error) {
+            return this.handleError(`${RedisGraph.name}: ${error}`);
+        }
     }
 
     /**
@@ -38,7 +49,12 @@ export class RedisGraph extends Module {
      * @returns String representation of a query execution plan, with details on results produced by and time spent in each operation.
      */
     async profile(name: string, query: string): Promise<string[]> {
-        return await this.redis.send_command('GRAPH.PROFILE', [name, query])
+        try {
+            return await this.redis.send_command('GRAPH.PROFILE', [name, query])
+        }
+        catch(error) {
+            return this.handleError(`${RedisGraph.name}: ${error}`);
+        }
     }
 
     /**
@@ -47,7 +63,12 @@ export class RedisGraph extends Module {
      * @returns String indicating if operation succeeded or failed.
      */
     async delete(name: string): Promise<string> {
-        return await this.redis.send_command('GRAPH.DELETE', [name])
+        try {
+            return await this.redis.send_command('GRAPH.DELETE', [name])
+        }
+        catch(error) {
+            return this.handleError(`${RedisGraph.name}: ${error}`);
+        }
     }
 
     /**
@@ -57,7 +78,12 @@ export class RedisGraph extends Module {
      * @returns String representation of a query execution plan
      */
     async explain(name: string, query: string): Promise<string[]> {
-        return await this.redis.send_command('GRAPH.EXPLAIN', [name, query])
+        try {
+            return await this.redis.send_command('GRAPH.EXPLAIN', [name, query])
+        }
+        catch(error) {
+            return this.handleError(`${RedisGraph.name}: ${error}`);
+        }
     }
 
     /**
@@ -66,6 +92,11 @@ export class RedisGraph extends Module {
      * @returns A list containing up to 10 of the slowest queries issued against the given graph ID. 
      */
     async slowlog(id: number): Promise<string[]> {
-        return await this.redis.send_command('GRAPH.SLOWLOG', [id])
+        try {
+            return await this.redis.send_command('GRAPH.SLOWLOG', [id])
+        }
+        catch(error) {
+            return this.handleError(`${RedisGraph.name}: ${error}`);
+        }
     }
 }
