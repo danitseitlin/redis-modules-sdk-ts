@@ -5,7 +5,7 @@ import * as fs from 'fs';
 let client: RedisAI;
 
 describe('AI testing', async function() {
-    this.timeout(60);
+    this.timeout(5 * 60);
     before(async () => {
         client = new RedisAI({
             host: cliArguments.host,
