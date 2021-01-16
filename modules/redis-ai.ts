@@ -40,7 +40,7 @@ export class RedisAI extends Module {
      * @param meta 
      * @param format 
      */
-    async tensorget(key: string, format?: 'BLOB' | 'VALUES', meta?: boolean): Promise<AITensor | string[] | string> {
+    async tensorget(key: string, format?: 'BLOB' | 'VALUES', meta?: boolean): Promise<AITensorInfo | string[] | string> {
         try {
             const args = [key];
             if(meta === true)
@@ -297,4 +297,11 @@ export interface AIScriptInfo extends AIScript {
     samples?: number,
     calls?: number,
     errors?: number
+}
+
+export type AITensorInfo = {
+    dtype?: TensorType,
+    shape?: string[],
+    values?: string[],
+    blob?: string
 }

@@ -43,7 +43,6 @@ export class Module {
      */
     convertArrayResponseToJson(response: string[] | string): {[key: string]: (string | number)} | string[] | string {
         const obj = {}
-        console.log(typeof response)
         if((typeof response === 'string') || (typeof response !== 'string' && response.length <= 1))
             return response;
         for(let i = 0; i < response.length; i+=2) {

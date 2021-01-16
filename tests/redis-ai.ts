@@ -1,11 +1,10 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
-import { AIModel, AIScript, AIScriptInfo, RedisAI } from '../modules/redis-ai';
+import { AIModel, AIScript, AIScriptInfo, AITensor, AITensorInfo, RedisAI } from '../modules/redis-ai';
 import * as fs from 'fs';
 let client: RedisAI;
 
 describe('AI testing', async function() {
-    this.timeout(5 * 60);
     before(async () => {
         client = new RedisAI({
             host: cliArguments.host,
@@ -24,15 +23,12 @@ describe('AI testing', async function() {
         expect(response).to.eql('OK', 'The response of tensorset')
     });
     it('tensorget function', async () => {
-        let response = await client.tensorget('values-key', 'VALUES', true)
-        console.log(response)
-        response = await client.tensorget('blob-key', 'BLOB', true)
-        console.log(response)
-        response = await client.tensorget('blob-key', 'BLOB')
-        console.log(response)
+        let response = await client.tensorget('values-key', 'VALUES', true) as AITensorInfo;
+        expect(response.dtype).to.eql('FLOAT', 'The dtype of tensor')
+        response = await client.tensorget('blob-key', 'BLOB', true) as AITensorInfo
+        expect(response.dtype).to.eql('FLOAT', 'The dtype of tensor')
     });
     it('modelset function', async () => {
-        //you need to import a model file via fs.readFileAsync
         const file = fs.readFileSync('./models/model1.onnx')
         const response = await client.modelset('blob-model', 'ONNX', 'CPU', file)
         expect(response).to.eql('OK', 'The response of modelset')
