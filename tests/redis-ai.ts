@@ -142,12 +142,26 @@ describe('AI testing', async function() {
         console.log(response)
     });
     it('dagrunRO function', async () => {
-        const response = await client.dagrun([
-            'AI.TENSORSET mytensor FLOAT 1 2 VALUES 5 10'
-        ], undefined, {
-            keyCount: 1,
-            keys: ['predictions']
+        const blob = fs.readFileSync('./models/graph.pb');
+        let response = await client.modelset('mymodel-dag', 'TF', 'CPU', blob, {
+            inputs: ['a', 'b'],
+            outputs: ['c'],
+            tag: 'test_tag'
         })
+        await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3]);
+        await client.tensorset('tensorB', 'FLOAT', [1, 2], [3, 5]);
+        response = await client.dagrun([
+            'AI.TENSORSET tensorA FLOAT INPUTS 1 2 OUTPUTS 3 5',
+            'AI.TENSORSET tensorB FLOAT INPUTS 1 2 OUTPUTS 3 5',
+            'AI.MODELRUN mymodel-dag INPUTS tensorA tensorB OUTPUTS tensorC'
+        ])
         console.log(response)
+        //const response = await client.dagrun([
+        //    'AI.TENSORSET mytensor FLOAT 1 2 VALUES 5 10'
+        //], undefined, {
+        //    keyCount: 1,
+        //    keys: ['predictions']
+        //})
+        //console.log(response)
     });
 })
