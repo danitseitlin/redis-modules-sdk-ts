@@ -40,20 +40,21 @@ export class RedisAI extends Module {
      * @param meta 
      * @param format 
      */
-    async tensorget(key: string, format?: 'BLOB' | 'VALUES', meta?: boolean) {
+    async tensorget(key: string, format?: 'BLOB' | 'VALUES', meta?: boolean): Promise<AITensor | string[]> {
         try {
             const args = [key];
             if(meta === true)
                 args.push('META');
             if(format !== undefined)
                 args.push(format);
-            return await this.redis.send_command('AI.TENSORGET', args); 
+            const response: string[] = await this.redis.send_command('AI.TENSORGET', args);
+            return this.convertArrayResponseToJson(response);
         }
         catch(error) {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async modelset(key: string, backend: ModelBackend, device: ModelSetDevice, model: Buffer, options?: ModelSetOptions): Promise<'OK'> {
+    async modelset(key: string, backend: AIBackend, device: AIDevice, model: Buffer, options?: ModelSetOptions): Promise<'OK'> {
         try {
             let args: (string | Buffer)[] = [key, backend, device];
             if(options !== undefined) {
@@ -75,7 +76,7 @@ export class RedisAI extends Module {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async modelget(key: string, meta?: boolean, blob?: boolean): Promise<AIModel> {
+    async modelget(key: string, meta?: boolean, blob?: boolean): Promise<AIModel | string[]> {
         try {
             const args = [key];
             if(meta === true)
@@ -109,7 +110,7 @@ export class RedisAI extends Module {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async modelscan() {
+    async modelscan(): Promise<string[][]> {
         try {
             return await this.redis.send_command('AI._MODELSCAN', []);
         }
@@ -129,14 +130,15 @@ export class RedisAI extends Module {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async scriptget(key: string, meta?: boolean, source?: boolean) {
+    async scriptget(key: string, meta?: boolean, source?: boolean): Promise<AIScript | string[]> {
         try {
             const args = [key];
             if(meta === true)
                 args.push('META');
             if(source === true)
                 args.push('SOURCE');
-            return await this.redis.send_command('AI.SCRIPTGET', args);
+            const response: string[] = await this.redis.send_command('AI.SCRIPTGET', args);
+            return this.convertArrayResponseToJson(response);
         }
         catch(error) {
             return this.handleError(`${RedisAI.name}: ${error}`);
@@ -161,7 +163,7 @@ export class RedisAI extends Module {
             return this.handleError(`${RedisAI.name}: ${error}`);
         }
     }
-    async scriptscan() {
+    async scriptscan(): Promise<string[][]> {
         try {
             return await this.redis.send_command('AI._SCRIPTSCAN')
         }
@@ -212,11 +214,12 @@ export class RedisAI extends Module {
         });
         return args
     }
-    async info(key: string, RESETSTAT?: boolean): Promise<'OK'> {
+    async info(key: string, RESETSTAT?: boolean): Promise<AIScriptInfo | string[]> {
         try {
             const args = [key]
             if(RESETSTAT === true) args.push('RESETSTAT')
-            return await this.redis.send_command('AI.INFO', args)
+            const response: string[] = await this.redis.send_command('AI.INFO', args)
+            return this.convertArrayResponseToJson(response);
         }
         catch(error) {
             return this.handleError(`${RedisAI.name}: ${error}`);
@@ -228,7 +231,7 @@ export class RedisAI extends Module {
      * @param path 
      * @param backend 
      */
-    async config(path: string, backend?: ModelBackend): Promise<'OK'> {
+    async config(path: string, backend?: AIBackend): Promise<'OK'> {
         try {
             let args: string[] = []
             if(backend !== undefined)
@@ -255,8 +258,8 @@ export type ModelSetOptions = {
     outputs?: string[],
 }
 
-export type ModelBackend = 'TF' | 'TFLITE' | 'TORCH' | 'ONNX';
-export type ModelSetDevice = 'CPU' | 'GPU' | string
+export type AIBackend = 'TF' | 'TFLITE' | 'TORCH' | 'ONNX';
+export type AIDevice = 'CPU' | 'GPU' | string
 
 export type AIScriptSetParameters = {
     device: string,
@@ -270,11 +273,31 @@ export type AIDagrunOarameters = {
 }
 
 export type AIModel = {
-    backend?: ModelBackend,
-    device?: ModelSetDevice,
+    backend?: AIBackend,
+    device?: AIDevice,
     tag?: string,
     batchsize?: number,
     minbatchsize?: number,
     inputs?: string[],
     outputs?: string[]
-} 
+}
+
+export interface AITensor extends AIModel{
+    blob?: string
+}
+
+export type AIScript = {
+    device?: AIDevice,
+    tag?: string,
+    source?: string
+}
+
+export interface AIScriptInfo extends AIScript {
+    key?: string,
+    type?: string,
+    backend?: string,
+    duration?: number,
+    samples?: number,
+    calls?: number,
+    errors?: number
+}
