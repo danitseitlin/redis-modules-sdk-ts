@@ -122,7 +122,7 @@ export class RedisAI extends Module {
             let args = [key, parameters.device];
             if(parameters.tag !== undefined)
                 args = args.concat(['TAG', parameters.tag])
-            parameters.script = parameters.script.indexOf('"') === -1 ? `"${parameters.script}"`: parameters.script; 
+            //parameters.script = parameters.script.indexOf('"') === -1 ? `"${parameters.script}"`: parameters.script; 
             return await this.redis.send_command('AI.SCRIPTSET', args.concat(['SOURCE', parameters.script]));
         }
         catch(error) {
