@@ -60,9 +60,10 @@ describe('RedisBloom Module testing', async function() {
         
         dataIterator = response[0]
         expect(dataIterator).to.equal(1, 'The chunk data iterator');
-        while(response[0] > 0){
+        while(dataIterator > 0){
             responses.push(response);
             response = await client.scandump(key3, dataIterator)
+            console.log(response)
             dataIterator = response[0]
             //const decoder = new StringDecoder('utf16le');
             //const cent = Buffer.from(response[1]);
