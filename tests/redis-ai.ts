@@ -39,7 +39,7 @@ describe('AI testing', async function() {
         const response = await client.modelget('blob-model', true, true/*, false, true*/);
         console.log(response);
     });
-    it.only('modelrun function', async () => {
+    it('modelrun function', async () => {
         let response = await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3])
         response = await client.tensorset('tensorB', 'FLOAT', [1, 2], [3, 5])
         const blob = fs.readFileSync('./models/graph.pb');
