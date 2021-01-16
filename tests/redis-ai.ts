@@ -27,7 +27,9 @@ describe('AI testing', async function() {
         let response = await client.tensorget('values-key', 'VALUES', true)
         console.log(response)
         response = await client.tensorget('blob-key', 'BLOB', true)
-        console.log(response) 
+        console.log(response)
+        response = await client.tensorget('blob-key', 'BLOB')
+        console.log(response)
     });
     it('modelset function', async () => {
         //you need to import a model file via fs.readFileAsync
@@ -36,9 +38,9 @@ describe('AI testing', async function() {
         expect(response).to.eql('OK', 'The response of modelset')
     });
     it('modelget function', async () => {
-        const response: AIModel = await client.modelget('blob-model', true, true/*, false, true*/) as AIModel;
-        expect(response)
-        console.log(response);
+        const modelName = 'blob-model';
+        const response = await client.modelget('blob-model', true, true/*, false, true*/) as AIModel;
+        expect(response.device).to.eql('CPU', `The device of key ${modelName}`)
     });
     it('modelrun function', async () => {
         let response = await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3])
@@ -54,7 +56,6 @@ describe('AI testing', async function() {
     it('modelscan function', async () => {
         const response = await client.modelscan();
         expect(response[0][0]).to.eql('mymodel', 'The response of mymodel')
-        console.log(response);
     });
     it('modeldel function', async () => {
         const response = await client.modeldel('blob-model');
