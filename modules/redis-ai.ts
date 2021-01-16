@@ -152,7 +152,10 @@ export class RedisAI extends Module {
     }
     async scriptrun(key: string, functionName: string, inputs: string[], outputs: string[]): Promise<'OK'> {
         try {
-            return await this.redis.send_command('AI.SCRIPTRUN', [key, functionName].concat(inputs).concat(outputs));
+            const args = [key, functionName, 'INPUTS'].concat(inputs)
+            args.push('OUTPUTS')
+            //args = args.
+            return await this.redis.send_command('AI.SCRIPTRUN', args.concat(outputs));
         }
         catch(error) {
             return this.handleError(`${RedisAI.name}: ${error}`);
