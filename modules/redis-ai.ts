@@ -46,7 +46,7 @@ export class RedisAI extends Module {
             if(meta === true)
                 args.push('META');
             if(format !== undefined)
-                args.push(format);
+                args.push(format);0
             const response: string[] | string = await this.redis.send_command('AI.TENSORGET', args);
             return this.convertArrayResponseToJson(response);
         }
@@ -83,11 +83,8 @@ export class RedisAI extends Module {
                 args.push('META');
             if(blob === true)
                 args.push('BLOB');
-            //const outputItems = ['backend', 'device', 'tag', 'batchsize', 'minbatchsize', 'inputs', 'outputs'];
-            //const outputObject: AIModel = this.convertArrayResponseToJson(response);
-            console.log(`AI.MODELGET ${args}`)
             const response = await this.redis.send_command('AI.MODELGET', args);
-            return this.convertArrayResponseToJson(response)//outputObject
+            return this.convertArrayResponseToJson(response)
         }
         catch(error) {
             return this.handleError(`${RedisAI.name}: ${error}`);
