@@ -39,34 +39,41 @@ describe('AI testing', async function() {
         const response = await client.modelget('blob-model', true, true/*, false, true*/);
         console.log(response);
     });
-    it.skip('modelrun function', async () => {
-        const response = await client.modelrun('blob-model', ['blob-key'], ['blob-key-output'])
+    it.only('modelrun function', async () => {
+        let response = await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3])
+        response = await client.tensorset('tensorB', 'FLOAT', [1, 2], [3, 5])
+        const blob = fs.readFileSync('./models/graph.pb');
+        response = await client.modelset('mymodel', 'TF', 'CPU', blob, {
+            inputs: ['a', 'b'],
+            outputs: ['c']
+        })
+        response = await client.modelrun('mymodel', ['tensorA', 'tensorB'], ['tensorC'])
         console.log(response)
     });
-    it.skip('modelscan function', async () => {
+    it('modelscan function', async () => {
         const response = await client.modelscan();
         console.log(response);
     });
-    it.skip('modeldel function', async () => {
+    it('modeldel function', async () => {
         const response = await client.modeldel('blob-model');
         console.log(response)
     });
-    it.skip('scriptset function', async () => {
+    it('scriptset function', async () => {
         const response = await client.scriptset('values-key', {
             device: 'CPU',
             script: 'addtwo.py'
         })
         console.log(response)
     });
-    it.skip('scriptget function', async () => {
+    it('scriptget function', async () => {
         const response = await client.scriptget('values-key');
         console.log(response)
     });
-    it.skip('scriptdel function', async () => {
+    it('scriptdel function', async () => {
         const response = await client.scriptdel('values-key');
         console.log(response)
     });
-    it.skip('scriptrun function', async () => {
+    it('scriptrun function', async () => {
         const scriptFileStr = fs.readFileSync('./scripts/script.txt').toString();
         const scriptStr = 'def bar(a, b):\n    return a + b\n';
         await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3]);
@@ -90,22 +97,22 @@ describe('AI testing', async function() {
         );//await client.scriptrun('values-key', 'addtwo', ['mytensor1', 'mytensor2'], ['result'])
         console.log(response)
     });
-    it.skip('scriptscan function', async () => {
+    it('scriptscan function', async () => {
         const response = await client.scriptscan();
         console.log(response)
     });
      
-    it.skip('info function', async () => {
+    it('info function', async () => {
         const response = await client.info('blob-key');
         console.log(response)
         //response = await client.info('values-key', true);
         //console.log(response)
     });
-    it.skip('config function', async () => {
+    it('config function', async () => {
         const response = await client.config('d/my-path', 'TF')
         console.log(response)
     });
-    it.skip('dagrun function', async () => {
+    it('dagrun function', async () => {
         const response = await client.dagrun([
             'AI.TENSORSET mytensor FLOAT 1 2 VALUES 5 10'
         ], undefined, {
@@ -114,7 +121,7 @@ describe('AI testing', async function() {
         })
         console.log(response)
     });
-    it.skip('dagrunRO function', async () => {
+    it('dagrunRO function', async () => {
         const response = await client.dagrun([
             'AI.TENSORSET mytensor FLOAT 1 2 VALUES 5 10'
         ], undefined, {
