@@ -120,7 +120,7 @@ export class RedisBloom extends Module {
      * @param key The key of the 'BF.SCANDUMP' command
      * @param iterator The iterator of the 'BF.SCANDUMP' command
      */
-    async scandump(key: string, iterator: number): Promise<string[]> {
+    async scandump(key: string, iterator: number): Promise<[number, Buffer]> {
         try {
             return await this.redis.send_command('BF.SCANDUMP', [key, iterator])
         }
@@ -135,9 +135,9 @@ export class RedisBloom extends Module {
      * @param iterator The iterator of the 'BF.LOADCHUNK' command
      * @param data The data of the 'BF.LOADCHUNK' command
      */
-    async loadchunk(key: string, iterator: number, data: string): Promise<'OK'> {
+    async loadchunk(key: string, iterator: number, data: Buffer): Promise<'OK'> {
         try {
-            return await this.redis.send_command('BF.LOADCHUNK', [key, iterator, data]);
+            return await this.redis.send_command('BF.LOADCHUNK', [key, iterator, data.toString()]);
         }
         catch(error) {
             return this.handleError(`${RedisBloom.name}: ${error}`);

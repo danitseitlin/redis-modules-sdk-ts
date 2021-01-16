@@ -6,7 +6,7 @@ const key1 = 'key1bloom';
 const key2 = 'key2bloom';
 const key3 = 'k1';
 const item1 = 'item1';
-const responses: string[][] = []
+const responses: [number, Buffer][] = []
 let dataIterator: number;
 let data: string;
 import { StringDecoder } from 'string_decoder'
@@ -58,15 +58,15 @@ describe('RedisBloom Module testing', async function() {
         let response = await client.scandump(key3, 0)
         console.log(response)
         
-        dataIterator = parseInt(response[0])
+        dataIterator = response[0]
         expect(dataIterator).to.equal(1, 'The chunk data iterator');
-        while(parseInt(response[0]) > 0){
+        while(response[0] > 0){
             responses.push(response);
             response = await client.scandump(key3, dataIterator)
-            dataIterator = parseInt(response[0])
-            const decoder = new StringDecoder('utf16le');
-            const cent = Buffer.from(response[1]);
-            console.log(decoder.write(cent));
+            dataIterator = response[0]
+            //const decoder = new StringDecoder('utf16le');
+            //const cent = Buffer.from(response[1]);
+            //console.log(decoder.write(cent));
         }
         //for(let i = 0; i < responses[0][1].length; i++) {
         //    console.log(responses[0][1][i]);
@@ -88,7 +88,7 @@ describe('RedisBloom Module testing', async function() {
             //console.log(Buffer.from(res[1], 'ascii').toString('utf-8'))
             //console.log(Buffer.from(res[1], 'ascii').toString('utf8'))
             //console.log(Buffer.from(res[1], 'ascii').toString('utf16le'))
-            console.log(await client.loadchunk(key3, parseInt(res[0]), res[1]))
+            console.log(await client.loadchunk(key3, res[0], res[1]))
         }
         //const response = await client.loadchunk(key2, dataIterator, data)
         //console.log(response)
