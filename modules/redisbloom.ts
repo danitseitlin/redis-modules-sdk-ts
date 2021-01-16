@@ -135,9 +135,9 @@ export class RedisBloom extends Module {
      * @param iterator The iterator of the 'BF.LOADCHUNK' command
      * @param data The data of the 'BF.LOADCHUNK' command
      */
-    async loadchunk(key: string, iterator: number, data: Buffer): Promise<'OK'> {
+    async loadchunk(key: string, iterator: number, data: string): Promise<'OK'> {
         try {
-            return await this.redis.send_command('BF.LOADCHUNK', [key, iterator, data.toString()]);
+            return await this.redis.send_command('BF.LOADCHUNK', [key, iterator, data]);
         }
         catch(error) {
             return this.handleError(`${RedisBloom.name}: ${error}`);
