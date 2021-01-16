@@ -1,6 +1,6 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
-import { AIModel, AIScript, AIScriptInfo, AITensor, AITensorInfo, RedisAI } from '../modules/redis-ai';
+import { AIModel, AIScript, AIScriptInfo, AITensorInfo, RedisAI } from '../modules/redis-ai';
 import * as fs from 'fs';
 let client: RedisAI;
 
@@ -95,14 +95,14 @@ describe('AI testing', async function() {
     });
     it('dagrun function', async () => {
         const blob = fs.readFileSync('./models/graph.pb');
-        let response = await client.modelset('mymodel-dag', 'TF', 'CPU', blob, {
+        await client.modelset('mymodel-dag', 'TF', 'CPU', blob, {
             inputs: ['a', 'b'],
             outputs: ['c'],
             tag: 'test_tag'
         })
         await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3]);
         await client.tensorset('tensorB', 'FLOAT', [1, 2], [3, 5]);
-        response = await client.dagrun([
+        const response = await client.dagrun([
             'AI.TENSORSET tensorA FLOAT INPUTS 1 2 OUTPUTS 3 5',
             'AI.TENSORSET tensorB FLOAT INPUTS 1 2 OUTPUTS 3 5',
             'AI.MODELRUN mymodel-dag INPUTS tensorA tensorB OUTPUTS tensorC'
@@ -111,14 +111,14 @@ describe('AI testing', async function() {
     });
     it('dagrunRO function', async () => {
         const blob = fs.readFileSync('./models/graph.pb');
-        let response = await client.modelset('mymodel-dag', 'TF', 'CPU', blob, {
+        await client.modelset('mymodel-dag', 'TF', 'CPU', blob, {
             inputs: ['a', 'b'],
             outputs: ['c'],
             tag: 'test_tag'
         })
         await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3]);
         await client.tensorset('tensorB', 'FLOAT', [1, 2], [3, 5]);
-        response = await client.dagrunRO([
+        const response = await client.dagrunRO([
             'AI.TENSORSET tensorA FLOAT INPUTS 1 2 OUTPUTS 3 5',
             'AI.TENSORSET tensorB FLOAT INPUTS 1 2 OUTPUTS 3 5',
             'AI.MODELRUN mymodel-dag INPUTS tensorA tensorB OUTPUTS tensorC'
