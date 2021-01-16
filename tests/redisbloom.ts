@@ -55,42 +55,50 @@ describe('RedisBloom Module testing', async function() {
         expect(response[1]).to.equal(100, 'The value of the \'Capacity\' item')
     });
     it('scandump function', async () => {
-        let response = await client.scandump(key3, 0)
-        console.log(response)
-        
-        dataIterator = response[0]
-        expect(dataIterator).to.equal(1, 'The chunk data iterator');
-        while(dataIterator > 0){
-            responses.push(response);
-            response = await client.scandump(key3, dataIterator)
-            console.log(response)
-            dataIterator = response[0]
-            //const decoder = new StringDecoder('utf16le');
-            //const cent = Buffer.from(response[1]);
-            //console.log(decoder.write(cent));
-        }
+        //let response = await client.scandump(key3, 0)
+        ////console.log(response)
+        //
+        //dataIterator = response[0]
+        //expect(dataIterator).to.equal(1, 'The chunk data iterator');
+        //while(dataIterator > 0){
+        //    responses.push(response);
+        //    response = await client.scandump(key3, dataIterator)
+        //    //console.log(response)
+        //    dataIterator = response[0]
+        //    //const decoder = new StringDecoder('utf16le');
+        //    //const cent = Buffer.from(response[1]);
+        //    //console.log(decoder.write(cent));
+        //}
         //for(let i = 0; i < responses[0][1].length; i++) {
         //    console.log(responses[0][1][i]);
         //}
         //const buffer = Buffer.from(response[1], 'hex');
         //console.log(buffer.toString())
         //data = buffer.toString('hex')//Buffer.from(response[1], 'utf16');//Buffer.from(response[1]).toString();
-        console.log(data)
-        expect(data).to.not.equal('', 'The chunk data')
+        //console.log(data)
+        await client.reserve('1', 0.01, 100);
+        await client.add('1', '1');
+        await client.add('1', '2');
+        await client.add('1', '3');
+        const response = await client.scandump('1', 0);
+        responses.push(response);
+        console.log(responses)
+        //expect(data).to.not.equal('', 'The chunk data')
     });
     it('loadchunk function', async () => {
         await client.redis.del(key3);
-        for(const res of responses) {
-            //console.log(`\n=== ${res[0]} ===`)
-            //console.log(Buffer.from(res[1], 'ascii').toString('hex'))
-            //console.log(Buffer.from(res[1], 'ascii').toString('ascii'))
-            //console.log(Buffer.from(res[1], 'ascii').toString('base64'))
-            //console.log(Buffer.from(res[1], 'ascii').toString('binary'))
-            //console.log(Buffer.from(res[1], 'ascii').toString('utf-8'))
-            //console.log(Buffer.from(res[1], 'ascii').toString('utf8'))
-            //console.log(Buffer.from(res[1], 'ascii').toString('utf16le'))
-            console.log(await client.loadchunk(key3, res[0], res[1]))
-        }
+        console.log(await client.loadchunk(key3, responses[0][0], responses[0][1]));
+        //for(const res of responses) {
+        //    //console.log(`\n=== ${res[0]} ===`)
+        //    //console.log(Buffer.from(res[1], 'ascii').toString('hex'))
+        //    //console.log(Buffer.from(res[1], 'ascii').toString('ascii'))
+        //    //console.log(Buffer.from(res[1], 'ascii').toString('base64'))
+        //    //console.log(Buffer.from(res[1], 'ascii').toString('binary'))
+        //    //console.log(Buffer.from(res[1], 'ascii').toString('utf-8'))
+        //    //console.log(Buffer.from(res[1], 'ascii').toString('utf8'))
+        //    //console.log(Buffer.from(res[1], 'ascii').toString('utf16le'))
+        //    console.log(await client.loadchunk(key3, res[0], res[1]))
+        //}
         //const response = await client.loadchunk(key2, dataIterator, data)
         //console.log(response)
     });
