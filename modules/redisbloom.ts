@@ -122,7 +122,7 @@ export class RedisBloom extends Module {
      */
     async scandump(key: string, iterator: number): Promise<[number, Buffer]> {
         try {
-            return await this.redis.send_command('BF.SCANDUMP', [key, iterator])
+            return await this.redis.send_command('BF.SCANDUMP', [key, iterator]) as [number, Buffer]
         }
         catch(error) {
             return this.handleError(`${RedisBloom.name}: ${error}`);
