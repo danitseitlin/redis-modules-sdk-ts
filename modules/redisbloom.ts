@@ -137,7 +137,8 @@ export class RedisBloom extends Module {
      */
     async loadchunk(key: string, iterator: number, data: string): Promise<'OK'> {
         try {
-            return await this.redis.send_command('BF.LOADCHUNK', [key, iterator, data]);
+            console.log(data)
+            return await this.redis.send_command('BF.LOADCHUNK', [key, iterator, JSON.stringify(data)]);
         }
         catch(error) {
             return this.handleError(`${RedisBloom.name}: ${error}`);
