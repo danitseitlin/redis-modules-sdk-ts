@@ -72,7 +72,7 @@ await client.disconnect();
 ## <img src='https://oss.redislabs.com/redistimeseries/images/logo.svg' style='max-width:100%;' height='30'/> RedisTimeSeries module
 ### Quick start :toolbox:
 ```
-const client = new RedisTimeSeies({
+const client = new RedisTimeSeries({
     host: 'hostname',
     port: 43758,
 });
