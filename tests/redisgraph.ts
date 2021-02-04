@@ -46,4 +46,10 @@ describe('RedisGraph Module testing', async function() {
         const response = await client.delete(graphName)
         expect(response).to.contain('Graph removed', 'The response of the GRAPH.DELETE command');
     });
+    it('config function', async () => {
+        let response = await client.config('SET', 'RESULTSET_SIZE', '1000')
+        console.log(response)
+        response = await client.config('GET', 'RESULTSET_SIZE')
+        console.log(response)
+    });
 });

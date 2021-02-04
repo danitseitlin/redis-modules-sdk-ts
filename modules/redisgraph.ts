@@ -99,4 +99,23 @@ export class RedisGraph extends Module {
             return this.handleError(`${RedisGraph.name}: ${error}`);
         }
     }
+
+    /**
+     * Retrieves, describes and sets runtime configuration options
+     * @param command The command type
+     * @param option The option
+     * @param value In case of 'SET' command, a valid value to set
+     * @returns If 'SET' command, returns 'OK' for valid runtime-settable option names and values. If 'GET' command, returns a string with the current option's value.
+     */
+    async config(command: 'GET' | 'SET' | 'HELP', option: string, value?: string): Promise<string[][]> {
+        try {
+            const args = [command, option];
+            if(command === 'SET')
+                args.push(value);
+            return await this.redis.send_command('GRAPH.CONFIG', args);
+        }
+        catch(error) {
+            return this.handleError(`${RedisGraph.name}: ${error}`);
+        }
+    }
 }
