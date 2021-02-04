@@ -51,5 +51,7 @@ describe('RedisGraph Module testing', async function() {
         console.log(response)
         response = await client.config('GET', 'RESULTSET_SIZE')
         console.log(response)
+        response = await client.config('GET', '*')
+        console.log(response)
     });
 });
