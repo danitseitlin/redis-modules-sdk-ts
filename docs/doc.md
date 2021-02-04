@@ -179,6 +179,7 @@ await client.disconnect();
 | delete        | GRAPH.DELETE        |
 | explain       | GRAPH.EXPLAIN       |
 | slowlog       | GRAPH.SLOWLOG       |
+| config        | GRAPH.CONFIG        |
 
 ## <img src='https://oss.redislabs.com/redisgears/images/RedisGears.png' style='max-width:100%;' height='30'/> RedisGears module
 ### Quick start :toolbox:
