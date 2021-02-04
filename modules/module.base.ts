@@ -36,4 +36,3 @@ export class Module {
         return error;
     }
 }
-
