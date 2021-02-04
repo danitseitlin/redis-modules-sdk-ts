@@ -107,7 +107,7 @@ export class RedisGraph extends Module {
      * @param value In case of 'SET' command, a valid value to set
      * @returns If 'SET' command, returns 'OK' for valid runtime-settable option names and values. If 'GET' command, returns a string with the current option's value.
      */
-    async config(command: 'GET' | 'SET' | 'HELP', option: string, value?: string): Promise<string[][]> {
+    async config(command: 'GET' | 'SET' | 'HELP', option: string, value?: string): Promise<string[] | 'OK'> {
         try {
             const args = [command, option];
             if(command === 'SET')
