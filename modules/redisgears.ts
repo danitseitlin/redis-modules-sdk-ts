@@ -9,7 +9,7 @@ export class RedisGears extends Module {
      * @param throwError If to throw an exception on error.
      */
     constructor(options: Redis.RedisOptions, throwError = true) {
-        super(options, throwError)
+        super(RedisGears.name, options, throwError)
     }
 
     /**
@@ -21,7 +21,7 @@ export class RedisGears extends Module {
             return await this.redis.send_command('RG.ABORTEXECUTION', [id]);
         }
         catch(error) {
-            return this.handleError(`${RedisGears.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -34,7 +34,7 @@ export class RedisGears extends Module {
             return await this.redis.send_command('RG.CONFIGGET', key);
         }
         catch(error) {
-            return this.handleError(`${RedisGears.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -50,7 +50,7 @@ export class RedisGears extends Module {
             return await this.redis.send_command('RG.CONFIGSET', args);
         }
         catch(error) {
-            return this.handleError(`${RedisGears.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -63,7 +63,7 @@ export class RedisGears extends Module {
             return await this.redis.send_command('RG.DROPEXECUTION', [id]);
         }
         catch(error) {
-            return this.handleError(`${RedisGears.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -75,7 +75,7 @@ export class RedisGears extends Module {
             return await this.redis.send_command('RG.DUMPEXECUTIONS');
         }
         catch(error) {
-            return this.handleError(`${RedisGears.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -87,7 +87,7 @@ export class RedisGears extends Module {
             return await this.redis.send_command('RG.DUMPREGISTRATIONS');
         }
         catch(error) {
-            return this.handleError(`${RedisGears.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -104,7 +104,7 @@ export class RedisGears extends Module {
             return await this.redis.send_command('RG.GETEXECUTION', args);
         }
         catch(error) {
-            return this.handleError(`${RedisGears.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -117,7 +117,7 @@ export class RedisGears extends Module {
             return await this.redis.send_command('RG.GETRESULTS', [id])
         }
         catch(error) {
-            return this.handleError(`${RedisGears.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -130,7 +130,7 @@ export class RedisGears extends Module {
             return await this.redis.send_command('RG.GETRESULTSBLOCKING', [id])
         }
         catch(error) {
-            return this.handleError(`${RedisGears.name}: ${error}`);
+            return this.handleError(error);
         }
     }
     
@@ -142,7 +142,7 @@ export class RedisGears extends Module {
             return await this.redis.send_command('RG.INFOCLUSTER')
         }
         catch(error) {
-            return this.handleError(`${RedisGears.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -159,7 +159,7 @@ export class RedisGears extends Module {
             return await this.redis.send_command('RG.PYEXECUTE', args);
         }
         catch(error) {
-            return this.handleError(`${RedisGears.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -171,7 +171,7 @@ export class RedisGears extends Module {
             return await this.redis.send_command('RG.PYSTATS');
         }
         catch(error) {
-            return this.handleError(`${RedisGears.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -183,7 +183,7 @@ export class RedisGears extends Module {
             return await this.redis.send_command('RG.PYDUMPREQS');
         }
         catch(error) {
-            return this.handleError(`${RedisGears.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -195,7 +195,7 @@ export class RedisGears extends Module {
             return await this.redis.send_command('RG.REFRESHCLUSTER');
         }
         catch(error) {
-            return this.handleError(`${RedisGears.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -209,7 +209,7 @@ export class RedisGears extends Module {
             return await this.redis.send_command('RG.TRIGGER', [trigger].concat(args));
         }
         catch(error) {
-            return this.handleError(`${RedisGears.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -222,7 +222,7 @@ export class RedisGears extends Module {
             return await this.redis.send_command('RG.UNREGISTER', [id]);
         }
         catch(error) {
-            return this.handleError(`${RedisGears.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 }

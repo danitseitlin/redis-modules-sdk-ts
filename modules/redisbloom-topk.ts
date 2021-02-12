@@ -9,7 +9,7 @@ export class RedisBloomTopK extends Module {
      * @param throwError If to throw an exception on error.
      */
     constructor(options: Redis.RedisOptions, throwError = true) {
-        super(options, throwError)
+        super(RedisBloomTopK.name, options, throwError)
     }
 
     /**
@@ -25,7 +25,7 @@ export class RedisBloomTopK extends Module {
             return await this.redis.send_command('TOPK.RESERVE', [key, topk, width, depth, decay]);
         }
         catch(error) {
-            return this.handleError(`${RedisBloomTopK.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -39,7 +39,7 @@ export class RedisBloomTopK extends Module {
             return await this.redis.send_command('TOPK.ADD', [key].concat(items as string[]))
         }
         catch(error) {
-            return this.handleError(`${RedisBloomTopK.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -57,7 +57,7 @@ export class RedisBloomTopK extends Module {
             return await this.redis.send_command('TOPK.INCRBY', args);
         }
         catch(error) {
-            return this.handleError(`${RedisBloomTopK.name}: ${error}`);
+            return this.handleError(error);
         }
         
     }
@@ -72,7 +72,7 @@ export class RedisBloomTopK extends Module {
             return await this.redis.send_command('TOPK.QUERY', [key].concat(items as string[]))
         }
         catch(error) {
-            return this.handleError(`${RedisBloomTopK.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -86,7 +86,7 @@ export class RedisBloomTopK extends Module {
             return await this.redis.send_command('TOPK.COUNT', [key].concat(items as string[]));
         }
         catch(error) {
-            return this.handleError(`${RedisBloomTopK.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -99,7 +99,7 @@ export class RedisBloomTopK extends Module {
             return await this.redis.send_command('TOPK.LIST', [key]);
         }
         catch(error) {
-            return this.handleError(`${RedisBloomTopK.name}: ${error}`);
+            return this.handleError(error);
         }
     }
     
@@ -112,7 +112,7 @@ export class RedisBloomTopK extends Module {
             return await this.redis.send_command('TOPK.INFO', [key]);
         }
         catch(error) {
-            return this.handleError(`${RedisBloomTopK.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 }

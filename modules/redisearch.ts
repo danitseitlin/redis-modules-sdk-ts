@@ -10,7 +10,7 @@ export class Redisearch extends Module {
      * @param throwError If to throw an exception on error.
      */
     constructor(options: Redis.RedisOptions, throwError = true) {
-        super(options, throwError)
+        super(Redisearch.name, options, throwError)
     }
 
     /**
@@ -71,7 +71,7 @@ export class Redisearch extends Module {
             return await  this.redis.send_command('FT.CREATE', args);
         }
         catch(error) {
-            return this.handleError(`${Redisearch.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -167,7 +167,7 @@ export class Redisearch extends Module {
             return await this.redis.send_command('FT.SEARCH', args);
         }
         catch(error) {
-            return this.handleError(`${Redisearch.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -236,7 +236,7 @@ export class Redisearch extends Module {
             return await this.redis.send_command('FT.AGGREGATE', args);
         }
         catch(error) {
-            return this.handleError(`${Redisearch.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -251,7 +251,7 @@ export class Redisearch extends Module {
             return await this.redis.send_command('FT.EXPLAIN', [index, query]);
         }
         catch(error) {
-            return this.handleError(`${Redisearch.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -266,7 +266,7 @@ export class Redisearch extends Module {
             return await this.redis.send_command('FT.EXPLAINCLI', [index, query]);
         }
         catch(error) {
-            return this.handleError(`${Redisearch.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -292,7 +292,7 @@ export class Redisearch extends Module {
             return await this.redis.send_command('FT.ALTER', args);
         }
         catch(error) {
-            return this.handleError(`${Redisearch.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -309,7 +309,7 @@ export class Redisearch extends Module {
             return await this.redis.send_command('FT.DROPINDEX', args);
         }
         catch(error) {
-            return this.handleError(`${Redisearch.name}: ${error}`);
+            return this.handleError(error);
         }
     }
     
@@ -324,7 +324,7 @@ export class Redisearch extends Module {
             return await this.redis.send_command('FT.ALIASADD', [name, index]);
         }
         catch(error) {
-            return this.handleError(`${Redisearch.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -339,7 +339,7 @@ export class Redisearch extends Module {
             return await this.redis.send_command('FT.ALIASUPDATE', [name, index]);
         }
         catch(error) {
-            return this.handleError(`${Redisearch.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -353,7 +353,7 @@ export class Redisearch extends Module {
             return await this.redis.send_command('FT.ALIASDEL', [name]);
         }
         catch(error) {
-            return this.handleError(`${Redisearch.name}: ${error}`);
+            return this.handleError(error);
         }
     }
     
@@ -368,7 +368,7 @@ export class Redisearch extends Module {
             return await this.redis.send_command('FT.TAGVALS', [index, field]);
         }
         catch(error) {
-            return this.handleError(`${Redisearch.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -390,7 +390,7 @@ export class Redisearch extends Module {
             return await this.redis.send_command('FT.SUGADD', args);
         }
         catch(error) {
-            return this.handleError(`${Redisearch.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -415,7 +415,7 @@ export class Redisearch extends Module {
             return await this.redis.send_command('FT.SUGGET', args);
         }
         catch(error) {
-            return this.handleError(`${Redisearch.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -429,7 +429,7 @@ export class Redisearch extends Module {
             return await this.redis.send_command('FT.SUGDEL', [key, suggestion]);
         }
         catch(error) {
-            return this.handleError(`${Redisearch.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -442,7 +442,7 @@ export class Redisearch extends Module {
             return await this.redis.send_command('FT.SUGLEN', key);
         }
         catch(error) {
-            return this.handleError(`${Redisearch.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -462,7 +462,7 @@ export class Redisearch extends Module {
             return await this.redis.send_command('FT.SYNUPDATE', args);
         }
         catch(error) {
-            return this.handleError(`${Redisearch.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -476,7 +476,7 @@ export class Redisearch extends Module {
             return await this.redis.send_command('FT.SYNDUMP', [index]);
         }
         catch(error) {
-            return this.handleError(`${Redisearch.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -501,7 +501,7 @@ export class Redisearch extends Module {
             return await this.redis.send_command('FT.SPELLCHECK', args);
         }
         catch(error) {
-            return this.handleError(`${Redisearch.name}: ${error}`);
+            return this.handleError(error);
         }
     }
     
@@ -516,7 +516,7 @@ export class Redisearch extends Module {
             return await this.redis.send_command('FT.DICTADD', [dict].concat(terms));
         }
         catch(error) {
-            return this.handleError(`${Redisearch.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -531,7 +531,7 @@ export class Redisearch extends Module {
             return await this.redis.send_command('FT.DICTDEL', [dict].concat(terms));
         }
         catch(error) {
-            return this.handleError(`${Redisearch.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -545,7 +545,7 @@ export class Redisearch extends Module {
             return await this.redis.send_command('FT.DICTDUMP', [dict]);
         }
         catch(error) {
-            return this.handleError(`${Redisearch.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -559,7 +559,7 @@ export class Redisearch extends Module {
             return await this.redis.send_command('FT.INFO', [index]);
         }
         catch(error) {
-            return this.handleError(`${Redisearch.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -578,7 +578,7 @@ export class Redisearch extends Module {
             return await this.redis.send_command('FT.CONFIG', args);
         }
         catch(error) {
-            return this.handleError(`${Redisearch.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 }

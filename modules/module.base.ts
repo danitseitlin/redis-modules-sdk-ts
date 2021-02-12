@@ -9,7 +9,7 @@ export class Module {
      * @param options The options of the Redis database
      * @param throwError If to throw an exception on error.
      */
-    constructor(public options: Redis.RedisOptions, public throwError: boolean) {}
+    constructor(public name: string, public options: Redis.RedisOptions, public throwError: boolean) {}
 
     /**
      * Connecting to the Redis database with the module
@@ -31,8 +31,9 @@ export class Module {
      * @param error The message of the error
      */
     handleError(error: string): any {
+        const err = `${this.name}: ${error}`
         if(this.throwError)
-            throw new Error(error);
-        return error;
+            throw new Error(err);
+        return err;
     }
 }
