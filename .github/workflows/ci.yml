@@ -11,7 +11,7 @@ on:
 jobs:
   #Verifying build and compilation
   Setup:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     outputs:
       files: ${{ steps.files.outputs.all }}
       #ReJSON
@@ -56,14 +56,12 @@ jobs:
   ReJSON:
     needs: Setup
     if: needs.Setup.outputs.rejson-selected == 'true' || needs.Setup.outputs.rejson-changes == 'true'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-    - name: Install curl
-      run: sudo apt install curl
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20201109
+        docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/rejson:latest && docker ps -a
@@ -73,12 +71,12 @@ jobs:
   RTS:
     needs: Setup
     if: needs.Setup.outputs.rts-selected == 'true' || needs.Setup.outputs.rts-changes == 'true'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20201109
+        docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/redistimeseries && docker ps -a
@@ -88,12 +86,12 @@ jobs:
   Redisearch:
     needs: Setup
     if: needs.Setup.outputs.redisearch-selected == 'true' || needs.Setup.outputs.redisearch-changes == 'true'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20201109
+        docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/redisearch:latest && docker ps -a
@@ -103,12 +101,12 @@ jobs:
   RedisGraph:
     needs: Setup
     if: needs.Setup.outputs.redisgraph-selected == 'true' || needs.Setup.outputs.redisgraph-changes == 'true'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20201109
+        docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/redisgraph:latest && docker ps -a
@@ -118,12 +116,12 @@ jobs:
   RedisGears:
     needs: Setup
     if: needs.Setup.outputs.redisgears-selected == 'true' || needs.Setup.outputs.redisgears-changes == 'true'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20201109
+        docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/redisgears:latest && docker ps -a
@@ -133,12 +131,12 @@ jobs:
   ReBloom:
     needs: Setup
     if: needs.Setup.outputs.redisbloom-selected == 'true' || needs.Setup.outputs.redisbloom-changes == 'true'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20201109
+        docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
@@ -148,12 +146,12 @@ jobs:
   ReBloomTopK:
     needs: Setup
     if: needs.Setup.outputs.rebloom-topk-selected == 'true' || needs.Setup.outputs.rebloom-topk-changes == 'true'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20201109
+        docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
@@ -163,12 +161,12 @@ jobs:
   ReBloomCMK:
     needs: Setup
     if: needs.Setup.outputs.rebloom-cmk-selected == 'true' || needs.Setup.outputs.rebloom-cmk-changes == 'true'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20201109
+        docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
@@ -178,12 +176,12 @@ jobs:
   ReBloomCuckoo:
     needs: Setup
     if: needs.Setup.outputs.rebloom-cuckoo-selected == 'true' || needs.Setup.outputs.rebloom-cuckoo-changes == 'true'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20201109
+        docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
