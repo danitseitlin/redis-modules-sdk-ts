@@ -58,6 +58,8 @@ jobs:
     if: needs.Setup.outputs.rejson-selected == 'true' || needs.Setup.outputs.rejson-changes == 'true'
     runs-on: ubuntu-20.04
     steps:
+    - name: Install curl
+      run: sudo apt install curl
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
