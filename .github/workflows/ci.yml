@@ -11,7 +11,7 @@ on:
 jobs:
   #Verifying build and compilation
   Setup:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     outputs:
       files: ${{ steps.files.outputs.all }}
       #ReJSON
@@ -56,7 +56,7 @@ jobs:
   ReJSON:
     needs: Setup
     if: needs.Setup.outputs.rejson-selected == 'true' || needs.Setup.outputs.rejson-changes == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - uses: docker-practice/actions-setup-docker@master
       with:
@@ -71,7 +71,7 @@ jobs:
   RTS:
     needs: Setup
     if: needs.Setup.outputs.rts-selected == 'true' || needs.Setup.outputs.rts-changes == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - uses: docker-practice/actions-setup-docker@master
       with:
@@ -86,7 +86,7 @@ jobs:
   Redisearch:
     needs: Setup
     if: needs.Setup.outputs.redisearch-selected == 'true' || needs.Setup.outputs.redisearch-changes == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - uses: docker-practice/actions-setup-docker@master
       with:
@@ -101,7 +101,7 @@ jobs:
   RedisGraph:
     needs: Setup
     if: needs.Setup.outputs.redisgraph-selected == 'true' || needs.Setup.outputs.redisgraph-changes == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - uses: docker-practice/actions-setup-docker@master
       with:
@@ -116,7 +116,7 @@ jobs:
   RedisGears:
     needs: Setup
     if: needs.Setup.outputs.redisgears-selected == 'true' || needs.Setup.outputs.redisgears-changes == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - uses: docker-practice/actions-setup-docker@master
       with:
@@ -131,7 +131,7 @@ jobs:
   ReBloom:
     needs: Setup
     if: needs.Setup.outputs.redisbloom-selected == 'true' || needs.Setup.outputs.redisbloom-changes == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - uses: docker-practice/actions-setup-docker@master
       with:
@@ -146,7 +146,7 @@ jobs:
   ReBloomTopK:
     needs: Setup
     if: needs.Setup.outputs.rebloom-topk-selected == 'true' || needs.Setup.outputs.rebloom-topk-changes == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - uses: docker-practice/actions-setup-docker@master
       with:
@@ -161,7 +161,7 @@ jobs:
   ReBloomCMK:
     needs: Setup
     if: needs.Setup.outputs.rebloom-cmk-selected == 'true' || needs.Setup.outputs.rebloom-cmk-changes == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - uses: docker-practice/actions-setup-docker@master
       with:
@@ -176,7 +176,7 @@ jobs:
   ReBloomCuckoo:
     needs: Setup
     if: needs.Setup.outputs.rebloom-cuckoo-selected == 'true' || needs.Setup.outputs.rebloom-cuckoo-changes == 'true'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - uses: docker-practice/actions-setup-docker@master
       with:
