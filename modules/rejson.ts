@@ -10,7 +10,7 @@ export class ReJSON extends Module {
      * @param throwError If to throw an exception on error.
      */
     constructor(options: Redis.RedisOptions, throwError = true) {
-        super(options, throwError)
+        super(ReJSON.name, options, throwError)
     }
 
     /**
@@ -26,7 +26,7 @@ export class ReJSON extends Module {
             return await this.redis.send_command('JSON.DEL', parameters)
         }
         catch(error) {
-            return this.handleError(`${ReJSON.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -42,7 +42,7 @@ export class ReJSON extends Module {
             return await this.redis.send_command('JSON.SET', [key, path, json])
         }
         catch(error) {
-            return this.handleError(`${ReJSON.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -67,7 +67,7 @@ export class ReJSON extends Module {
             return await this.redis.send_command('JSON.GET', args)
         }
         catch(error) {
-            return this.handleError(`${ReJSON.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -84,7 +84,7 @@ export class ReJSON extends Module {
             return await this.redis.send_command('JSON.MGET', args)
         }
         catch(error) {
-            return this.handleError(`${ReJSON.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -101,7 +101,7 @@ export class ReJSON extends Module {
             return await this.redis.send_command('JSON.TYPE', args)
         }
         catch(error) {
-            return this.handleError(`${ReJSON.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -120,7 +120,7 @@ export class ReJSON extends Module {
             return await this.redis.send_command('JSON.NUMINCRBY', args)
         }
         catch(error) {
-            return this.handleError(`${ReJSON.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -139,7 +139,7 @@ export class ReJSON extends Module {
             return await this.redis.send_command('JSON.NUMMULTBY', args)
         }
         catch(error) {
-            return this.handleError(`${ReJSON.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -157,7 +157,7 @@ export class ReJSON extends Module {
             return await this.redis.send_command('JSON.STRAPPEND', args.concat(string));
         }
         catch(error) {
-            return this.handleError(`${ReJSON.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -174,7 +174,7 @@ export class ReJSON extends Module {
             return await this.redis.send_command('JSON.STRLEN', args);
         }
         catch(error) {
-            return this.handleError(`${ReJSON.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -192,7 +192,7 @@ export class ReJSON extends Module {
             return await this.redis.send_command('JSON.ARRAPPEND', args.concat(items));
         }
         catch(error) {
-            return this.handleError(`${ReJSON.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -211,7 +211,7 @@ export class ReJSON extends Module {
             return await this.redis.send_command('JSON.ARRINDEX', args);
         }
         catch(error) {
-            return this.handleError(`${ReJSON.name}: ${error}`);
+            return this.handleError(error);
         }
     }
     
@@ -232,7 +232,7 @@ export class ReJSON extends Module {
             return await this.redis.send_command('JSON.ARRINSERT', args);
         }
         catch(error) {
-            return this.handleError(`${ReJSON.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -249,7 +249,7 @@ export class ReJSON extends Module {
             return await this.redis.send_command('JSON.ARRLEN', args);
         }
         catch(error) {
-            return this.handleError(`${ReJSON.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -268,7 +268,7 @@ export class ReJSON extends Module {
             return await this.redis.send_command('JSON.ARRPOP', args);
         }
         catch(error) {
-            return this.handleError(`${ReJSON.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -289,7 +289,7 @@ export class ReJSON extends Module {
             return await this.redis.send_command('JSON.ARRTRIM', args);
         }
         catch(error) {
-            return this.handleError(`${ReJSON.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -306,7 +306,7 @@ export class ReJSON extends Module {
             return await this.redis.send_command('JSON.OBJKEYS', args);
         }
         catch(error) {
-            return this.handleError(`${ReJSON.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -323,7 +323,7 @@ export class ReJSON extends Module {
             return await this.redis.send_command('JSON.OBJLEN', args);
         }
         catch(error) {
-            return this.handleError(`${ReJSON.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -346,7 +346,7 @@ export class ReJSON extends Module {
             return await this.redis.send_command('JSON.DEBUG', args);
         }
         catch(error) {
-            return this.handleError(`${ReJSON.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -363,7 +363,7 @@ export class ReJSON extends Module {
             return await this.redis.send_command('JSON.FORGET', parameters)
         }
         catch(error) {
-            return this.handleError(`${ReJSON.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -380,7 +380,7 @@ export class ReJSON extends Module {
             return await this.redis.send_command('JSON.RESP', parameters)
         }
         catch(error) {
-            return this.handleError(`${ReJSON.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 }
