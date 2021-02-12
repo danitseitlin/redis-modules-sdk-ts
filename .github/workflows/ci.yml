@@ -61,7 +61,7 @@ jobs:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20200915
+        docker_nightly_version: snapshot-20201109
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/rejson:latest && docker ps -a
@@ -76,7 +76,7 @@ jobs:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20200915
+        docker_nightly_version: snapshot-20201109
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/redistimeseries && docker ps -a
@@ -91,7 +91,7 @@ jobs:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20200915
+        docker_nightly_version: snapshot-20201109
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/redisearch:latest && docker ps -a
@@ -106,7 +106,7 @@ jobs:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20200915
+        docker_nightly_version: snapshot-20201109
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/redisgraph:latest && docker ps -a
@@ -121,7 +121,7 @@ jobs:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20200915
+        docker_nightly_version: snapshot-20201109
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/redisgears:latest && docker ps -a
@@ -136,7 +136,7 @@ jobs:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20200915
+        docker_nightly_version: snapshot-20201109
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
@@ -151,7 +151,7 @@ jobs:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20200915
+        docker_nightly_version: snapshot-20201109
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
@@ -166,7 +166,7 @@ jobs:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20200915
+        docker_nightly_version: snapshot-20201109
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
@@ -181,7 +181,7 @@ jobs:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20200915
+        docker_nightly_version: snapshot-20201109
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
