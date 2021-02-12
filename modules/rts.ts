@@ -10,7 +10,7 @@ export class RedisTimeSeries extends Module {
      * @param throwError If to throw an exception on error.
      */
     constructor(options: Redis.RedisOptions, throwError = true) {
-        super(options, throwError)
+        super(RedisTimeSeries.name, options, throwError)
     }
 
     /**
@@ -44,7 +44,7 @@ export class RedisTimeSeries extends Module {
             return await this.redis.send_command('TS.CREATE', args)
         }
         catch(error) {
-            return this.handleError(`${RedisTimeSeries.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -69,7 +69,7 @@ export class RedisTimeSeries extends Module {
             return await this.redis.send_command('TS.ALTER', args)
         }
         catch(error) {
-            return this.handleError(`${RedisTimeSeries.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -105,7 +105,7 @@ export class RedisTimeSeries extends Module {
             return await this.redis.send_command('TS.ADD', args);
         }
         catch(error) {
-            return this.handleError(`${RedisTimeSeries.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -124,7 +124,7 @@ export class RedisTimeSeries extends Module {
             return await this.redis.send_command('TS.MADD', args);   
         }
         catch(error) {
-            return this.handleError(`${RedisTimeSeries.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -157,7 +157,7 @@ export class RedisTimeSeries extends Module {
             return await this.redis.send_command('TS.INCRBY', args);
         }
         catch(error) {
-            return this.handleError(`${RedisTimeSeries.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -190,7 +190,7 @@ export class RedisTimeSeries extends Module {
             return await this.redis.send_command('TS.DECRBY', args);
         }
         catch(error) {
-            return this.handleError(`${RedisTimeSeries.name}: ${error}`);
+            return this.handleError(error);
         }
     }
     
@@ -208,7 +208,7 @@ export class RedisTimeSeries extends Module {
             return await this.redis.send_command('TS.CREATERULE', args);
         }
         catch(error) {
-            return this.handleError(`${RedisTimeSeries.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -222,7 +222,7 @@ export class RedisTimeSeries extends Module {
             return await this.redis.send_command('TS.DELETERULE', sourceKey, destKey)
         }
         catch(error) {
-            return this.handleError(`${RedisTimeSeries.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -247,7 +247,7 @@ export class RedisTimeSeries extends Module {
             return await this.redis.send_command('TS.RANGE', args)
         }
         catch(error) {
-            return this.handleError(`${RedisTimeSeries.name}: ${error}`);
+            return this.handleError(error);
         }
     }
     
@@ -272,7 +272,7 @@ export class RedisTimeSeries extends Module {
             return await this.redis.send_command('TS.REVRANGE', args)
         }
         catch(error) {
-            return this.handleError(`${RedisTimeSeries.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -301,7 +301,7 @@ export class RedisTimeSeries extends Module {
             return await this.redis.send_command('TS.MRANGE', args)
         }
         catch(error) {
-            return this.handleError(`${RedisTimeSeries.name}: ${error}`);
+            return this.handleError(error);
         }
     }
     
@@ -330,7 +330,7 @@ export class RedisTimeSeries extends Module {
             return await this.redis.send_command('TS.MREVRANGE', args)
         }
         catch(error) {
-            return this.handleError(`${RedisTimeSeries.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -343,7 +343,7 @@ export class RedisTimeSeries extends Module {
             return await this.redis.send_command('TS.GET', key);
         }
         catch(error) {
-            return this.handleError(`${RedisTimeSeries.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -361,7 +361,7 @@ export class RedisTimeSeries extends Module {
             return await this.redis.send_command('TS.MGET', args);
         }
         catch(error) {
-            return this.handleError(`${RedisTimeSeries.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -379,7 +379,7 @@ export class RedisTimeSeries extends Module {
             return info;
         }
         catch(error) {
-            return this.handleError(`${RedisTimeSeries.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -392,7 +392,7 @@ export class RedisTimeSeries extends Module {
             return await this.redis.send_command('TS.QUERYINDEX', filter);
         }
         catch(error) {
-            return this.handleError(`${RedisTimeSeries.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 }

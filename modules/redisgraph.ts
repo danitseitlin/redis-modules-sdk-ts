@@ -9,7 +9,7 @@ export class RedisGraph extends Module {
      * @param throwError If to throw an exception on error.
      */
     constructor(options: Redis.RedisOptions, throwError = true) {
-        super(options, throwError)
+        super(RedisGraph.name, options, throwError)
     }
 
     /**
@@ -23,7 +23,7 @@ export class RedisGraph extends Module {
             return await this.redis.send_command('GRAPH.QUERY', [name, query])
         }
         catch(error) {
-            return this.handleError(`${RedisGraph.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -38,7 +38,7 @@ export class RedisGraph extends Module {
             return await this.redis.send_command('GRAPH.RO_QUERY', [name, query])
         }
         catch(error) {
-            return this.handleError(`${RedisGraph.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -53,7 +53,7 @@ export class RedisGraph extends Module {
             return await this.redis.send_command('GRAPH.PROFILE', [name, query])
         }
         catch(error) {
-            return this.handleError(`${RedisGraph.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -67,7 +67,7 @@ export class RedisGraph extends Module {
             return await this.redis.send_command('GRAPH.DELETE', [name])
         }
         catch(error) {
-            return this.handleError(`${RedisGraph.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -82,7 +82,7 @@ export class RedisGraph extends Module {
             return await this.redis.send_command('GRAPH.EXPLAIN', [name, query])
         }
         catch(error) {
-            return this.handleError(`${RedisGraph.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -96,7 +96,7 @@ export class RedisGraph extends Module {
             return await this.redis.send_command('GRAPH.SLOWLOG', [id])
         }
         catch(error) {
-            return this.handleError(`${RedisGraph.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -115,7 +115,7 @@ export class RedisGraph extends Module {
             return await this.redis.send_command('GRAPH.CONFIG', args);
         }
         catch(error) {
-            return this.handleError(`${RedisGraph.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 }
