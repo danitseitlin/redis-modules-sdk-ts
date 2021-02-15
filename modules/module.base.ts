@@ -50,7 +50,7 @@ export class Module {
             (Array.isArray(response) && response.length % 2 === 1 && response.length > 1 && !this.isOnlyTwoDimensionalArray(response)) ||
             (Array.isArray(response) && response.length === 0)
         ) return response;
-        else if(Array.isArray(response) && response.length === 1 && this.isOnlyTwoDimensionalArray(response))
+        else if(Array.isArray(response) && response.length === 1)
             return this.handleResponse(response[0])
         else if(Array.isArray(response)  && response.length > 1 && this.isOnlyTwoDimensionalArray(response))
             return this.handleResponse(this.reduceArrayDimension(response))
