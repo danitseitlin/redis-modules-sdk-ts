@@ -45,9 +45,13 @@ export class Module {
         console.log(response)
         const obj = {}
         //If not an array/object
-        if(typeof response === 'string' || typeof response === 'number' || (Array.isArray(response) && response.length % 2 === 1))
-            return response;
-        else if(Array.isArray(response) && response.length <= 1)
+        if(
+            typeof response === 'string' ||
+            typeof response === 'number' ||
+            (Array.isArray(response) && response.length % 2 === 1) ||
+            (Array.isArray(response) && response.length === 0)
+        ) return response;
+        else if(Array.isArray(response) && response.length === 1)
             return this.handleResponse(response[0])
         //If is an array/obj we will build it
         for(let i = 0; i < response.length; i+=2) {
