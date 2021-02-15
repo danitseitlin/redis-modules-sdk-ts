@@ -57,7 +57,7 @@ export class Module {
         for(let i = 0; i < response.length; i+=2) {
             if(response[i+1] !== '' && response[i+1] !== undefined) {
                 if(Array.isArray(response[i+1]) && this.isOnlyTwoDimensionalArray(response[i+1])) {
-                    obj[response[i]] = this.reduceArrayDimension(response[i+1]);
+                    obj[response[i]] = this.handleResponse(this.reduceArrayDimension(response[i+1]));
                     continue;
                 }
                 const value = (Array.isArray(response[i+1]) ? this.handleResponse(response[i+1]): response[i+1])
