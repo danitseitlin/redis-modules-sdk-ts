@@ -108,12 +108,12 @@ describe('RediSearch Module testing', async function() {
     it('syndump function', async () => {
         const response = await client.syndump(index)
         console.log(response)
-        expect(response.term1).to.equal('term1', 'The response of the FT.SYNDUMP command');
+        expect(response.term1).to.equal('0', 'The response of the FT.SYNDUMP command');
     });
     it('spellcheck function', async () => {
         const response = await client.spellcheck(index, query);
         console.log(response)
-        expect(response.TERM).to.be.greaterThan(0, 'The response of the FT.SPELLCHECK command')
+        expect(response).to.be.greaterThan(0, 'The response of the FT.SPELLCHECK command')
     });
     it('dictadd function', async () => {
         let response = await client.dictadd(dict.name, [dict.term])
@@ -131,19 +131,17 @@ describe('RediSearch Module testing', async function() {
     it('dictdump function', async () => {
         const response = await client.dictdump(`${dict.name}1`)
         console.log(response)
-        expect(response[0]).to.equal('termY1', 'The response of the FT.DICTDUMP command');
+        expect(response).to.equal('termY1', 'The response of the FT.DICTDUMP command');
     });
     it('info function', async () => {
         const response = await client.info(index)
         console.log(response)
-        expect(response[0]).to.equal('index_name', 'The index name field');
-        expect(response[1]).to.equal(index, 'The index name'); 
+        expect(response.index_name).to.equal(index, 'The index name'); 
     });
     it('config function', async () => {
         const response = await client.config('GET', '*')
         console.log(response)
-        expect(response[0][0]).to.equal('EXTLOAD', 'The EXTLOAD key');
-        expect(response[0][1]).to.equal(null, 'The EXTLOAD value');
+        expect(response.EXTLOAD).to.equal(null, 'The EXTLOAD value');
     });
     it('dropindex function', async () => {
         const response = await client.dropindex(index)

@@ -575,7 +575,7 @@ export class Redisearch extends Module {
      * @param index The index
      * @returns A nested array of keys and values. 
      */
-    async info(index: string): Promise<(string | number)[]> {
+    async info(index: string): Promise<{[key: string]: any}> {
         try {
             const response = await this.redis.send_command('FT.INFO', [index]);
             return this.handleResponse(response);
@@ -592,7 +592,7 @@ export class Redisearch extends Module {
      * @param value In case of 'SET' command, a valid value to set
      * @returns If 'SET' command, returns 'OK' for valid runtime-settable option names and values. If 'GET' command, returns a string with the current option's value.
      */
-    async config(command: 'GET' | 'SET' | 'HELP', option: string, value?: string): Promise<string[][]> {
+    async config(command: 'GET' | 'SET' | 'HELP', option: string, value?: string): Promise<{[key: string]: any}> {
         try {
             const args = [command, option];
             if(command === 'SET')
