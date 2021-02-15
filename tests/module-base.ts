@@ -33,6 +33,8 @@ describe('AI testing', async function() {
                 [3,4,5]
             ]
         ]))
+
+        console.log(client.handleResponse([ [ 'TERM', 'name', [] ] ]))
     });
 
     it('isOnlyTwoDimensionalArray function', async () => {
