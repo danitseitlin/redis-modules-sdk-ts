@@ -41,13 +41,16 @@ jobs:
       #RedisBloom Cuckoo
       rebloom-cuckoo-selected: ${{(github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rebloom-cuckoo') || github.event.inputs.tests == 'All'))}}
       rebloom-cuckoo-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, 'redisbloom-cuckoo.ts')}}
+      #Redis AI redis-ai-tests
+      redis-ai-selected: ${{(github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'redis-ai') || github.event.inputs.tests == 'All'))}}
+      redis-ai-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, 'redis-ai.ts')}}
     steps:
       - uses: actions/checkout@v2
       - id: files
         if: github.event_name != 'workflow_dispatch'
         uses: jitterbit/get-changed-files@v1
       - name: Setup
-        run: npm i 
+        run: npm i
       - name: Linting
         run: ./node_modules/.bin/eslint .
       - name: Build
@@ -61,7 +64,7 @@ jobs:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20201109
+        docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/rejson:latest && docker ps -a
@@ -76,7 +79,7 @@ jobs:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20201109
+        docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/redistimeseries && docker ps -a
@@ -91,7 +94,7 @@ jobs:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20201109
+        docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/redisearch:latest && docker ps -a
@@ -106,7 +109,7 @@ jobs:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20201109
+        docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/redisgraph:latest && docker ps -a
@@ -121,7 +124,7 @@ jobs:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20201109
+        docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/redisgears:latest && docker ps -a
@@ -136,7 +139,7 @@ jobs:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20201109
+        docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
@@ -151,7 +154,7 @@ jobs:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20201109
+        docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
@@ -166,7 +169,7 @@ jobs:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20201109
+        docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
@@ -181,9 +184,24 @@ jobs:
     - uses: docker-practice/actions-setup-docker@master
       with:
         docker_channel: nightly
-        docker_nightly_version: snapshot-20201109
+        docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
     - name: Running tests
       run: npm i && npm run redisbloom-cuckoo-filter-tests
+  #Build for 'Redis AI' module
+  RedisAI:
+    needs: Setup
+    if: needs.Setup.outputs.redis-ai-selected == 'true' || needs.Setup.outputs.redis-ai-changes == 'true'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: docker-practice/actions-setup-docker@master
+      with:
+        docker_channel: nightly
+        docker_nightly_version: snapshot-20200915
+    - uses: actions/checkout@v2
+    - name: Setting up Redis
+      run: docker run -p 6379:6379 -d --rm redisai/redisai && docker ps -a
+    - name: Running tests
+      run: npm i && npm run redis-ai-tests
