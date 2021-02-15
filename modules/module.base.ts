@@ -47,8 +47,8 @@ export class Module {
         //If not an array/object
         if(typeof response === 'string')
             return response;
-        else if(Array.isArray(response))
-            return this.handleResponse(response)
+        else if(Array.isArray(response) && response.length === 1)
+            return this.handleResponse(response[0])
         //If is an array/obj we will build it
         for(let i = 0; i < response.length; i+=2) {
             if(response[i+1] !== '' && response[i+1] !== undefined) {
