@@ -9,7 +9,7 @@ export class RedisBloomCuckoo extends Module {
      * @param throwError If to throw an exception on error.
      */
     constructor(options: Redis.RedisOptions, throwError = true) {
-        super(options, throwError)
+        super(RedisBloomCuckoo.name, options, throwError)
     }
 
     /**
@@ -22,7 +22,7 @@ export class RedisBloomCuckoo extends Module {
             return await this.redis.send_command('CF.ADD', [key, item])
         }
         catch(error) {
-            return this.handleError(`${RedisBloomCuckoo.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -36,7 +36,7 @@ export class RedisBloomCuckoo extends Module {
             return await this.redis.send_command('CF.ADDNX', [key, item])
         }
         catch(error) {
-            return this.handleError(`${RedisBloomCuckoo.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -56,7 +56,7 @@ export class RedisBloomCuckoo extends Module {
             return await this.redis.send_command('CF.INSERT', args.concat(['ITEMS']).concat(items));
         }
         catch(error) {
-            return this.handleError(`${RedisBloomCuckoo.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -76,7 +76,7 @@ export class RedisBloomCuckoo extends Module {
             return await this.redis.send_command('CF.INSERTNX', args.concat(['ITEMS']).concat(items));
         }
         catch(error) {
-            return this.handleError(`${RedisBloomCuckoo.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -90,7 +90,7 @@ export class RedisBloomCuckoo extends Module {
             return await this.redis.send_command('CF.EXISTS', [key, item]);
         }
         catch(error) {
-            return this.handleError(`${RedisBloomCuckoo.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -104,7 +104,7 @@ export class RedisBloomCuckoo extends Module {
             return await this.redis.send_command('CF.DEL', [key, item]);
         }
         catch(error) {
-            return this.handleError(`${RedisBloomCuckoo.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -118,7 +118,7 @@ export class RedisBloomCuckoo extends Module {
             return await this.redis.send_command('CF.COUNT', [key, item]);
         }
         catch(error) {
-            return this.handleError(`${RedisBloomCuckoo.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -132,7 +132,7 @@ export class RedisBloomCuckoo extends Module {
             return await this.redis.send_command('CF.SCANDUMP', [key, iterator])
         }
         catch(error) {
-            return this.handleError(`${RedisBloomCuckoo.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -147,7 +147,7 @@ export class RedisBloomCuckoo extends Module {
             return await this.redis.send_command('CF.LOADCHUNK', [key, iterator, data]);
         }
         catch(error) {
-            return this.handleError(`${RedisBloomCuckoo.name}: ${error}`);
+            return this.handleError(error);
         }
     }
     
@@ -160,7 +160,7 @@ export class RedisBloomCuckoo extends Module {
             return await this.redis.send_command('CF.INFO', [key]);
         }
         catch(error) {
-            return this.handleError(`${RedisBloomCuckoo.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 }
