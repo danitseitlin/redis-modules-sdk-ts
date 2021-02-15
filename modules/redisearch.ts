@@ -487,7 +487,7 @@ export class Redisearch extends Module {
      * @param index The index
      * @returns A list of synonym terms and their synonym group ids.  
      */
-    async syndump(index: string): Promise<(string | number)[]> {
+    async syndump(index: string): Promise<{[key: string]: any}> {
         try {
             const response = await this.redis.send_command('FT.SYNDUMP', [index]);
             return this.handleResponse(response);
@@ -504,7 +504,7 @@ export class Redisearch extends Module {
      * @param options The additional optional parameters
      * @returns An array, in which each element represents a misspelled term from the query
      */
-    async spellcheck(index: string, query: string, options?: FTSpellCheck): Promise<(string | string[])[]> {
+    async spellcheck(index: string, query: string, options?: FTSpellCheck): Promise<{[key: string]: any}> {
         try {
             let args = [index, query];
             if(options !== undefined && options.distance !== undefined)

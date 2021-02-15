@@ -37,21 +37,20 @@ describe('RediSearch Module testing', async function() {
     it('search function', async () => {
         const response = await client.search(index, query)
         console.log(response)
-        expect(response[0]).to.equal(0, 'The response of the FT.SEARCH command')
+        expect(response).to.equal(0, 'The response of the FT.SEARCH command')
     });
     it('aggregate function', async () => {
         const response = await client.aggregate(index, query)
         console.log(response)
-        expect(response[0]).to.equal(0, 'The response of the FT.SEARCH command')
+        expect(response).to.equal(0, 'The response of the FT.SEARCH command')
     });
     it('explain function', async () => {
         const response = await client.explain(index, query)
-        console.log(response)
         expect(response).to.contain('@NULL:UNION', 'The response of the FT.EXPLAIN command')
     });
     it('explainCLI function', async () => {
         console.log(await client.explainCLI(index, query))
-        const response = (await client.explainCLI(index, query)).join('');
+        const response = await client.explainCLI(index, query);
         expect(response).to.equal('@NULL:UNION {  @NULL:name  @NULL:+name(expanded)}', 'The response of the FT.EXPLAINCLI command');
     });
     it('alter function', async () => {
@@ -84,7 +83,7 @@ describe('RediSearch Module testing', async function() {
     it('sugget function', async () => {
         const response = await client.sugget(sug.key, sug.string)
         console.log(response)
-        expect(response[0]).to.equal('str', 'The response of the FT.SUGGET command');
+        expect(response).to.equal('str', 'The response of the FT.SUGGET command');
     });
     it('suglen function', async () => {
         const response = await client.suglen(sug.key)
@@ -109,12 +108,12 @@ describe('RediSearch Module testing', async function() {
     it('syndump function', async () => {
         const response = await client.syndump(index)
         console.log(response)
-        expect(response[0]).to.equal('term1', 'The response of the FT.SYNDUMP command');
+        expect(response.term1).to.equal('term1', 'The response of the FT.SYNDUMP command');
     });
     it('spellcheck function', async () => {
         const response = await client.spellcheck(index, query);
         console.log(response)
-        expect(response[0].length).to.be.greaterThan(0, 'The response of the FT.SPELLCHECK command')
+        expect(response.TERM).to.be.greaterThan(0, 'The response of the FT.SPELLCHECK command')
     });
     it('dictadd function', async () => {
         let response = await client.dictadd(dict.name, [dict.term])
