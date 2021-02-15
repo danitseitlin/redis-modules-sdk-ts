@@ -36,4 +36,20 @@ export class Module {
             throw new Error(err);
         return err;
     }
+
+    /**
+     * Converting an array to a key-value JS object based on response
+     * @param response The array response from the module
+     * @param keys The keys of the key-value JS object
+     */
+    convertArrayResponseToJson(response: string[] | string): {[key: string]: (string | number)} | string[] | string {
+        const obj = {}
+        if((typeof response === 'string') || (typeof response !== 'string' && response.length <= 1))
+            return response;
+        for(let i = 0; i < response.length; i+=2) {
+            if(response[i+1] !== '' && response[i+1] !== undefined)
+                obj[response[i]] = response[i+1];
+        }
+        return obj
+    }
 }
