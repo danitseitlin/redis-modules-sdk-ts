@@ -47,7 +47,7 @@ export class Module {
         if(
             typeof response === 'string' ||
             typeof response === 'number' ||
-            (Array.isArray(response) && response.length % 2 === 1 && response.length > 1) ||
+            (Array.isArray(response) && response.length % 2 === 1 && response.length > 1 && !this.isOnlyTwoDimensionalArray(response)) ||
             (Array.isArray(response) && response.length === 0)
         ) return response;
         else if(Array.isArray(response) && response.length === 1 && this.isOnlyTwoDimensionalArray(response))
