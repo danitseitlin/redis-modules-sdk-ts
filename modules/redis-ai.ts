@@ -9,7 +9,7 @@ export class RedisAI extends Module {
      * @param throwError If to throw an exception on error.
      */
     constructor(options: Redis.RedisOptions, throwError = true) {
-        super(options, throwError)
+        super(RedisAI.name, options, throwError)
     }
 
     /**
@@ -30,7 +30,7 @@ export class RedisAI extends Module {
             return await this.redis.send_command('AI.TENSORSET', args);  
         }
         catch(error) {
-            return this.handleError(`${RedisAI.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -51,7 +51,7 @@ export class RedisAI extends Module {
             return this.convertArrayResponseToJson(response);
         }
         catch(error) {
-            return this.handleError(`${RedisAI.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -82,7 +82,7 @@ export class RedisAI extends Module {
             return await this.redis.send_command('AI.MODELSET', args.concat(['BLOB', model])); 
         }
         catch(error) {
-            return this.handleError(`${RedisAI.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -103,7 +103,7 @@ export class RedisAI extends Module {
             return this.convertArrayResponseToJson(response)
         }
         catch(error) {
-            return this.handleError(`${RedisAI.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -116,7 +116,7 @@ export class RedisAI extends Module {
             return await this.redis.send_command('AI.MODELDEL', [key]);
         }
         catch(error) {
-            return this.handleError(`${RedisAI.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -132,7 +132,7 @@ export class RedisAI extends Module {
             return await this.redis.send_command('AI.MODELRUN', args);
         }
         catch(error) {
-            return this.handleError(`${RedisAI.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -144,7 +144,7 @@ export class RedisAI extends Module {
             return await this.redis.send_command('AI._MODELSCAN', []);
         }
         catch(error) {
-            return this.handleError(`${RedisAI.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -161,7 +161,7 @@ export class RedisAI extends Module {
             return await this.redis.send_command('AI.SCRIPTSET', args.concat(['SOURCE', parameters.script]));
         }
         catch(error) {
-            return this.handleError(`${RedisAI.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -182,7 +182,7 @@ export class RedisAI extends Module {
             return this.convertArrayResponseToJson(response);
         }
         catch(error) {
-            return this.handleError(`${RedisAI.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -195,7 +195,7 @@ export class RedisAI extends Module {
             return await this.redis.send_command('AI.SCRIPTDEL', [key]);
         }
         catch(error) {
-            return this.handleError(`${RedisAI.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -213,7 +213,7 @@ export class RedisAI extends Module {
             return await this.redis.send_command('AI.SCRIPTRUN', args.concat(outputs));
         }
         catch(error) {
-            return this.handleError(`${RedisAI.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -225,7 +225,7 @@ export class RedisAI extends Module {
             return await this.redis.send_command('AI._SCRIPTSCAN')
         }
         catch(error) {
-            return this.handleError(`${RedisAI.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -240,7 +240,7 @@ export class RedisAI extends Module {
             return await this.redis.send_command('AI.DAGRUN', this.generateDagRunArguments(commands, load, persist))
         }
         catch(error) {
-            return this.handleError(`${RedisAI.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -254,7 +254,7 @@ export class RedisAI extends Module {
             return await this.redis.send_command('AI.DAGRUN_RO', this.generateDagRunArguments(commands, load))
         }
         catch(error) {
-            return this.handleError(`${RedisAI.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -291,7 +291,7 @@ export class RedisAI extends Module {
             return this.convertArrayResponseToJson(response);
         }
         catch(error) {
-            return this.handleError(`${RedisAI.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -310,7 +310,7 @@ export class RedisAI extends Module {
             return await this.redis.send_command('AI.CONFIG', args)
         }
         catch(error) {
-            return this.handleError(`${RedisAI.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 }
