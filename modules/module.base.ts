@@ -42,10 +42,13 @@ export class Module {
      * @param response The array response from the module
      */
     handleResponse(response: any): any {
+        console.log(response)
         const obj = {}
         //If not an array/object
-        if((typeof response === 'string') || (response.length <= 1))
+        if(typeof response === 'string')
             return response;
+        else if(Array.isArray(response))
+            return this.handleResponse(response)
         //If is an array/obj we will build it
         for(let i = 0; i < response.length; i+=2) {
             if(response[i+1] !== '' && response[i+1] !== undefined) {

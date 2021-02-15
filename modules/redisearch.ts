@@ -268,7 +268,7 @@ export class Redisearch extends Module {
     async explainCLI(index: string, query: string): Promise<string[]> {
         try {
             const response = await this.redis.send_command('FT.EXPLAINCLI', [index, query]);
-            return this.handleResponse(response);
+            return this.handleResponse(response.join(''));
         }
         catch(error) {
             return this.handleError(error);
