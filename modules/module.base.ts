@@ -42,7 +42,6 @@ export class Module {
      * @param response The array response from the module
      */
     handleResponse(response: any): any {
-        console.log(response)
         const obj = {}
         //If not an array/object
         if(
