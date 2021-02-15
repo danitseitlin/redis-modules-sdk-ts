@@ -56,9 +56,11 @@ export class Module {
         //If is an array/obj we will build it
         for(let i = 0; i < response.length; i+=2) {
             if(response[i+1] !== '' && response[i+1] !== undefined) {
+                if(Array.isArray(response[i+1]) && this.isOnlyTwoDimensionalArray(response[i+1])) {
+                    obj[response[i]] = this.reduceArrayDimension(response[i+1]);
+                    continue;
+                }
                 const value = (Array.isArray(response[i+1]) ? this.handleResponse(response[i+1]): response[i+1])
-                if((Array.isArray(response[i]) && !obj[response[i]] && response[i].length >=2))
-                    obj[response[i]] = [value];
                 obj[response[i]] = value;
             }
            //if() {
@@ -67,6 +69,18 @@ export class Module {
            //}
         }
         return obj
+    }
+
+    isOnlyTwoDimensionalArray(array: any[]) {
+        return array.filter(item => Array.isArray(item)).length === array.length;
+    }
+
+    reduceArrayDimension(arr: any[][]) {
+        let newArray = [];
+        arr.forEach(singleArr => {
+            newArray = newArray.concat(singleArr)
+        })
+        return newArray;
     }
 
     /**

@@ -12,13 +12,39 @@ describe('AI testing', async function() {
     })
 
     it('handleResponse function', async () => {
-        const response1 = 'OK';
-        console.log(client.handleResponse(response1))
-        const response2 = ['Key', 'Value', 'Key2', 'Value2'];
-        console.log(client.handleResponse(response2))
-        const response3 = [
+        let response: any = 'OK';
+        let parsed = client.handleResponse(response)
+        expect(parsed).to.equal(response, 'The parsed response')
+        response = ['key', 'value', 'key2', 'value2'];
+        parsed = client.handleResponse(response)
+        expect(parsed.key).to.equal(response[1], 'The parsed response')
+        expect(parsed.key2).to.equal(response[3], 'The parsed response')
+        response = [
             'numbers', ['num1', 2]
         ];
-        console.log(client.handleResponse(response3))
+        parsed = client.handleResponse(response)
+        expect(parsed.numbers.num1).to.equal(response[1][1], 'The parsed response')
+        console.log(client.handleResponse([
+            'key',
+            1,
+            'fields',
+            [
+                [1,2,3],
+                [3,4,5]
+            ]
+        ]))
     });
+
+    it('isOnlyTwoDimensionalArray function', async () => {
+        const response1 = [
+            [1, 2, 3],
+            1
+        ]
+        console.log(client.isOnlyTwoDimensionalArray(response1))
+        const response2 = [
+            [1, 2, 3],
+            [6]
+        ]
+        console.log(client.isOnlyTwoDimensionalArray(response2))
+    })
 })
