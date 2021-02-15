@@ -50,8 +50,10 @@ export class Module {
             (Array.isArray(response) && response.length % 2 === 1) ||
             (Array.isArray(response) && response.length === 0)
         ) return response;
-        else if(Array.isArray(response) && response.length === 1  && this.isOnlyTwoDimensionalArray(response))
+        else if(Array.isArray(response) && response.length === 1 && this.isOnlyTwoDimensionalArray(response))
             return this.handleResponse(response[0])
+        else if(Array.isArray(response) && this.isOnlyTwoDimensionalArray(response) && response.length > 1)
+            return this.handleResponse(this.reduceArrayDimension(response))
         //If is an array/obj we will build it
         for(let i = 0; i < response.length; i+=2) {
             if(response[i+1] !== '' && response[i+1] !== undefined) {
