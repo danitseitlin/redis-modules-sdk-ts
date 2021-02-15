@@ -68,7 +68,8 @@ export class Redisearch extends Module {
                 if(field.seperator !== undefined) args = args.concat(['SEPERATOR', field.seperator]);
                 if(field.weight !== undefined) args = args.concat(['WEIGHT', field.weight.toString()]);
             }
-            return await  this.redis.send_command('FT.CREATE', args);
+            const response = await this.redis.send_command('FT.CREATE', args);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
@@ -164,7 +165,8 @@ export class Redisearch extends Module {
                 if(parameters.limit !== undefined)
                     args = args.concat(['LIMIT', parameters.limit.first.toString(), parameters.limit.num.toString()])
             }
-            return await this.redis.send_command('FT.SEARCH', args);
+            const response = await this.redis.send_command('FT.SEARCH', args);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
@@ -233,7 +235,8 @@ export class Redisearch extends Module {
                         args.push(parameters.limit.numberOfResults.toString());
                 }
             }
-            return await this.redis.send_command('FT.AGGREGATE', args);
+            const response = await this.redis.send_command('FT.AGGREGATE', args);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
@@ -248,7 +251,8 @@ export class Redisearch extends Module {
      */
     async explain(index: string, query: string): Promise<string> {
         try {
-            return await this.redis.send_command('FT.EXPLAIN', [index, query]);
+            const response = await this.redis.send_command('FT.EXPLAIN', [index, query]);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
@@ -263,7 +267,8 @@ export class Redisearch extends Module {
      */
     async explainCLI(index: string, query: string): Promise<string[]> {
         try {
-            return await this.redis.send_command('FT.EXPLAINCLI', [index, query]);
+            const response = await this.redis.send_command('FT.EXPLAINCLI', [index, query]);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
@@ -289,7 +294,8 @@ export class Redisearch extends Module {
                 if(options.seperator !== undefined) args = args.concat(['SEPERATOR', options.seperator]);
                 if(options.weight !== undefined) args = args.concat(['WEIGHT', options.weight.toString()]);
             }
-            return await this.redis.send_command('FT.ALTER', args);
+            const response = await this.redis.send_command('FT.ALTER', args);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
@@ -306,7 +312,8 @@ export class Redisearch extends Module {
         try {
             const args = [index];
             if(deleteHash === true) args.push('DD')
-            return await this.redis.send_command('FT.DROPINDEX', args);
+            const response = await this.redis.send_command('FT.DROPINDEX', args);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
@@ -321,7 +328,8 @@ export class Redisearch extends Module {
      */
     async aliasadd(name: string, index: string): Promise<'OK'> {
         try {
-            return await this.redis.send_command('FT.ALIASADD', [name, index]);
+            const response = await this.redis.send_command('FT.ALIASADD', [name, index]);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
@@ -336,7 +344,8 @@ export class Redisearch extends Module {
      */
     async aliasupdate(name: string, index: string): Promise<'OK'> {
         try {
-            return await this.redis.send_command('FT.ALIASUPDATE', [name, index]);
+            const response = await this.redis.send_command('FT.ALIASUPDATE', [name, index]);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
@@ -350,7 +359,8 @@ export class Redisearch extends Module {
      */
     async aliasdel(name: string): Promise<'OK'> {
         try {
-            return await this.redis.send_command('FT.ALIASDEL', [name]);
+            const response = await this.redis.send_command('FT.ALIASDEL', [name]);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
@@ -365,7 +375,8 @@ export class Redisearch extends Module {
      */
     async tagvals(index: string, field: string): Promise<string[]> {
         try {
-            return await this.redis.send_command('FT.TAGVALS', [index, field]);
+            const response = await this.redis.send_command('FT.TAGVALS', [index, field]);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
@@ -387,7 +398,8 @@ export class Redisearch extends Module {
                 args.push('INCR');
             if(options !== undefined && options.payload !== undefined)
                 args = args.concat(['PAYLOAD', options.payload]);
-            return await this.redis.send_command('FT.SUGADD', args);
+            const response = await this.redis.send_command('FT.SUGADD', args);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
@@ -412,7 +424,8 @@ export class Redisearch extends Module {
                 args.push('WITHSCORES');
             if(options !== undefined && options.withPayloads !== undefined)
                 args.push('WITHPAYLOADS');
-            return await this.redis.send_command('FT.SUGGET', args);
+            const response = await this.redis.send_command('FT.SUGGET', args);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
@@ -426,7 +439,8 @@ export class Redisearch extends Module {
      */
     async sugdel(key: string, suggestion: string): Promise<number> {
         try {
-            return await this.redis.send_command('FT.SUGDEL', [key, suggestion]);
+            const response = await this.redis.send_command('FT.SUGDEL', [key, suggestion]);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
@@ -439,7 +453,8 @@ export class Redisearch extends Module {
      */
     async suglen(key: string): Promise<number> {
         try {
-            return await this.redis.send_command('FT.SUGLEN', key);
+            const response = await this.redis.send_command('FT.SUGLEN', key);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
@@ -459,7 +474,8 @@ export class Redisearch extends Module {
             const args = [index, groupId].concat(terms);
             if(skipInitialScan === true)
                 args.push('SKIPINITIALSCAN');
-            return await this.redis.send_command('FT.SYNUPDATE', args);
+            const response = await this.redis.send_command('FT.SYNUPDATE', args);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
@@ -473,7 +489,8 @@ export class Redisearch extends Module {
      */
     async syndump(index: string): Promise<(string | number)[]> {
         try {
-            return await this.redis.send_command('FT.SYNDUMP', [index]);
+            const response = await this.redis.send_command('FT.SYNDUMP', [index]);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
@@ -498,7 +515,8 @@ export class Redisearch extends Module {
                     args = args.concat([term.type, term.dict]);
                 }
             }
-            return await this.redis.send_command('FT.SPELLCHECK', args);
+            const response = await this.redis.send_command('FT.SPELLCHECK', args);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
@@ -513,7 +531,8 @@ export class Redisearch extends Module {
      */
     async dictadd(dict: string, terms: string[]): Promise<number> {
         try {
-            return await this.redis.send_command('FT.DICTADD', [dict].concat(terms));
+            const response = await this.redis.send_command('FT.DICTADD', [dict].concat(terms));
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
@@ -528,7 +547,8 @@ export class Redisearch extends Module {
      */
     async dictdel(dict: string, terms: string[]): Promise<number> {
         try {
-            return await this.redis.send_command('FT.DICTDEL', [dict].concat(terms));
+            const response = await this.redis.send_command('FT.DICTDEL', [dict].concat(terms));
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
@@ -542,7 +562,8 @@ export class Redisearch extends Module {
      */
     async dictdump(dict: string): Promise<string[]> {
         try {
-            return await this.redis.send_command('FT.DICTDUMP', [dict]);
+            const response = await this.redis.send_command('FT.DICTDUMP', [dict]);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
@@ -556,7 +577,8 @@ export class Redisearch extends Module {
      */
     async info(index: string): Promise<(string | number)[]> {
         try {
-            return await this.redis.send_command('FT.INFO', [index]);
+            const response = await this.redis.send_command('FT.INFO', [index]);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
@@ -575,7 +597,8 @@ export class Redisearch extends Module {
             const args = [command, option];
             if(command === 'SET')
                 args.push(value);
-            return await this.redis.send_command('FT.CONFIG', args);
+            const response = await this.redis.send_command('FT.CONFIG', args);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);

@@ -38,6 +38,25 @@ export class Module {
     }
 
     /**
+     * Simpilizing the response of the Module command
+     * @param response The array response from the module
+     */
+    handleResponse(response: any): any {
+        const obj = {}
+        //If not an array/object
+        if((typeof response === 'string') || (response.length <= 1))
+            return response;
+        //If is an array/obj we will build it
+        for(let i = 0; i < response.length; i+=2) {
+            if(response[i+1] !== '' && response[i+1] !== undefined) {
+                const value = (Array.isArray(response[i+1]) ? this.handleResponse(response[i+1]): response[i+1])
+                obj[response[i]] = value;
+            }
+        }
+        return obj
+    }
+
+    /**
      * Converting an array to a key-value JS object based on response
      * @param response The array response from the module
      * @param keys The keys of the key-value JS object
