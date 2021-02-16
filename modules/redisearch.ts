@@ -83,7 +83,7 @@ export class Redisearch extends Module {
      * @param parameters The additional optional parameter
      * @returns Array reply, where the first element is the total number of results, and then pairs of document id, and a nested array of field/value.
      */
-    async search(index: string, query: string, parameters?: FTSearchParameters): Promise<number[]> {
+    async search(index: string, query: string, parameters?: FTSearchParameters): Promise<number> {
         try {
             let args: string[] = [index, query];
             if(parameters !== undefined) {
@@ -180,7 +180,7 @@ export class Redisearch extends Module {
      * @param parameters The additional optional parameters
      * @returns Array Response. Each row is an array and represents a single aggregate result
      */
-    async aggregate(index: string, query: string, parameters?: FTAggregateParameters): Promise<number[]> {
+    async aggregate(index: string, query: string, parameters?: FTAggregateParameters): Promise<number> {
         try {
             let args: string[] = [index, query];
             if(parameters !== undefined) {
@@ -413,7 +413,7 @@ export class Redisearch extends Module {
      * @param options The additional optional parameter
      * @returns A list of the top suggestions matching the prefix, optionally with score after each entry 
      */
-    async sugget(key: string, prefix: string, options?: FTSugGetParameters): Promise<string[]> {
+    async sugget(key: string, prefix: string, options?: FTSugGetParameters): Promise<string> {
         try {
             let args = [key, prefix];
             if(options !== undefined && options.fuzzy !== undefined)
@@ -487,7 +487,7 @@ export class Redisearch extends Module {
      * @param index The index
      * @returns A list of synonym terms and their synonym group ids.  
      */
-    async syndump(index: string): Promise<{[key: string]: any}> {
+    async syndump(index: string): Promise<{[key: string]: string | number}> {
         try {
             const response = await this.redis.send_command('FT.SYNDUMP', [index]);
             return this.handleResponse(response);
@@ -504,7 +504,7 @@ export class Redisearch extends Module {
      * @param options The additional optional parameters
      * @returns An array, in which each element represents a misspelled term from the query
      */
-    async spellcheck(index: string, query: string, options?: FTSpellCheck): Promise<{[key: string]: any}> {
+    async spellcheck(index: string, query: string, options?: FTSpellCheck): Promise<string[]>  {
         try {
             let args = [index, query];
             if(options !== undefined && options.distance !== undefined)
@@ -560,7 +560,7 @@ export class Redisearch extends Module {
      * @param dict The dictionary
      * @returns An array, where each element is term
      */
-    async dictdump(dict: string): Promise<string[]> {
+    async dictdump(dict: string): Promise<string> {
         try {
             const response = await this.redis.send_command('FT.DICTDUMP', [dict]);
             return this.handleResponse(response);
@@ -575,7 +575,7 @@ export class Redisearch extends Module {
      * @param index The index
      * @returns A nested array of keys and values. 
      */
-    async info(index: string): Promise<{[key: string]: any}> {
+    async info(index: string): Promise<FTInfo> {
         try {
             const response = await this.redis.send_command('FT.INFO', [index]);
             return this.handleResponse(response);
@@ -592,7 +592,7 @@ export class Redisearch extends Module {
      * @param value In case of 'SET' command, a valid value to set
      * @returns If 'SET' command, returns 'OK' for valid runtime-settable option names and values. If 'GET' command, returns a string with the current option's value.
      */
-    async config(command: 'GET' | 'SET' | 'HELP', option: string, value?: string): Promise<{[key: string]: any}> {
+    async config(command: 'GET' | 'SET' | 'HELP', option: string, value?: string): Promise<FTConfig> {
         try {
             const args = [command, option];
             if(command === 'SET')
@@ -912,3 +912,85 @@ export type FTSpellCheck = {
  * @param TAG The tag type
  */
 export type FTFieldType = 'TEXT' | 'NUMERIC' | 'TAG' | string;
+
+/**
+ * The config response
+ */
+export type FTConfig = {
+    EXTLOAD?: string | null,
+    SAFEMODE?: string,
+    CONCURRENT_WRITE_MODE?: string,
+    NOGC?: string,
+    MINPREFIX?: string,
+    FORKGC_SLEEP_BEFORE_EXIT?: string,
+    MAXDOCTABLESIZE?: string,
+    MAXSEARCHRESULTS?: string,
+    MAXAGGREGATERESULTS?: string,
+    MAXEXPANSIONS?: string,
+    MAXPREFIXEXPANSIONS?: string,
+    TIMEOUT?: string,
+    INDEX_THREADS?: string,
+    SEARCH_THREADS?: string,
+    FRISOINI?: string | null,
+    ON_TIMEOUT?: string,
+    GCSCANSIZE?: string,
+    MIN_PHONETIC_TERM_LEN?: string,
+    GC_POLICY?: string,
+    FORK_GC_RUN_INTERVAL?: string,
+    FORK_GC_CLEAN_THRESHOLD?: string,
+    FORK_GC_RETRY_INTERVAL?: string,
+    _MAX_RESULTS_TO_UNSORTED_MODE?: string,
+    CURSOR_MAX_IDLE?: string,
+    NO_MEM_POOLS?: string,
+    PARTIAL_INDEXED_DOCS?: string,
+    UPGRADE_INDEX?: string
+}
+
+/**
+ * The info response
+ */
+export type FTInfo = {
+    index_name?: string,
+    index_options?: string[],
+    index_definition?: {
+        key_type?: string,
+        prefixes?: string,
+        language_field?: string,
+        default_score?: string,
+        score_field?: string,
+        payload_field?: string
+    },
+    fields?: string[],
+    num_docs?: string,
+    max_doc_id?: string,
+    num_terms?: string,
+    num_records?: string,
+    inverted_sz_mb?: string,
+    total_inverted_index_blocks?: string,
+    offset_vectors_sz_mb?: string,
+    doc_table_size_mb?: string,
+    sortable_values_size_mb?: string,
+    key_table_size_mb?: string,
+    records_per_doc_avg?: string,
+    bytes_per_record_avg?: string,
+    offsets_per_term_avg?: string,
+    offset_bits_per_record_avg?: string,
+    hash_indexing_failures?: string,
+    indexing?: string,
+    percent_indexed?: string,
+    gc_stats?: {
+        bytes_collected?: string,
+        total_ms_run?: string,
+        total_cycles?: string,
+        average_cycle_time_ms?: string,
+        last_run_time_ms?: string,
+        gc_numeric_trees_missed?: string,
+        gc_blocks_denied?: string
+    },
+    cursor_stats?: {
+        global_idle?: number,
+        global_total?: number,
+        index_capacity?: number,
+        index_total?: number
+    }
+}
