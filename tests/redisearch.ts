@@ -113,7 +113,7 @@ describe('RediSearch Module testing', async function() {
     it('spellcheck function', async () => {
         const response = await client.spellcheck(index, query);
         console.log(response)
-        expect(response).to.be.greaterThan(0, 'The response of the FT.SPELLCHECK command')
+        expect(response.length).to.be.greaterThan(0, 'The response of the FT.SPELLCHECK command')
     });
     it('dictadd function', async () => {
         let response = await client.dictadd(dict.name, [dict.term])
