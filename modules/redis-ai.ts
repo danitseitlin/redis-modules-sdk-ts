@@ -48,7 +48,7 @@ export class RedisAI extends Module {
             if(format !== undefined)
                 args.push(format);
             const response = await this.redis.send_command('AI.TENSORGET', args);
-            return this.convertArrayResponseToJson(response);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
@@ -100,7 +100,7 @@ export class RedisAI extends Module {
             if(blob === true)
                 args.push('BLOB');
             const response = await this.redis.send_command('AI.MODELGET', args);
-            return this.convertArrayResponseToJson(response)
+            return this.handleResponse(response)
         }
         catch(error) {
             return this.handleError(error);
@@ -179,7 +179,7 @@ export class RedisAI extends Module {
             if(source === true)
                 args.push('SOURCE');
             const response: string[] = await this.redis.send_command('AI.SCRIPTGET', args);
-            return this.convertArrayResponseToJson(response);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
@@ -288,7 +288,7 @@ export class RedisAI extends Module {
             const args = [key]
             if(RESETSTAT === true) args.push('RESETSTAT')
             const response: string[] = await this.redis.send_command('AI.INFO', args)
-            return this.convertArrayResponseToJson(response);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
