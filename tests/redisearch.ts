@@ -46,7 +46,6 @@ describe('RediSearch Module testing', async function() {
         expect(response).to.contain('@NULL:UNION', 'The response of the FT.EXPLAIN command')
     });
     it('explainCLI function', async () => {
-        console.log(await client.explainCLI(index, query))
         const response = await client.explainCLI(index, query);
         expect(response).to.equal('@NULL:UNION {  @NULL:name  @NULL:+name(expanded)}', 'The response of the FT.EXPLAINCLI command');
     });
