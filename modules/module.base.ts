@@ -64,21 +64,25 @@ export class Module {
                 const value = (Array.isArray(response[i+1]) ? this.handleResponse(response[i+1]): response[i+1])
                 obj[response[i]] = value;
             }
-           //if() {
-           //    const value = (Array.isArray(response[i+1]) ? this.handleResponse(response[i+1]): response[i+1])
-           //    obj[response[i]] = value;
-           //}
         }
         return obj
     }
 
-    isOnlyTwoDimensionalArray(array: any[]) {
+    /**
+     * Check if array is fully two dimensional. Only items in the array are arrays.
+     * @param array The potential two dimensional array
+     */
+    isOnlyTwoDimensionalArray(array: any[]): boolean {
         return array.filter(item => Array.isArray(item)).length === array.length;
     }
 
-    reduceArrayDimension(arr: any[][]) {
+    /**
+     * Reducing an array by one level. i.e. from two dimensional to 1 dimensional.
+     * @param array The potentional two dimensional array
+     */
+    reduceArrayDimension(array: any[][]): any[] {
         let newArray = [];
-        arr.forEach(singleArr => {
+        array.forEach(singleArr => {
             newArray = newArray.concat(singleArr)
         })
         return newArray;

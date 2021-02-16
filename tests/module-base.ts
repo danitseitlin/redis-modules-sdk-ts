@@ -38,15 +38,15 @@ describe('AI testing', async function() {
     });
 
     it('isOnlyTwoDimensionalArray function', async () => {
-        const response1 = [
+        let response = [
             [1, 2, 3],
             1
         ]
-        console.log(client.isOnlyTwoDimensionalArray(response1))
-        const response2 = [
+        expect(response).to.equal(false, 'If array is two dimensional')
+        response = [
             [1, 2, 3],
             [6]
         ]
-        console.log(client.isOnlyTwoDimensionalArray(response2))
+        expect(response).to.equal(true, 'If array is two dimensional')
     })
 })
