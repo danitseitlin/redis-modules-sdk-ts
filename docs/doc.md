@@ -11,6 +11,7 @@
 | RedisBloom: TopK filter             | [Section](#topk-filter)             | [QuickStart](#quick-start-toolbox-6) | [Functions](#functions-list-floppy_disk-6) |
 | RedisBloom: Cuckoo filter           | [Section](#cuckoo-filter)           | [QuickStart](#quick-start-toolbox-7) | [Functions](#functions-list-floppy_disk-7) |
 | RedisBloom: Count-Min-Sketch filter | [Section](#count-min-sketch-filter) | [QuickStart](#quick-start-toolbox-8) | [Functions](#functions-list-floppy_disk-8) |
+| RedisAI                             | [Section](#-redis-ai-module)        | [QuickStart](#quick-start-toolbox-9) | [Functions](#functions-list-floppy_disk-9) |
 
 ## <img src='https://oss.redislabs.com/redisjson/images/logo.svg' style='max-width:100%;' height='30'/> ReJSON module
 ### Quick start :toolbox:
@@ -31,7 +32,7 @@ expect(response).to.equal('OK', 'The response of the set command');
 await client.disconnect();
 ```
 ### Functions list :floppy_disk:
-| Functions | ReJSON Command  |
+| Functions | Command         |
 |:--------- |:--------------- |
 | del       | JSON.DEL        |
 | get       | JSON.GET        |
@@ -73,7 +74,7 @@ expect(response).to.equal('OK', 'The response of the del command');
 await client.disconnect();
 ```
 ### Functions list :floppy_disk:
-| Functions  | RedisTimeSeries Command  |
+| Functions  | Command                     |
 |:---------- |:--------------------------- |
 | create     | TS.CREATE                   |
 | alter      | TS.ALTER                    |
@@ -111,7 +112,7 @@ expect(response).to.equal('OK', 'The response of the aliasdel command');
 await client.disconnect();
 ```
 ### Functions list :floppy_disk:
-| Functions   | Redisearch Command  |
+| Functions   | Command             |
 |:----------- |:------------------- |
 | create      | FT.CREATE           |
 | search      | FT.SEARCH           |
@@ -156,7 +157,7 @@ expect(response[2][0]).to.equal('Labels added: 1', 'The response of the GRAPH.QU
 await client.disconnect();
 ```
 ### Functions list :floppy_disk:
-| Functions     | RedisGraph Command  |
+| Functions     | Command             |
 |:------------- |:------------------- |
 | query         | GRAPH.QUERY         |
 | readonlyQuery | GRAPH.RO_QUERY      |
@@ -185,7 +186,7 @@ console.log(`Execution ID: ${executionId}`)
 await client.disconnect();
 ```
 ### Functions list :floppy_disk:
-| Functions          | RedisGears Command    |
+| Functions          | Command               |
 |:------------------ |:--------------------- |
 | pyexecute          | RG.PYEXECUTE          |
 | abortExecution     | RG.ABORTEXECUTION     |
@@ -223,7 +224,7 @@ const response = await client.add('key1', 'item1')
 await client.disconnect();
 ```
 #### Functions list :floppy_disk:
-| Functions  | RedisBloom Command |
+| Functions  | Command            |
 |:---------- |:------------------ |
 | reserve    | BF.RESERVE         |
 | add        | BF.ADD             |
@@ -253,7 +254,7 @@ const response = await client.reserve(key1, 1, 2, 3, 0.1);
 await client.disconnect();
 ```
 #### Functions list :floppy_disk:
-| Functions | RedisBloom TopK Command |
+| Functions | Command                 |
 |:--------- |:----------------------- |
 | reserve   | TOPK.RESERVE            |
 | add       | TOPK.ADD                |
@@ -280,7 +281,7 @@ const response = await client.add('key1', 'item');
 await client.disconnect();
 ```
 #### Functions list :floppy_disk:
-| Functions | RedisBloom Cuckoo Command |
+| Functions | Command                   |
 |:--------- |:------------------------- |
 | add       | CF.ADD                    |
 | addnx     | CF.ADDNX                  |
@@ -311,7 +312,7 @@ const response = await client.initbydim('dest', 1, 2);
 await client.disconnect();
 ```
 #### Functions list :floppy_disk:
-| Functions  | RedisBloom Count-Min Sketch Command |
+| Functions  | Command                             |
 |:---------- |:----------------------------------- |
 | initbydim  | CMS.INITBYDIM                       |
 | initbyprob | CMS.INITBYPROB                      |
@@ -319,3 +320,41 @@ await client.disconnect();
 | query      | CMS.QUERY                           |
 | merge      | CMS.MERGE                           |
 | info       | CMS.INFO                            |
+
+## <img src='https://oss.redislabs.com/redisjson/images/logo.svg' style='max-width:100%;' height='30'/> RedisAI module
+### Quick start :toolbox:
+```
+const client = new RedisAI({
+    host: 'hostname',
+    port: 43758,
+});
+
+//Connect to the Redis database with RedisAI module
+await client.connect();
+
+//Setting a tensor
+const response = await client.tensorset('values-key', 'FLOAT', [2, 2], [1, 2 ,3, 4])
+expect(response).to.eql('OK', 'The response of tensorset')
+
+//Disconnect from the Redis database with RedisAI module
+await client.disconnect();
+```
+### Functions list :floppy_disk:
+| Functions  | Command         |
+|:---------- |:--------------- |
+| tensorset  | AI.TENSORSET    |
+| tensorget  | AI.TENSORGET    |
+| modelset   | AI.MODELSET     |
+| modelget   | AI.MODELGET     |
+| modeldel   | AI.MODELDEL     |
+| modelrun   | AI.MODELRUN     |
+| modelscan  | AI._MODELSCAN   |
+| scriptset  | AI.SCRIPTSET    |
+| scriptget  | AI.SCRIPTGET    |
+| scriptdel  | AI.SCRIPTDEL    |
+| scriptrun  | AI.SCRIPTRUN    |
+| scriptscan | AI._SCRIPTSCAN  |
+| dagrun     | AI.DAGRUN       |
+| dagrunRO   | AI.DAGRUN_RO    |
+| info       | AI.INFO         |
+| config     | AI.CONFIG       |
