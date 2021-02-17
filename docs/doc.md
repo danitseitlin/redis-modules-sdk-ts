@@ -11,7 +11,7 @@
 | [RedisBloom: TopK filter](https://github.com/RedisBloom/RedisBloom)             | [Section](#topk-filter)             | [QuickStart](#quick-start-toolbox-6) | [Functions](#functions-list-floppy_disk-6) |
 | [RedisBloom: Cuckoo filter](https://github.com/RedisBloom/RedisBloom)           | [Section](#cuckoo-filter)           | [QuickStart](#quick-start-toolbox-7) | [Functions](#functions-list-floppy_disk-7) |
 | [RedisBloom: Count Min Sketch filter](https://github.com/RedisBloom/RedisBloom) | [Section](#count-min-sketch-filter) | [QuickStart](#quick-start-toolbox-8) | [Functions](#functions-list-floppy_disk-8) |
-| [RedisAI](https://github.com/RedisAI/RedisAI)                                   | [Section](#-redis-ai-module)        | [QuickStart](#quick-start-toolbox-9) | [Functions](#functions-list-floppy_disk-9) |
+| [RedisAI](https://github.com/RedisAI/RedisAI)                                   | [Section](#-redisai-module)         | [QuickStart](#quick-start-toolbox-9) | [Functions](#functions-list-floppy_disk-9) |
 
 ## <img src='https://oss.redislabs.com/redisjson/images/logo.svg' style='max-width:100%;' height='30'/> ReJSON module
 ### Quick start :toolbox:
