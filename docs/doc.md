@@ -6,7 +6,7 @@
 | [RedisTimeSeries](https://github.com/RedisTimeSeries/RedisTimeSeries) (RTS)     | [Section](#-redistimeseries-module) | [QuickStart](#quick-start-toolbox-1) | [Functions](#functions-list-floppy_disk-1) |
 | [RediSearch](https://github.com/RediSearch/RediSearch)                          | [Section](#-redisearch-module)      | [QuickStart](#quick-start-toolbox-2) | [Functions](#functions-list-floppy_disk-2) |
 | [RedisGraph](https://github.com/RedisGraph/RedisGraph)                          | [Section](#-redisgraph-module)      | [QuickStart](#quick-start-toolbox-3) | [Functions](#functions-list-floppy_disk-3) |
-| [RedisGears](https://github.com/RedisGears/RedisGears/)                         | [Section](#-redisgears-module)      | [QuickStart](#quick-start-toolbox-4) | [Functions](#functions-list-floppy_disk-4) |
+| [RedisGears](https://github.com/RedisGears/RedisGears)                          | [Section](#-redisgears-module)      | [QuickStart](#quick-start-toolbox-4) | [Functions](#functions-list-floppy_disk-4) |
 | [RedisBloom: Bloom filter](https://github.com/RedisBloom/RedisBloom)            | [Section](#bloom-filter)            | [QuickStart](#quick-start-toolbox-5) | [Functions](#functions-list-floppy_disk-5) |
 | [RedisBloom: TopK filter](https://github.com/RedisBloom/RedisBloom)             | [Section](#topk-filter)             | [QuickStart](#quick-start-toolbox-6) | [Functions](#functions-list-floppy_disk-6) |
 | [RedisBloom: Cuckoo filter](https://github.com/RedisBloom/RedisBloom)           | [Section](#cuckoo-filter)           | [QuickStart](#quick-start-toolbox-7) | [Functions](#functions-list-floppy_disk-7) |
