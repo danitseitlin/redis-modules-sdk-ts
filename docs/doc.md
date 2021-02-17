@@ -1,32 +1,17 @@
 # Documentation :book:
 ## Links :bulb:
-  1. [ReJSON](#-rejson-module)<br>
-    1. [Quick start](#quick-start-toolbox)<br>
-    2. [Functions](#functions-list-floppy_disk)<br>
-  2. [RedisTimeSeries](#-redistimeseries-module)<br>
-    1. [Quick start](#quick-start-toolbox-1)<br>
-    2. [Functions](#functions-list-floppy_disk-1)<br>
-  3. [RediSearch](#-redisearch-module)<br>
-    1. [Quick start](#quick-start-toolbox-2)<br>
-    2. [Functions](#functions-list-floppy_disk-2)<br>
-  4. [RedisGraph](#-redisgraph-module)<br>
-    1. [Quick start](#quick-start-toolbox-3)<br>
-    2. [Functions](#functions-list-floppy_disk-3)<br>
-  5. [RedisGears](#-redisgears-module)<br>
-    1. [Quick start](#quick-start-toolbox-4)<br>
-    2. [Functions](#functions-list-floppy_disk-4)<br>
-  6. [RedisBloom Bloom filter](#bloom-filter)<br>
-    1. [Quick start](#quick-start-toolbox-5)<br>
-    2. [Functions](#functions-list-floppy_disk-5)<br>
-  7. [RedisBloom TopK filter](#topk-filter)<br>
-    1. [Quick start](#quick-start-toolbox-6)<br>
-    2. [Functions](#functions-list-floppy_disk-6)<br>
-  8. [RedisBloom Cuckoo filter](#cuckoo-filter)<br>
-    1. [Quick start](#quick-start-toolbox-7)<br>
-    2. [Functions](#functions-list-floppy_disk-7)<br>
-  9. [RedisBloom Count-Min-Sketch filter](#count-min-sketch-filter)<br>
-    1. [Quick start](#quick-start-toolbox-8)<br>
-    2. [Functions](#functions-list-floppy_disk-8)<br>
+| Module |            |  |  |
+| ------------------------- | -------------------------- | ---------------------------------- | ------------------------------------ |
+| ReJSON                    | [Section](#-rejson-module) | [QuickStart](#quick-start-toolbox) | [Functions](#functions-list-floppy_disk) |
+| RedisTimeSeries (RTS)     | [Section](#-redistimeseries-module) | [QuickStart](#quick-start-toolbox-1) | [Functions](#functions-list-floppy_disk-1) |
+| RediSearch                | [Section](#-redisearch-module) | [QuickStart](#quick-start-toolbox-2) | [Functions](#functions-list-floppy_disk-2) |
+| RedisGraph                | [Section](#-redisgraph-module) | [QuickStart](#quick-start-toolbox-3) | [Functions](#functions-list-floppy_disk-3) |
+| RedisGears                | [Section](#-redisgears-module) | [QuickStart](#quick-start-toolbox-4) | [Functions](#functions-list-floppy_disk-4) |
+| RedisBloom: Bloom filter  | [Section](#bloom-filter) | [QuickStart](#quick-start-toolbox-5) | [Functions](#functions-list-floppy_disk-5) |
+| RedisBloom: TopK filter   | [Section](#topk-filter) | [QuickStart](#quick-start-toolbox-6) | [Functions](#functions-list-floppy_disk-6) |
+| RedisBloom: Cuckoo filter | [Section](#cuckoo-filter) | [QuickStart](#quick-start-toolbox-7) | [Functions](#functions-list-floppy_disk-7) |
+| RedisBloom: Count-Min-Sketch filter | [Section](#count-min-sketch-filter) | [QuickStart](#quick-start-toolbox-8) | [Functions](#functions-list-floppy_disk-8) |
+
 ## <img src='https://oss.redislabs.com/redisjson/images/logo.svg' style='max-width:100%;' height='30'/> ReJSON module
 ### Quick start :toolbox:
 ```
