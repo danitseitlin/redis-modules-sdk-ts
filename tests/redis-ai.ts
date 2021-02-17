@@ -29,19 +29,19 @@ describe('AI testing', async function() {
         expect(response.dtype).to.eql('FLOAT', 'The dtype of tensor')
     });
     it('modelset function', async () => {
-        const file = fs.readFileSync('./models/model1.onnx')
+        const file = fs.readFileSync('./data/models/model1.onnx')
         const response = await client.modelset('blob-model', 'ONNX', 'CPU', file)
         expect(response).to.eql('OK', 'The response of modelset')
     });
     it('modelget function', async () => {
         const modelName = 'blob-model';
-        const response = await client.modelget('blob-model', true, true/*, false, true*/) as AIModel;
+        const response = await client.modelget('blob-model', true, true) as AIModel;
         expect(response.device).to.eql('CPU', `The device of key ${modelName}`)
     });
     it('modelrun function', async () => {
         let response = await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3])
         response = await client.tensorset('tensorB', 'FLOAT', [1, 2], [3, 5])
-        const blob = fs.readFileSync('./models/graph.pb');
+        const blob = fs.readFileSync('./data/models/graph.pb');
         response = await client.modelset('mymodel', 'TF', 'CPU', blob, {
             inputs: ['a', 'b'],
             outputs: ['c']
@@ -58,7 +58,7 @@ describe('AI testing', async function() {
         expect(response).to.eql('OK', 'The response of modeldel')
     });
     it('scriptset function', async () => {
-        const scriptFileStr = fs.readFileSync('./scripts/script.txt').toString();
+        const scriptFileStr = fs.readFileSync('./data/scripts/script.txt').toString();
         const response = await client.scriptset('myscript', {
             device: 'CPU',
             script: scriptFileStr
@@ -94,7 +94,7 @@ describe('AI testing', async function() {
         expect(response).to.eql('OK', 'The response of config')
     });
     it('dagrun function', async () => {
-        const blob = fs.readFileSync('./models/graph.pb');
+        const blob = fs.readFileSync('./data/models/graph.pb');
         await client.modelset('mymodel-dag', 'TF', 'CPU', blob, {
             inputs: ['a', 'b'],
             outputs: ['c'],
@@ -110,7 +110,7 @@ describe('AI testing', async function() {
         expect(response).to.eql([], 'The response of dagrun')
     });
     it('dagrunRO function', async () => {
-        const blob = fs.readFileSync('./models/graph.pb');
+        const blob = fs.readFileSync('./data/models/graph.pb');
         await client.modelset('mymodel-dag', 'TF', 'CPU', blob, {
             inputs: ['a', 'b'],
             outputs: ['c'],
