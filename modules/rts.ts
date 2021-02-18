@@ -369,10 +369,10 @@ export class RedisTimeSeries extends Module {
      * Retrieving information and statistics on the time-series
      * @param key The key
      */
-    async info(key: string): Promise<Info> {
+    async info(key: string): Promise<TSInfo> {
         try {
             const response = await this.redis.send_command('TS.INFO', key);
-            const info: Info = {};
+            const info: TSInfo = {};
             for(let i = 0; i < response.length; i+=2) {
                 info[response[i]] = response[i+1];
             }
@@ -411,7 +411,7 @@ export class RedisTimeSeries extends Module {
  * @param sourceKey If source key is set
  * @param rules A list of rules
  */
-export type Info = {
+export type TSInfo = {
     totalSamples?: string,
     memoryUsage?: number,
     firstTimestamp?: number,
