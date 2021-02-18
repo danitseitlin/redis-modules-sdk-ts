@@ -7,9 +7,12 @@ export { RedisBloomCuckoo, CFInsertParameters, CFResponse } from './modules/redi
 export { RedisBloomCMK, CMKIncrbyItems } from './modules/redisbloom-cmk';
 export {
     RedisTimeSeries as RTS, RedisTimeSeries, TSCreateOptions, TSLabel, TSAddOptions, TSKeySet, TSIncrbyDecrbyOptions, TSOptions, TSCreateRule, TSAggregationType,
-    TSRangeOptions, TSMRangeOptions, Info
+    TSRangeOptions, TSMRangeOptions, TSInfo
 } from './modules/rts';
 export {
     Redisearch, FTCreateParameters, FTFieldOptions, FTSchemaField, FTSearchParameters, FTAggregateParameters, FTSugAddParameters, FTSugGetParameters, FTSpellCheck,
-    FTFieldType
+    FTFieldType, FTConfig, FTInfo
 } from './modules/redisearch'
+export {
+    RedisAI, AIBackend, AIDagrunParameters, AIDevice, AIModel, AIScript, AIScriptInfo, AIScriptSetParameters, AITensor, AITensorInfo
+} from './modules/redis-ai'
