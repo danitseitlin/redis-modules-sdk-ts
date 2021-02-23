@@ -1,5 +1,5 @@
 export { ReJSON, ReJSONGetParameters } from './modules/rejson';
-export { RedisGraph } from './modules/redisgraph'
+export { RedisGraph, GraphConfigInfo } from './modules/redisgraph'
 export { RedisGears, RGGetExecutionParameters, RGPyExecuteParameters } from './modules/redisgears'
 export { RedisBloom, BFInsertParameters, BFResponse, BFReserveParameter } from './modules/redisbloom';
 export { RedisBloomTopK, TOPKIncrbyItems, TOPKResponse } from './modules/redisbloom-topk';

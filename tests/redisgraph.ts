@@ -1,6 +1,6 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
-import { RedisGraph } from '../modules/redisgraph';
+import { GraphConfigInfo, RedisGraph } from '../modules/redisgraph';
 let client: RedisGraph;
 const graphName = 'Test'
 
@@ -47,9 +47,11 @@ describe('RedisGraph Module testing', async function() {
         expect(response).to.contain('Graph removed', 'The response of the GRAPH.DELETE command');
     });
     it('config function', async () => {
-        let response = await client.config('SET', 'RESULTSET_SIZE', '1000')
+        const response = await client.config('SET', 'RESULTSET_SIZE', '1000')
         expect(response).to.eql('OK', 'The RESULT SET SIZE')
-        response = await client.config('GET', 'RESULTSET_SIZE')
-        expect(response[1]).to.eql(1000, 'The RESULT SET SIZE')
+        let response2 = await client.config('GET', 'RESULTSET_SIZE') as GraphConfigInfo
+        expect(response2.RESULTSET_SIZE).to.eql(1000, 'The RESULT SET SIZE')
+        response2 = await client.config('GET', '*') as GraphConfigInfo
+        expect(response2.CACHE_SIZE).to.eql(25, 'The CACHE_SIZE of the module')
     });
 });
