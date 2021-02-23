@@ -49,9 +49,9 @@ describe('RedisGraph Module testing', async function() {
     it('config function', async () => {
         let response = await client.config('SET', 'RESULTSET_SIZE', '1000')
         expect(response).to.eql('OK', 'The RESULT SET SIZE')
-        response = await client.config('GET', 'RESULTSET_SIZE')
-        expect(response).to.eql(1000, 'The RESULT SET SIZE')
-        const response2 = await client.config('GET', '*') as GraphConfigInfo
-        expect(response2.CACHE_SIZE).to.eql(25, 'The RESULT SET SIZE')
+        let response2 = await client.config('GET', 'RESULTSET_SIZE') as GraphConfigInfo
+        expect(response2.RESULTSET_SIZE).to.eql(1000, 'The RESULT SET SIZE')
+        response2 = await client.config('GET', '*') as GraphConfigInfo
+        expect(response2.CACHE_SIZE).to.eql(25, 'The CACHE_SIZE of the module')
     });
 });
