@@ -112,7 +112,8 @@ export class RedisGraph extends Module {
             const args = [command, option];
             if(command === 'SET')
                 args.push(value);
-            return await this.redis.send_command('GRAPH.CONFIG', args);
+            const response = await this.redis.send_command('GRAPH.CONFIG', args);
+            return this.handleResponse(response);
         }
         catch(error) {
             return this.handleError(error);
