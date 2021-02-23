@@ -1,6 +1,6 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
-import { RedisGraph } from '../modules/redisgraph';
+import { GraphConfigInfo, RedisGraph } from '../modules/redisgraph';
 let client: RedisGraph;
 const graphName = 'Test'
 
@@ -50,7 +50,8 @@ describe('RedisGraph Module testing', async function() {
         let response = await client.config('SET', 'RESULTSET_SIZE', '1000')
         expect(response).to.eql('OK', 'The RESULT SET SIZE')
         response = await client.config('GET', 'RESULTSET_SIZE')
-        expect(response[1]).to.eql(1000, 'The RESULT SET SIZE')
-        console.log(await client.config('GET', '*'))
+        expect(response).to.eql(1000, 'The RESULT SET SIZE')
+        const response2 = await client.config('GET', '*') as GraphConfigInfo
+        expect(response2.CACHE_SIZE).to.eql(25, 'The RESULT SET SIZE')
     });
 });
