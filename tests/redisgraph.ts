@@ -51,5 +51,6 @@ describe('RedisGraph Module testing', async function() {
         expect(response).to.eql('OK', 'The RESULT SET SIZE')
         response = await client.config('GET', 'RESULTSET_SIZE')
         expect(response[1]).to.eql(1000, 'The RESULT SET SIZE')
+        console.log(await client.config('GET', '*'))
     });
 });
