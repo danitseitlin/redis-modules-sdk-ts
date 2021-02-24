@@ -1,3 +1,4 @@
+export { Redis } from './modules/redis';
 export { ReJSON, ReJSONGetParameters } from './modules/rejson';
 export { RedisGraph, GraphConfigInfo } from './modules/redisgraph'
 export { RedisGears, RGGetExecutionParameters, RGPyExecuteParameters } from './modules/redisgears'
