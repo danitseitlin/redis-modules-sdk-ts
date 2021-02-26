@@ -61,12 +61,12 @@ export class Redisearch extends Module {
             args.push('SCHEMA');
             for(const field of schemaFields) {
                 args = args.concat([field.name, field.type]);
-                if(field.sortable !== undefined) args.push('SORTABLE');
-                if(field.noindex !== undefined) args.push('NOINDEX');
                 if(field.nostem !== undefined) args.push('NOSTEM');
+                if(field.weight !== undefined) args = args.concat(['WEIGHT', field.weight.toString()]);
                 if(field.phonetic !== undefined) args = args.concat(['PHONETIC', field.phonetic]);
                 if(field.seperator !== undefined) args = args.concat(['SEPERATOR', field.seperator]);
-                if(field.weight !== undefined) args = args.concat(['WEIGHT', field.weight.toString()]);
+                if(field.sortable !== undefined) args.push('SORTABLE');
+                if(field.noindex !== undefined) args.push('NOINDEX');
             }
             const response = await this.redis.send_command('FT.CREATE', args);
             return this.handleResponse(response);

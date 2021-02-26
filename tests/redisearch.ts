@@ -27,9 +27,19 @@ describe('RediSearch Module testing', async function() {
     })
 
     it('create function', async () => {
-        const response = await client.create(index, [{
+        let response = await client.create(index, [{
             name: 'name',
             type: 'TEXT'
+        }])
+        expect(response).to.equal('OK', 'The response of the FT.CREATE command');
+        response = await client.create(`${index}1`, [{
+            name: 'name',
+            type: 'TEXT'
+        }, {
+            name: 'name2',
+            type: 'TEXT',
+            sortable: true,
+            weight: 2
         }])
         expect(response).to.equal('OK', 'The response of the FT.CREATE command');
     });
