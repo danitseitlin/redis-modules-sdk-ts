@@ -30,7 +30,7 @@ describe('RedisGraph Module testing', async function() {
 
     it('get function', async () => {
         console.log(await client.get('ages'))
-        console.log(await client.get('ages', ['kids']))
+        console.log(await client.get('ages', 'kids'))
     });
 
     it('score function', async () => {
@@ -48,6 +48,8 @@ describe('RedisGraph Module testing', async function() {
     it('del function', async () => {
         let response = await client.del('ages', ['kids'])
         expect(response).to.eql('OK', 'The response of the \'is.del\' command');
+        const sets = await client.get('ages');
+        expect(sets.length).to.eql(1, 'The sets count')
         response = await client.del('ages')
         expect(response).to.eql('OK', 'The response of the \'is.del\' command');
     });
