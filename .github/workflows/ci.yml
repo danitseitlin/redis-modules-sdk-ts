@@ -45,8 +45,8 @@ jobs:
       redis-ai-selected: ${{(github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'redis-ai') || github.event.inputs.tests == 'All'))}}
       redis-ai-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, 'redis-ai.ts')}}
       #Redis Interval Sets
-      redis-ai-selected: ${{(github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'ris') || github.event.inputs.tests == 'All'))}}
-      redis-ai-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, 'ris.ts')}}
+      ris-selected: ${{(github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'ris') || github.event.inputs.tests == 'All'))}}
+      ris-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, 'ris.ts')}}
     steps:
       - uses: actions/checkout@v2
       - id: files
