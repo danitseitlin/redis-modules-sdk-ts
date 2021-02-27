@@ -17,7 +17,7 @@ export class RedisIntervalSets extends Module {
      * @param key 
      * @param sets 
      */
-    async set(key: string, sets: RISMember[]): Promise<'OK'> {
+    async set(key: string, sets: RISSet[]): Promise<'OK'> {
         try {
             let args: (number | string)[] = [key];
             for(const set of sets)
@@ -29,15 +29,30 @@ export class RedisIntervalSets extends Module {
         }
     }
 
-    async get(key: string, setNames?: string[]) {
+    /**
+     * 
+     * @param key 
+     * @param setNames 
+     */
+    async get(key: string, setNames?: string[]): Promise<RISSet[]> {
         try {
-            return await this.redis.send_command('is.get', [key].concat(setNames))
+            let args = [key];
+            if(setNames)
+                args = args.concat(setNames)
+            const response = await this.redis.send_command('is.get', args)
+            return this.parseGet(response)
         }
         catch(error) {
             return this.handleError(error);
         }
     }
-    async del(key: string, setNames?: string[]) {
+
+    /**
+     * 
+     * @param key 
+     * @param setNames 
+     */
+    async del(key: string, setNames?: string[]): Promise<'OK'> {
         try {
             return await this.redis.send_command('is.del', [key].concat(setNames))
         }
@@ -45,7 +60,13 @@ export class RedisIntervalSets extends Module {
             return this.handleError(error);
         }
     }
-    async score(key: string, score: number) {
+
+    /**
+     * 
+     * @param key 
+     * @param score 
+     */
+    async score(key: string, score: number): Promise<string[]> {
         try {
             return await this.redis.send_command('is.score', [key, score])
         }
@@ -53,7 +74,13 @@ export class RedisIntervalSets extends Module {
             return this.handleError(error);
         }
     }
-    async notScore(key: string, score: number) {
+
+    /**
+     * 
+     * @param key 
+     * @param score 
+     */
+    async notScore(key: string, score: number): Promise<string[]> {
         try {
             return await this.redis.send_command('is.not_score', [key, score])
         }
@@ -61,10 +88,21 @@ export class RedisIntervalSets extends Module {
             return this.handleError(error);
         }
     }
+
+    private parseGet(sets: string[][]): RISSet[] {
+        const parsedSets: RISSet[] = [];
+        for(const set of sets) {
+            if(set.length > 2)
+                parsedSets.push({name: set[0], minimum: parseInt(set[1]), maximum: parseInt(set[2])})
+            else
+                parsedSets.push({minimum: parseInt(set[0]), maximum: parseInt(set[1])})
+        }
+        return parsedSets;
+    }
 }
 
-export type RISMember = {
-    name: string,
+export type RISSet = {
+    name?: string,
     minimum: number,
     maximum: number
 }

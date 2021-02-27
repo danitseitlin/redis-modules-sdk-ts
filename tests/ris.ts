@@ -34,15 +34,21 @@ describe('RedisGraph Module testing', async function() {
     });
 
     it('score function', async () => {
-        console.log(await client.score('ages', 5))
+        const sets = await client.score('ages', 5)
+        expect(sets.length).to.eql(1, 'The number of sets');
+        expect(sets[0]).to.eql('kids', 'The name of the set');
     });
 
     it('notScore function', async () => {
-        console.log(await client.notScore('ages', 5))
+        const sets = await client.notScore('ages', 5)
+        expect(sets.length).to.eql(1, 'The number of sets');
+        expect(sets[0]).to.eql('parents', 'The name of the set');
     });
 
     it('del function', async () => {
-        console.log(await client.del('ages', ['kids']))
-        console.log(await client.del('ages'))
+        let response = await client.del('ages', ['kids'])
+        expect(response).to.eql('OK', 'The response of the \'is.del\' command');
+        response = await client.del('ages')
+        expect(response).to.eql('OK', 'The response of the \'is.del\' command');
     });
 });
