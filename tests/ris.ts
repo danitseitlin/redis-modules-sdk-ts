@@ -29,8 +29,12 @@ describe('RedisIntervalSets Module testing', async function() {
     });
 
     it('get function', async () => {
-        console.log(await client.get('ages'))
-        console.log(await client.get('ages', 'kids'))
+        let sets = await client.get('ages')
+        expect(sets.length).to.eql(2, 'The number of sets');
+        sets = await client.get('ages', 'kids')
+        expect(sets.length).to.eql(1, 'The number of sets');
+        expect(sets[0].minimum).to.eql(0, 'The minimum score of set')
+        expect(sets[0].maximum).to.eql(100, 'The maximum score of set')
     });
 
     it('score function', async () => {
