@@ -54,8 +54,8 @@ jobs:
         uses: jitterbit/get-changed-files@v1
       - name: Setup
         run: npm i
-      #- name: Linting
-      #  run: ./node_modules/.bin/eslint .
+      - name: Linting
+        run: ./node_modules/.bin/eslint .
       - name: Build
         run: npm run build
   #Build for 'ReJSON' module

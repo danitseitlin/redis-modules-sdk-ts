@@ -36,7 +36,7 @@ export class RedisIntervalSets extends Module {
      */
     async get(key: string, setName?: string): Promise<RISSet[]> {
         try {
-            let args = [key];
+            const args = [key];
             if(setName)
                 args.push(setName)
             const response = await this.redis.send_command('is.get', args)
