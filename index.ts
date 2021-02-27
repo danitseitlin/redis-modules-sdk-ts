@@ -17,3 +17,4 @@ export {
 export {
     RedisAI, AIBackend, AIDagrunParameters, AIDevice, AIModel, AIScript, AIScriptInfo, AIScriptSetParameters, AITensor, AITensorInfo
 } from './modules/redis-ai'
+export { RedisIntervalSets, RISSet } from './modules/ris';
