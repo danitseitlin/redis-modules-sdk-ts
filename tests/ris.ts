@@ -29,15 +29,20 @@ describe('RedisGraph Module testing', async function() {
     });
 
     it('get function', async () => {
-
-    });
-
-    it('del function', async () => {
+        console.log(await client.get('ages'))
+        console.log(await client.get('ages', ['kids']))
     });
 
     it('score function', async () => {
+        console.log(await client.score('ages', 5))
     });
 
     it('notScore function', async () => {
+        console.log(await client.notScore('ages', 5))
+    });
+
+    it('del function', async () => {
+        console.log(await client.del('ages', ['kids']))
+        console.log(await client.del('ages'))
     });
 });
