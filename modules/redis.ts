@@ -10,6 +10,7 @@ import { Redisearch } from './redisearch';
 import { RedisGears } from './redisgears';
 import { RedisGraph } from './redisgraph';
 import { ReJSON } from './rejson';
+import { RedisIntervalSets } from './ris';
 import { RedisTimeSeries } from './rts';
 
 export class Redis extends Module {
@@ -23,6 +24,7 @@ export class Redis extends Module {
     public bloomCuckoo: RedisBloomCuckoo
     public bloomCMK: RedisBloomCMK
     public ai: RedisAI
+    public ris: RedisIntervalSets
     
     /**
      * Initializing the Redis object
@@ -41,6 +43,7 @@ export class Redis extends Module {
         this.bloomCuckoo = new RedisBloomCuckoo(options)
         this.bloomCMK = new RedisBloomCMK(options)
         this.ai = new RedisAI(options)
+        this.ris = new RedisIntervalSets(options)
     }
 
     /**
@@ -58,6 +61,7 @@ export class Redis extends Module {
         await this.bloomCuckoo.connect();
         await this.bloomCMK.connect();
         await this.ai.connect();
+        await this.ris.connect();
     }
 
     /**
@@ -75,5 +79,6 @@ export class Redis extends Module {
         await this.bloomCuckoo.disconnect();
         await this.bloomCMK.disconnect();
         await this.ai.disconnect();
+        await this.ris.disconnect();
     }
 }
