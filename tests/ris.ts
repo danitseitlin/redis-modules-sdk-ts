@@ -15,8 +15,8 @@ describe('RedisIntervalSets Module testing', async function() {
         await client.disconnect();
     })
 
-    it('set function', async () => {
-        const response = await client.set('ages', [{
+    it('add function', async () => {
+        const response = await client.add('ages', [{
             name: 'parents',
             minimum: 20,
             maximum: 100

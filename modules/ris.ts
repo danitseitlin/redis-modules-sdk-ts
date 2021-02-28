@@ -13,11 +13,11 @@ export class RedisIntervalSets extends Module {
     }
 
     /**
-     * Setting an interval set 
+     * Adding an interval set 
      * @param key The name of the key
      * @param sets A list of sets to create. At least 1 set is required.
      */
-    async set(key: string, sets: RISSet[]): Promise<'OK'> {
+    async add(key: string, sets: RISSet[]): Promise<'OK'> {
         try {
             let args: (number | string)[] = [key];
             for(const set of sets)
