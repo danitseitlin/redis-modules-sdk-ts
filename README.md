@@ -45,17 +45,15 @@ npm install redis-modules-sdk@latest
 # Documentation :book:
 Come and read our documentation [here](https://github.com/danitseitlin/redis-modules-sdk/blob/master/docs/doc.md#documentation-book) before starting
 
-# Supported modules
-* [ReJSON](https://github.com/RedisJSON/RedisJSON)                               
-* [RedisTimeSeries](https://github.com/RedisTimeSeries/RedisTimeSeries) (RTS)    
-* [RediSearch](https://github.com/RediSearch/RediSearch)                         
-* [RedisGraph](https://github.com/RedisGraph/RedisGraph)                         
-* [RedisGears](https://github.com/RedisGears/RedisGears)                         
-* [RedisBloom: Bloom filter](https://github.com/RedisBloom/RedisBloom)           
-* [RedisBloom: TopK filter](https://github.com/RedisBloom/RedisBloom)            
-* [RedisBloom: Cuckoo filter](https://github.com/RedisBloom/RedisBloom)          
-* [RedisBloom: Count Min Sketch filter](https://github.com/RedisBloom/RedisBloom)
-* [RedisAI](https://github.com/RedisAI/RedisAI)                                  
+# Supported modules :dark_sunglasses:
+* [ReJSON](https://github.com/RedisJSON/RedisJSON)
+* [RedisTimeSeries](https://github.com/RedisTimeSeries/RedisTimeSeries) (RTS)
+* [RediSearch](https://github.com/RediSearch/RediSearch)
+* [RedisGraph](https://github.com/RedisGraph/RedisGraph)
+* [RedisGears](https://github.com/RedisGears/RedisGears)
+* [RedisBloom](https://github.com/RedisBloom/RedisBloom)
+* [RedisAI](https://github.com/RedisAI/RedisAI)
+* [RedisIntervalSets](https://github.com/danitseitlin/redis-interval-sets)
 
 # Contributing :raised_hands:
 Interested in contributing? awesome! start with reading our guidelines [here](https://github.com/danitseitlin/redis-modules-sdk/blob/master/docs/contributing.md#contributing-guide)
