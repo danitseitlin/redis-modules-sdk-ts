@@ -37,12 +37,23 @@ An open source SDK of all the available Redis modules, built with TypeScript for
 ```
 npm install redis-modules-sdk@latest
 ```
+
 ### Versions & Releases
 * A list of existing versions can be found [here](https://www.npmjs.com/package/redis-modules-sdk?activeTab=versions)
 * A list of releases will be found [here](https://github.com/danitseitlin/redis-modules-sdk/releases)
 
 # Documentation :book:
 Come and read our documentation [here](https://github.com/danitseitlin/redis-modules-sdk/blob/master/docs/doc.md#documentation-book) before starting
+
+# Supported modules :dark_sunglasses:
+* [ReJSON](https://github.com/RedisJSON/RedisJSON)
+* [RedisTimeSeries](https://github.com/RedisTimeSeries/RedisTimeSeries) (RTS)
+* [RediSearch](https://github.com/RediSearch/RediSearch)
+* [RedisGraph](https://github.com/RedisGraph/RedisGraph)
+* [RedisGears](https://github.com/RedisGears/RedisGears)
+* [RedisBloom](https://github.com/RedisBloom/RedisBloom)
+* [RedisAI](https://github.com/RedisAI/RedisAI)
+* [RedisIntervalSets](https://github.com/danitseitlin/redis-interval-sets)
 
 # Contributing :raised_hands:
 Interested in contributing? awesome! start with reading our guidelines [here](https://github.com/danitseitlin/redis-modules-sdk/blob/master/docs/contributing.md#contributing-guide)
