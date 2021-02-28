@@ -32,28 +32,13 @@ expect(response).to.equal('OK', 'The response of the set command');
 await client.disconnect();
 ```
 ### Functions list :floppy_disk:
-| Functions | Command         |
-|:--------- |:--------------- |
-| del       | JSON.DEL        |
-| get       | JSON.GET        |
-| mget      | JSON.MGET       |
-| set       | JSON.SET        |
-| type      | JSON.TYPE       |
-| numincrby | JSON.NUMINCRBY  |
-| nummultby | JSON.NUMMULTBY  |
-| strappend | JSON.STRAPPEND  |
-| strlen    | JSON.STRLEN     |
-| arrappend | JSON.ARRAPPEND  |
-| arrindex  | JSON.ARRINDEX   |
-| arrinsert | JSON.ARRINSERT  |
-| arrlen    | JSON.ARRLEN     |
-| arrpop    | JSON.ARRPOP     |
-| arrtrim   | JSON.ARRTRIM    |
-| objkeys   | JSON.OBJKEYS    |
-| objlen    | JSON.OBJLEN     |
-| debug     | JSON.DEBUG      |
-| forget    | JSON.FORGET     |
-| resp      | JSON.RESP       |
+| Function | Command          || Function  | Command         || Function  | Command         || Function  | Command         |
+|:--------- |:--------------- ||:--------- |:--------------- ||:--------- |:--------------- ||:--------- |:--------------- |
+| del       | JSON.DEL        || numincrby | JSON.NUMINCRBY  || arrindex  | JSON.ARRINDEX   || objkeys   | JSON.OBJKEYS    |
+| get       | JSON.GET        || nummultby | JSON.NUMMULTBY  || arrinsert | JSON.ARRINSERT  || objlen    | JSON.OBJLEN     |
+| mget      | JSON.MGET       || strappend | JSON.STRAPPEND  || arrlen    | JSON.ARRLEN     || debug     | JSON.DEBUG      |
+| set       | JSON.SET        || strlen    | JSON.STRLEN     || arrpop    | JSON.ARRPOP     || forget    | JSON.FORGET     |
+| type      | JSON.TYPE       || arrappend | JSON.ARRAPPEND  || arrtrim   | JSON.ARRTRIM    || resp      | JSON.RESP       |
 
 ## <img src='https://oss.redislabs.com/redistimeseries/images/logo.svg' style='max-width:100%;' height='30'/> RedisTimeSeries module
 ### Quick start :toolbox:
