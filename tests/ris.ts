@@ -25,7 +25,7 @@ describe('RedisIntervalSets Module testing', async function() {
             minimum: 0,
             maximum: 100  
         }])
-        expect(response).to.eql('OK', 'The response of the \'is.set\' command');
+        expect(response).to.eql('OK', 'The response of the \'iset.add\' command');
     });
 
     it('get function', async () => {
@@ -51,10 +51,10 @@ describe('RedisIntervalSets Module testing', async function() {
 
     it('del function', async () => {
         let response = await client.del('ages', ['kids'])
-        expect(response).to.eql('OK', 'The response of the \'is.del\' command');
+        expect(response).to.eql('OK', 'The response of the \'iset.del\' command');
         const sets = await client.get('ages');
         expect(sets.length).to.eql(1, 'The sets count')
         response = await client.del('ages')
-        expect(response).to.eql('OK', 'The response of the \'is.del\' command');
+        expect(response).to.eql('OK', 'The response of the \'iset.del\' command');
     });
 });

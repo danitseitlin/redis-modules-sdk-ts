@@ -46,7 +46,7 @@ describe('RedisBloom Cuckoo filter testing', async function() {
     });
     it.skip('scandump function', async () => {
         await client.add(key2, 'item');
-        await client.redis.del(key2);
+        await client.rediset.del(key2);
         const response = await client.scandump(key1, 123)
         console.log(response)
         dataIterator = parseInt(response[0])

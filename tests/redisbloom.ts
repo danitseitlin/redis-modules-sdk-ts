@@ -68,7 +68,7 @@ describe('RedisBloom Module testing', async function() {
         expect(data).to.not.equal('', 'The chunk data')
     });
     it.skip('loadchunk function', async () => {
-        await client.redis.del(key2);
+        await client.rediset.del(key2);
         for(const res of responses) {
             console.log(`\n=== ${res[0]} ===`)
             console.log(Buffer.from(res[1], 'ascii').toString('hex'))
