@@ -32,13 +32,21 @@ expect(response).to.equal('OK', 'The response of the set command');
 await client.disconnect();
 ```
 ### Functions list :floppy_disk:
-| Function | Command          | Function  | Command         | Function  | Command         | Function  | Command         |
-|:--------- |:--------------- |:--------- |:--------------- |:--------- |:--------------- |:--------- |:--------------- |
-| del       | JSON.DEL        | numincrby | JSON.NUMINCRBY  | arrindex  | JSON.ARRINDEX   | objkeys   | JSON.OBJKEYS    |
-| get       | JSON.GET        | nummultby | JSON.NUMMULTBY  | arrinsert | JSON.ARRINSERT  | objlen    | JSON.OBJLEN     |
-| mget      | JSON.MGET       | strappend | JSON.STRAPPEND  | arrlen    | JSON.ARRLEN     | debug     | JSON.DEBUG      |
-| set       | JSON.SET        | strlen    | JSON.STRLEN     | arrpop    | JSON.ARRPOP     | forget    | JSON.FORGET     |
-| type      | JSON.TYPE       | arrappend | JSON.ARRAPPEND  | arrtrim   | JSON.ARRTRIM    | resp      | JSON.RESP       |
+| Function  | Command         | Function  | Command        
+|:--------- |:--------------- |:--------- |:---------------
+| del       | JSON.DEL        | numincrby | JSON.NUMINCRBY 
+| get       | JSON.GET        | nummultby | JSON.NUMMULTBY 
+| mget      | JSON.MGET       | strappend | JSON.STRAPPEND 
+| set       | JSON.SET        | strlen    | JSON.STRLEN    
+| type      | JSON.TYPE       | arrappend | JSON.ARRAPPEND 
+
+| Function  | Command         | Function  | Command         |
+|:--------- |:--------------- |:--------- |:--------------- |
+| arrindex  | JSON.ARRINDEX   | objkeys   | JSON.OBJKEYS    |
+| arrinsert | JSON.ARRINSERT  | objlen    | JSON.OBJLEN     |
+| arrlen    | JSON.ARRLEN     | debug     | JSON.DEBUG      |
+| arrpop    | JSON.ARRPOP     | forget    | JSON.FORGET     |
+| arrtrim   | JSON.ARRTRIM    | resp      | JSON.RESP       |
 
 ## <img src='https://oss.redislabs.com/redistimeseries/images/logo.svg' style='max-width:100%;' height='30'/> RedisTimeSeries module
 ### Quick start :toolbox:
