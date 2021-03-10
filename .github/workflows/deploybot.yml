@@ -21,7 +21,7 @@ jobs:
       run: npm run build
     - name: Deploying version
       #run: npm run deploy
-      uses: docker-practice/actions-setup-docker@master
+      uses: package-deploy-bot@master
       with:
         pkg_name: redis-modules-sdk
         pkg_registry: https://registry.npmjs.org/
