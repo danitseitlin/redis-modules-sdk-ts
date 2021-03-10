@@ -21,7 +21,7 @@ jobs:
       run: npm run build
     - name: Deploying version
       #run: npm run deploy
-      uses: package-deploy-bot@master
+      uses: danitseitlin/npm-package-deployer@alpha
       with:
         pkg_name: redis-modules-sdk
         pkg_registry: https://registry.npmjs.org/
