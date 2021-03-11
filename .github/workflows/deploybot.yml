@@ -16,4 +16,3 @@ jobs:
       with:
         pkg_name: redis-modules-sdk
         npm_access_token: ${{secrets.NPM_AUTH_TOKEN}}
-        
