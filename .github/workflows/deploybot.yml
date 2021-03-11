@@ -7,15 +7,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Configurating Git
-      run: git config --global user.name ${{secrets.BOT_NAME}} && git config --global user.email ${{secrets.BOT_EMAIL}}
-    - name: Creating .npmrc file
-      run: echo "registry=https://registry.npmjs.org/" >> ~/.npmrc && echo "//registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN" >> ~/.npmrc
-      env:
-        NPM_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
     - name: Setup
       run: npm install
     - name: Build
       run: npm run build
     - name: Deploying version
-      run: npm run deploy
+      uses: danitseitlin/npm-package-deployer@master
+      with:
+        pkg_name: redis-modules-sdk
+        npm_access_token: ${{secrets.NPM_AUTH_TOKEN}}
