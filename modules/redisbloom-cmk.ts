@@ -9,7 +9,7 @@ export class RedisBloomCMK extends Module {
      * @param throwError If to throw an exception on error.
      */
     constructor(options: Redis.RedisOptions, throwError = true) {
-        super(options, throwError)
+        super(RedisBloomCMK.name, options, throwError)
     }
 
     /**
@@ -23,7 +23,7 @@ export class RedisBloomCMK extends Module {
             return await this.redis.send_command('CMS.INITBYDIM', [key, width, depth]);
         }
         catch(error) {
-            return this.handleError(`${RedisBloomCMK.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -38,7 +38,7 @@ export class RedisBloomCMK extends Module {
             return await this.redis.send_command('CMS.INITBYPROB', [key, errorSize, probability]);
         }
         catch(error) {
-            return this.handleError(`${RedisBloomCMK.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -55,7 +55,7 @@ export class RedisBloomCMK extends Module {
             return await this.redis.send_command('CMS.INCRBY', args);
         }
         catch(error) {
-            return this.handleError(`${RedisBloomCMK.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -69,7 +69,7 @@ export class RedisBloomCMK extends Module {
             return await this.redis.send_command('CMS.QUERY', [key].concat(items));
         }
         catch(error) {
-            return this.handleError(`${RedisBloomCMK.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -92,7 +92,7 @@ export class RedisBloomCMK extends Module {
             return await this.redis.send_command('CMS.MERGE', args);
         }
         catch(error) {
-            return this.handleError(`${RedisBloomCMK.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -105,7 +105,7 @@ export class RedisBloomCMK extends Module {
             return await this.redis.send_command('CMS.INFO', [key]);
         }
         catch(error) {
-            return this.handleError(`${RedisBloomCMK.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 }

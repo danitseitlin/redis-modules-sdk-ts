@@ -9,7 +9,7 @@ export class RedisBloom extends Module {
      * @param throwError If to throw an exception on error.
      */
     constructor(options: Redis.RedisOptions, throwError = true) {
-        super(options, throwError)
+        super(RedisBloom.name, options, throwError)
     }
 
     /**
@@ -29,7 +29,7 @@ export class RedisBloom extends Module {
             return await this.redis.send_command('BF.RESERVE', args);
         }
         catch(error) {
-            return this.handleError(`${RedisBloom.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -43,7 +43,7 @@ export class RedisBloom extends Module {
             return await this.redis.send_command('BF.ADD', [key, item])
         }
         catch(error) {
-            return this.handleError(`${RedisBloom.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -56,7 +56,7 @@ export class RedisBloom extends Module {
             return await this.redis.send_command('BF.MADD', [key].concat(items))
         }
         catch(error) {
-            return this.handleError(`${RedisBloom.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -83,7 +83,7 @@ export class RedisBloom extends Module {
             return await this.redis.send_command('BF.INSERT', args.concat(items));
         }
         catch(error) {
-            return this.handleError(`${RedisBloom.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -97,7 +97,7 @@ export class RedisBloom extends Module {
             return await this.redis.send_command('BF.EXISTS', [key, item]);
         }
         catch(error) {
-            return this.handleError(`${RedisBloom.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -111,7 +111,7 @@ export class RedisBloom extends Module {
             return await this.redis.send_command('BF.MEXISTS', [key].concat(items))
         }
         catch(error) {
-            return this.handleError(`${RedisBloom.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -125,7 +125,7 @@ export class RedisBloom extends Module {
             return await this.redis.send_command('BF.SCANDUMP', [key, iterator]) as [number, Buffer]
         }
         catch(error) {
-            return this.handleError(`${RedisBloom.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -141,7 +141,7 @@ export class RedisBloom extends Module {
             return await this.redis.send_command('BF.LOADCHUNK', [key, iterator, JSON.stringify(data)]);
         }
         catch(error) {
-            return this.handleError(`${RedisBloom.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 
@@ -154,7 +154,7 @@ export class RedisBloom extends Module {
             return await this.redis.send_command('BF.INFO', [key]);
         }
         catch(error) {
-            return this.handleError(`${RedisBloom.name}: ${error}`);
+            return this.handleError(error);
         }
     }
 }

@@ -1,32 +1,18 @@
 # Documentation :book:
 ## Links :bulb:
-  1. [ReJSON](#-rejson-module)<br>
-    1. [Quick start](#quick-start-toolbox)<br>
-    2. [Functions](#functions-list-floppy_disk)<br>
-  2. [RedisTimeSeries](#-redistimeseries-module)<br>
-    1. [Quick start](#quick-start-toolbox-1)<br>
-    2. [Functions](#functions-list-floppy_disk-1)<br>
-  3. [RediSearch](#-redisearch-module)<br>
-    1. [Quick start](#quick-start-toolbox-2)<br>
-    2. [Functions](#functions-list-floppy_disk-2)<br>
-  4. [RedisGraph](#-redisgraph-module)<br>
-    1. [Quick start](#quick-start-toolbox-3)<br>
-    2. [Functions](#functions-list-floppy_disk-3)<br>
-  5. [RedisGears](#-redisgears-module)<br>
-    1. [Quick start](#quick-start-toolbox-4)<br>
-    2. [Functions](#functions-list-floppy_disk-4)<br>
-  6. [RedisBloom Bloom filter](#bloom-filter)<br>
-    1. [Quick start](#quick-start-toolbox-5)<br>
-    2. [Functions](#functions-list-floppy_disk-5)<br>
-  7. [RedisBloom TopK filter](#topk-filter)<br>
-    1. [Quick start](#quick-start-toolbox-6)<br>
-    2. [Functions](#functions-list-floppy_disk-6)<br>
-  8. [RedisBloom Cuckoo filter](#cuckoo-filter)<br>
-    1. [Quick start](#quick-start-toolbox-7)<br>
-    2. [Functions](#functions-list-floppy_disk-7)<br>
-  9. [RedisBloom Count-Min-Sketch filter](#count-min-sketch-filter)<br>
-    1. [Quick start](#quick-start-toolbox-8)<br>
-    2. [Functions](#functions-list-floppy_disk-8)<br>
+| Module                                                                          |                                     |                                      |                                            |
+| ------------------------------------------------------------------------------- | ----------------------------------- | ------------------------------------ | ------------------------------------------ |
+| [ReJSON](https://github.com/RedisJSON/RedisJSON)                                | [Section](#-rejson-module)          | [QuickStart](#quick-start-toolbox)   | [Functions](#functions-list-floppy_disk)   |
+| [RedisTimeSeries](https://github.com/RedisTimeSeries/RedisTimeSeries) (RTS)     | [Section](#-redistimeseries-module) | [QuickStart](#quick-start-toolbox-1) | [Functions](#functions-list-floppy_disk-1) |
+| [RediSearch](https://github.com/RediSearch/RediSearch)                          | [Section](#-redisearch-module)      | [QuickStart](#quick-start-toolbox-2) | [Functions](#functions-list-floppy_disk-2) |
+| [RedisGraph](https://github.com/RedisGraph/RedisGraph)                          | [Section](#-redisgraph-module)      | [QuickStart](#quick-start-toolbox-3) | [Functions](#functions-list-floppy_disk-3) |
+| [RedisGears](https://github.com/RedisGears/RedisGears)                          | [Section](#-redisgears-module)      | [QuickStart](#quick-start-toolbox-4) | [Functions](#functions-list-floppy_disk-4) |
+| [RedisBloom: Bloom filter](https://github.com/RedisBloom/RedisBloom)            | [Section](#bloom-filter)            | [QuickStart](#quick-start-toolbox-5) | [Functions](#functions-list-floppy_disk-5) |
+| [RedisBloom: TopK filter](https://github.com/RedisBloom/RedisBloom)             | [Section](#topk-filter)             | [QuickStart](#quick-start-toolbox-6) | [Functions](#functions-list-floppy_disk-6) |
+| [RedisBloom: Cuckoo filter](https://github.com/RedisBloom/RedisBloom)           | [Section](#cuckoo-filter)           | [QuickStart](#quick-start-toolbox-7) | [Functions](#functions-list-floppy_disk-7) |
+| [RedisBloom: Count Min Sketch filter](https://github.com/RedisBloom/RedisBloom) | [Section](#count-min-sketch-filter) | [QuickStart](#quick-start-toolbox-8) | [Functions](#functions-list-floppy_disk-8) |
+| [RedisAI](https://github.com/RedisAI/RedisAI)                                   | [Section](#-redisai-module)         | [QuickStart](#quick-start-toolbox-9) | [Functions](#functions-list-floppy_disk-9) |
+
 ## <img src='https://oss.redislabs.com/redisjson/images/logo.svg' style='max-width:100%;' height='30'/> ReJSON module
 ### Quick start :toolbox:
 ```
@@ -46,7 +32,7 @@ expect(response).to.equal('OK', 'The response of the set command');
 await client.disconnect();
 ```
 ### Functions list :floppy_disk:
-| Functions | ReJSON Command  |
+| Functions | Command         |
 |:--------- |:--------------- |
 | del       | JSON.DEL        |
 | get       | JSON.GET        |
@@ -72,7 +58,7 @@ await client.disconnect();
 ## <img src='https://oss.redislabs.com/redistimeseries/images/logo.svg' style='max-width:100%;' height='30'/> RedisTimeSeries module
 ### Quick start :toolbox:
 ```
-const client = new RedisTimeSeies({
+const client = new RedisTimeSeries({
     host: 'hostname',
     port: 43758,
 });
@@ -88,7 +74,7 @@ expect(response).to.equal('OK', 'The response of the del command');
 await client.disconnect();
 ```
 ### Functions list :floppy_disk:
-| Functions  | RedisTimeSeries Command  |
+| Functions  | Command                     |
 |:---------- |:--------------------------- |
 | create     | TS.CREATE                   |
 | alter      | TS.ALTER                    |
@@ -126,7 +112,7 @@ expect(response).to.equal('OK', 'The response of the aliasdel command');
 await client.disconnect();
 ```
 ### Functions list :floppy_disk:
-| Functions   | Redisearch Command  |
+| Functions   | Command             |
 |:----------- |:------------------- |
 | create      | FT.CREATE           |
 | search      | FT.SEARCH           |
@@ -171,7 +157,7 @@ expect(response[2][0]).to.equal('Labels added: 1', 'The response of the GRAPH.QU
 await client.disconnect();
 ```
 ### Functions list :floppy_disk:
-| Functions     | RedisGraph Command  |
+| Functions     | Command             |
 |:------------- |:------------------- |
 | query         | GRAPH.QUERY         |
 | readonlyQuery | GRAPH.RO_QUERY      |
@@ -179,6 +165,7 @@ await client.disconnect();
 | delete        | GRAPH.DELETE        |
 | explain       | GRAPH.EXPLAIN       |
 | slowlog       | GRAPH.SLOWLOG       |
+| config        | GRAPH.CONFIG        |
 
 ## <img src='https://oss.redislabs.com/redisgears/images/RedisGears.png' style='max-width:100%;' height='30'/> RedisGears module
 ### Quick start :toolbox:
@@ -199,7 +186,7 @@ console.log(`Execution ID: ${executionId}`)
 await client.disconnect();
 ```
 ### Functions list :floppy_disk:
-| Functions          | RedisGears Command    |
+| Functions          | Command               |
 |:------------------ |:--------------------- |
 | pyexecute          | RG.PYEXECUTE          |
 | abortExecution     | RG.ABORTEXECUTION     |
@@ -237,7 +224,7 @@ const response = await client.add('key1', 'item1')
 await client.disconnect();
 ```
 #### Functions list :floppy_disk:
-| Functions  | RedisBloom Command |
+| Functions  | Command            |
 |:---------- |:------------------ |
 | reserve    | BF.RESERVE         |
 | add        | BF.ADD             |
@@ -267,7 +254,7 @@ const response = await client.reserve(key1, 1, 2, 3, 0.1);
 await client.disconnect();
 ```
 #### Functions list :floppy_disk:
-| Functions | RedisBloom TopK Command |
+| Functions | Command                 |
 |:--------- |:----------------------- |
 | reserve   | TOPK.RESERVE            |
 | add       | TOPK.ADD                |
@@ -294,7 +281,7 @@ const response = await client.add('key1', 'item');
 await client.disconnect();
 ```
 #### Functions list :floppy_disk:
-| Functions | RedisBloom Cuckoo Command |
+| Functions | Command                   |
 |:--------- |:------------------------- |
 | add       | CF.ADD                    |
 | addnx     | CF.ADDNX                  |
@@ -325,7 +312,7 @@ const response = await client.initbydim('dest', 1, 2);
 await client.disconnect();
 ```
 #### Functions list :floppy_disk:
-| Functions  | RedisBloom Count-Min Sketch Command |
+| Functions  | Command                             |
 |:---------- |:----------------------------------- |
 | initbydim  | CMS.INITBYDIM                       |
 | initbyprob | CMS.INITBYPROB                      |
@@ -333,3 +320,41 @@ await client.disconnect();
 | query      | CMS.QUERY                           |
 | merge      | CMS.MERGE                           |
 | info       | CMS.INFO                            |
+
+## <img src='https://oss.redislabs.com/redisai/images/logo.svg' style='max-width:100%;' height='30'/> RedisAI module
+### Quick start :toolbox:
+```
+const client = new RedisAI({
+    host: 'hostname',
+    port: 43758,
+});
+
+//Connect to the Redis database with RedisAI module
+await client.connect();
+
+//Setting a tensor
+const response = await client.tensorset('values-key', 'FLOAT', [2, 2], [1, 2 ,3, 4])
+expect(response).to.eql('OK', 'The response of tensorset')
+
+//Disconnect from the Redis database with RedisAI module
+await client.disconnect();
+```
+### Functions list :floppy_disk:
+| Functions  | Command         |
+|:---------- |:--------------- |
+| tensorset  | AI.TENSORSET    |
+| tensorget  | AI.TENSORGET    |
+| modelset   | AI.MODELSET     |
+| modelget   | AI.MODELGET     |
+| modeldel   | AI.MODELDEL     |
+| modelrun   | AI.MODELRUN     |
+| modelscan  | AI._MODELSCAN   |
+| scriptset  | AI.SCRIPTSET    |
+| scriptget  | AI.SCRIPTGET    |
+| scriptdel  | AI.SCRIPTDEL    |
+| scriptrun  | AI.SCRIPTRUN    |
+| scriptscan | AI._SCRIPTSCAN  |
+| dagrun     | AI.DAGRUN       |
+| dagrunRO   | AI.DAGRUN_RO    |
+| info       | AI.INFO         |
+| config     | AI.CONFIG       |
