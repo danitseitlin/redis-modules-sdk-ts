@@ -37,7 +37,7 @@ export class Redisearch extends Module {
                     args = args.concat(['LANGUAGE_FIELD', parameters.languageField]);
                 if(parameters.score !== undefined)
                     args = args.concat(['SCORE', parameters.score])
-                if(parameters.score !== undefined)
+                if(parameters.scoreField !== undefined)
                     args = args.concat(['SCORE_FIELD', parameters.scoreField])
                 if(parameters.payloadField !== undefined)
                     args = args.concat(['PAYLOAD_FIELD', parameters.payloadField])
