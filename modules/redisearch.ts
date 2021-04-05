@@ -115,7 +115,7 @@ export class Redisearch extends Module {
                 if(parameters.inFields !== undefined)
                     args = args.concat(['INFIELDS', parameters.inFields.num.toString(), parameters.inFields.field])
                 if(parameters.return !== undefined)
-                    args = args.concat(['RETURN', parameters.return.num.toString(), parameters.return.field])
+                    args = args.concat(['RETURN', parameters.return.num.toString()].concat(parameters.return.fields))
                 if(parameters.summarize !== undefined) {
                     args.push('SUMMARIZE')
                     if(parameters.summarize.fields !== undefined) {
@@ -770,7 +770,7 @@ export type FTSearchParameters = {
     },
     return?: {
         num: number,
-        field: string
+        fields: string[]
     },
     summarize?: {
         fields?: {
