@@ -44,6 +44,16 @@ describe('RediSearch Module testing', async function() {
         expect(response).to.equal('OK', 'The response of the FT.CREATE command');
     });
     it('search function', async () => {
+        const res = await client.search('idx:v', '@tenant:{ACME} @state:{free} @location:[-31.50442215465239, -68.53204536191498 2000 m]', {
+            limit: {
+              first: 0,
+              num: 1
+            },
+            return: {
+              num: 2,
+              fields: ['vehicle','state'] // this space separated value seems to be the problem
+            }
+          })
         const response = await client.search(index, query)
         expect(response).to.equal(0, 'The response of the FT.SEARCH command')
     });
