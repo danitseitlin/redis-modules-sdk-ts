@@ -712,7 +712,7 @@ export interface FTSchemaField extends FTFieldOptions {
  * @param inFields.field The field argument of the 'INFIELDS' parameter
  * @param return The 'RETURN' parameter. Use this keyword to limit which fields from the document are returned.
  * @param return.num The num argument of the 'RETURN' parameter
- * @param return.field The field of the 'RETURN' parameter
+ * @param return.fields The fields of the 'RETURN' parameter
  * @param summarize The 'SUMMARIZE' parameter. Use this option to return only the sections of the field which contain the matched text.
  * @param summarize.fields The fields argument of the 'SUMMARIZE' parameter
  * @param summarize.fields.num The num argument of the fields argument
