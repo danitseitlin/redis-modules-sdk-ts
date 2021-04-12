@@ -91,7 +91,7 @@ export class Redisearch extends Module {
                     args.push('NOCONTENT')
                 if(parameters.verbatim === true)
                     args.push('VERBARIM')
-                if(parameters.nonStopWords === true)
+                if(parameters.noStopWords === true)
                     args.push('NOSTOPWORDS')
                 if(parameters.withScores === true)
                     args.push('WITHSCORES')
@@ -690,7 +690,7 @@ export interface FTSchemaField extends FTFieldOptions {
  * The parameter of the 'FT.SEARCH' command
  * @param noContent The 'NOTCONTENT' parameter. If it appears after the query, we only return the document ids and not the content.
  * @param verbatim The 'VERBATIM' parameter.  if set, we do not try to use stemming for query expansion but search the query terms verbatim.
- * @param nonStopWords The 'NONSTOPWORDS' parameter. If set, we do not filter stopwords from the query. 
+ * @param noStopWords The 'noStopWords' parameter. If set, we do not filter stopwords from the query. 
  * @param withScores The 'WITHSCORES' parameter. If set, we also return the relative internal score of each document.
  * @param withPayloads The 'WITHPAYLOADS' parameter. If set, we retrieve optional document payloads (see FT.ADD).
  * @param withSoryKeys The 'WITHSORTKEYS' parameter. Only relevant in conjunction with SORTBY . Returns the value of the sorting key, right after the id and score and /or payload if requested.
@@ -744,7 +744,7 @@ export interface FTSchemaField extends FTFieldOptions {
 export type FTSearchParameters = {
     noContent?: boolean,
     verbatim?: boolean,
-    nonStopWords?: boolean,
+    noStopWords?: boolean,
     withScores?: boolean,
     withPayloads?: boolean,
     withSortKeys?: boolean,
