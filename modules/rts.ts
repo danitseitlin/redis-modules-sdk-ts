@@ -7,12 +7,11 @@ export class RedisTimeSeries extends Module {
     /**
      * Initializing the RTS object.
      * @param options The options of the Redis database.
-     * @param throwError If to throw an exception on error.
+     * @param moduleOptions The additional module options
+     * @param moduleOptions.isHandleError If to throw error on error
+     * @param moduleOptions.showDebugLogs If to print debug logs
      */
-    constructor(options: Redis.RedisOptions, public moduleOptions: RedisModuleOptions = {
-        handleError: true,
-        showDebugLogs: true
-    }) {
+    constructor(options: Redis.RedisOptions, public moduleOptions?: RedisModuleOptions) {
         super(RedisTimeSeries.name, options, moduleOptions)
     }
 

@@ -8,7 +8,7 @@ describe('AI testing', async function() {
         client = new Module('Module', {
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
-        }, false);
+        }, { isHandleError: false });
     })
 
     it('handleResponse function', async () => {

@@ -3,16 +3,20 @@ import * as Redis from 'ioredis';
 
 export class Module {
     public redis: Redis.Redis;
+    public isHandleError: boolean;
+    public showDebugLogs: boolean;
 
     /**
      * Initializing the module object
      * @param redisOptions The options of the Redis database
-     * @param throwError If to throw an exception on error.
+     * @param moduleOptions The additional module options
+     * @param moduleOptions.isHandleError If to throw error on error
+     * @param moduleOptions.showDebugLogs If to print debug logs
      */
-    constructor(public name: string, public redisOptions: Redis.RedisOptions, public moduleOptions: RedisModuleOptions = {
-        handleError: true,
-        showDebugLogs: true
-    }) {}
+    constructor(public name: string, public redisOptions: Redis.RedisOptions, public moduleOptions?: RedisModuleOptions) {
+        this.isHandleError = moduleOptions && moduleOptions.isHandleError ? moduleOptions.isHandleError: true;
+        this.showDebugLogs = moduleOptions && moduleOptions.showDebugLogs ? moduleOptions.showDebugLogs: false;
+    }
 
     /**
      * Connecting to the Redis database with the module
@@ -34,10 +38,10 @@ export class Module {
      * @param args The args of the redis command
      */
     async sendCommand(command: string, ...args: Redis.ValueType[]): Promise<any> {
-        if(this.moduleOptions.showDebugLogs)
+        if(this.showDebugLogs)
             console.log(`${this.name}: Running command ${command} with arguments: ${args}`);
         const response = this.redis.send_command(command, args);
-        if(this.moduleOptions.showDebugLogs)
+        if(this.showDebugLogs)
             console.log(`${this.name}: command ${command} responded with ${response}`);
         return response;
     }
@@ -49,7 +53,7 @@ export class Module {
      */
     handleError(error: string): any {
         const err = `${this.name}: ${error}`
-        if(this.moduleOptions.handleError)
+        if(this.isHandleError)
             throw new Error(err);
         return err;
     }
@@ -108,10 +112,10 @@ export class Module {
 
 /**
  * The Redis module class options
- * @param handleError If to throw exception in case of error
+ * @param isHandleError If to throw exception in case of error
  * @param showDebugLogs If to print debug logs
  */
 export type RedisModuleOptions = {
-    handleError?: boolean,
+    isHandleError?: boolean,
     showDebugLogs?: boolean
 }
