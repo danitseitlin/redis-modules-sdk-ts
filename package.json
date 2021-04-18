@@ -17,7 +17,7 @@
     "redisbloom-topk-filter-tests": "npm run test tests/redisbloom-topk.ts -- -- --host=127.0.0.1 --port=6379",
     "redisbloom-cuckoo-filter-tests": "npm run test tests/redisbloom-cuckoo.ts -- -- --host=127.0.0.1 --port=6379",
     "redisbloom-cmk-filter-tests": "npm run test tests/redisbloom-cmk.ts -- -- --host=127.0.0.1 --port=6379",
-    "redis-ai-tests": "npm run test tests/redis-ai.ts -- -- --host=127.0.0.1 --port=6379",
+    "redis-ai-module-tests": "npm run test tests/redis-ai.ts -- -- --host=127.0.0.1 --port=6379",
     "ris-module-tests": "npm run test tests/ris.ts -- -- --host=127.0.0.1 --port=6379",
     "redis-module-base-tests": "npm run test tests/module-base.ts",
     "tests": "npm run rejson-module-tests && npm run rts-module-tests && npm run redisearch-module-tests && npm run redisgraph-module-tests && npm run redisgears-module-tests && npm run redisbloom-module-tests && npm run redis-ai-tests",
