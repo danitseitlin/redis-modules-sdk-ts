@@ -1,6 +1,6 @@
 
 import * as Redis from 'ioredis';
-import { Module } from './module.base';
+import { Module, RedisModuleOptions } from './module.base';
 
 export class ReJSON extends Module {
 
@@ -9,8 +9,11 @@ export class ReJSON extends Module {
      * @param options The options of the Redis database.
      * @param throwError If to throw an exception on error.
      */
-    constructor(options: Redis.RedisOptions, throwError = true) {
-        super(ReJSON.name, options, throwError)
+    constructor(options: Redis.RedisOptions, public moduleOptions: RedisModuleOptions = {
+        handleError: true,
+        showDebugLogs: false
+    }) {
+        super(ReJSON.name, options, moduleOptions)
     }
 
     /**
@@ -23,7 +26,7 @@ export class ReJSON extends Module {
         try {
             const parameters = [key];
             if(path !== undefined) parameters.push(path)
-            return await this.redis.send_command('JSON.DEL', parameters)
+            return await this.sendCommand('JSON.DEL', parameters)
         }
         catch(error) {
             return this.handleError(error);
@@ -39,7 +42,7 @@ export class ReJSON extends Module {
      */
     async set(key: string, path: string, json: string): Promise<"OK"> {
         try {
-            return await this.redis.send_command('JSON.SET', [key, path, json])
+            return await this.sendCommand('JSON.SET', [key, path, json])
         }
         catch(error) {
             return this.handleError(error);
@@ -64,7 +67,7 @@ export class ReJSON extends Module {
                     args.push(value);
             }
             if(path !== undefined) args.push(path);
-            return await this.redis.send_command('JSON.GET', args)
+            return await this.sendCommand('JSON.GET', args)
         }
         catch(error) {
             return this.handleError(error);
@@ -81,7 +84,7 @@ export class ReJSON extends Module {
         try {
             const args = keys;
             if(path !== undefined) args.push(path);
-            return await this.redis.send_command('JSON.MGET', args)
+            return await this.sendCommand('JSON.MGET', args)
         }
         catch(error) {
             return this.handleError(error);
@@ -98,7 +101,7 @@ export class ReJSON extends Module {
         try {
             const args = [key];
             if(path !== undefined) args.push(path);
-            return await this.redis.send_command('JSON.TYPE', args)
+            return await this.sendCommand('JSON.TYPE', args)
         }
         catch(error) {
             return this.handleError(error);
@@ -117,7 +120,7 @@ export class ReJSON extends Module {
             const args = [key];
             if(path !== undefined) args.push(path);
             args.push(number.toString())
-            return await this.redis.send_command('JSON.NUMINCRBY', args)
+            return await this.sendCommand('JSON.NUMINCRBY', args)
         }
         catch(error) {
             return this.handleError(error);
@@ -136,7 +139,7 @@ export class ReJSON extends Module {
             const args = [key];
             if(path !== undefined) args.push(path);
             args.push(number.toString())
-            return await this.redis.send_command('JSON.NUMMULTBY', args)
+            return await this.sendCommand('JSON.NUMMULTBY', args)
         }
         catch(error) {
             return this.handleError(error);
@@ -154,7 +157,7 @@ export class ReJSON extends Module {
         try {
             const args = [key];
             if(path !== undefined) args.push(path);
-            return await this.redis.send_command('JSON.STRAPPEND', args.concat(string));
+            return await this.sendCommand('JSON.STRAPPEND', args.concat(string));
         }
         catch(error) {
             return this.handleError(error);
@@ -171,7 +174,7 @@ export class ReJSON extends Module {
         try {
             const args = [key];
             if(path !== undefined) args.push(path);
-            return await this.redis.send_command('JSON.STRLEN', args);
+            return await this.sendCommand('JSON.STRLEN', args);
         }
         catch(error) {
             return this.handleError(error);
@@ -189,7 +192,7 @@ export class ReJSON extends Module {
         try {
             const args = [key];
             if(path !== undefined) args.push(path);
-            return await this.redis.send_command('JSON.ARRAPPEND', args.concat(items));
+            return await this.sendCommand('JSON.ARRAPPEND', args.concat(items));
         }
         catch(error) {
             return this.handleError(error);
@@ -208,7 +211,7 @@ export class ReJSON extends Module {
             const args = [key];
             if(path !== undefined) args.push(path);
             args.push(scalar);
-            return await this.redis.send_command('JSON.ARRINDEX', args);
+            return await this.sendCommand('JSON.ARRINDEX', args);
         }
         catch(error) {
             return this.handleError(error);
@@ -229,7 +232,7 @@ export class ReJSON extends Module {
             if(path !== undefined) args.push(path);
             args.push(index.toString());
             args.push(json);
-            return await this.redis.send_command('JSON.ARRINSERT', args);
+            return await this.sendCommand('JSON.ARRINSERT', args);
         }
         catch(error) {
             return this.handleError(error);
@@ -246,7 +249,7 @@ export class ReJSON extends Module {
         try {
             const args = [key];
             if(path !== undefined) args.push(path);
-            return await this.redis.send_command('JSON.ARRLEN', args);
+            return await this.sendCommand('JSON.ARRLEN', args);
         }
         catch(error) {
             return this.handleError(error);
@@ -265,7 +268,7 @@ export class ReJSON extends Module {
             const args = [key];
             if(path !== undefined) args.push(path);
             args.push(index.toString());
-            return await this.redis.send_command('JSON.ARRPOP', args);
+            return await this.sendCommand('JSON.ARRPOP', args);
         }
         catch(error) {
             return this.handleError(error);
@@ -286,7 +289,7 @@ export class ReJSON extends Module {
             if(path !== undefined) args.push(path);
             args.push(start.toString());
             args.push(end.toString());
-            return await this.redis.send_command('JSON.ARRTRIM', args);
+            return await this.sendCommand('JSON.ARRTRIM', args);
         }
         catch(error) {
             return this.handleError(error);
@@ -303,7 +306,7 @@ export class ReJSON extends Module {
         try {
             const args = [key];
             if(path !== undefined) args.push(path);
-            return await this.redis.send_command('JSON.OBJKEYS', args);
+            return await this.sendCommand('JSON.OBJKEYS', args);
         }
         catch(error) {
             return this.handleError(error);
@@ -320,7 +323,7 @@ export class ReJSON extends Module {
         try {
             const args = [key];
             if(path !== undefined) args.push(path);
-            return await this.redis.send_command('JSON.OBJLEN', args);
+            return await this.sendCommand('JSON.OBJLEN', args);
         }
         catch(error) {
             return this.handleError(error);
@@ -343,7 +346,7 @@ export class ReJSON extends Module {
                 if(key !== undefined) args.push(key);
                 if(path !== undefined) args.push(path);
             }
-            return await this.redis.send_command('JSON.DEBUG', args);
+            return await this.sendCommand('JSON.DEBUG', args);
         }
         catch(error) {
             return this.handleError(error);
@@ -360,7 +363,7 @@ export class ReJSON extends Module {
         try {
             const parameters = [key];
             if(path !== undefined) parameters.push(path)
-            return await this.redis.send_command('JSON.FORGET', parameters)
+            return await this.sendCommand('JSON.FORGET', parameters)
         }
         catch(error) {
             return this.handleError(error);
@@ -377,7 +380,7 @@ export class ReJSON extends Module {
         try {
             const parameters = [key];
             if(path !== undefined) parameters.push(path)
-            return await this.redis.send_command('JSON.RESP', parameters)
+            return await this.sendCommand('JSON.RESP', parameters)
         }
         catch(error) {
             return this.handleError(error);

@@ -1,6 +1,6 @@
 
 import * as Redis from 'ioredis';
-import { Module } from './module.base';
+import { Module, RedisModuleOptions } from './module.base';
 
 export class RedisTimeSeries extends Module {
 
@@ -9,8 +9,11 @@ export class RedisTimeSeries extends Module {
      * @param options The options of the Redis database.
      * @param throwError If to throw an exception on error.
      */
-    constructor(options: Redis.RedisOptions, throwError = true) {
-        super(RedisTimeSeries.name, options, throwError)
+    constructor(options: Redis.RedisOptions, public moduleOptions: RedisModuleOptions = {
+        handleError: true,
+        showDebugLogs: false
+    }) {
+        super(RedisTimeSeries.name, options, moduleOptions)
     }
 
     /**
@@ -41,7 +44,7 @@ export class RedisTimeSeries extends Module {
                     args = args.concat([label.name, label.value])
                 }
             }
-            return await this.redis.send_command('TS.CREATE', args)
+            return await this.sendCommand('TS.CREATE', args)
         }
         catch(error) {
             return this.handleError(error);
@@ -66,7 +69,7 @@ export class RedisTimeSeries extends Module {
                     args = args.concat([label.name, label.value]);
                 }
             }
-            return await this.redis.send_command('TS.ALTER', args)
+            return await this.sendCommand('TS.ALTER', args)
         }
         catch(error) {
             return this.handleError(error);
@@ -102,7 +105,7 @@ export class RedisTimeSeries extends Module {
                     args = args.concat([label.name, label.value]);
                 }
             }
-            return await this.redis.send_command('TS.ADD', args);
+            return await this.sendCommand('TS.ADD', args);
         }
         catch(error) {
             return this.handleError(error);
@@ -121,7 +124,7 @@ export class RedisTimeSeries extends Module {
             let args: string[] = []
             for(const keySet of keySets)
                 args = args.concat([keySet.key, keySet.timestamp, keySet.value]);
-            return await this.redis.send_command('TS.MADD', args);   
+            return await this.sendCommand('TS.MADD', args);   
         }
         catch(error) {
             return this.handleError(error);
@@ -154,7 +157,7 @@ export class RedisTimeSeries extends Module {
                     args = args.concat([label.name, label.value]);
                 }
             }
-            return await this.redis.send_command('TS.INCRBY', args);
+            return await this.sendCommand('TS.INCRBY', args);
         }
         catch(error) {
             return this.handleError(error);
@@ -187,7 +190,7 @@ export class RedisTimeSeries extends Module {
                     args = args.concat([label.name, label.value]);
                 }
             }
-            return await this.redis.send_command('TS.DECRBY', args);
+            return await this.sendCommand('TS.DECRBY', args);
         }
         catch(error) {
             return this.handleError(error);
@@ -205,7 +208,7 @@ export class RedisTimeSeries extends Module {
     async createrule(parameters: TSCreateRule): Promise<'OK'> {
         try {
             const args = [parameters.sourceKey, parameters.destKey, 'AGGREGATION', parameters.aggregation, parameters.timeBucket.toString()]
-            return await this.redis.send_command('TS.CREATERULE', args);
+            return await this.sendCommand('TS.CREATERULE', args);
         }
         catch(error) {
             return this.handleError(error);
@@ -219,7 +222,7 @@ export class RedisTimeSeries extends Module {
      */
     async deleterule(sourceKey: string, destKey: string): Promise<'OK'> {
         try {
-            return await this.redis.send_command('TS.DELETERULE', sourceKey, destKey)
+            return await this.sendCommand('TS.DELETERULE', sourceKey, destKey)
         }
         catch(error) {
             return this.handleError(error);
@@ -244,7 +247,7 @@ export class RedisTimeSeries extends Module {
                 args = args.concat(['COUNT', options.count.toString()]);
             if(options !== undefined && options.aggregation !== undefined)
                 args = args.concat(['AGGREGATION', options.aggregation.type, options.aggregation.timeBucket.toString()]);
-            return await this.redis.send_command('TS.RANGE', args)
+            return await this.sendCommand('TS.RANGE', args)
         }
         catch(error) {
             return this.handleError(error);
@@ -269,7 +272,7 @@ export class RedisTimeSeries extends Module {
                 args = args.concat(['COUNT', options.count.toString()]);
             if(options !== undefined && options.aggregation !== undefined)
                 args = args.concat(['AGGREGATION', options.aggregation.type, options.aggregation.timeBucket.toString()]);
-            return await this.redis.send_command('TS.REVRANGE', args)
+            return await this.sendCommand('TS.REVRANGE', args)
         }
         catch(error) {
             return this.handleError(error);
@@ -300,7 +303,7 @@ export class RedisTimeSeries extends Module {
             if(options !== undefined && options.groupBy)
                 args = args.concat(['GROUPBY', options.groupBy.label, 'REDUCE', options.groupBy.reducer])
             args = args.concat(['FILTER', filter])
-            return await this.redis.send_command('TS.MRANGE', args)
+            return await this.sendCommand('TS.MRANGE', args)
         }
         catch(error) {
             return this.handleError(error);
@@ -331,7 +334,7 @@ export class RedisTimeSeries extends Module {
             if(options !== undefined && options.groupBy)
                 args = args.concat(['GROUPBY', options.groupBy.label, 'REDUCE', options.groupBy.reducer])
             args = args.concat(['FILTER', filter])
-            return await this.redis.send_command('TS.MREVRANGE', args)
+            return await this.sendCommand('TS.MREVRANGE', args)
         }
         catch(error) {
             return this.handleError(error);
@@ -344,7 +347,7 @@ export class RedisTimeSeries extends Module {
      */
     async get(key: string): Promise<(string | number)[]> {
         try {
-            return await this.redis.send_command('TS.GET', key);
+            return await this.sendCommand('TS.GET', key);
         }
         catch(error) {
             return this.handleError(error);
@@ -362,7 +365,7 @@ export class RedisTimeSeries extends Module {
             if(withLabels === true)
                 args.push('WITHLABELS');
             args = args.concat(['FILTER', filter])
-            return await this.redis.send_command('TS.MGET', args);
+            return await this.sendCommand('TS.MGET', args);
         }
         catch(error) {
             return this.handleError(error);
@@ -375,7 +378,7 @@ export class RedisTimeSeries extends Module {
      */
     async info(key: string): Promise<TSInfo> {
         try {
-            const response = await this.redis.send_command('TS.INFO', key);
+            const response = await this.sendCommand('TS.INFO', key);
             const info: TSInfo = {};
             for(let i = 0; i < response.length; i+=2) {
                 info[response[i]] = response[i+1];
@@ -393,7 +396,7 @@ export class RedisTimeSeries extends Module {
      */
     async queryindex(filter: string): Promise<string[]> {
         try {
-            return await this.redis.send_command('TS.QUERYINDEX', filter);
+            return await this.sendCommand('TS.QUERYINDEX', filter);
         }
         catch(error) {
             return this.handleError(error);

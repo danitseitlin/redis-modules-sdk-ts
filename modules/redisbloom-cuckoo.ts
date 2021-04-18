@@ -1,5 +1,5 @@
 import * as Redis from 'ioredis';
-import { Module } from './module.base';
+import { Module, RedisModuleOptions } from './module.base';
 
 export class RedisBloomCuckoo extends Module {
     
@@ -8,8 +8,11 @@ export class RedisBloomCuckoo extends Module {
      * @param options The options of the Redis database.
      * @param throwError If to throw an exception on error.
      */
-    constructor(options: Redis.RedisOptions, throwError = true) {
-        super(RedisBloomCuckoo.name, options, throwError)
+    constructor(options: Redis.RedisOptions, public moduleOptions: RedisModuleOptions = {
+        handleError: true,
+        showDebugLogs: false
+    }) {
+        super(RedisBloomCuckoo.name, options, moduleOptions)
     }
 
     /**
@@ -19,7 +22,7 @@ export class RedisBloomCuckoo extends Module {
      */
     async add(key: string, item: string): Promise<CFResponse> {
         try {
-            return await this.redis.send_command('CF.ADD', [key, item])
+            return await this.sendCommand('CF.ADD', [key, item])
         }
         catch(error) {
             return this.handleError(error);
@@ -33,7 +36,7 @@ export class RedisBloomCuckoo extends Module {
      */
     async addnx(key: string, item: string): Promise<CFResponse> {
         try {
-            return await this.redis.send_command('CF.ADDNX', [key, item])
+            return await this.sendCommand('CF.ADDNX', [key, item])
         }
         catch(error) {
             return this.handleError(error);
@@ -53,7 +56,7 @@ export class RedisBloomCuckoo extends Module {
                 args = args.concat(['CAPACITY', options.capacity.toString()]);
             if(options !== undefined && options.nocreate !== undefined)
                 args.push('NOCREATE');
-            return await this.redis.send_command('CF.INSERT', args.concat(['ITEMS']).concat(items));
+            return await this.sendCommand('CF.INSERT', args.concat(['ITEMS']).concat(items));
         }
         catch(error) {
             return this.handleError(error);
@@ -73,7 +76,7 @@ export class RedisBloomCuckoo extends Module {
                 args = args.concat(['CAPACITY', options.capacity.toString()]);
             if(options !== undefined && options.nocreate !== undefined)
                 args.push('NOCREATE');
-            return await this.redis.send_command('CF.INSERTNX', args.concat(['ITEMS']).concat(items));
+            return await this.sendCommand('CF.INSERTNX', args.concat(['ITEMS']).concat(items));
         }
         catch(error) {
             return this.handleError(error);
@@ -87,7 +90,7 @@ export class RedisBloomCuckoo extends Module {
      */
     async exists(key: string, item: string): Promise<CFResponse> {
         try {
-            return await this.redis.send_command('CF.EXISTS', [key, item]);
+            return await this.sendCommand('CF.EXISTS', [key, item]);
         }
         catch(error) {
             return this.handleError(error);
@@ -101,7 +104,7 @@ export class RedisBloomCuckoo extends Module {
      */
     async del(key: string, item: string): Promise<CFResponse> {
         try {
-            return await this.redis.send_command('CF.DEL', [key, item]);
+            return await this.sendCommand('CF.DEL', [key, item]);
         }
         catch(error) {
             return this.handleError(error);
@@ -115,7 +118,7 @@ export class RedisBloomCuckoo extends Module {
      */
     async count(key: string, item: string): Promise<number> {
         try {
-            return await this.redis.send_command('CF.COUNT', [key, item]);
+            return await this.sendCommand('CF.COUNT', [key, item]);
         }
         catch(error) {
             return this.handleError(error);
@@ -129,7 +132,7 @@ export class RedisBloomCuckoo extends Module {
      */
     async scandump(key: string, iterator: number): Promise<string[]> {
         try {
-            return await this.redis.send_command('CF.SCANDUMP', [key, iterator])
+            return await this.sendCommand('CF.SCANDUMP', [key, iterator])
         }
         catch(error) {
             return this.handleError(error);
@@ -144,7 +147,7 @@ export class RedisBloomCuckoo extends Module {
      */
     async loadchunk(key: string, iterator: number, data: string): Promise<'OK'> {
         try {
-            return await this.redis.send_command('CF.LOADCHUNK', [key, iterator, data]);
+            return await this.sendCommand('CF.LOADCHUNK', [key, iterator, data]);
         }
         catch(error) {
             return this.handleError(error);
@@ -157,7 +160,7 @@ export class RedisBloomCuckoo extends Module {
      */
     async info(key: string): Promise<string[]> {
         try {
-            return await this.redis.send_command('CF.INFO', [key]);
+            return await this.sendCommand('CF.INFO', [key]);
         }
         catch(error) {
             return this.handleError(error);

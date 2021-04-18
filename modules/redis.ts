@@ -1,6 +1,6 @@
 
 import * as IORedis from 'ioredis';
-import { Module } from './module.base';
+import { Module, RedisModuleOptions } from './module.base';
 import { RedisAI } from './redis-ai';
 import { RedisBloom } from './redisbloom';
 import { RedisBloomCMK } from './redisbloom-cmk';
@@ -31,8 +31,11 @@ export class Redis extends Module {
      * @param options The options of the Redis database.
      * @param throwError If to throw an exception on error.
      */
-    constructor(options: IORedis.RedisOptions, throwError = true) {
-        super('Redis', options, throwError)
+    constructor(options: IORedis.RedisOptions, public moduleOptions: RedisModuleOptions = {
+        handleError: true,
+        showDebugLogs: false
+    }) {
+        super('Redis', options, moduleOptions)
         this.rts = new RedisTimeSeries(options)
         this.rejson = new ReJSON(options)
         this.graph = new RedisGraph(options)

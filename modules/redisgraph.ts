@@ -1,5 +1,5 @@
 import * as Redis from 'ioredis';
-import { Module } from './module.base';
+import { Module, RedisModuleOptions } from './module.base';
 
 export class RedisGraph extends Module {
 
@@ -8,8 +8,11 @@ export class RedisGraph extends Module {
      * @param options The options of the Redis database.
      * @param throwError If to throw an exception on error.
      */
-    constructor(options: Redis.RedisOptions, throwError = true) {
-        super(RedisGraph.name, options, throwError)
+    constructor(options: Redis.RedisOptions, public moduleOptions: RedisModuleOptions = {
+        handleError: true,
+        showDebugLogs: false
+    }) {
+        super(RedisGraph.name, options, moduleOptions)
     }
 
     /**
@@ -20,7 +23,7 @@ export class RedisGraph extends Module {
      */
     async query(name: string, query: string): Promise<string[][]> {
         try {
-            return await this.redis.send_command('GRAPH.QUERY', [name, query])
+            return await this.sendCommand('GRAPH.QUERY', [name, query])
         }
         catch(error) {
             return this.handleError(error);
@@ -35,7 +38,7 @@ export class RedisGraph extends Module {
      */
     async readonlyQuery(name: string, query: string): Promise<string[][]> {
         try {
-            return await this.redis.send_command('GRAPH.RO_QUERY', [name, query])
+            return await this.sendCommand('GRAPH.RO_QUERY', [name, query])
         }
         catch(error) {
             return this.handleError(error);
@@ -50,7 +53,7 @@ export class RedisGraph extends Module {
      */
     async profile(name: string, query: string): Promise<string[]> {
         try {
-            return await this.redis.send_command('GRAPH.PROFILE', [name, query])
+            return await this.sendCommand('GRAPH.PROFILE', [name, query])
         }
         catch(error) {
             return this.handleError(error);
@@ -64,7 +67,7 @@ export class RedisGraph extends Module {
      */
     async delete(name: string): Promise<string> {
         try {
-            return await this.redis.send_command('GRAPH.DELETE', [name])
+            return await this.sendCommand('GRAPH.DELETE', [name])
         }
         catch(error) {
             return this.handleError(error);
@@ -79,7 +82,7 @@ export class RedisGraph extends Module {
      */
     async explain(name: string, query: string): Promise<string[]> {
         try {
-            return await this.redis.send_command('GRAPH.EXPLAIN', [name, query])
+            return await this.sendCommand('GRAPH.EXPLAIN', [name, query])
         }
         catch(error) {
             return this.handleError(error);
@@ -93,7 +96,7 @@ export class RedisGraph extends Module {
      */
     async slowlog(id: number): Promise<string[]> {
         try {
-            return await this.redis.send_command('GRAPH.SLOWLOG', [id])
+            return await this.sendCommand('GRAPH.SLOWLOG', [id])
         }
         catch(error) {
             return this.handleError(error);
@@ -112,7 +115,7 @@ export class RedisGraph extends Module {
             const args = [command, option];
             if(command === 'SET')
                 args.push(value);
-            const response = await this.redis.send_command('GRAPH.CONFIG', args);
+            const response = await this.sendCommand('GRAPH.CONFIG', args);
             return this.handleResponse(response);
         }
         catch(error) {

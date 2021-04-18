@@ -1,5 +1,5 @@
 import * as Redis from 'ioredis';
-import { Module } from './module.base';
+import { Module, RedisModuleOptions } from './module.base';
 
 export class RedisBloomTopK extends Module {
 
@@ -8,8 +8,11 @@ export class RedisBloomTopK extends Module {
      * @param options The options of the Redis database.
      * @param throwError If to throw an exception on error.
      */
-    constructor(options: Redis.RedisOptions, throwError = true) {
-        super(RedisBloomTopK.name, options, throwError)
+    constructor(options: Redis.RedisOptions, public moduleOptions: RedisModuleOptions = {
+        handleError: true,
+        showDebugLogs: false
+    }) {
+        super(RedisBloomTopK.name, options, moduleOptions)
     }
 
     /**
@@ -22,7 +25,7 @@ export class RedisBloomTopK extends Module {
      */
     async reserve(key: string, topk: number, width: number, depth: number, decay: number): Promise<'OK'> {
         try {
-            return await this.redis.send_command('TOPK.RESERVE', [key, topk, width, depth, decay]);
+            return await this.sendCommand('TOPK.RESERVE', [key, topk, width, depth, decay]);
         }
         catch(error) {
             return this.handleError(error);
@@ -36,7 +39,7 @@ export class RedisBloomTopK extends Module {
      */
     async add(key: string, items: (number | string)[]): Promise<string[]> {
         try {
-            return await this.redis.send_command('TOPK.ADD', [key].concat(items as string[]))
+            return await this.sendCommand('TOPK.ADD', [key].concat(items as string[]))
         }
         catch(error) {
             return this.handleError(error);
@@ -54,7 +57,7 @@ export class RedisBloomTopK extends Module {
             for(const item of items) {
                 args = args.concat([item.name.toString(), item.increment.toString()])
             }
-            return await this.redis.send_command('TOPK.INCRBY', args);
+            return await this.sendCommand('TOPK.INCRBY', args);
         }
         catch(error) {
             return this.handleError(error);
@@ -69,7 +72,7 @@ export class RedisBloomTopK extends Module {
      */
     async query(key: string, items: (string | number)[]): Promise<TOPKResponse[]> {
         try {
-            return await this.redis.send_command('TOPK.QUERY', [key].concat(items as string[]))
+            return await this.sendCommand('TOPK.QUERY', [key].concat(items as string[]))
         }
         catch(error) {
             return this.handleError(error);
@@ -83,7 +86,7 @@ export class RedisBloomTopK extends Module {
      */
     async count(key: string, items: (string | number)[]): Promise<number[]> {
         try {
-            return await this.redis.send_command('TOPK.COUNT', [key].concat(items as string[]));
+            return await this.sendCommand('TOPK.COUNT', [key].concat(items as string[]));
         }
         catch(error) {
             return this.handleError(error);
@@ -96,7 +99,7 @@ export class RedisBloomTopK extends Module {
      */
     async list(key: string): Promise<(string | number)[]> {
         try {
-            return await this.redis.send_command('TOPK.LIST', [key]);
+            return await this.sendCommand('TOPK.LIST', [key]);
         }
         catch(error) {
             return this.handleError(error);
@@ -109,7 +112,7 @@ export class RedisBloomTopK extends Module {
      */
     async info(key: string): Promise<(string | number)[]> {
         try {
-            return await this.redis.send_command('TOPK.INFO', [key]);
+            return await this.sendCommand('TOPK.INFO', [key]);
         }
         catch(error) {
             return this.handleError(error);
