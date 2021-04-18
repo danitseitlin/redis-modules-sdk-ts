@@ -1,4 +1,4 @@
-import { Module } from './module.base'
+import { Module, RedisModuleOptions } from './module.base'
 import * as Redis from 'ioredis';
 
 export class RedisAI extends Module {
@@ -6,10 +6,12 @@ export class RedisAI extends Module {
     /**
      * Initializing the RedisAI object
      * @param options The options of the Redis database.
-     * @param throwError If to throw an exception on error.
+     * @param moduleOptions The additional module options
+     * @param moduleOptions.isHandleError If to throw error on error
+     * @param moduleOptions.showDebugLogs If to print debug logs 
      */
-    constructor(options: Redis.RedisOptions, throwError = true) {
-        super(RedisAI.name, options, throwError)
+    constructor(options: Redis.RedisOptions, public moduleOptions?: RedisModuleOptions) {
+        super(RedisAI.name, options, moduleOptions)
     }
 
     /**
@@ -27,7 +29,7 @@ export class RedisAI extends Module {
                 args.push(data instanceof Buffer ? 'BLOB': 'VALUES');
                 data.forEach((value: (number | string | Buffer)) => {args.push(value.toString())});
             }
-            return await this.redis.send_command('AI.TENSORSET', args);  
+            return await this.sendCommand('AI.TENSORSET', args);  
         }
         catch(error) {
             return this.handleError(error);
@@ -47,7 +49,7 @@ export class RedisAI extends Module {
                 args.push('META');
             if(format !== undefined)
                 args.push(format);
-            const response = await this.redis.send_command('AI.TENSORGET', args);
+            const response = await this.sendCommand('AI.TENSORGET', args);
             return this.handleResponse(response);
         }
         catch(error) {
@@ -79,7 +81,7 @@ export class RedisAI extends Module {
                 if(options.outputs !== undefined && options.outputs.length > 0)
                     args = args.concat(['OUTPUTS'].concat(options.outputs));
             }
-            return await this.redis.send_command('AI.MODELSET', args.concat(['BLOB', model])); 
+            return await this.sendCommand('AI.MODELSET', args.concat(['BLOB', model])); 
         }
         catch(error) {
             return this.handleError(error);
@@ -99,7 +101,7 @@ export class RedisAI extends Module {
                 args.push('META');
             if(blob === true)
                 args.push('BLOB');
-            const response = await this.redis.send_command('AI.MODELGET', args);
+            const response = await this.sendCommand('AI.MODELGET', args);
             return this.handleResponse(response)
         }
         catch(error) {
@@ -113,7 +115,7 @@ export class RedisAI extends Module {
      */
     async modeldel(key: string): Promise<'OK'> {
         try {
-            return await this.redis.send_command('AI.MODELDEL', [key]);
+            return await this.sendCommand('AI.MODELDEL', [key]);
         }
         catch(error) {
             return this.handleError(error);
@@ -129,7 +131,7 @@ export class RedisAI extends Module {
     async modelrun(key: string, inputs: string[], outputs: string[]): Promise<'OK'> {
         try {
             const args = [key, 'INPUTS'].concat(inputs).concat(['OUTPUTS']).concat(outputs);
-            return await this.redis.send_command('AI.MODELRUN', args);
+            return await this.sendCommand('AI.MODELRUN', args);
         }
         catch(error) {
             return this.handleError(error);
@@ -141,7 +143,7 @@ export class RedisAI extends Module {
      */
     async modelscan(): Promise<string[][]> {
         try {
-            return await this.redis.send_command('AI._MODELSCAN', []);
+            return await this.sendCommand('AI._MODELSCAN', []);
         }
         catch(error) {
             return this.handleError(error);
@@ -158,7 +160,7 @@ export class RedisAI extends Module {
             let args = [key, parameters.device];
             if(parameters.tag !== undefined)
                 args = args.concat(['TAG', parameters.tag])
-            return await this.redis.send_command('AI.SCRIPTSET', args.concat(['SOURCE', parameters.script]));
+            return await this.sendCommand('AI.SCRIPTSET', args.concat(['SOURCE', parameters.script]));
         }
         catch(error) {
             return this.handleError(error);
@@ -178,7 +180,7 @@ export class RedisAI extends Module {
                 args.push('META');
             if(source === true)
                 args.push('SOURCE');
-            const response: string[] = await this.redis.send_command('AI.SCRIPTGET', args);
+            const response: string[] = await this.sendCommand('AI.SCRIPTGET', args);
             return this.handleResponse(response);
         }
         catch(error) {
@@ -192,7 +194,7 @@ export class RedisAI extends Module {
      */
     async scriptdel(key: string): Promise<'OK'> {
         try {
-            return await this.redis.send_command('AI.SCRIPTDEL', [key]);
+            return await this.sendCommand('AI.SCRIPTDEL', [key]);
         }
         catch(error) {
             return this.handleError(error);
@@ -210,7 +212,7 @@ export class RedisAI extends Module {
         try {
             const args = [key, functionName, 'INPUTS'].concat(inputs)
             args.push('OUTPUTS')
-            return await this.redis.send_command('AI.SCRIPTRUN', args.concat(outputs));
+            return await this.sendCommand('AI.SCRIPTRUN', args.concat(outputs));
         }
         catch(error) {
             return this.handleError(error);
@@ -222,7 +224,7 @@ export class RedisAI extends Module {
      */
     async scriptscan(): Promise<string[][]> {
         try {
-            return await this.redis.send_command('AI._SCRIPTSCAN')
+            return await this.sendCommand('AI._SCRIPTSCAN')
         }
         catch(error) {
             return this.handleError(error);
@@ -237,7 +239,7 @@ export class RedisAI extends Module {
      */
     async dagrun(commands: string[], load?: AIDagrunParameters, persist?: AIDagrunParameters): Promise<string[]> {
         try {
-            return await this.redis.send_command('AI.DAGRUN', this.generateDagRunArguments(commands, load, persist))
+            return await this.sendCommand('AI.DAGRUN', this.generateDagRunArguments(commands, load, persist))
         }
         catch(error) {
             return this.handleError(error);
@@ -251,7 +253,7 @@ export class RedisAI extends Module {
      */
     async dagrunRO(commands: string[], load?: AIDagrunParameters): Promise<string[]> {
         try {
-            return await this.redis.send_command('AI.DAGRUN_RO', this.generateDagRunArguments(commands, load))
+            return await this.sendCommand('AI.DAGRUN_RO', this.generateDagRunArguments(commands, load))
         }
         catch(error) {
             return this.handleError(error);
@@ -287,7 +289,7 @@ export class RedisAI extends Module {
         try {
             const args = [key]
             if(RESETSTAT === true) args.push('RESETSTAT')
-            const response: string[] = await this.redis.send_command('AI.INFO', args)
+            const response: string[] = await this.sendCommand('AI.INFO', args)
             return this.handleResponse(response);
         }
         catch(error) {
@@ -307,7 +309,7 @@ export class RedisAI extends Module {
                 args = args.concat(['LOADBACKEND', backend, path])
             else
                 args = args.concat(['BACKENDSPATH', path])
-            return await this.redis.send_command('AI.CONFIG', args)
+            return await this.sendCommand('AI.CONFIG', args)
         }
         catch(error) {
             return this.handleError(error);
