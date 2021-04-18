@@ -1,15 +1,17 @@
 import * as Redis from 'ioredis';
-import { Module } from './module.base';
+import { Module, RedisModuleOptions } from './module.base';
 
 export class RedisBloom extends Module {
 
     /**
      * Initializing the RedisBloom object
      * @param options The options of the Redis database.
-     * @param throwError If to throw an exception on error.
+     * @param moduleOptions The additional module options
+     * @param moduleOptions.isHandleError If to throw error on error
+     * @param moduleOptions.showDebugLogs If to print debug logs
      */
-    constructor(options: Redis.RedisOptions, throwError = true) {
-        super(RedisBloom.name, options, throwError)
+    constructor(options: Redis.RedisOptions, public moduleOptions?: RedisModuleOptions) {
+        super(RedisBloom.name, options, moduleOptions)
     }
 
     /**
@@ -26,7 +28,7 @@ export class RedisBloom extends Module {
                 args.push(options.expansion);
             if(options !== undefined && options.nonscaling === true)
                 args.push('NONSCALING');
-            return await this.redis.send_command('BF.RESERVE', args);
+            return await this.sendCommand('BF.RESERVE', args);
         }
         catch(error) {
             return this.handleError(error);
@@ -40,7 +42,7 @@ export class RedisBloom extends Module {
      */
     async add(key: string, item: string): Promise<BFResponse> {
         try {
-            return await this.redis.send_command('BF.ADD', [key, item])
+            return await this.sendCommand('BF.ADD', [key, item])
         }
         catch(error) {
             return this.handleError(error);
@@ -53,7 +55,7 @@ export class RedisBloom extends Module {
      */
     async madd(key: string, items: string[]): Promise<BFResponse[]> {
         try {
-            return await this.redis.send_command('BF.MADD', [key].concat(items))
+            return await this.sendCommand('BF.MADD', [key].concat(items))
         }
         catch(error) {
             return this.handleError(error);
@@ -80,7 +82,7 @@ export class RedisBloom extends Module {
             if(options !== undefined && options.noscaling !== undefined)
                 args.push('NOSCALING');
             args.push('ITEMS')
-            return await this.redis.send_command('BF.INSERT', args.concat(items));
+            return await this.sendCommand('BF.INSERT', args.concat(items));
         }
         catch(error) {
             return this.handleError(error);
@@ -94,7 +96,7 @@ export class RedisBloom extends Module {
      */
     async exists(key: string, item: string): Promise<BFResponse> {
         try {
-            return await this.redis.send_command('BF.EXISTS', [key, item]);
+            return await this.sendCommand('BF.EXISTS', [key, item]);
         }
         catch(error) {
             return this.handleError(error);
@@ -108,7 +110,7 @@ export class RedisBloom extends Module {
      */
     async mexists(key: string, items: string[]): Promise<BFResponse[]> {
         try {
-            return await this.redis.send_command('BF.MEXISTS', [key].concat(items))
+            return await this.sendCommand('BF.MEXISTS', [key].concat(items))
         }
         catch(error) {
             return this.handleError(error);
@@ -122,7 +124,7 @@ export class RedisBloom extends Module {
      */
     async scandump(key: string, iterator: number): Promise<string[]> {
         try {
-            return await this.redis.send_command('BF.SCANDUMP', [key, iterator])
+            return await this.sendCommand('BF.SCANDUMP', [key, iterator])
         }
         catch(error) {
             return this.handleError(error);
@@ -137,7 +139,7 @@ export class RedisBloom extends Module {
      */
     async loadchunk(key: string, iterator: number, data: string): Promise<'OK'> {
         try {
-            return await this.redis.send_command('BF.LOADCHUNK', [key, iterator, data]);
+            return await this.sendCommand('BF.LOADCHUNK', [key, iterator, data]);
         }
         catch(error) {
             return this.handleError(error);
@@ -150,7 +152,7 @@ export class RedisBloom extends Module {
      */
     async info(key: string): Promise<string[]> {
         try {
-            return await this.redis.send_command('BF.INFO', [key]);
+            return await this.sendCommand('BF.INFO', [key]);
         }
         catch(error) {
             return this.handleError(error);

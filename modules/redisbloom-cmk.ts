@@ -1,15 +1,17 @@
 import * as Redis from 'ioredis';
-import { Module } from './module.base';
+import { Module, RedisModuleOptions } from './module.base';
 
 export class RedisBloomCMK extends Module {
 
     /**
      * Initializing the RedisBloom Count-Min Sketch object
      * @param options The options of the Redis database.
-     * @param throwError If to throw an exception on error.
+     * @param moduleOptions The additional module options
+     * @param moduleOptions.isHandleError If to throw error on error
+     * @param moduleOptions.showDebugLogs If to print debug logs
      */
-    constructor(options: Redis.RedisOptions, throwError = true) {
-        super(RedisBloomCMK.name, options, throwError)
+    constructor(options: Redis.RedisOptions, public moduleOptions?: RedisModuleOptions) {
+        super(RedisBloomCMK.name, options, moduleOptions)
     }
 
     /**
@@ -20,7 +22,7 @@ export class RedisBloomCMK extends Module {
      */
     async initbydim(key: string, width: number, depth: number): Promise<'OK'> {
         try {
-            return await this.redis.send_command('CMS.INITBYDIM', [key, width, depth]);
+            return await this.sendCommand('CMS.INITBYDIM', [key, width, depth]);
         }
         catch(error) {
             return this.handleError(error);
@@ -35,7 +37,7 @@ export class RedisBloomCMK extends Module {
      */
     async initbyprob(key: string, errorSize: number, probability: number): Promise<'OK'> {
         try {
-            return await this.redis.send_command('CMS.INITBYPROB', [key, errorSize, probability]);
+            return await this.sendCommand('CMS.INITBYPROB', [key, errorSize, probability]);
         }
         catch(error) {
             return this.handleError(error);
@@ -52,7 +54,7 @@ export class RedisBloomCMK extends Module {
             let args = [key];
             for(const item of items)
                 args = args.concat([item.name.toString(), item.increment.toString()])
-            return await this.redis.send_command('CMS.INCRBY', args);
+            return await this.sendCommand('CMS.INCRBY', args);
         }
         catch(error) {
             return this.handleError(error);
@@ -66,7 +68,7 @@ export class RedisBloomCMK extends Module {
      */
     async query(key: string, items: string[]): Promise<number[]> {
         try {
-            return await this.redis.send_command('CMS.QUERY', [key].concat(items));
+            return await this.sendCommand('CMS.QUERY', [key].concat(items));
         }
         catch(error) {
             return this.handleError(error);
@@ -89,7 +91,7 @@ export class RedisBloomCMK extends Module {
                 for(const weight of weights)
                     args.push(weight.toString());
             }
-            return await this.redis.send_command('CMS.MERGE', args);
+            return await this.sendCommand('CMS.MERGE', args);
         }
         catch(error) {
             return this.handleError(error);
@@ -102,7 +104,7 @@ export class RedisBloomCMK extends Module {
      */
     async info(key: string): Promise<string[]> {
         try {
-            return await this.redis.send_command('CMS.INFO', [key]);
+            return await this.sendCommand('CMS.INFO', [key]);
         }
         catch(error) {
             return this.handleError(error);

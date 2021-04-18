@@ -1,15 +1,17 @@
 import * as Redis from 'ioredis';
-import { Module } from './module.base';
+import { Module, RedisModuleOptions } from './module.base';
 
 export class RedisIntervalSets extends Module {
 
     /**
      * Initializing the RedisIntervalSets object
      * @param options The options of the Redis database.
-     * @param throwError If to throw an exception on error.
+     * @param moduleOptions The additional module options
+     * @param moduleOptions.isHandleError If to throw error on error
+     * @param moduleOptions.showDebugLogs If to print debug logs
      */
-    constructor(options: Redis.RedisOptions, throwError = true) {
-        super(RedisIntervalSets.name, options, throwError)
+    constructor(options: Redis.RedisOptions, public moduleOptions?: RedisModuleOptions) {
+        super(RedisIntervalSets.name, options, moduleOptions)
     }
 
     /**
@@ -22,7 +24,7 @@ export class RedisIntervalSets extends Module {
             let args: (number | string)[] = [key];
             for(const set of sets)
                 args = args.concat([set.name, set.minimum, set.maximum])
-            return await this.redis.send_command('iset.add', args)
+            return await this.sendCommand('iset.add', args)
         }
         catch(error) {
             return this.handleError(error);
@@ -39,7 +41,7 @@ export class RedisIntervalSets extends Module {
             const args = [key];
             if(setName)
                 args.push(setName)
-            const response = await this.redis.send_command('iset.get', args)
+            const response = await this.sendCommand('iset.get', args)
             return this.parseGet(response)
         }
         catch(error) {
@@ -54,7 +56,7 @@ export class RedisIntervalSets extends Module {
      */
     async del(key: string, setNames?: string[]): Promise<'OK'> {
         try {
-            return await this.redis.send_command('iset.del', [key].concat(setNames))
+            return await this.sendCommand('iset.del', [key].concat(setNames))
         }
         catch(error) {
             return this.handleError(error);
@@ -68,7 +70,7 @@ export class RedisIntervalSets extends Module {
      */
     async score(key: string, score: number): Promise<string[]> {
         try {
-            return await this.redis.send_command('iset.score', [key, score])
+            return await this.sendCommand('iset.score', [key, score])
         }
         catch(error) {
             return this.handleError(error);
@@ -82,7 +84,7 @@ export class RedisIntervalSets extends Module {
      */
     async notScore(key: string, score: number): Promise<string[]> {
         try {
-            return await this.redis.send_command('iset.not_score', [key, score])
+            return await this.sendCommand('iset.not_score', [key, score])
         }
         catch(error) {
             return this.handleError(error);
