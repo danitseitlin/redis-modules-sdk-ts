@@ -40,7 +40,7 @@ export class Module {
     async sendCommand(command: string, ...args: Redis.ValueType[]): Promise<any> {
         if(this.showDebugLogs)
             console.log(`${this.name}: Running command ${command} with arguments: ${args}`);
-        const response = await this.redis.send_command(command, args);
+        const response = await this.redis.send_command(command, ...args);
         if(this.showDebugLogs)
             console.log(`${this.name}: command ${command} responded with ${response}`);
         return response;
