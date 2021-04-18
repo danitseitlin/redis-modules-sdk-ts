@@ -10,7 +10,7 @@ export class RedisGears extends Module {
      */
     constructor(options: Redis.RedisOptions, public moduleOptions: RedisModuleOptions = {
         handleError: true,
-        showDebugLogs: false
+        showDebugLogs: true
     }) {
         super(RedisGears.name, options, moduleOptions)
     }

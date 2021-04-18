@@ -10,7 +10,7 @@ export class RedisBloomCMK extends Module {
      */
     constructor(options: Redis.RedisOptions, public moduleOptions: RedisModuleOptions = {
         handleError: true,
-        showDebugLogs: false
+        showDebugLogs: true
     }) {
         super(RedisBloomCMK.name, options, moduleOptions)
     }

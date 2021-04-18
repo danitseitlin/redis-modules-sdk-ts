@@ -10,7 +10,7 @@ export class RedisIntervalSets extends Module {
      */
     constructor(options: Redis.RedisOptions, public moduleOptions: RedisModuleOptions = {
         handleError: true,
-        showDebugLogs: false
+        showDebugLogs: true
     }) {
         super(RedisIntervalSets.name, options, moduleOptions)
     }

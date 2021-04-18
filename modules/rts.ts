@@ -11,7 +11,7 @@ export class RedisTimeSeries extends Module {
      */
     constructor(options: Redis.RedisOptions, public moduleOptions: RedisModuleOptions = {
         handleError: true,
-        showDebugLogs: false
+        showDebugLogs: true
     }) {
         super(RedisTimeSeries.name, options, moduleOptions)
     }

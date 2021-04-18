@@ -11,7 +11,7 @@ export class Module {
      */
     constructor(public name: string, public redisOptions: Redis.RedisOptions, public moduleOptions: RedisModuleOptions = {
         handleError: true,
-        showDebugLogs: false
+        showDebugLogs: true
     }) {}
 
     /**

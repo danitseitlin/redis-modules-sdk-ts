@@ -33,7 +33,7 @@ export class Redis extends Module {
      */
     constructor(options: IORedis.RedisOptions, public moduleOptions: RedisModuleOptions = {
         handleError: true,
-        showDebugLogs: false
+        showDebugLogs: true
     }) {
         super('Redis', options, moduleOptions)
         this.rts = new RedisTimeSeries(options)

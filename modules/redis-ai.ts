@@ -10,7 +10,7 @@ export class RedisAI extends Module {
      */
     constructor(options: Redis.RedisOptions, public moduleOptions: RedisModuleOptions = {
         handleError: true,
-        showDebugLogs: false
+        showDebugLogs: true
     }) {
         super(RedisAI.name, options, moduleOptions)
     }

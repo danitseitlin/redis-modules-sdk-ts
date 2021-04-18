@@ -11,7 +11,7 @@ export class Redisearch extends Module {
      */
     constructor(options: Redis.RedisOptions, public moduleOptions: RedisModuleOptions = {
         handleError: true,
-        showDebugLogs: false
+        showDebugLogs: true
     }) {
         super(Redisearch.name, options, moduleOptions)
     }
