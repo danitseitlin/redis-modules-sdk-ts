@@ -221,7 +221,7 @@ export class RedisTimeSeries extends Module {
      */
     async deleterule(sourceKey: string, destKey: string): Promise<'OK'> {
         try {
-            return await this.sendCommand('TS.DELETERULE', sourceKey, destKey)
+            return await this.sendCommand('TS.DELETERULE', [sourceKey, destKey])
         }
         catch(error) {
             return this.handleError(error);
