@@ -207,7 +207,7 @@ jobs:
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm redisai/redisai && docker ps -a
     - name: Running tests
-      run: npm i && npm run ris-tests
+      run: npm i && npm run rts-tests
   #Build for 'Redis Interval Sets' module
   RIS:
     needs: Setup
@@ -222,4 +222,4 @@ jobs:
     - name: Setting up Redis
       run: docker run -p 6379:6379 -d --rm danitseitlin/redis-interval-sets && docker ps -a
     - name: Running tests
-      run: npm i && npm run ris-tests
+      run: npm i && npm run ris-module-tests
