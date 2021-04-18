@@ -15,7 +15,7 @@ export class Module {
      */
     constructor(public name: string, public redisOptions: Redis.RedisOptions, public moduleOptions?: RedisModuleOptions) {
         this.isHandleError = moduleOptions && moduleOptions.isHandleError ? moduleOptions.isHandleError: true;
-        this.showDebugLogs = moduleOptions && moduleOptions.showDebugLogs ? moduleOptions.showDebugLogs: false;
+        this.showDebugLogs = moduleOptions && moduleOptions.showDebugLogs ? moduleOptions.showDebugLogs: true;
     }
 
     /**
