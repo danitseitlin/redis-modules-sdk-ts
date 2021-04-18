@@ -297,6 +297,8 @@ export class RedisTimeSeries extends Module {
                 args = args.concat(['AGGREGATION', options.aggregation.type, options.aggregation.timeBucket.toString()]);
             if(options !== undefined && options.withLabels !== undefined)
                 args.push('WITHLABELS')
+            if(options !== undefined && options.groupBy)
+                args = args.concat(['GROUPBY', options.groupBy.label, 'REDUCE', options.groupBy.reducer])
             args = args.concat(['FILTER', filter])
             return await this.redis.send_command('TS.MRANGE', args)
         }
@@ -326,6 +328,8 @@ export class RedisTimeSeries extends Module {
                 args = args.concat(['AGGREGATION', options.aggregation.type, options.aggregation.timeBucket.toString()]);
             if(options !== undefined && options.withLabels !== undefined)
                 args.push('WITHLABELS')
+            if(options !== undefined && options.groupBy)
+                args = args.concat(['GROUPBY', options.groupBy.label, 'REDUCE', options.groupBy.reducer])
             args = args.concat(['FILTER', filter])
             return await this.redis.send_command('TS.MREVRANGE', args)
         }
@@ -538,7 +542,14 @@ export type TSRangeOptions = {
  * @param aggregation.type The type of the 'AGGREGATION' command
  * @param aggregation.timeBucket The time bucket of the 'AGGREGATION' command
  * @param withLabels The 'WITHLABELS' optional parameter
+ * @param groupBy The 'GROUPBY' optional parameters
+ * @param groupBy.label The label of the 'GROUPBY' parameters
+ * @param groupBy.reducer The reducer of the 'GROUPBY' parameters
  */
 export interface TSMRangeOptions extends TSRangeOptions {
     withLabels?: boolean,
+    groupBy?: {
+        label: string,
+        reducer: 'SUM' | 'MIN' | 'MAX'
+    }
 }
