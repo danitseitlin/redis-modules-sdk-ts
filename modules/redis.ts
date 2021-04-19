@@ -1,4 +1,6 @@
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-empty-interface */
 import * as IORedis from 'ioredis';
 import { Module, RedisModuleOptions } from './module.base';
 import { RedisAI } from './redis-ai';
@@ -35,7 +37,7 @@ export class Redis extends Module {
 	 */
 	constructor(options: IORedis.RedisOptions, public moduleOptions?: RedisModuleOptions) {
 		super('Redis', options, moduleOptions)
-		applyMixins(Redis, [RedisAI/*, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries*/])
+		this.applyMixins(Redis, [RedisAI/*, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries*/])
 	}
 
 	/**
@@ -51,16 +53,14 @@ export class Redis extends Module {
 	async disconnectAll() {
 		await this.disconnect();
 	}
-	
-}
-
-export function applyMixins(derivedCtor: any, baseCtors: any[], addPrefix = true) {
-	baseCtors.forEach(baseCtor => {
-		Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
-			const functionName = addPrefix ? `${baseCtor.prototype.name.toLowerCase()}_${name}`: name;
-			Object.defineProperty(derivedCtor.prototype, functionName, Object.getOwnPropertyDescriptor(baseCtor.prototype, name));
-	  	});
-	});
+	private applyMixins(baseObject: any, baseCtors: any[], addPrefix = true) {
+		baseCtors.forEach(baseCtor => {
+			Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
+				const functionName = addPrefix ? `${baseCtor.prototype.name}_${name}`: name;
+				Object.defineProperty(baseObject.prototype, functionName, Object.getOwnPropertyDescriptor(baseCtor.prototype, name));
+			});
+		});
+	}
 }
 
 export interface Redis extends Mixin<RedisAI, 'RedisAI'> {}//, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries {}
