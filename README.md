@@ -47,7 +47,6 @@ Come and read our documentation [here](https://github.com/danitseitlin/redis-mod
 
 # Redis "All in One"! :scream:
 A class built for integrating more than one Redis module without creating more than one class!
-Snippet:
 ```
 const client = new Redis(....);
 await client.connect();
