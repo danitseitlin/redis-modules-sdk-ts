@@ -1,10 +1,12 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { RedisBloomCuckoo } from '../modules/redisbloom-cuckoo';
+import { Redis } from '../modules/redis';
 const key1 = 'key1cuckoo'
 const key2 = 'key2cuckoo'
 const key3 = 'key3cuckoo'
 let client: RedisBloomCuckoo;
+let redis: Redis;
 let dataIterator: number;
 let data: string;
 
@@ -14,10 +16,16 @@ describe('RedisBloom Cuckoo filter testing', async function() {
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });
+        redis = new Redis({
+            host: cliArguments.host,
+            port: parseInt(cliArguments.port),
+        });
         await client.connect();
+        await redis.connect();
     })
     after(async () => {
         await client.disconnect();
+        await redis.disconnect();
     })
 
     it('add function', async () => {

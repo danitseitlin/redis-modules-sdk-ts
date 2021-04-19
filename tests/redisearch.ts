@@ -1,7 +1,9 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { Redisearch } from '../modules/redisearch';
+import { Redis } from '../modules/redis';
 let client: Redisearch;
+let redis: Redis;
 const index = 'idx'
 const query = '@text:name'
 const alias = 'alias'
@@ -20,10 +22,16 @@ describe('RediSearch Module testing', async function() {
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });
+        redis = new Redis({
+            host: cliArguments.host,
+            port: parseInt(cliArguments.port),
+        });
         await client.connect();
+        await redis.connect();
     })
     after(async () => {
         await client.disconnect();
+        await redis.disconnect();
     })
 
     it('create function', async () => {

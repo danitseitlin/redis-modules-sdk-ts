@@ -1,7 +1,9 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { RedisTimeSeries } from '../modules/rts';
+import { Redis } from '../modules/redis';
 let client: RedisTimeSeries;
+let redis: Redis;
 const date = new Date(2019, 11, 24, 19).getTime();
 const key1 = 'key:2:32';
 const key2 = 'key:2:33';
@@ -11,10 +13,16 @@ describe('RTS Module testing', async function() {
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });
+        redis = new Redis({
+            host: cliArguments.host,
+            port: parseInt(cliArguments.port),
+        });
         await client.connect();
+        await redis.connect();
     })
     after(async () => {
         await client.disconnect();
+        await redis.disconnect();
     })
 
     it('create function', async () => {
@@ -106,7 +114,7 @@ describe('RTS Module testing', async function() {
     });
     it('info function', async () => {
         const response = await client.info(key1)
-        expect(response.totalSamples).to.equal(1, 'The total samples of the key');
+        expect(response.totalSamples).to.be.greaterThan(0, 'The total samples of the key');
     });
     it('queryindex function', async () => {
         const response = await client.queryindex('label=value')

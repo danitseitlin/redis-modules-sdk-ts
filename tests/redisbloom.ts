@@ -1,7 +1,9 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { RedisBloom } from '../modules/redisbloom';
+import { Redis } from '../modules/redis';
 let client: RedisBloom;
+let redis: Redis;
 const key1 = 'key1bloom';
 const key2 = 'key2bloom';
 const item1 = 'item1';
@@ -15,11 +17,18 @@ describe('RedisBloom Module testing', async function() {
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });
+        redis = new Redis({
+            host: cliArguments.host,
+            port: parseInt(cliArguments.port),
+        });
         await client.connect();
+        await redis.connect();
     })
     after(async () => {
         await client.disconnect();
+        await redis.disconnect();
     })
+    
     it('reserve function', async () => {
         const response = await client.reserve(key2, 0.1, 1);
         expect(response).to.equal('OK', 'The response of the \'BF.RESERVE\' command');
