@@ -51,7 +51,7 @@ export class Redis extends Module {
     /**
      * Connecting to the Redis database with the module
      */
-    async connect() {
+    async connectAll() {
         await this.connect();
         await this.rts.connect();
         await this.rejson.connect();
@@ -69,7 +69,7 @@ export class Redis extends Module {
     /**
      * Disconnecting from the Redis database with the module
      */
-    async disconnect() {
+    async disconnectAll() {
         await this.disconnect();
         await this.rts.disconnect();
         await this.rejson.disconnect();
