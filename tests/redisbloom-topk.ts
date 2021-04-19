@@ -1,7 +1,9 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { RedisBloomTopK } from '../modules/redisbloom-topk';
+import { Redis } from '../modules/redis';
 let client: RedisBloomTopK;
+let redis: Redis;
 const key1 = 'key1topk';
 
 describe('RedisBloom Top-K filter testing', async function() {
@@ -10,11 +12,18 @@ describe('RedisBloom Top-K filter testing', async function() {
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });
+        redis = new Redis({
+            host: cliArguments.host,
+            port: parseInt(cliArguments.port),
+        });
         await client.connect();
+        await redis.connect();
     })
     after(async () => {
         await client.disconnect();
+        await redis.disconnect();
     })
+    
     it('reserve function', async() => {
         const response = await client.reserve(key1, 1, 2, 3, 0.1);
         expect(response).to.equal('OK', 'The response of the TOPK.RESERVE command');

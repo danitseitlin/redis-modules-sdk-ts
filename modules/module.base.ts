@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as Redis from 'ioredis';
+import * as IORedis from 'ioredis';
 
 export class Module {
-    public redis: Redis.Redis;
+    public redis: IORedis.Redis;
     public isHandleError: boolean;
     public showDebugLogs: boolean;
 
@@ -13,7 +13,7 @@ export class Module {
      * @param moduleOptions.isHandleError If to throw error on error
      * @param moduleOptions.showDebugLogs If to print debug logs
      */
-    constructor(public name: string, public redisOptions: Redis.RedisOptions, public moduleOptions?: RedisModuleOptions) {
+    constructor(public name: string, public redisOptions: IORedis.RedisOptions, public moduleOptions?: RedisModuleOptions) {
         this.isHandleError = moduleOptions && moduleOptions.isHandleError ? moduleOptions.isHandleError: true;
         this.showDebugLogs = moduleOptions && moduleOptions.showDebugLogs ? moduleOptions.showDebugLogs: false;
     }
@@ -22,7 +22,7 @@ export class Module {
      * Connecting to the Redis database with the module
      */
     async connect(): Promise<void> {
-        this.redis = new Redis(this.redisOptions);
+        this.redis = new IORedis(this.redisOptions);
     }
 
     /**
@@ -37,7 +37,7 @@ export class Module {
      * @param command The redis command
      * @param args The args of the redis command
      */
-    async sendCommand(command: string, args: Redis.ValueType | Redis.ValueType[] = []): Promise<any> {
+    async sendCommand(command: string, args: IORedis.ValueType | IORedis.ValueType[] = []): Promise<any> {
         if(this.showDebugLogs)
             console.log(`${this.name}: Running command ${command} with arguments: ${args}`);
         const response = await this.redis.send_command(command, args);
