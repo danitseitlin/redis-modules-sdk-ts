@@ -14,73 +14,56 @@ import { RedisIntervalSets } from './ris';
 import { RedisTimeSeries } from './rts';
 
 export class Redis extends Module {
-    public rts: RedisTimeSeries
-    public rejson: ReJSON
-    public graph: RedisGraph
-    public gears: RedisGears
-    public search: Redisearch
-    public bloom: RedisBloom
-    public bloomTopK: RedisBloomTopK
-    public bloomCuckoo: RedisBloomCuckoo
-    public bloomCMK: RedisBloomCMK
-    public ai: RedisAI
-    public ris: RedisIntervalSets
-    
-    /**
-     * Initializing the Redis object
-     * @param options The options of the Redis database.
-     * @param moduleOptions The additional module options
-     * @param moduleOptions.isHandleError If to throw error on error
-     * @param moduleOptions.showDebugLogs If to print debug logs
-     */
-    constructor(options: IORedis.RedisOptions, public moduleOptions?: RedisModuleOptions) {
-        super('Redis', options, moduleOptions)
-        this.rts = new RedisTimeSeries(options)
-        this.rejson = new ReJSON(options)
-        this.graph = new RedisGraph(options)
-        this.gears = new RedisGears(options)
-        this.search = new Redisearch(options)
-        this.bloom = new RedisBloom(options)
-        this.bloomTopK = new RedisBloomTopK(options)
-        this.bloomCuckoo = new RedisBloomCuckoo(options)
-        this.bloomCMK = new RedisBloomCMK(options)
-        this.ai = new RedisAI(options)
-        this.ris = new RedisIntervalSets(options)
-    }
+	public rts: RedisTimeSeries
+	public rejson: ReJSON
+	public graph: RedisGraph
+	public gears: RedisGears
+	public search: Redisearch
+	public bloom: RedisBloom
+	public bloomTopK: RedisBloomTopK
+	public bloomCuckoo: RedisBloomCuckoo
+	public bloomCMK: RedisBloomCMK
+	public ai: RedisAI
+	public ris: RedisIntervalSets
+	
+	/**
+	 * Initializing the Redis object
+	 * @param options The options of the Redis database.
+	 * @param moduleOptions The additional module options
+	 * @param moduleOptions.isHandleError If to throw error on error
+	 * @param moduleOptions.showDebugLogs If to print debug logs
+	 */
+	constructor(options: IORedis.RedisOptions, public moduleOptions?: RedisModuleOptions) {
+		super('Redis', options, moduleOptions)
+		applyMixins(Redis, [RedisAI/*, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries*/])
+	}
 
-    /**
-     * Connecting to the Redis database with the module
-     */
-    async connectAll() {
-        await this.connect();
-        await this.rts.connect();
-        await this.rejson.connect();
-        await this.graph.connect();
-        await this.gears.connect();
-        await this.search.connect();
-        await this.bloom.connect();
-        await this.bloomTopK.connect();
-        await this.bloomCuckoo.connect();
-        await this.bloomCMK.connect();
-        await this.ai.connect();
-        await this.ris.connect();
-    }
+	/**
+	 * Connecting to the Redis database with the module
+	 */
+	async connectAll() {
+		await this.connect();
+	}
 
-    /**
-     * Disconnecting from the Redis database with the module
-     */
-    async disconnectAll() {
-        await this.disconnect();
-        await this.rts.disconnect();
-        await this.rejson.disconnect();
-        await this.graph.disconnect();
-        await this.gears.disconnect();
-        await this.search.disconnect();
-        await this.bloom.disconnect();
-        await this.bloomTopK.disconnect();
-        await this.bloomCuckoo.disconnect();
-        await this.bloomCMK.disconnect();
-        await this.ai.disconnect();
-        await this.ris.disconnect();
-    }
+	/**
+	 * Disconnecting from the Redis database with the module
+	 */
+	async disconnectAll() {
+		await this.disconnect();
+	}
+	
 }
+
+export function applyMixins(derivedCtor: any, baseCtors: any[], addPrefix = true) {
+	baseCtors.forEach(baseCtor => {
+		Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
+			const functionName = addPrefix ? `${baseCtor.prototype.name.toLowerCase()}_${name}`: name;
+			Object.defineProperty(derivedCtor.prototype, functionName, Object.getOwnPropertyDescriptor(baseCtor.prototype, name));
+	  	});
+	});
+}
+
+export interface Redis extends Mixin<RedisAI, 'RedisAI'> {}//, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries {}
+
+//type Mixin<T> = { [P in keyof T & string as `${P}`]: T[P] };
+type Mixin<T extends any, Y extends string> = { [P in keyof T & string as `${Y}_${P}`]: T[P] };

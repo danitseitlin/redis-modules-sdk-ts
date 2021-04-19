@@ -2,7 +2,9 @@ import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { AIModel, AIScript, AIScriptInfo, AITensorInfo, RedisAI } from '../modules/redis-ai';
 import * as fs from 'fs';
+import { Redis } from '../modules/redis';
 let client: RedisAI;
+let redis: Redis;
 
 describe('AI testing', async function() {
     before(async () => {
@@ -10,10 +12,16 @@ describe('AI testing', async function() {
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });
+        redis = new Redis({
+            host: cliArguments.host,
+            port: parseInt(cliArguments.port),
+        });
         await client.connect();
+        await redis.connect()
     })
     after(async () => {
         await client.disconnect();
+        await redis.disconnect();
     })
 
     it('tensorset function', async () => {
@@ -26,6 +34,8 @@ describe('AI testing', async function() {
         let response = await client.tensorget('values-key', 'VALUES', true) as AITensorInfo;
         expect(response.dtype).to.eql('FLOAT', 'The dtype of tensor')
         response = await client.tensorget('blob-key', 'BLOB', true) as AITensorInfo
+        expect(response.dtype).to.eql('FLOAT', 'The dtype of tensor')
+        response = await redis.RedisAI_tensorget('blob-key', 'BLOB', true) as AITensorInfo
         expect(response.dtype).to.eql('FLOAT', 'The dtype of tensor')
     });
     it('modelset function', async () => {
