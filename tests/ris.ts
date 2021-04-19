@@ -1,7 +1,9 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { RedisIntervalSets } from '../modules/ris';
+import { Redis } from '../modules/redis';
 let client: RedisIntervalSets;
+let redis: Redis;
 
 describe('RedisIntervalSets Module testing', async function() {
     before(async () => {
@@ -10,9 +12,11 @@ describe('RedisIntervalSets Module testing', async function() {
             port: parseInt(cliArguments.port),
         });
         await client.connect();
+        await redis.connect();
     })
     after(async () => {
         await client.disconnect();
+        await redis.disconnect();
     })
 
     it('add function', async () => {
@@ -38,13 +42,21 @@ describe('RedisIntervalSets Module testing', async function() {
     });
 
     it('score function', async () => {
-        const sets = await client.score('ages', 5)
+        let sets = await client.score('ages', 5)
+        expect(sets.length).to.eql(1, 'The number of sets');
+        expect(sets[0]).to.eql('kids', 'The name of the set');
+
+        sets = await redis.RedisIntervalSets_score('ages', 5)
         expect(sets.length).to.eql(1, 'The number of sets');
         expect(sets[0]).to.eql('kids', 'The name of the set');
     });
 
     it('notScore function', async () => {
-        const sets = await client.notScore('ages', 5)
+        let sets = await client.notScore('ages', 5)
+        expect(sets.length).to.eql(1, 'The number of sets');
+        expect(sets[0]).to.eql('parents', 'The name of the set');
+
+        sets = await redis.RedisIntervalSets_notScore('ages', 5)
         expect(sets.length).to.eql(1, 'The number of sets');
         expect(sets[0]).to.eql('parents', 'The name of the set');
     });

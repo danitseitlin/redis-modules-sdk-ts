@@ -16,20 +16,9 @@ import { RedisIntervalSets } from './ris';
 import { RedisTimeSeries } from './rts';
 
 export class Redis extends Module {
-	public rts: RedisTimeSeries
-	public rejson: ReJSON
-	public graph: RedisGraph
-	public gears: RedisGears
-	public search: Redisearch
-	public bloom: RedisBloom
-	public bloomTopK: RedisBloomTopK
-	public bloomCuckoo: RedisBloomCuckoo
-	public bloomCMK: RedisBloomCMK
-	public ai: RedisAI
-	public ris: RedisIntervalSets
 	
 	/**
-	 * Initializing the Redis object
+	 * Initializing the 'All In One' Redis object
 	 * @param options The options of the Redis database.
 	 * @param moduleOptions The additional module options
 	 * @param moduleOptions.isHandleError If to throw error on error
@@ -37,33 +26,27 @@ export class Redis extends Module {
 	 */
 	constructor(options: IORedis.RedisOptions, public moduleOptions?: RedisModuleOptions) {
 		super('Redis', options, moduleOptions)
-		this.applyMixins(Redis, [RedisAI/*, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries*/])
+		this.applyMixins(Redis, [
+			RedisAI, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries
+		])
 	}
 
 	/**
-	 * Connecting to the Redis database with the module
+	 * Applying mixings of given objects into base object
+	 * @param baseObject The base objects
+	 * @param givenObjects An array of given objects
+	 * @param addPrefix If to add a prefix of Object name to the properties as ObjectName_FunctionName
 	 */
-	async connectAll() {
-		await this.connect();
-	}
-
-	/**
-	 * Disconnecting from the Redis database with the module
-	 */
-	async disconnectAll() {
-		await this.disconnect();
-	}
-	private applyMixins(baseObject: any, baseCtors: any[], addPrefix = true) {
-		baseCtors.forEach(baseCtor => {
-			Object.getOwnPropertyNames(baseCtor.prototype).forEach((name: string) => {
-				const functionName = addPrefix ? `${baseCtor.name}_${name}`: name;
-				Object.defineProperty(baseObject.prototype, functionName, Object.getOwnPropertyDescriptor(baseCtor.prototype, name));
+	private applyMixins(baseObject: any, givenObjects: any[], addPrefix = true): void {
+		givenObjects.forEach(givenObject => {
+			Object.getOwnPropertyNames(givenObject.prototype).forEach((name: string) => {
+				const functionName = addPrefix ? `${givenObject.name}_${name}`: name;
+				Object.defineProperty(baseObject.prototype, functionName, Object.getOwnPropertyDescriptor(givenObject.prototype, name));
 			});
 		});
 	}
 }
 
-export interface Redis extends Mixin<RedisAI, 'RedisAI'> {}//, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries {}
+export type Mixin<T extends any, Y extends string> = { [P in keyof T & string as `${Y}_${P}`]: T[P] };
+export interface Redis extends Mixin<RedisAI, 'RedisAI'>, Mixin<RedisIntervalSets, 'RedisIntervalSets'>, Mixin<RedisBloom, 'RedisBloom'>, Mixin<RedisBloomCMK, 'RedisBloomCMK'>, Mixin<RedisBloomCuckoo, 'RedisBloomCuckoo'>, Mixin<RedisBloomTopK, 'RedisBloomTopK'>, Mixin<Redisearch, 'Redisearch'>, Mixin<RedisGears, 'RedisGears'>, Mixin<RedisGraph, 'RedisGraph'>, Mixin<ReJSON, 'ReJSON'>, Mixin<RedisTimeSeries, 'RedisTimeSeries'> {}
 
-//type Mixin<T> = { [P in keyof T & string as `${P}`]: T[P] };
-type Mixin<T extends any, Y extends string> = { [P in keyof T & string as `${Y}_${P}`]: T[P] };

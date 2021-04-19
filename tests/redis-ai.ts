@@ -17,7 +17,7 @@ describe('AI testing', async function() {
             port: parseInt(cliArguments.port),
         });
         await client.connect();
-        await redis.connect()
+        await redis.connect();
     })
     after(async () => {
         await client.disconnect();

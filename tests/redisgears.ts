@@ -1,7 +1,9 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { RedisGears } from '../modules/redisgears';
+import { Redis } from '../modules/redis';
 let client: RedisGears;
+let redis: Redis;
 let executionId1: string;
 let executionId2: string;
 let executionId3: string;
@@ -11,11 +13,18 @@ describe('RedisGears Module testing', async function() {
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });
+        redis = new Redis({
+            host: cliArguments.host,
+            port: parseInt(cliArguments.port),
+        });
         await client.connect();
+        await redis.connect();
     })
     after(async () => {
         await client.disconnect();
+        await redis.disconnect();
     })
+    
     it('pyexecute function', async () => {
         executionId1 = await client.pyexecute('GB().run()', {
             unblocking: true
