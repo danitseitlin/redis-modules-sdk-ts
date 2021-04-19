@@ -114,7 +114,7 @@ describe('RTS Module testing', async function() {
     });
     it('info function', async () => {
         const response = await client.info(key1)
-        expect(response.totalSamples).to.equal(1, 'The total samples of the key');
+        expect(response.totalSamples).to.be.greaterThan(0, 'The total samples of the key');
     });
     it('queryindex function', async () => {
         const response = await client.queryindex('label=value')
