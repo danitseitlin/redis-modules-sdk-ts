@@ -45,6 +45,17 @@ npm install redis-modules-sdk@latest
 # Documentation :book:
 Come and read our documentation [here](https://github.com/danitseitlin/redis-modules-sdk/blob/master/docs/doc.md#documentation-book) before starting
 
+# Redis "All in One"! :scream:
+A class built for integrating more than one Redis module without creating more than one class!
+```
+const client = new Redis(....);
+await client.connect();
+await client.ai_module_tensorset(...);
+await client.ris_module_add(...);
+await client.disconnect();
+```
+All modules are supported! :fire:
+
 # Supported modules :dark_sunglasses:
 * [ReJSON](https://github.com/RedisJSON/RedisJSON)
 * [RedisTimeSeries](https://github.com/RedisTimeSeries/RedisTimeSeries) (RTS)
