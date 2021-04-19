@@ -55,7 +55,9 @@ export class Redis extends Module {
 	}
 	private applyMixins(baseObject: any, baseCtors: any[], addPrefix = true) {
 		baseCtors.forEach(baseCtor => {
-			Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
+			console.log(baseCtor.prototype)
+			console.log(baseCtor.name)
+			Object.getOwnPropertyNames(baseCtor.prototype).forEach((name: string) => {
 				const functionName = addPrefix ? `${baseCtor.prototype.name}_${name}`: name;
 				Object.defineProperty(baseObject.prototype, functionName, Object.getOwnPropertyDescriptor(baseCtor.prototype, name));
 			});
