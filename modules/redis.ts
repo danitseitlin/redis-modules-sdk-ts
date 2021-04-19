@@ -40,13 +40,27 @@ export class Redis extends Module {
 	private applyMixins(baseObject: any, givenObjects: any[], addPrefix = true): void {
 		givenObjects.forEach(givenObject => {
 			Object.getOwnPropertyNames(givenObject.prototype).forEach((name: string) => {
-				const functionName = addPrefix ? `${givenObject.name}_${name}`: name;
+				const functionName = addPrefix ? `${modulePropNames[givenObject.name]}_${name}`: name;
 				Object.defineProperty(baseObject.prototype, functionName, Object.getOwnPropertyDescriptor(givenObject.prototype, name));
 			});
 		});
 	}
 }
 
+export const modulePropNames = {
+	RedisAI: 'ai_module',
+	RedisIntervalSets: 'ris_module',
+	RedisBloom: 'bloom_module',
+	RedisBloomCMK: 'bloom_cmk_module',
+	RedisBloomCuckoo: 'bloom_cuckoo_module',
+	RedisBloomTopK: 'bloom_topk_module',
+	Redisearch: 'search_module',
+	RedisGears: 'gears_module',
+	RedisGraph: 'graph_module',
+	ReJSON: 'rejson_module',
+	RedisTimeSeries: 'rts_module',
+}
+
 export type Mixin<T extends any, Y extends string> = { [P in keyof T & string as `${Y}_${P}`]: T[P] };
-export interface Redis extends Mixin<RedisAI, 'RedisAI'>, Mixin<RedisIntervalSets, 'RedisIntervalSets'>, Mixin<RedisBloom, 'RedisBloom'>, Mixin<RedisBloomCMK, 'RedisBloomCMK'>, Mixin<RedisBloomCuckoo, 'RedisBloomCuckoo'>, Mixin<RedisBloomTopK, 'RedisBloomTopK'>, Mixin<Redisearch, 'Redisearch'>, Mixin<RedisGears, 'RedisGears'>, Mixin<RedisGraph, 'RedisGraph'>, Mixin<ReJSON, 'ReJSON'>, Mixin<RedisTimeSeries, 'RedisTimeSeries'> {}
+export interface Redis extends Mixin<RedisAI, 'ai_module'>, Mixin<RedisIntervalSets, 'ris_module'>, Mixin<RedisBloom, 'bloom_module'>, Mixin<RedisBloomCMK, 'bloom_cmk_module'>, Mixin<RedisBloomCuckoo, 'bloom_cuckoo_module'>, Mixin<RedisBloomTopK, 'bloom_topk_module'>, Mixin<Redisearch, 'search_module'>, Mixin<RedisGears, 'gears_module'>, Mixin<RedisGraph, 'graph_module'>, Mixin<ReJSON, 'rejson_module'>, Mixin<RedisTimeSeries, 'rts_module'> {}
 

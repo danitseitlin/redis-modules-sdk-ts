@@ -35,7 +35,7 @@ describe('AI testing', async function() {
         expect(response.dtype).to.eql('FLOAT', 'The dtype of tensor')
         response = await client.tensorget('blob-key', 'BLOB', true) as AITensorInfo
         expect(response.dtype).to.eql('FLOAT', 'The dtype of tensor')
-        response = await redis.RedisAI_tensorget('blob-key', 'BLOB', true) as AITensorInfo
+        response = await redis.ai_module_tensorget('blob-key', 'BLOB', true) as AITensorInfo
         expect(response.dtype).to.eql('FLOAT', 'The dtype of tensor')
     });
     it('modelset function', async () => {

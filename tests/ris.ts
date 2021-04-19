@@ -46,7 +46,7 @@ describe('RedisIntervalSets Module testing', async function() {
         expect(sets.length).to.eql(1, 'The number of sets');
         expect(sets[0]).to.eql('kids', 'The name of the set');
 
-        sets = await redis.RedisIntervalSets_score('ages', 5)
+        sets = await redis.ris_module_score('ages', 5)
         expect(sets.length).to.eql(1, 'The number of sets');
         expect(sets[0]).to.eql('kids', 'The name of the set');
     });
@@ -56,7 +56,7 @@ describe('RedisIntervalSets Module testing', async function() {
         expect(sets.length).to.eql(1, 'The number of sets');
         expect(sets[0]).to.eql('parents', 'The name of the set');
 
-        sets = await redis.RedisIntervalSets_notScore('ages', 5)
+        sets = await redis.ris_module_notScore('ages', 5)
         expect(sets.length).to.eql(1, 'The number of sets');
         expect(sets[0]).to.eql('parents', 'The name of the set');
     });
