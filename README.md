@@ -45,7 +45,7 @@ npm install redis-modules-sdk@latest
 # Documentation :book:
 Come and read our documentation [here](https://github.com/danitseitlin/redis-modules-sdk/blob/master/docs/doc.md#documentation-book) before starting
 
-# Redis all in one! :shocked
+# Redis "All in One"! :screams:
 A class built for integrating more than one Redis module without creating more than one class!
 Snippet:
 ```
