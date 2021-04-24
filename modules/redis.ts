@@ -47,9 +47,10 @@ export class Redis extends Module {
 	}
 }
 
-export type Mixin<T extends {[key: string]: any}, Y extends string> = ({ [P in keyof T & string as (`${Y}_${P}`)]: T[P]; });
-
-export type RedisIntervalSetsMixin = {
+/**
+ * The Redis 'All in One' RedisIntervalSet module functions
+ */
+export type RedisIntervalSetMixin = {
 	ris_module_add: typeof RedisIntervalSets.prototype.add,
 	ris_module_get: typeof RedisIntervalSets.prototype.get,
 	ris_module_del: typeof RedisIntervalSets.prototype.del,
@@ -57,6 +58,9 @@ export type RedisIntervalSetsMixin = {
 	ris_module_notScore: typeof RedisIntervalSets.prototype.notScore
 }
 
+/**
+ * The Redis 'All in One' RedisAI module functions
+ */
 export type RedisAIMixin = {
 	ai_module_tensorset: typeof RedisAI.prototype.tensorset,
 	ai_module_tensorget: typeof RedisAI.prototype.tensorget,
@@ -76,6 +80,9 @@ export type RedisAIMixin = {
 	ai_module_config: typeof RedisAI.prototype.config
 }
 
+/**
+ * The Redis 'All in One' RedisBloom module functions
+ */
 export type RedisBloomMixin = {
 	bloom_module_reserve: typeof RedisBloom.prototype.reserve,
 	bloom_module_add: typeof RedisBloom.prototype.add,
@@ -88,6 +95,9 @@ export type RedisBloomMixin = {
 	bloom_module_info: typeof RedisBloom.prototype.info
 }
 
+/**
+ * The Redis 'All in One' RedisBloomCMK module functions
+ */
 export type RedisBloomCMKMixin = {
 	bloom_cmk_module_initbydim: typeof RedisBloomCMK.prototype.initbydim,
 	bloom_cmk_module_initbyprob: typeof RedisBloomCMK.prototype.initbyprob,
@@ -97,6 +107,9 @@ export type RedisBloomCMKMixin = {
 	bloom_cmk_module_info: typeof RedisBloomCMK.prototype.info
 }
 
+/**
+ * The Redis 'All in One' RedisBloomCuckoo module functions
+ */
 export type RedisBloomCuckooMixin = {
 	bloom_cuckoo_module_add: typeof RedisBloomCuckoo.prototype.add,
 	bloom_cuckoo_module_addnx: typeof RedisBloomCuckoo.prototype.addnx,
@@ -110,6 +123,9 @@ export type RedisBloomCuckooMixin = {
 	bloom_cuckoo_module_info: typeof RedisBloomCuckoo.prototype.info
 }
 
+/**
+ * The Redis 'All in One' RedisBloomTopK module functions
+ */
 export type RedisBloomTopKMixin = {
 	bloom_topk_module_reserve: typeof RedisBloomTopK.prototype.reserve,
 	bloom_topk_module_add: typeof RedisBloomTopK.prototype.add,
@@ -120,6 +136,9 @@ export type RedisBloomTopKMixin = {
 	bloom_topk_module_info: typeof RedisBloomTopK.prototype.info
 }
 
+/**
+ * The Redis 'All in One' Redisearch module functions
+ */
 export type RedisearchMixin = {
 	search_module_create: typeof Redisearch.prototype.create,
 	search_module_search: typeof Redisearch.prototype.search,
@@ -145,6 +164,9 @@ export type RedisearchMixin = {
 	search_module_info: typeof Redisearch.prototype.info
 }
 
+/**
+ * The Redis 'All in One' RedisGears module functions
+ */
 export type RedisGearsMixin = {
 	gears_module_abortExecution: typeof RedisGears.prototype.abortExecution,
 	gears_module_configGet: typeof RedisGears.prototype.configGet,
@@ -164,6 +186,9 @@ export type RedisGearsMixin = {
 	gears_module_unregister: typeof RedisGears.prototype.unregister
 }
 
+/**
+ * The Redis 'All in One' RedisGraph module functions
+ */
 export type RedisGraphMixin = {
 	graph_module_query: typeof RedisGraph.prototype.query,
 	graph_module_readonlyQuery: typeof RedisGraph.prototype.readonlyQuery,
@@ -174,6 +199,9 @@ export type RedisGraphMixin = {
 	graph_module_config: typeof RedisGraph.prototype.config,
 }
 
+/**
+ * The Redis 'All in One' ReJSON module functions
+ */
 export type ReJSONMixin = {
 	rejson_module_del: typeof ReJSON.prototype.del,
 	rejson_module_set: typeof ReJSON.prototype.set,
@@ -197,6 +225,9 @@ export type ReJSONMixin = {
 	rejson_module_resp: typeof ReJSON.prototype.resp
 }
 
+/**
+ * The Redis 'All in One' RedisTimeSeries module functions
+ */
 export type RedisTimeSeriesMixin = {
 	rts_module_create: typeof RedisTimeSeries.prototype.create,
 	rts_module_alter: typeof RedisTimeSeries.prototype.alter,
@@ -216,6 +247,9 @@ export type RedisTimeSeriesMixin = {
 	rts_module_queryindex: typeof RedisTimeSeries.prototype.queryindex
 }
 
+/**
+ * A list of converted Redis 'All in One' sub function prefixes per module
+ */
 export const modulePropNames = {
 	RedisAI: 'ai_module',
 	RedisIntervalSets: 'ris_module',
@@ -230,4 +264,7 @@ export const modulePropNames = {
 	RedisTimeSeries: 'rts_module',
 }
 
-export interface Redis extends RedisAIMixin, RedisBloomCMKMixin, RedisBloomCuckooMixin, RedisBloomTopKMixin, RedisBloomMixin, RedisearchMixin, RedisGearsMixin, RedisGraphMixin, ReJSONMixin, RedisIntervalSetsMixin, RedisTimeSeriesMixin {}
+/**
+ * A definition of all the modules functions to be under the Redis 'All in One'
+ */
+export interface Redis extends RedisAIMixin, RedisBloomCMKMixin, RedisBloomCuckooMixin, RedisBloomTopKMixin, RedisBloomMixin, RedisearchMixin, RedisGearsMixin, RedisGraphMixin, ReJSONMixin, RedisIntervalSetMixin, RedisTimeSeriesMixin {}
