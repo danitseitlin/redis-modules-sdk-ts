@@ -47,6 +47,7 @@ export class Redis extends Module {
 	}
 }
 
+<<<<<<< HEAD
 export type Mixin<T extends {[key: string]: any}, Y extends string> = ({ [P in keyof T & string as (`${Y}_${P}`)]: T[P]; });
 
 export type RedisIntervalSetsMixin = {
@@ -216,6 +217,8 @@ export type RedisTimeSeriesMixin = {
 	rts_module_queryindex: typeof RedisTimeSeries.prototype.queryindex
 }
 
+=======
+>>>>>>> a2782bc3d4c4072c55f229a9773c38ae938f273c
 export const modulePropNames = {
 	RedisAI: 'ai_module',
 	RedisIntervalSets: 'ris_module',
@@ -230,4 +233,9 @@ export const modulePropNames = {
 	RedisTimeSeries: 'rts_module',
 }
 
+<<<<<<< HEAD
 export interface Redis extends Mixin<RedisAI, 'ai_module'>, RedisIntervalSetsMixin, Mixin<RedisBloom, 'bloom_module'>, Mixin<RedisBloomCMK, 'bloom_cmk_module'>, Mixin<RedisBloomCuckoo, 'bloom_cuckoo_module'>, Mixin<RedisBloomTopK, 'bloom_topk_module'>, Mixin<Redisearch, 'search_module'>, Mixin<RedisGears, 'gears_module'>, Mixin<RedisGraph, 'graph_module'>, Mixin<ReJSON, 'rejson_module'>, Mixin<RedisTimeSeries, 'rts_module'> {}
+=======
+export type Mixin<T extends any, Y extends string> = { [P in keyof T & string as `${Y}_${P}`]: T[P] };
+export interface Redis extends Mixin<RedisAI, 'ai_module'>, Mixin<RedisIntervalSets, 'ris_module'>, Mixin<RedisBloom, 'bloom_module'>, Mixin<RedisBloomCMK, 'bloom_cmk_module'>, Mixin<RedisBloomCuckoo, 'bloom_cuckoo_module'>, Mixin<RedisBloomTopK, 'bloom_topk_module'>, Mixin<Redisearch, 'search_module'>, Mixin<RedisGears, 'gears_module'>, Mixin<RedisGraph, 'graph_module'>, Mixin<ReJSON, 'rejson_module'>, Mixin<RedisTimeSeries, 'rts_module'> {}
+>>>>>>> a2782bc3d4c4072c55f229a9773c38ae938f273c
