@@ -7,7 +7,7 @@ let redis: Redis;
 const key1 = 'mykey1'
 const key2 = 'mykey2';
 
-describe('RedisBloom Count-Min-Sketch filter testing', async function() {
+describe('RedisBloom TDigest filter testing', async function() {
     before(async () => {
         client = new RedisBloomTDigest({
             host: cliArguments.host,
@@ -28,7 +28,7 @@ describe('RedisBloom Count-Min-Sketch filter testing', async function() {
     it('create function', async () => {
         let response = await client.create(key1, 100);
         expect(response).to.equal('OK', 'The response of \'TDIGEST.CREATE\' command');
-        response = await client.create(key2, 100);
+        response = await redis.bloom_tdigest_module_create(key2, 100);
         expect(response).to.equal('OK', 'The response of \'TDIGEST.CREATE\' command');
     });
     it('reset function', async () => {

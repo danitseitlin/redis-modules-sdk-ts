@@ -4,7 +4,7 @@ import { Module, RedisModuleOptions } from './module.base';
 export class RedisBloomTDigest extends Module {
 
     /**
-     * Initializing the RedisBloom Count-Min Sketch object
+     * Initializing the RedisBloom TDigest object
      * @param options The options of the Redis database.
      * @param moduleOptions The additional module options
      * @param moduleOptions.isHandleError If to throw error on error
@@ -138,9 +138,10 @@ export class RedisBloomTDigest extends Module {
      * Returns compression, capacity, total merged and unmerged nodes, the total compressions made up to date on that key, and merged and unmerged weight.
      * @param key The name of the sketch
      */
-    async info(key: string) {
+    async info(key: string): Promise<TDigestInfo> {
         try {
-            return await this.sendCommand('TDIGEST.INFO', [key]);
+            const response = await this.sendCommand('TDIGEST.INFO', [key]);
+            return this.handleResponse(response)
         }
         catch(error) {
             return this.handleError(error);
@@ -150,9 +151,31 @@ export class RedisBloomTDigest extends Module {
 
 
 /**
- * 
+ * The parameters of the 'TDIGEST.ADD' command
+ * @param value The value to add
+ * @param weight The weight of this point
  */
 export type TDigestAddParameters = {
     value: number,
     weight: number
+}
+
+/**
+ * The response of the 'TDIGEST.INFO' command
+ * @param compression The compression
+ * @param capacity The capacity
+ * @param 'Merged nodes' The merged nodes
+ * @param 'Unmerged nodes' The unmerged nodes
+ * @param 'Merged weight' The merged weight
+ * @param 'Unmerged weight' The unmerged weight
+ * @param 'Total compressions' The total compressions
+ */
+export type TDigestInfo = {
+    Compression: number,
+    Capacity: number,
+    'Merged nodes': number,
+    'Unmerged nodes': number,
+    'Merged weight': string,
+    'Unmerged weight': string,
+    'Total compressions': number
 }

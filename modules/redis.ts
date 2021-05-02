@@ -7,6 +7,7 @@ import { RedisAI } from './redis-ai';
 import { RedisBloom } from './redisbloom';
 import { RedisBloomCMK } from './redisbloom-cmk';
 import { RedisBloomCuckoo } from './redisbloom-cuckoo';
+import { RedisBloomTDigest } from './redisbloom-tdigest';
 import { RedisBloomTopK } from './redisbloom-topk';
 import { Redisearch } from './redisearch';
 import { RedisGears } from './redisgears';
@@ -27,7 +28,7 @@ export class Redis extends Module {
 	constructor(options: IORedis.RedisOptions, public moduleOptions?: RedisModuleOptions) {
 		super('Redis', options, moduleOptions)
 		this.applyMixins(Redis, [
-			RedisAI, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries
+			RedisAI, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, RedisBloomTDigest, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries
 		])
 	}
 
@@ -134,6 +135,21 @@ export type RedisBloomTopKMixin = {
 	bloom_topk_module_count: typeof RedisBloomTopK.prototype.count,
 	bloom_topk_module_list: typeof RedisBloomTopK.prototype.list,
 	bloom_topk_module_info: typeof RedisBloomTopK.prototype.info
+}
+
+/**
+ * The Redis 'All in One' RedisBloomTDigest module functions
+ */
+ export type RedisBloomTDigestMixin = {
+	bloom_tdigest_module_create: typeof RedisBloomTDigest.prototype.create,
+	bloom_tdigest_module_reset: typeof RedisBloomTDigest.prototype.reset,
+	bloom_tdigest_module_add: typeof RedisBloomTDigest.prototype.add,
+	bloom_tdigest_module_merge: typeof RedisBloomTDigest.prototype.merge,
+	bloom_tdigest_module_max: typeof RedisBloomTDigest.prototype.max,
+	bloom_tdigest_module_min: typeof RedisBloomTDigest.prototype.min,
+	bloom_tdigest_module_quantile: typeof RedisBloomTDigest.prototype.quantile
+	bloom_tdigest_module_cdf: typeof RedisBloomTDigest.prototype.cdf
+	bloom_tdigest_module_info: typeof RedisBloomTDigest.prototype.info
 }
 
 /**
@@ -257,6 +273,7 @@ export const modulePropNames = {
 	RedisBloomCMK: 'bloom_cmk_module',
 	RedisBloomCuckoo: 'bloom_cuckoo_module',
 	RedisBloomTopK: 'bloom_topk_module',
+	RedisBloomTDigest: 'bloom_tdigest_module',
 	Redisearch: 'search_module',
 	RedisGears: 'gears_module',
 	RedisGraph: 'graph_module',
@@ -267,4 +284,4 @@ export const modulePropNames = {
 /**
  * A definition of all the modules functions to be under the Redis 'All in One'
  */
-export interface Redis extends RedisAIMixin, RedisBloomCMKMixin, RedisBloomCuckooMixin, RedisBloomTopKMixin, RedisBloomMixin, RedisearchMixin, RedisGearsMixin, RedisGraphMixin, ReJSONMixin, RedisIntervalSetMixin, RedisTimeSeriesMixin {}
+export interface Redis extends RedisAIMixin, RedisBloomCMKMixin, RedisBloomCuckooMixin, RedisBloomTopKMixin, RedisBloomMixin, RedisBloomTDigestMixin, RedisearchMixin, RedisGearsMixin, RedisGraphMixin, ReJSONMixin, RedisIntervalSetMixin, RedisTimeSeriesMixin {}

@@ -197,7 +197,7 @@ jobs:
     - name: Running tests
       run: npm i && npm run redisbloom-cuckoo-filter-tests
   #Build for 'Redis Bloom TDigest' filter
-  ReBloomTdigest:
+  ReBloomTDigest:
     needs: Setup
     if: needs.Setup.outputs.rebloom-tdigest-selected == 'true' || needs.Setup.outputs.rebloom-tdigest-changes == 'true'
     runs-on: ubuntu-latest
