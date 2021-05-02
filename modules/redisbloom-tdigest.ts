@@ -18,7 +18,7 @@ export class RedisBloomTDigest extends Module {
      * Allocate the memory and initialize the t-digest
      * @param key The name of the sketch
      * @param compression The compression parameter. 100 is a common value for normal uses. 1000 is extremely large. See the further notes bellow. 
-     * @returns 'OK' on success
+     * @returns OK on success, error otherwise
      */
     async create(key: string, compression: number): Promise<'OK'> {
         try {
@@ -32,7 +32,7 @@ export class RedisBloomTDigest extends Module {
     /**
      * Reset the sketch to zero - empty out the sketch and re-initialize it
      * @param key The name of the sketch
-     * @returns 'OK' on success
+     * @returns OK on success, error otherwise
      */
     async reset(key: string): Promise<'OK'> {
         try {
@@ -47,13 +47,13 @@ export class RedisBloomTDigest extends Module {
      * Adds one or more samples to a sketch
      * @param key The name of the sketch
      * @param parameters The parameters of the command
-     * @returns 
+     * @returns OK on success, error otherwise
      */
     async add(key: string, parameters: TDigestAddParameters[]): Promise<'OK'> {  
         try {
             let args = [key]
             for(const pair of parameters)
-                args = args.concat([pair.value, `${pair.weight}`])
+                args = args.concat([`${pair.value}`, `${pair.weight}`])
             return await this.sendCommand('TDIGEST.ADD', args);
         }
         catch(error) {
@@ -65,7 +65,7 @@ export class RedisBloomTDigest extends Module {
      * Merges all of the values from 'from' to 'this' sketch
      * @param fromKey Sketch to copy values to
      * @param toKey Sketch to copy values from
-     * @returns 
+     * @returns OK on success, error otherwise
      */
     async merge(fromKey: string, toKey: string): Promise<'OK'> {
         try {
@@ -79,7 +79,7 @@ export class RedisBloomTDigest extends Module {
     /**
      * Get minimum value from the sketch. Will return DBL_MAX if the sketch is empty
      * @param key The name of the sketch
-     * @returns 
+     * @returns DBL_MAX if the sketch is empty
      */
     async min(key: string): Promise<number> {
         try {
@@ -93,7 +93,7 @@ export class RedisBloomTDigest extends Module {
     /**
      * Get maximum value from the sketch. Will return DBL_MIN if the sketch is empty
      * @param key The name of the sketch
-     * @returns 
+     * @returns DBL_MIN if the sketch is empty
      */
     async max(key: string): Promise<number> {
         try {
@@ -107,10 +107,10 @@ export class RedisBloomTDigest extends Module {
     /**
      * Returns an estimate of the cutoff such that a specified fraction of the data added to this TDigest would be less than or equal to the cutoff
      * @param key The name of the sketch
-     * @param quantile 
-     * @returns 
+     * @param quantile The desired fraction ( between 0 and 1 inclusively )
+     * @returns Double value estimate of the cutoff such that a specified fraction of the data added to this TDigest would be less than or equal to the cutoff
      */
-    async quantile(key: string, quantile: string) {
+    async quantile(key: string, quantile: number): Promise<number> {
         try {
             return await this.sendCommand('TDIGEST.QUANTILE', [key, quantile]);
         }
@@ -122,9 +122,10 @@ export class RedisBloomTDigest extends Module {
     /**
      * Returns the fraction of all points added which are <= value
      * @param key The name of the sketch
-     * @param value 
+     * @param value Upper limit for which the fraction of all points added which are <= value
+     * @returns Returns compression, capacity, total merged and unmerged nodes, the total compressions made up to date on that key, and merged and unmerged weight
      */
-    async cdf(key: string, value: string) {
+    async cdf(key: string, value: number): Promise<number> {
         try {
             return await this.sendCommand('TDIGEST.CDF', [key, value]);
         }
@@ -152,16 +153,6 @@ export class RedisBloomTDigest extends Module {
  * 
  */
 export type TDigestAddParameters = {
-    value: string,
+    value: number,
     weight: number
-}
-
-/**
- * The sets of the incrby items (and increments)
- * @param name The item name which counter to be increased.
- * @param increment The counter to be increased by this integer.
- */
-export type CMKIncrbyItems = {
-    name: string,
-    increment: number
 }
