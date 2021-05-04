@@ -48,23 +48,19 @@ describe('RedisBloom TDigest filter testing', async function() {
     });
     it('max function', async () => {
         const response = await client.max(key1);
-        expect(response).to.eql(1500, 'The response of \'TDIGEST.MAX\' command')
-        console.log(response)
+        expect(response).to.eql('1500', 'The response of \'TDIGEST.MAX\' command')
     });
     it('min function', async () => {
         const response = await client.min(key1);
-        expect(response).to.eql(1500, 'The response of \'TDIGEST.MIN\' command')
-        console.log(response)
+        expect(response).to.eql('1500', 'The response of \'TDIGEST.MIN\' command')
     });
     it('quantile function', async () => {
         const response = await client.quantile(key1, 0.5);
-        expect(response).to.eql(1500, 'The response of \'TDIGEST.QUANTILE\' command')
-        console.log(response)
+        expect(response).to.eql('1500', 'The response of \'TDIGEST.QUANTILE\' command')
     });
     it('cdf function', async () => {
         const response = await client.cdf(key1, 10);
-        expect(response).to.eql(0, 'The response of \'TDIGEST.CDF\' command')
-        console.log(response)
+        expect(response).to.eql('0', 'The response of \'TDIGEST.CDF\' command')
     });
     it('info function', async () => {
         const response = await client.info(key1);
@@ -75,6 +71,5 @@ describe('RedisBloom TDigest filter testing', async function() {
         expect(response['Merged weight']).to.eql('1', 'The merged weight')
         expect(response['Unmerged weight']).to.eql('0', 'The unmerged weight')
         expect(response['Total compressions']).to.eql(1, 'The total compressions')
-        console.log(response)
     });
 });
