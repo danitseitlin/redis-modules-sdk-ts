@@ -208,7 +208,7 @@ jobs:
         docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
-      run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
+      run: docker run -p 6379:6379 -d --rm redislabs/rebloom:edge && docker ps -a
     - name: Running tests
       run: npm i && npm run redisbloom-tdigest-filter-tests
   #Build for 'Redis AI' module
