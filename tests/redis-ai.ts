@@ -40,7 +40,7 @@ describe('AI testing', async function() {
     });
     it('modelset function', async () => {
         const file = fs.readFileSync('./tests/data/models/model1.onnx')
-        const response = await client.modelset('blob-model', 'ONNX', 'CPU', file)
+        const response = await client.modelstore('blob-model', 'ONNX', 'CPU', file)
         expect(response).to.eql('OK', 'The response of modelset')
     });
     it('modelget function', async () => {
@@ -52,11 +52,16 @@ describe('AI testing', async function() {
         let response = await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3])
         response = await client.tensorset('tensorB', 'FLOAT', [1, 2], [3, 5])
         const blob = fs.readFileSync('./tests/data/models/graph.pb');
-        response = await client.modelset('mymodel', 'TF', 'CPU', blob, {
+        response = await client.modelstore('mymodel', 'TF', 'CPU', blob, {
             inputs: ['a', 'b'],
             outputs: ['c']
         })
-        response = await client.modelrun('mymodel', ['tensorA', 'tensorB'], ['tensorC'])
+        response = await client.modelexecute('mymodel', {
+            inputs: ['tensorA', 'tensorB'],
+            outputs: ['tensorC'],
+            inputsCount: 2,
+            outputsCount: 1
+        })
         expect(response).to.eql('OK', 'The response of modelrun')
     });
     it('modelscan function', async () => {
@@ -105,7 +110,7 @@ describe('AI testing', async function() {
     });
     it('dagrun function', async () => {
         const blob = fs.readFileSync('./tests/data/models/graph.pb');
-        await client.modelset('mymodel-dag', 'TF', 'CPU', blob, {
+        await client.modelstore('mymodel-dag', 'TF', 'CPU', blob, {
             inputs: ['a', 'b'],
             outputs: ['c'],
             tag: 'test_tag'
@@ -121,7 +126,7 @@ describe('AI testing', async function() {
     });
     it('dagrunRO function', async () => {
         const blob = fs.readFileSync('./tests/data/models/graph.pb');
-        await client.modelset('mymodel-dag', 'TF', 'CPU', blob, {
+        await client.modelstore('mymodel-dag', 'TF', 'CPU', blob, {
             inputs: ['a', 'b'],
             outputs: ['c'],
             tag: 'test_tag'

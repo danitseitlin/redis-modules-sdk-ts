@@ -65,7 +65,7 @@ export class RedisAI extends Module {
      * @param model The Protobuf-serialized model. Since Redis supports strings up to 512MB, blobs for very large
      * @param options Additional optional parameters
      */
-    async modelset(key: string, backend: AIBackend, device: AIDevice, model: Buffer, options?: ModelSetParameters): Promise<'OK'> {
+    async modelstore(key: string, backend: AIBackend, device: AIDevice, model: Buffer, options?: ModelSetParameters): Promise<'OK'> {
         try {
             let args: (string | Buffer)[] = [key, backend, device];
             if(options !== undefined) {
@@ -81,7 +81,7 @@ export class RedisAI extends Module {
                 if(options.outputs !== undefined && options.outputs.length > 0)
                     args = args.concat(['OUTPUTS'].concat(options.outputs));
             }
-            return await this.sendCommand('AI.MODELSET', args.concat(['BLOB', model])); 
+            return await this.sendCommand('AI.MODELSTORE', args.concat(['BLOB', model])); 
         }
         catch(error) {
             return this.handleError(error);
@@ -128,9 +128,9 @@ export class RedisAI extends Module {
      * @param inputs Denotes the beginning of the input tensors keys' list, followed by one or more key names
      * @param outputs Denotes the beginning of the output tensors keys' list, followed by one or more key names
      */
-    async modelrun(key: string, inputs: string[], outputs: string[]): Promise<'OK'> {
+    async modelexecute(key: string, parameters: AIModelExecute): Promise<'OK'> {
         try {
-            const args = [key, 'INPUTS'].concat(inputs).concat(['OUTPUTS']).concat(outputs);
+            const args = [key, 'INPUTS', parameters.inputsCount].concat(parameters.inputs).concat(['OUTPUTS', parameters.outputsCount]).concat(parameters.outputs);
             return await this.sendCommand('AI.MODELRUN', args);
         }
         catch(error) {
@@ -451,4 +451,20 @@ export type AITensorInfo = {
     shape?: string[],
     values?: string[],
     blob?: string
+}
+
+/**
+ * The AI.MODELEXECUTE additional parameters
+ * @param inputsCount A positive number that indicates the number of following input keys
+ * @param inputs The given inputs
+ * @param outputsCount A positive number that indicates the number of output keys to follow
+ * @param outputs The given outputs
+ * @param timeout The time (in ms) after which the client is unblocked and a TIMEDOUT string is returned 
+ */
+export type AIModelExecute = {
+    inputsCount: number,
+    inputs: string[],
+    outputsCount: number,
+    outputs: string[],
+    timeout?: number
 }
