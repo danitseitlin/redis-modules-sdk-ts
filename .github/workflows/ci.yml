@@ -223,7 +223,7 @@ jobs:
         docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
-      run: docker run -p 6379:6379 -d --rm redislabs/redisai && docker ps -a
+      run: docker run -p 6379:6379 -d --rm redislabs/redisai:latest && docker ps -a
     - name: Running tests
       run: npm i && npm run redis-ai-module-tests
   #Build for 'Redis Interval Sets' module
