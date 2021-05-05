@@ -38,7 +38,7 @@ describe('AI testing', async function() {
         response = await redis.ai_module_tensorget('blob-key', 'BLOB', true) as AITensorInfo
         expect(response.dtype).to.eql('FLOAT', 'The dtype of tensor')
     });
-    it('modelset function', async () => {
+    it('modelstore function', async () => {
         const file = fs.readFileSync('./tests/data/models/model1.onnx')
         const response = await client.modelstore('blob-model', 'ONNX', 'CPU', file)
         expect(response).to.eql('OK', 'The response of modelset')
@@ -48,7 +48,7 @@ describe('AI testing', async function() {
         const response = await client.modelget('blob-model', true, true) as AIModel;
         expect(response.device).to.eql('CPU', `The device of key ${modelName}`)
     });
-    it('modelrun function', async () => {
+    it('modelexecute function', async () => {
         let response = await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3])
         response = await client.tensorset('tensorB', 'FLOAT', [1, 2], [3, 5])
         const blob = fs.readFileSync('./tests/data/models/graph.pb');
