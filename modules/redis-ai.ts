@@ -65,9 +65,9 @@ export class RedisAI extends Module {
      * @param model The Protobuf-serialized model. Since Redis supports strings up to 512MB, blobs for very large
      * @param options Additional optional parameters
      */
-    async modelstore(key: string, backend: AIBackend, device: AIDevice, model: Buffer, options?: ModelSetParameters): Promise<'OK'> {
+    async modelstore(key: string, backend: AIBackend, device: AIDevice, model: Buffer, options?: AIModelSetParameters): Promise<'OK'> {
         //try {
-            let args: (string | Buffer)[] = [key, backend, device];
+            let args: (string | Buffer | number)[] = [key, backend, device];
             if(options !== undefined) {
                 if(options.tag !== undefined)
                     args = args.concat(['TAG', options.tag]);
@@ -77,9 +77,9 @@ export class RedisAI extends Module {
                         args = args.concat(['MINBATCHSIZE', options.batch.minSize]);
                 }
                 if(options.inputs !== undefined && options.inputs.length > 0)
-                    args = args.concat(['INPUTS'].concat(options.inputs));
+                    args = args.concat(['INPUTS', options.inputsCount].concat(options.inputs));
                 if(options.outputs !== undefined && options.outputs.length > 0)
-                    args = args.concat(['OUTPUTS'].concat(options.outputs));
+                    args = args.concat(['OUTPUTS', options.outputsCount].concat(options.outputs));
             }
             return await this.sendCommand('AI.MODELSTORE', args.concat(['BLOB', model])); 
         //}
@@ -329,15 +329,19 @@ export type TensorType = 'FLOAT' | 'DOUBLE' | 'INT8' | 'INT16' | 'INT32' | 'INT6
  * @param size The size of the model
  * @param minSize The min size of the model
  * @param inputs The inputs of the model
+ * @param inputsCount The inputs count of model
  * @param outputs The outputs of the model
+ * @param outputsCount The outputs count of the model
  */
-export type ModelSetParameters = {
+export type AIModelSetParameters = {
     tag?: string,
     batch?: {
         size: string,
         minSize?: string
     },
+    inputsCount?: number,
     inputs?: string[],
+    outputsCount?: number,
     outputs?: string[],
 }
 
