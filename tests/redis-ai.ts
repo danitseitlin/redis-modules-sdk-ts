@@ -115,7 +115,9 @@ describe('AI testing', async function() {
         const blob = fs.readFileSync('./tests/data/models/graph.pb');
         await client.modelstore('mymodel-dag', 'TF', 'CPU', blob, {
             inputs: ['a', 'b'],
+            inputsCount: 2,
             outputs: ['c'],
+            outputsCount: 1,
             tag: 'test_tag'
         })
         await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3]);
@@ -131,7 +133,9 @@ describe('AI testing', async function() {
         const blob = fs.readFileSync('./tests/data/models/graph.pb');
         await client.modelstore('mymodel-dag', 'TF', 'CPU', blob, {
             inputs: ['a', 'b'],
+            inputsCount: 2,
             outputs: ['c'],
+            outputsCount: 1,
             tag: 'test_tag'
         })
         await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3]);
