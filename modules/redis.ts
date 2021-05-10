@@ -75,7 +75,7 @@ export type RedisAIMixin = {
 	ai_module_scriptdel: typeof RedisAI.prototype.scriptdel,
 	ai_module_scriptrun: typeof RedisAI.prototype.scriptrun,
 	ai_module_scriptscan: typeof RedisAI.prototype.scriptscan,
-	ai_module_dagexecute: typeof RedisAI.prototype.dagexecute,
+	ai_module_dagrun: typeof RedisAI.prototype.dagrun,
 	ai_module_dagrunRO: typeof RedisAI.prototype.dagrunRO,
 	ai_module_info: typeof RedisAI.prototype.info,
 	ai_module_config: typeof RedisAI.prototype.config
