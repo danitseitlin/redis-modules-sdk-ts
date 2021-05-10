@@ -54,7 +54,9 @@ describe('AI testing', async function() {
         const blob = fs.readFileSync('./tests/data/models/graph.pb');
         response = await client.modelstore('mymodel', 'TF', 'CPU', blob, {
             inputs: ['a', 'b'],
-            outputs: ['c']
+            inputsCount: 2,
+            outputs: ['c'],
+            outputsCount: 1
         })
         expect(response).to.eql('OK', 'The response of modelstore')
         response = await client.modelexecute('mymodel', {
