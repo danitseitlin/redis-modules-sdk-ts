@@ -122,7 +122,7 @@ describe('AI testing', async function() {
         })
         await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3]);
         await client.tensorset('tensorB', 'FLOAT', [1, 2], [3, 5]);
-        const response = await client.dagrun([
+        const response = await client.dagexecute([
             'AI.TENSORSET tensorA FLOAT INPUTS 1 2 OUTPUTS 3 5',
             'AI.TENSORSET tensorB FLOAT INPUTS 1 2 OUTPUTS 3 5',
             'AI.MODELRUN mymodel-dag INPUTS tensorA tensorB OUTPUTS tensorC'
