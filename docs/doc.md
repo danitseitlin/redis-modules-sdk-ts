@@ -354,7 +354,7 @@ await client.disconnect();
 | scriptdel  | AI.SCRIPTDEL    |
 | scriptrun  | AI.SCRIPTRUN    |
 | scriptscan | AI._SCRIPTSCAN  |
-| dagrun     | AI.DAGRUN       |
-| dagrunRO   | AI.DAGRUN_RO    |
+| dagexecute     | AI.DAGRUN       |
+| dagexecuteRO   | AI.DAGRUN_RO    |
 | info       | AI.INFO         |
 | config     | AI.CONFIG       |
