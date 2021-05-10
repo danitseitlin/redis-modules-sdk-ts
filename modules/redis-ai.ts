@@ -132,7 +132,7 @@ export class RedisAI extends Module {
         try {
             const args = [key, 'INPUTS', parameters.inputsCount].concat(parameters.inputs).concat(['OUTPUTS', parameters.outputsCount]).concat(parameters.outputs);
             console.log(args)
-            return await this.sendCommand('AI.MODELRUN', args);
+            return await this.sendCommand('AI.MODELEXECUTE', args);
         }
         catch(error) {
             return this.handleError(error);
