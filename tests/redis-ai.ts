@@ -111,7 +111,7 @@ describe('AI testing', async function() {
         const response = await client.config('/usr/lib/redis/modules/backends/')
         expect(response).to.eql('OK', 'The response of config')
     });
-    it('dagrun function', async () => {
+    it('dagexecute function', async () => {
         const blob = fs.readFileSync('./tests/data/models/graph.pb');
         await client.modelstore('mymodel-dag', 'TF', 'CPU', blob, {
             inputs: ['a', 'b'],
@@ -125,7 +125,7 @@ describe('AI testing', async function() {
         const response = await client.dagexecute([
             'AI.TENSORSET tensorA FLOAT INPUTS 1 2 OUTPUTS 3 5',
             'AI.TENSORSET tensorB FLOAT INPUTS 1 2 OUTPUTS 3 5',
-            'AI.MODELRUN mymodel-dag INPUTS tensorA tensorB OUTPUTS tensorC'
+            'AI.MODELEXECUTE mymodel-dag INPUTS 2 tensorA tensorB OUTPUTS 1 tensorC'
         ])
         expect(response).to.eql([], 'The response of dagrun')
     });
@@ -143,7 +143,7 @@ describe('AI testing', async function() {
         const response = await client.dagrunRO([
             'AI.TENSORSET tensorA FLOAT INPUTS 1 2 OUTPUTS 3 5',
             'AI.TENSORSET tensorB FLOAT INPUTS 1 2 OUTPUTS 3 5',
-            'AI.MODELRUN mymodel-dag INPUTS tensorA tensorB OUTPUTS tensorC'
+            'AI.MODELEXECUTE mymodel-dag INPUTS 2 tensorA tensorB OUTPUTS 1 tensorC'
         ])
         expect(response).to.eql([], 'The response of dagrun_RO')
     });
