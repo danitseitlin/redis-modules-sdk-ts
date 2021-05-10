@@ -237,9 +237,9 @@ export class RedisAI extends Module {
      * @param load An optional argument, that denotes the beginning of the input tensors keys' list, followed by the number of keys, and one or more key names
      * @param persist An optional argument, that denotes the beginning of the output tensors keys' list, followed by the number of keys, and one or more key names
      */
-    async dagexecute(commands: string[], load?: AIDagexecuteParameters, persist?: AIDagexecuteParameters): Promise<string[]> {
+    async dagrun(commands: string[], load?: AIDagrunParameters, persist?: AIDagrunParameters): Promise<string[]> {
         try {
-            return await this.sendCommand('AI.DAGEXECUTE', this.generateDagRunArguments(commands, load, persist))
+            return await this.sendCommand('AI.DAGRUN', this.generateDagRunArguments(commands, load, persist))
         }
         catch(error) {
             return this.handleError(error);
@@ -251,7 +251,7 @@ export class RedisAI extends Module {
      * @param commands The commands sent to the DAG
      * @param load An optional argument, that denotes the beginning of the input tensors keys' list, followed by the number of keys, and one or more key names
      */
-    async dagrunRO(commands: string[], load?: AIDagexecuteParameters): Promise<string[]> {
+    async dagrunRO(commands: string[], load?: AIDagrunParameters): Promise<string[]> {
         try {
             return await this.sendCommand('AI.DAGRUN_RO', this.generateDagRunArguments(commands, load))
         }
@@ -261,12 +261,12 @@ export class RedisAI extends Module {
     }
 
     /**
-     * Generating the dagexecute CLI arguments
+     * Generating the dagrun CLI arguments
      * @param commands The given commands
      * @param load The given load
      * @param persist The given persist
      */
-    private generateDagRunArguments(commands: string[], load?: AIDagexecuteParameters, persist?: AIDagexecuteParameters): string[] {
+    private generateDagRunArguments(commands: string[], load?: AIDagrunParameters, persist?: AIDagrunParameters): string[] {
         let args: string[] = [];
         if(load !== undefined){
             args = args.concat(['LOAD', load.keyCount.toString()].concat(load.keys))
@@ -374,11 +374,11 @@ export type AIScriptSetParameters = {
 }
 
 /**
- * The dagexecute object
+ * The dagrun object
  * @param keyCount The key count of the dagrun
  * @param keys The keys of the dagrun
  */
-export type AIDagexecuteParameters = {
+export type AIDagrunParameters = {
     keyCount: number,
     keys: string[]
 }

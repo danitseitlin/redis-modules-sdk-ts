@@ -122,12 +122,12 @@ describe('AI testing', async function() {
         })
         await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3]);
         await client.tensorset('tensorB', 'FLOAT', [1, 2], [3, 5]);
-        const response = await client.dagexecute([
+        const response = await client.dagrun([
             'AI.TENSORSET tensorA FLOAT INPUTS 1 2 OUTPUTS 3 5',
             'AI.TENSORSET tensorB FLOAT INPUTS 1 2 OUTPUTS 3 5',
             'AI.MODELEXECUTE mymodel-dag INPUTS 2 tensorA tensorB OUTPUTS 1 tensorC'
         ])
-        expect(response).to.eql([], 'The response of dagrun')
+        expect(response).to.eql([], 'The response of dagexecute')
     });
     it('dagrunRO function', async () => {
         const blob = fs.readFileSync('./tests/data/models/graph.pb');
