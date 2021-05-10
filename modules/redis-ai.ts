@@ -131,6 +131,7 @@ export class RedisAI extends Module {
     async modelexecute(key: string, parameters: AIModelExecute): Promise<'OK'> {
         try {
             const args = [key, 'INPUTS', parameters.inputsCount].concat(parameters.inputs).concat(['OUTPUTS', parameters.outputsCount]).concat(parameters.outputs);
+            console.log(args)
             return await this.sendCommand('AI.MODELRUN', args);
         }
         catch(error) {

@@ -11,7 +11,7 @@ describe('AI testing', async function() {
         client = new RedisAI({
             host: cliArguments.host,
             port: parseInt(cliArguments.port)
-        }, { showDebugLogs: true });
+        });
         redis = new Redis({
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
