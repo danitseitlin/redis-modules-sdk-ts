@@ -38,12 +38,16 @@ export class Module {
      * @param args The args of the redis command
      */
     async sendCommand(command: string, args: IORedis.ValueType | IORedis.ValueType[] = []): Promise<any> {
-        if(this.showDebugLogs)
-            console.log(`${this.name}: Running command ${command} with arguments: ${args}`);
-        const response = await this.redis.send_command(command, args);
-        if(this.showDebugLogs)
-            console.log(`${this.name}: command ${command} responded with ${response}`);
-        return response;
+        try{
+            if(this.showDebugLogs)
+                console.log(`${this.name}: Running command ${command} with arguments: ${args}`);
+            const response = await this.redis.send_command(command, args);
+            if(this.showDebugLogs)
+                console.log(`${this.name}: command ${command} responded with ${response}`);
+            return response;
+        } catch(error) {
+            return this.handleError(`${this.name} class (${command.split(' ')[0]}): ${error}`)
+        }
     }
 
     /**
@@ -52,10 +56,10 @@ export class Module {
      * @param error The message of the error
      */
     handleError(error: string): any {
-        const err = `${this.name}: ${error}`
+        ///const err = `${this.name} class (${this}): ${error}`
         if(this.isHandleError)
-            throw new Error(err);
-        return err;
+            throw new Error(error);
+        return error;
     }
 
     /**

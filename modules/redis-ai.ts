@@ -66,7 +66,7 @@ export class RedisAI extends Module {
      * @param options Additional optional parameters
      */
     async modelstore(key: string, backend: AIBackend, device: AIDevice, model: Buffer, options?: ModelSetParameters): Promise<'OK'> {
-        try {
+        //try {
             let args: (string | Buffer)[] = [key, backend, device];
             if(options !== undefined) {
                 if(options.tag !== undefined)
@@ -82,10 +82,10 @@ export class RedisAI extends Module {
                     args = args.concat(['OUTPUTS'].concat(options.outputs));
             }
             return await this.sendCommand('AI.MODELSTORE', args.concat(['BLOB', model])); 
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        //}
+        //catch(error) {
+        //    return this.handleError(error);
+        //}
     }
 
     /**
@@ -125,8 +125,7 @@ export class RedisAI extends Module {
     /**
      * Running a model
      * @param key The model's key name
-     * @param inputs Denotes the beginning of the input tensors keys' list, followed by one or more key names
-     * @param outputs Denotes the beginning of the output tensors keys' list, followed by one or more key names
+     * @param parameters The parameters of 'AI.MODELEXECUTE'
      */
     async modelexecute(key: string, parameters: AIModelExecute): Promise<'OK'> {
         try {
