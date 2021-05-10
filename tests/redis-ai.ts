@@ -56,13 +56,14 @@ describe('AI testing', async function() {
             inputs: ['a', 'b'],
             outputs: ['c']
         })
+        expect(response).to.eql('OK', 'The response of modelstore')
         response = await client.modelexecute('mymodel', {
             inputs: ['tensorA', 'tensorB'],
             outputs: ['tensorC'],
             inputsCount: 2,
             outputsCount: 1
         })
-        expect(response).to.eql('OK', 'The response of modelrun')
+        expect(response).to.eql('OK', 'The response of modelexecute')
     });
     it('modelscan function', async () => {
         const response = await client.modelscan();
