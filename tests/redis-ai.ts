@@ -95,7 +95,7 @@ describe('AI testing', async function() {
         // const response = await client.scriptexecute('myscript', 'bar', ['tensorA', 'tensorB'], ['tensorC'])
         const response = await client.scriptexecute('myscript', 'bar', {
             numberOfKeys: 1,
-            keys: ['{tag}'],
+            keys: ['tensorA'],
             numberOfInputs: 2,
             inputs: ['tensorA{tag}', 'tensorB{tag}'],
             numberOfOutputs: 1,
