@@ -15,6 +15,7 @@ export {
     FTFieldType, FTConfig, FTInfo
 } from './modules/redisearch'
 export {
-    RedisAI, AIBackend, AIDagrunParameters, AIDevice, AIModel, AIScript, AIScriptInfo, AIScriptSetParameters, AITensor, AITensorInfo
+    RedisAI, AIBackend, AIDagrunParameters, AIDevice, AIModel, AIScript, AIScriptInfo, AIScriptSetParameters, AITensor, AITensorInfo, AIModelExecute,
+    AIModelSetParameters, AIScriptExecuteParameters
 } from './modules/redis-ai'
 export { RedisIntervalSets, RISSet } from './modules/ris';

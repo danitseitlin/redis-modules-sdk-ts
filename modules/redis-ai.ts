@@ -215,7 +215,6 @@ export class RedisAI extends Module {
             args = args.concat('OUTPUTS', parameters.numberOfOutputs).concat(parameters.outputs)
             if(parameters.timeout)
                 args.concat('TIMEOUT', parameters.timeout)
-            console.log(args)
             return await this.sendCommand('AI.SCRIPTEXECUTE', args);
         }
         catch(error) {
@@ -241,9 +240,9 @@ export class RedisAI extends Module {
      * @param load An optional argument, that denotes the beginning of the input tensors keys' list, followed by the number of keys, and one or more key names
      * @param persist An optional argument, that denotes the beginning of the output tensors keys' list, followed by the number of keys, and one or more key names
      */
-    async dagrun(commands: string[], load?: AIDagrunParameters, persist?: AIDagrunParameters): Promise<string[]> {
+    async dagexecute(commands: string[], load?: AIDagrunParameters, persist?: AIDagrunParameters): Promise<string[]> {
         try {
-            return await this.sendCommand('AI.DAGRUN', this.generateDagRunArguments(commands, load, persist))
+            return await this.sendCommand('AI.DAGEXECUTE', this.generateDagRunArguments(commands, load, persist))
         }
         catch(error) {
             return this.handleError(error);
@@ -255,9 +254,9 @@ export class RedisAI extends Module {
      * @param commands The commands sent to the DAG
      * @param load An optional argument, that denotes the beginning of the input tensors keys' list, followed by the number of keys, and one or more key names
      */
-    async dagrunRO(commands: string[], load?: AIDagrunParameters): Promise<string[]> {
+    async dagexecuteRO(commands: string[], load?: AIDagrunParameters): Promise<string[]> {
         try {
-            return await this.sendCommand('AI.DAGRUN_RO', this.generateDagRunArguments(commands, load))
+            return await this.sendCommand('AI.DAGEXECUTE_RO', this.generateDagRunArguments(commands, load))
         }
         catch(error) {
             return this.handleError(error);
@@ -265,7 +264,7 @@ export class RedisAI extends Module {
     }
 
     /**
-     * Generating the dagrun CLI arguments
+     * Generating the dagexecute CLI arguments
      * @param commands The given commands
      * @param load The given load
      * @param persist The given persist
@@ -378,9 +377,9 @@ export type AIScriptSetParameters = {
 }
 
 /**
- * The dagrun object
- * @param keyCount The key count of the dagrun
- * @param keys The keys of the dagrun
+ * The dagexecute object
+ * @param keyCount The key count of the dagexecute
+ * @param keys The keys of the dagexecute
  */
 export type AIDagrunParameters = {
     keyCount: number,
@@ -477,6 +476,18 @@ export type AIModelExecute = {
     timeout?: number
 }
 
+/**
+ * Additional parameters of the 'AI.SCRIPTEXECUTE' command
+ * @param numberOfKeys The number of tensor keys
+ * @param keys The tensor keys
+ * @param numberOfInputs The number of inputs
+ * @param inputs The inputs
+ * @param numberOfListInputs Optional. The number of list inputs
+ * @param listInputs Optional. The list inputs
+ * @param numberOfOutputs The number of outputs
+ * @param outputs The outputs
+ * @param timeout The time (in ms) after which the client is unblocked and a TIMEDOUT string is returned
+ */
 export type AIScriptExecuteParameters = {
     numberOfKeys: number,
     keys: string[],
