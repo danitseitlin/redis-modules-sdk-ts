@@ -209,7 +209,7 @@ export class RedisAI extends Module {
     */
     async scriptexecute(key: string, functionName: string, parameters: AIScriptExecuteParameters): Promise<'OK'> {
         try {
-            let args = [key, functionName, 'INPUTS', parameters.numberOfInputs].concat(parameters.inputs)
+            let args = [key, functionName, 'KEYS', parameters.numberOfKeys].concat(parameters.keys).concat(['INPUTS', parameters.numberOfInputs]).concat(parameters.inputs)
             if(parameters.listInputs && parameters.listInputs.length > 0 && parameters.numberOfListInputs)
                 args = args.concat('LIST_INPUTS', parameters.numberOfListInputs).concat(parameters.listInputs)
             args = args.concat('OUTPUTS', parameters.numberOfOutputs).concat(parameters.outputs)
