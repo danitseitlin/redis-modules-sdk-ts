@@ -130,8 +130,8 @@ describe('AI testing', async function() {
         await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3]);
         await client.tensorset('tensorB', 'FLOAT', [1, 2], [3, 5]);
         const response = await client.dagexecute([
-            'AI.TENSORSET tensorA FLOAT INPUTS 1 2 OUTPUTS 2 3',
-            'AI.TENSORSET tensorB FLOAT INPUTS 1 2 OUTPUTS 3 5',
+            // 'AI.TENSORSET tensorA FLOAT INPUTS 1 2 OUTPUTS 2 3',
+            // 'AI.TENSORSET tensorB FLOAT INPUTS 1 2 OUTPUTS 3 5',
             'AI.MODELEXECUTE mymodel-dag INPUTS 2 tensorA tensorB OUTPUTS 1 tensorC'
         ], {
             keyCount: 1,
@@ -151,10 +151,13 @@ describe('AI testing', async function() {
         await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3]);
         await client.tensorset('tensorB', 'FLOAT', [1, 2], [3, 5]);
         const response = await client.dagexecuteRO([
-            'AI.TENSORSET tensorA FLOAT INPUTS 1 2 OUTPUTS 2 3',
-            'AI.TENSORSET tensorB FLOAT INPUTS 1 2 OUTPUTS 3 5',
+            // 'AI.TENSORSET tensorA FLOAT INPUTS 1 2 OUTPUTS 2 3',
+            // 'AI.TENSORSET tensorB FLOAT INPUTS 1 2 OUTPUTS 3 5',
             'AI.MODELEXECUTE mymodel-dag INPUTS 2 tensorA tensorB OUTPUTS 1 tensorC'
-        ])
+        ], {
+            keyCount: 1,
+            keys: ['tensorA']
+        })
         expect(response).to.eql([], 'The response of dagexecute_RO')
     });
 })
