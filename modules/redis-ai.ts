@@ -215,6 +215,7 @@ export class RedisAI extends Module {
             args = args.concat('OUTPUTS', parameters.numberOfOutputs).concat(parameters.outputs)
             if(parameters.timeout)
                 args.concat('TIMEOUT', parameters.timeout)
+            console.log(args)
             return await this.sendCommand('AI.SCRIPTEXECUTE', args);
         }
         catch(error) {

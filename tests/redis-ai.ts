@@ -94,12 +94,12 @@ describe('AI testing', async function() {
         await client.tensorset('tensorB', 'FLOAT', [1, 2], [3, 5]);
         // const response = await client.scriptexecute('myscript', 'bar', ['tensorA', 'tensorB'], ['tensorC'])
         const response = await client.scriptexecute('myscript', 'bar', {
-            numberOfKeys: 1,
-            keys: ['tensorA'],
+            numberOfKeys: 3,
+            keys: ['tensorA', 'tensorB', 'tensorC'],
             numberOfInputs: 2,
-            inputs: ['tensorA{tag}', 'tensorB{tag}'],
+            inputs: ['tensorA', 'tensorB'],
             numberOfOutputs: 1,
-            outputs: ['tensorC{tag}']
+            outputs: ['tensorC']
         })
         expect(response).to.eql('OK', 'The response of scriptexecute')
     });
