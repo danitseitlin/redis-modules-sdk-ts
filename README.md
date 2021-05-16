@@ -9,7 +9,7 @@
     <img src='https://img.shields.io/github/issues/danitseitlin/redis-modules-sdk?style=plastic' target='_blank' />
   </a>
   <a href='https://npmjs.org/package/redis-modules-sdk' style='width:25px;height:20px;'>
-    <img srddddc='https://img.shields.io/bundlephobia/min/redis-modules-sdk/latest?style=plastic' target='_blank' />
+    <img src='https://img.shields.io/bundlephobia/min/redis-modules-sdk/latest?style=plastic' target='_blank' />
   </a>
   <a href='https://github.com/danitseitlin/redis-modules-sdk/commits/master'>
     <img src='https://img.shields.io/github/last-commit/danitseitlin/redis-modules-sdk?style=plastic' />
