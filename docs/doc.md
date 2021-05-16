@@ -352,7 +352,7 @@ await client.disconnect();
 | scriptset  | AI.SCRIPTSET    |
 | scriptget  | AI.SCRIPTGET    |
 | scriptdel  | AI.SCRIPTDEL    |
-| scriptrun  | AI.SCRIPTRUN    |
+| scriptexecute  | AI.scriptexecute    |
 | scriptscan | AI._SCRIPTSCAN  |
 | dagexecute     | AI.DAGRUN       |
 | dagexecuteRO   | AI.DAGRUN_RO    |

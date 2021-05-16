@@ -89,11 +89,19 @@ describe('AI testing', async function() {
         expect(response.device).to.eql('CPU', `The device of script ${scriptName}`)
     });
     
-    it('scriptrun function', async () => {
+    it('scriptexecute function', async () => {
         await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3]);
         await client.tensorset('tensorB', 'FLOAT', [1, 2], [3, 5]);
-        const response = await client.scriptrun('myscript', 'bar', ['tensorA', 'tensorB'], ['tensorC'])
-        expect(response).to.eql('OK', 'The response of scriptrun')
+        // const response = await client.scriptexecute('myscript', 'bar', ['tensorA', 'tensorB'], ['tensorC'])
+        const response = await client.scriptexecute('myscript', 'bar', {
+            numberOfKeys: 1,
+            keys: ['{tag}']
+            numberOfInputs: 2,
+            inputs: ['tensorA{tag}', 'tensorB{tag}'],
+            numberOfOutputs: 1,
+            outputs: ['tensorC{tag}']
+        })
+        expect(response).to.eql('OK', 'The response of scriptexecute')
     });
     it('scriptscan function', async () => {
         const response = await client.scriptscan();

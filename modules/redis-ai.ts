@@ -205,14 +205,17 @@ export class RedisAI extends Module {
      * Running a script
      * @param key The script's key nameb
      * @param functionName The name of the function to run
-     * @param inputs Denotes the beginning of the input tensors keys' list, followed by one or more key names; variadic arguments are supported by prepending the list with $ , in this case the script is expected an argument of type List[Tensor] as its last argument
-     * @param outputs Denotes the beginning of the output tensors keys' list, followed by one or more key names
-     */
-    async scriptrun(key: string, functionName: string, inputs: string[], outputs: string[]): Promise<'OK'> {
+     * @param parameters The parameters of the 'AI.SCRIPTEXECUTE' command
+    */
+    async scriptexecute(key: string, functionName: string, parameters: AIScriptExecuteParameters): Promise<'OK'> {
         try {
-            const args = [key, functionName, 'INPUTS'].concat(inputs)
-            args.push('OUTPUTS')
-            return await this.sendCommand('AI.SCRIPTRUN', args.concat(outputs));
+            let args = [key, functionName, 'INPUTS', parameters.numberOfInputs].concat(parameters.inputs)
+            if(parameters.listInputs && parameters.listInputs.length > 0 && parameters.numberOfListInputs)
+                args = args.concat('LIST_INPUTS', parameters.numberOfListInputs).concat(parameters.listInputs)
+            args = args.concat('OUTPUTS', parameters.numberOfOutputs).concat(parameters.outputs)
+            if(parameters.timeout)
+                args.concat('TIMEOUT', parameters.timeout)
+            return await this.sendCommand('AI.SCRIPTEXECUTE', args);
         }
         catch(error) {
             return this.handleError(error);
@@ -469,6 +472,18 @@ export type AIModelExecute = {
     inputsCount: number,
     inputs: string[],
     outputsCount: number,
+    outputs: string[],
+    timeout?: number
+}
+
+export type AIScriptExecuteParameters = {
+    numberOfKeys: number,
+    keys: string[],
+    numberOfInputs: number,
+    inputs: string[],
+    listInputs?: string[],
+    numberOfListInputs?: number,
+    numberOfOutputs: number,
     outputs: string[],
     timeout?: number
 }
