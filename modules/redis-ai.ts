@@ -279,7 +279,6 @@ export class RedisAI extends Module {
             args = args.concat(['PERSIST', persist.keyCount.toString()].concat(persist.keys))
         if(keys)
             args = args.concat(['KEYS', persist.keyCount.toString()].concat(persist.keys))
-        args.push('|>')
         commands.forEach(command => {
             args = args.concat([command, '|>'])
         });
