@@ -241,9 +241,9 @@ export class RedisAI extends Module {
      * @param persist An optional argument, that denotes the beginning of the output tensors keys' list, followed by the number of keys, and one or more key names
      * @param keys An optional argument, that denotes the beginning of keys' list which are used within this command, followed by the number of keys, and one or more key names. Alternately, the keys names list can be replaced with a tag which all of those keys share. Redis will verify that all potential key accesses are done to the right shard.
      */
-    async dagexecute(commands: string[], load?: AIDagrunParameters, persist?: AIDagrunParameters, keys?: AIDagrunParameters[]): Promise<string[]> {
+    async dagexecute(commands: string[], load?: AIDagrunParameters, persist?: AIDagrunParameters, keys?: AIDagrunParameters): Promise<string[]> {
         try {
-            return await this.sendCommand('AI.DAGEXECUTE', this.generateDagRunArguments(commands, load, persist))
+            return await this.sendCommand('AI.DAGEXECUTE', this.generateDagRunArguments(commands, load, persist, keys))
         }
         catch(error) {
             return this.handleError(error);
@@ -279,6 +279,7 @@ export class RedisAI extends Module {
             args = args.concat(['PERSIST', persist.keyCount.toString()].concat(persist.keys))
         if(keys)
             args = args.concat(['KEYS', persist.keyCount.toString()].concat(persist.keys))
+        args.push('|>')
         commands.forEach(command => {
             args = args.concat([command, '|>'])
         });
