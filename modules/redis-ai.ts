@@ -283,6 +283,7 @@ export class RedisAI extends Module {
         commands.forEach(command => {
             args = args.concat([command, '|>'])
         });
+        console.log(args)
         return args
     }
 
