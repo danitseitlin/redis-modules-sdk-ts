@@ -239,8 +239,9 @@ export class RedisAI extends Module {
      * @param commands The commands sent to the DAG
      * @param load An optional argument, that denotes the beginning of the input tensors keys' list, followed by the number of keys, and one or more key names
      * @param persist An optional argument, that denotes the beginning of the output tensors keys' list, followed by the number of keys, and one or more key names
+     * @param keys An optional argument, that denotes the beginning of keys' list which are used within this command, followed by the number of keys, and one or more key names. Alternately, the keys names list can be replaced with a tag which all of those keys share. Redis will verify that all potential key accesses are done to the right shard.
      */
-    async dagexecute(commands: string[], load?: AIDagrunParameters, persist?: AIDagrunParameters): Promise<string[]> {
+    async dagexecute(commands: string[], load?: AIDagrunParameters, persist?: AIDagrunParameters, keys?: AIDagrunParameters[]): Promise<string[]> {
         try {
             return await this.sendCommand('AI.DAGEXECUTE', this.generateDagRunArguments(commands, load, persist))
         }
@@ -268,15 +269,16 @@ export class RedisAI extends Module {
      * @param commands The given commands
      * @param load The given load
      * @param persist The given persist
+     * @param keys The given keys
      */
-    private generateDagRunArguments(commands: string[], load?: AIDagrunParameters, persist?: AIDagrunParameters): string[] {
+    private generateDagRunArguments(commands: string[], load?: AIDagrunParameters, persist?: AIDagrunParameters, keys?: AIDagrunParameters): string[] {
         let args: string[] = [];
-        if(load !== undefined){
+        if(load)
             args = args.concat(['LOAD', load.keyCount.toString()].concat(load.keys))
-        }
-        if(persist !== undefined){
+        if(persist)
             args = args.concat(['PERSIST', persist.keyCount.toString()].concat(persist.keys))
-        }
+        if(keys)
+            args = args.concat(['KEYS', persist.keyCount.toString()].concat(persist.keys))
         commands.forEach(command => {
             args = args.concat([command, '|>'])
         });
