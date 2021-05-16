@@ -133,10 +133,10 @@ describe('AI testing', async function() {
             'AI.TENSORSET tensorC FLOAT INPUTS 1 2 OUTPUTS 3 5',
             'AI.TENSORSET tensorB FLOAT INPUTS 1 2 OUTPUTS 3 5',
         //    'AI.MODELEXECUTE mymodel-dag INPUTS 2 tensorA tensorB OUTPUTS 1 tensorC'
-        ], {
+        ]/*, {
             keyCount: 1,
             keys: ['tensorA']
-        })
+        }*/)
         expect(response).to.eql([], 'The response of dagexecute')
     });
     it('dagexecuteRO function', async () => {
