@@ -92,7 +92,6 @@ describe('AI testing', async function() {
     it('scriptexecute function', async () => {
         await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3]);
         await client.tensorset('tensorB', 'FLOAT', [1, 2], [3, 5]);
-        // const response = await client.scriptexecute('myscript', 'bar', ['tensorA', 'tensorB'], ['tensorC'])
         const response = await client.scriptexecute('myscript', 'bar', {
             numberOfKeys: 3,
             keys: ['tensorA', 'tensorB', 'tensorC'],
