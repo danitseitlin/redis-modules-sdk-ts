@@ -140,24 +140,21 @@ describe('AI testing', async function() {
         expect(response).to.eql([], 'The response of dagexecute')
     });
     it('dagexecuteRO function', async () => {
-        // const blob = fs.readFileSync('./tests/data/models/graph.pb');
-        // await client.modelstore('mymodel-dag', 'TF', 'CPU', blob, {
-        //     inputs: ['a', 'b'],
-        //     inputsCount: 2,
-        //     outputs: ['c'],
-        //     outputsCount: 1,
-        //     tag: 'test_tag'
-        // })
+        const blob = fs.readFileSync('./tests/data/models/graph.pb');
+        await client.modelstore('mymodel-dag', 'TF', 'CPU', blob, {
+            inputs: ['a', 'b'],
+            inputsCount: 2,
+            outputs: ['c'],
+            outputsCount: 1,
+            tag: 'test_tag'
+        })
         await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3]);
         await client.tensorset('tensorB', 'FLOAT', [1, 2], [3, 5]);
         const response = await client.dagexecuteRO([
             'AI.TENSORSET tensorA FLOAT INPUTS 1 2 OUTPUTS 3 5',
             'AI.TENSORSET tensorB FLOAT INPUTS 1 2 OUTPUTS 3 5',
-        //    'AI.MODELEXECUTE mymodel-dag INPUTS 2 tensorA tensorB OUTPUTS 1 tensorC'
-        ], {
-            keyCount: 1,
-            keys: ['tensorA']
-        })
+            'AI.MODELEXECUTE mymodel-dag INPUTS 2 tensorA tensorB OUTPUTS 1 tensorC'
+        ])
         expect(response).to.eql([], 'The response of dagexecute_RO')
     });
 })
