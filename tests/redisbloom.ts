@@ -5,7 +5,7 @@ import { Redis } from '../modules/redis';
 let client: RedisBloom;
 let redis: Redis;
 const key1 = 'key1bloom';
-const key2 = 'key2bloom';
+const key2 = '1';
 const item1 = 'item1';
 const responses = []
 let dataIterator: number;
@@ -30,7 +30,7 @@ describe('RedisBloom Module testing', async function() {
     })
     
     it('reserve function', async () => {
-        const response = await client.reserve(key2, 0.1, 1);
+        const response = await client.reserve(key2, 0.01, 100);
         expect(response).to.equal('OK', 'The response of the \'BF.RESERVE\' command');
     })
     it('add function', async () => {
@@ -60,13 +60,28 @@ describe('RedisBloom Module testing', async function() {
     });
     it('scandump function', async () => {
         //responses = [];
+
+//         127.0.0.1:6379> BF.RESERVE 1 0.01 100
+// OK
+// 127.0.0.1:6379> BF.ADD 1 1
+// (integer) 1
+// 127.0.0.1:6379> BF.ADD 1 2
+// (integer) 1
+// 127.0.0.1:6379> BF.ADD 1 3
+// (integer) 1
+// 127.0.0.1:6379> BF.SCANDUMP 1 0
+// 1) (integer) 1
+// 2) "\x03\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x05\x00\x00\x00\x02\x00\x00\x00\x90\x00\x00\x00\x00\x00\x00\x00\x80\x04\x00\x00\x00\x00\x00\x00\x03\x00\x00\x00\x00\x00\x00\x00{\x14\xaeG\xe1zt?\xe9\x86/\xb25\x0e&@\b\x00\x00\x00d\x00\x00\x00\x00\x00\x00\x00\x00
+        await client.add(key2, '1')
+        await client.add(key2, '2')
+        await client.add(key2, '3')
         let iter = 0;
-        let response = await client.scandump(key1, iter)
+        let response = await client.scandump(key2, iter)
         let data = response[1]
         const chunks = [{iterator: iter, data: data}]
         iter = parseInt(response[0])
         while(iter != 0){
-            response = await client.scandump(key1, iter)
+            response = await client.scandump(key2, iter)
             iter = parseInt(response[0])
             data = response[1]
             chunks.push({iterator: iter, data: data})
@@ -74,10 +89,10 @@ describe('RedisBloom Module testing', async function() {
 
         console.log(chunks)
 
-        console.log(await client.redis.del(key1));
-        console.log(await client.redis.get(key1));
+        console.log(await client.redis.del(key2));
+        console.log(await client.redis.get(key2));
         const chunk = chunks[1];
-        const res = await client.loadchunk(key1, chunk.iterator, chunk.data);
+        const res = await client.loadchunk(key2, chunk.iterator, chunk.data);
             expect(res).to.equal('OK', `The response of load chunk with iterator ${chunk.iterator}`)
         // for(const chunk of chunks) {
         //     console.log(chunk)
