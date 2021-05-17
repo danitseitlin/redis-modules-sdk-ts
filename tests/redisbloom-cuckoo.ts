@@ -74,7 +74,7 @@ describe('RedisBloom Cuckoo filter testing', async function() {
         console.log(chunks)
         expect(chunks.length).gt(0, `The count of chunks of key ${key2}`)
     });
-    it('loadchunk function', async () => {
+    it.skip('loadchunk function', async () => {
         const chunk = chunks[1];
         const res = await client.loadchunk(key2, chunk.iterator, chunk.data.replace(/�/g, 'fffd'));
         expect(res).to.equal('OK', `The response of load chunk with iterator ${chunk.iterator}`)
