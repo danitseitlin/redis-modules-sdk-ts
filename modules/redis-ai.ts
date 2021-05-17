@@ -176,39 +176,32 @@ export class RedisAI extends Module {
 
     /**
      * Running a DAG
-     * @param commands The commands sent to the DAG
-     * @param load An optional argument, that denotes the beginning of the input tensors keys' list, followed by the number of keys, and one or more key names
-     * @param persist An optional argument, that denotes the beginning of the output tensors keys' list, followed by the number of keys, and one or more key names
-     * @param keys An optional argument, that denotes the beginning of keys' list which are used within this command, followed by the number of keys, and one or more key names. Alternately, the keys names list can be replaced with a tag which all of those keys share. Redis will verify that all potential key accesses are done to the right shard.
+     * @param parameters Additional parameters required for the 'AI.DAGEXECUTE' command
+     * @param commands The commands sent to the 'AI.DAGEXECUTE' command
      */
-    async dagexecute(commands: string[], load?: AIDagrunParameters, persist?: AIDagrunParameters, keys?: AIDagrunParameters): Promise<string[]> {
-        return await this.sendCommand('AI.DAGEXECUTE', this.generateDagRunArguments(commands, load, persist, keys))
+    async dagexecute(parameters: AIDagExecuteParameters, commands: string[]): Promise<string[]> {
+        return await this.sendCommand('AI.DAGEXECUTE', this.generateDagRunArguments(parameters, commands))
     }
 
     /**
      * Running a readonly DAG
-     * @param commands The commands sent to the DAG
-     * @param load An optional argument, that denotes the beginning of the input tensors keys' list, followed by the number of keys, and one or more key names
+     * @param parameters Additional parameters required for the 'AI.DAGEXECUTE_RO' command
+     * @param commands The commands sent to the 'AI.DAGEXECUTE_RO' command
      */
-    async dagexecuteRO(commands: string[], load?: AIDagrunParameters): Promise<string[]> {
-        return await this.sendCommand('AI.DAGEXECUTE_RO', this.generateDagRunArguments(commands, load))
+    async dagexecuteRO(parameters: AIDagExecuteParameters, commands: string[]): Promise<string[]> {
+        return await this.sendCommand('AI.DAGEXECUTE_RO', this.generateDagRunArguments(parameters, commands))
     }
 
     /**
      * Generating the dagexecute CLI arguments
+     * @param parameters Additional parameters required for the DAG command
      * @param commands The given commands
-     * @param load The given load
-     * @param persist The given persist
-     * @param keys The given keys
      */
-    private generateDagRunArguments(commands: string[], load?: AIDagrunParameters, persist?: AIDagrunParameters, keys?: AIDagrunParameters): string[] {
+    private generateDagRunArguments(parameters: AIDagExecuteParameters, commands: string[]): string[] {
         let args: string[] = [];
-        if(load)
-            args = args.concat(['LOAD', load.keyCount.toString()].concat(load.keys))
-        if(persist)
-            args = args.concat(['PERSIST', persist.keyCount.toString()].concat(persist.keys))
-        if(keys)
-            args = args.concat(['KEYS', persist.keyCount.toString()].concat(persist.keys))
+        args = args.concat([parameters.type.toUpperCase(), `${parameters.numberOfKeys}`].concat(parameters.keys));
+        if(parameters.timeout)
+            args = args.concat(['TIMEOUT', `${parameters.timeout}`])
         commands.forEach(command => {
             args = args.concat(['|>'].concat(command.split(' ')))
         });
@@ -300,13 +293,17 @@ export type AIScriptSetParameters = {
 }
 
 /**
- * The dagexecute object
- * @param keyCount The key count of the dagexecute
+ * The dagexecute parameters
+ * @param type The keyword of the command
  * @param keys The keys of the dagexecute
+ * @param numberOfKeys The key count of the dagexecute
+ * @param timeout Optional. The time (in ms) after which the client is unblocked and a TIMEDOUT string is returned 
  */
-export type AIDagrunParameters = {
-    keyCount: number,
-    keys: string[]
+export type AIDagExecuteParameters = {
+    type: 'load' | 'persist' | 'keys',
+    keys: string[],
+    numberOfKeys: number,
+    timeout?: number
 }
 
 /**

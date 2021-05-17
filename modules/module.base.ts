@@ -38,7 +38,7 @@ export class Module {
      * @param args The args of the redis command
      */
     async sendCommand(command: string, args: IORedis.ValueType | IORedis.ValueType[] = []): Promise<any> {
-        try{
+        try {
             if(this.showDebugLogs)
                 console.log(`${this.name}: Running command ${command} with arguments: ${args}`);
             const response = await this.redis.send_command(command, args);

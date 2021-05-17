@@ -120,12 +120,13 @@ describe('AI testing', async function() {
     });
     it('dagexecute function', async () => {
         await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3]);
-        const response = await client.dagexecute([
-            'AI.TENSORGET tensorA VALUES'
-        ], {
-            keyCount: 1,
+        const response = await client.dagexecute({
+            type: 'load',
+            numberOfKeys: 1,
             keys: ['tensorA']
-        })
+        }, [
+            'AI.TENSORGET tensorA VALUES'
+        ])
         expect(response).to.eql([
             [
                 "2",
@@ -135,12 +136,13 @@ describe('AI testing', async function() {
     });
     it('dagexecuteRO function', async () => {
         await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3]);
-        const response = await client.dagexecuteRO([
-            'AI.TENSORGET tensorA VALUES'
-        ], {
-            keyCount: 1,
+        const response = await client.dagexecuteRO({
+            type: 'load',
+            numberOfKeys: 1,
             keys: ['tensorA']
-        })
+        }, [
+            'AI.TENSORGET tensorA VALUES'
+        ])
         expect(response).to.eql([
             [
                 "2",
