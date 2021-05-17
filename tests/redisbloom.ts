@@ -61,12 +61,12 @@ describe('RedisBloom Module testing', async function() {
     it('scandump function', async () => {
         //responses = [];
         let iter = 0;
-        let response = await client.scandump(key2, iter)
+        let response = await client.scandump(key1, iter)
         let data = response[1]
         const chunks = [{iterator: iter, data: data}]
         iter = parseInt(response[0])
         while(iter != 0){
-            response = await client.scandump(key2, iter)
+            response = await client.scandump(key1, iter)
             iter = parseInt(response[0])
             data = response[1]
             chunks.push({iterator: iter, data: data})
