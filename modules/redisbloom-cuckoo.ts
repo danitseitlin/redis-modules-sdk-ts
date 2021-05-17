@@ -17,16 +17,17 @@ export class RedisBloomCuckoo extends Module {
     /**
      * Creating an empty Bloom Cuckoo filter with a given desired error ratio and initial capacity.
      * @param key The key under which the filter is to be found
-     * @param errorRate The desired probability for false positives. This should be a decimal value between 0 and 1. For example, for a desired false positive rate of 0.1% (1 in 1000), error_rate should be set to 0.001. The closer this number is to zero, the greater the memory consumption per item and the more CPU usage per operation.
      * @param capacity The number of entries you intend to add to the filter. Performance will begin to degrade after adding more items than this number. The actual degradation will depend on how far the limit has been exceeded. Performance will degrade linearly as the number of entries grow exponentially. 
      * @param options The additional optional parameters
      */
-    async reserve(key: string, errorRate: number, capacity: number, options?: CFReserveParameter): Promise<'OK'> {
-        const args = [key, errorRate, capacity];
-        if(options !== undefined && options.expansion !== undefined)
-            args.push(options.expansion);
-        if(options !== undefined && options.nonscaling === true)
-            args.push('NONSCALING');
+    async reserve(key: string, capacity: number, options?: CFReserveParameters): Promise<'OK'> {
+        let args = [key, capacity];
+        if(options && options.bucketSize)
+            args = args.concat(['BUCKETSIZE', options.bucketSize])
+        if(options && options.maxIteractions)
+            args = args.concat(['MAXITERATIONS', options.maxIteractions])
+        if(options && options.expansion)
+            args = args.concat(['EXPANSION', options.expansion])
         return await this.sendCommand('CF.RESERVE', args);
     }
 
@@ -152,10 +153,12 @@ export type CFResponse = '1' | '0';
 
 /**
  * The additional optional parameters of the 'CF.RESERVE' command
- * @param expansion If a new sub-filter is created, its size will be the size of the current filter multiplied by expansion.
- * @param nonscaling Prevents the filter from creating additional sub-filters if initial capacity is reached.
+ * @param bucketSize Number of items in each bucket. A higher bucket size value improves the fill rate but also causes a higher error rate and slightly slower performance.
+ * @param maxIteractions Number of attempts to swap items between buckets before declaring filter as full and creating an additional filter. A low value is better for performance and a higher number is better for filter fill rate.
+ * @param expansion When a new filter is created, its size is the size of the current filter multiplied by expansion . Expansion is rounded to the next 2^n number.
  */
- export type CFReserveParameter = {
-    expansion?: number,
-    nonscaling?: boolean
+ export type CFReserveParameters = {
+    bucketSize?: number,
+    maxIteractions?: number,
+    expansion?: number
 }

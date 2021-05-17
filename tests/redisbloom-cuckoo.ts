@@ -28,7 +28,7 @@ describe('RedisBloom Cuckoo filter testing', async function() {
     })
 
     it('reserve function', async () => {
-        const response = await client.reserve(key2, 0.01, 100);
+        const response = await client.reserve(key2, 100);
         expect(response).to.equal('OK', 'The response of the \'CF.RESERVE\' command');
     })
     it('add function', async () => {
