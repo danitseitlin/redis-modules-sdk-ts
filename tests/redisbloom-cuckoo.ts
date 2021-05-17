@@ -67,7 +67,7 @@ describe('RedisBloom Cuckoo filter testing', async function() {
             response = await client.scandump(key2, iter)
             iter = parseInt(response[0])
             data = response[1]
-            chunks.push({iterator: iter, data: data})
+            chunks.push({iterator: iter, data: data.replace('�', '')})
         }
         console.log(chunks)
         expect(chunks.length).gt(0, `The count of chunks of key ${key2}`)
