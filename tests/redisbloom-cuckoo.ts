@@ -32,7 +32,9 @@ describe('RedisBloom Cuckoo filter testing', async function() {
         expect(response).to.equal('OK', 'The response of the \'CF.RESERVE\' command');
     })
     it('add function', async () => {
-        const response = await client.add(key1, 'item');
+        let response = await client.add(key1, 'item');
+        expect(response).to.equal(1, 'The response of the CF.ADD command');
+        response = await client.add(key2, '1');
         expect(response).to.equal(1, 'The response of the CF.ADD command');
     });
     it('addnx function', async () => {
