@@ -22,60 +22,55 @@ export class Redisearch extends Module {
      * @returns 'OK'
      */
     async create(index: string, schemaFields: FTSchemaField[], parameters?: FTCreateParameters): Promise<'OK'> {
-        try {
-            let args: string[] = [index]
-            args = args.concat(['ON', 'HASH']);
-            if(parameters !== undefined) {
-                if(parameters.prefix !== undefined) {
-                    args.push('PREFIX');
-                    for(const prefix of parameters.prefix)
-                        args = args.concat([prefix.count.toString(), prefix.name])
-                }
-                if(parameters.filter !== undefined)
-                    args = args.concat(['FILTER', parameters.filter])
-                if(parameters.language !== undefined)
-                    args = args.concat(['LANGUAGE', parameters.language]);
-                if(parameters.languageField !== undefined)
-                    args = args.concat(['LANGUAGE_FIELD', parameters.languageField]);
-                if(parameters.score !== undefined)
-                    args = args.concat(['SCORE', parameters.score])
-                if(parameters.scoreField !== undefined)
-                    args = args.concat(['SCORE_FIELD', parameters.scoreField])
-                if(parameters.payloadField !== undefined)
-                    args = args.concat(['PAYLOAD_FIELD', parameters.payloadField])
-                if(parameters.maxTextFields !== undefined)
-                    args = args.concat(['MAXTEXTFIELDS', parameters.maxTextFields.toString()])
-                if(parameters.noOffsets !== undefined)
-                    args.push('NOOFFSETS');
-                if(parameters.temporary !== undefined)
-                    args.push('TEMPORARY');
-                if(parameters.nohl !== undefined)
-                    args.push('NOHL');
-                if(parameters.noFields !== undefined)
-                    args.push('NOFIELDS');
-                if(parameters.noFreqs !== undefined)
-                    args.push('NOFREQS');
-                if(parameters.stopwords !== undefined)
-                    args = args.concat(['STOPWORDS', parameters.stopwords.num.toString(), parameters.stopwords.stopword]);
-                if(parameters.skipInitialScan !== undefined)
-                    args.push('SKIPINITIALSCAN');
+        let args: string[] = [index]
+        args = args.concat(['ON', 'HASH']);
+        if(parameters !== undefined) {
+            if(parameters.prefix !== undefined) {
+                args.push('PREFIX');
+                for(const prefix of parameters.prefix)
+                    args = args.concat([prefix.count.toString(), prefix.name])
             }
-            args.push('SCHEMA');
-            for(const field of schemaFields) {
-                args = args.concat([field.name, field.type]);
-                if(field.nostem !== undefined) args.push('NOSTEM');
-                if(field.weight !== undefined) args = args.concat(['WEIGHT', field.weight.toString()]);
-                if(field.phonetic !== undefined) args = args.concat(['PHONETIC', field.phonetic]);
-                if(field.seperator !== undefined) args = args.concat(['SEPERATOR', field.seperator]);
-                if(field.sortable !== undefined) args.push('SORTABLE');
-                if(field.noindex !== undefined) args.push('NOINDEX');
-            }
-            const response = await this.sendCommand('FT.CREATE', args);
-            return this.handleResponse(response);
+            if(parameters.filter !== undefined)
+                args = args.concat(['FILTER', parameters.filter])
+            if(parameters.language !== undefined)
+                args = args.concat(['LANGUAGE', parameters.language]);
+            if(parameters.languageField !== undefined)
+                args = args.concat(['LANGUAGE_FIELD', parameters.languageField]);
+            if(parameters.score !== undefined)
+                args = args.concat(['SCORE', parameters.score])
+            if(parameters.scoreField !== undefined)
+                args = args.concat(['SCORE_FIELD', parameters.scoreField])
+            if(parameters.payloadField !== undefined)
+                args = args.concat(['PAYLOAD_FIELD', parameters.payloadField])
+            if(parameters.maxTextFields !== undefined)
+                args = args.concat(['MAXTEXTFIELDS', parameters.maxTextFields.toString()])
+            if(parameters.noOffsets !== undefined)
+                args.push('NOOFFSETS');
+            if(parameters.temporary !== undefined)
+                args.push('TEMPORARY');
+            if(parameters.nohl !== undefined)
+                args.push('NOHL');
+            if(parameters.noFields !== undefined)
+                args.push('NOFIELDS');
+            if(parameters.noFreqs !== undefined)
+                args.push('NOFREQS');
+            if(parameters.stopwords !== undefined)
+                args = args.concat(['STOPWORDS', parameters.stopwords.num.toString(), parameters.stopwords.stopword]);
+            if(parameters.skipInitialScan !== undefined)
+                args.push('SKIPINITIALSCAN');
         }
-        catch(error) {
-            return this.handleError(error);
+        args.push('SCHEMA');
+        for(const field of schemaFields) {
+            args = args.concat([field.name, field.type]);
+            if(field.nostem !== undefined) args.push('NOSTEM');
+            if(field.weight !== undefined) args = args.concat(['WEIGHT', field.weight.toString()]);
+            if(field.phonetic !== undefined) args = args.concat(['PHONETIC', field.phonetic]);
+            if(field.seperator !== undefined) args = args.concat(['SEPERATOR', field.seperator]);
+            if(field.sortable !== undefined) args.push('SORTABLE');
+            if(field.noindex !== undefined) args.push('NOINDEX');
         }
+        const response = await this.sendCommand('FT.CREATE', args);
+        return this.handleResponse(response);
     }
 
     /**
@@ -86,93 +81,88 @@ export class Redisearch extends Module {
      * @returns Array reply, where the first element is the total number of results, and then pairs of document id, and a nested array of field/value.
      */
     async search(index: string, query: string, parameters?: FTSearchParameters): Promise<number> {
-        try {
-            let args: string[] = [index, query];
-            if(parameters !== undefined) {
-                if(parameters.noContent === true)
-                    args.push('NOCONTENT')
-                if(parameters.verbatim === true)
-                    args.push('VERBARIM')
-                if(parameters.noStopWords === true)
-                    args.push('NOSTOPWORDS')
-                if(parameters.withScores === true)
-                    args.push('WITHSCORES')
-                if(parameters.withPayloads === true)
-                    args.push('WITHPAYLOADS')
-                if(parameters.withSortKeys === true)
-                    args.push('WITHSORTKEYS')
-                if(parameters.filter !== undefined)
-                args = args.concat(['FILTER', parameters.filter.field, parameters.filter.min.toString(), parameters.filter.max.toString()])
-                if(parameters.geoFilter !== undefined)
-                    args = args.concat([
-                        'GEOFILTER',
-                        parameters.geoFilter.field,
-                        parameters.geoFilter.lon.toString(),
-                        parameters.geoFilter.lat.toString(),
-                        parameters.geoFilter.radius.toString(),
-                        parameters.geoFilter.measurement
-                    ])
-                if(parameters.inKeys !== undefined)
-                    args = args.concat(['INKEYS', parameters.inKeys.num.toString(), parameters.inKeys.field])
-                if(parameters.inFields !== undefined)
-                    args = args.concat(['INFIELDS', parameters.inFields.num.toString(), parameters.inFields.field])
-                if(parameters.return !== undefined)
-                    args = args.concat(['RETURN', parameters.return.num.toString()].concat(parameters.return.fields))
-                if(parameters.summarize !== undefined) {
-                    args.push('SUMMARIZE')
-                    if(parameters.summarize.fields !== undefined) {
-                        args.push('FIELDS')
-                        for(const field of parameters.summarize.fields) {
-                            args = args.concat([field.num.toString(), field.field]);
-                        }
-                    }
-                    if(parameters.summarize.frags !== undefined) 
-                        args = args.concat(['FRAGS', parameters.summarize.frags.toString()])
-                    if(parameters.summarize.len !== undefined) 
-                        args = args.concat(['LEN', parameters.summarize.len.toString()])
-                    if(parameters.summarize.seperator !== undefined) 
-                        args = args.concat(['SEPARATOR', parameters.summarize.seperator])
-                }
-                if(parameters.highlight !== undefined) {
-                    args.push('HIGHLIGHT')
-                    if(parameters.highlight.fields !== undefined) {
-                        args.push('FIELDS')
-                        for(const field of parameters.highlight.fields) {
-                            args = args.concat([field.num.toString(), field.field]);
-                        }
-                    }
-                    if(parameters.highlight.tags !== undefined) {
-                        args.push('TAGS')
-                        for(const tag of parameters.highlight.tags) {
-                            args = args.concat([tag.open, tag.close]);
-                        }
+        let args: string[] = [index, query];
+        if(parameters !== undefined) {
+            if(parameters.noContent === true)
+                args.push('NOCONTENT')
+            if(parameters.verbatim === true)
+                args.push('VERBARIM')
+            if(parameters.noStopWords === true)
+                args.push('NOSTOPWORDS')
+            if(parameters.withScores === true)
+                args.push('WITHSCORES')
+            if(parameters.withPayloads === true)
+                args.push('WITHPAYLOADS')
+            if(parameters.withSortKeys === true)
+                args.push('WITHSORTKEYS')
+            if(parameters.filter !== undefined)
+            args = args.concat(['FILTER', parameters.filter.field, parameters.filter.min.toString(), parameters.filter.max.toString()])
+            if(parameters.geoFilter !== undefined)
+                args = args.concat([
+                    'GEOFILTER',
+                    parameters.geoFilter.field,
+                    parameters.geoFilter.lon.toString(),
+                    parameters.geoFilter.lat.toString(),
+                    parameters.geoFilter.radius.toString(),
+                    parameters.geoFilter.measurement
+                ])
+            if(parameters.inKeys !== undefined)
+                args = args.concat(['INKEYS', parameters.inKeys.num.toString(), parameters.inKeys.field])
+            if(parameters.inFields !== undefined)
+                args = args.concat(['INFIELDS', parameters.inFields.num.toString(), parameters.inFields.field])
+            if(parameters.return !== undefined)
+                args = args.concat(['RETURN', parameters.return.num.toString()].concat(parameters.return.fields))
+            if(parameters.summarize !== undefined) {
+                args.push('SUMMARIZE')
+                if(parameters.summarize.fields !== undefined) {
+                    args.push('FIELDS')
+                    for(const field of parameters.summarize.fields) {
+                        args = args.concat([field.num.toString(), field.field]);
                     }
                 }
-                if(parameters.slop !== undefined)
-                    args = args.concat(['SLOP', parameters.slop.toString()])
-                if(parameters.inOrder !== undefined)
-                    args.push('INORDER')
-                if(parameters.language !== undefined)
-                    args = args.concat(['LANGUAGE', parameters.language])
-                if(parameters.expander !== undefined)
-                    args = args.concat(['EXPANDER', parameters.expander])
-                if(parameters.scorer !== undefined)
-                    args = args.concat(['SCORER', parameters.scorer])
-                if(parameters.explainScore !== undefined)
-                    args.push('EXPLAINSCORE')
-                if(parameters.payload)
-                    args = args.concat(['PAYLOAD', parameters.payload])
-                if(parameters.sortBy !== undefined)
-                    args = args.concat(['SORTBY', parameters.sortBy.field, parameters.sortBy.sort])
-                if(parameters.limit !== undefined)
-                    args = args.concat(['LIMIT', parameters.limit.first.toString(), parameters.limit.num.toString()])
+                if(parameters.summarize.frags !== undefined) 
+                    args = args.concat(['FRAGS', parameters.summarize.frags.toString()])
+                if(parameters.summarize.len !== undefined) 
+                    args = args.concat(['LEN', parameters.summarize.len.toString()])
+                if(parameters.summarize.seperator !== undefined) 
+                    args = args.concat(['SEPARATOR', parameters.summarize.seperator])
             }
-            const response = await this.sendCommand('FT.SEARCH', args);
-            return this.handleResponse(response);
+            if(parameters.highlight !== undefined) {
+                args.push('HIGHLIGHT')
+                if(parameters.highlight.fields !== undefined) {
+                    args.push('FIELDS')
+                    for(const field of parameters.highlight.fields) {
+                        args = args.concat([field.num.toString(), field.field]);
+                    }
+                }
+                if(parameters.highlight.tags !== undefined) {
+                    args.push('TAGS')
+                    for(const tag of parameters.highlight.tags) {
+                        args = args.concat([tag.open, tag.close]);
+                    }
+                }
+            }
+            if(parameters.slop !== undefined)
+                args = args.concat(['SLOP', parameters.slop.toString()])
+            if(parameters.inOrder !== undefined)
+                args.push('INORDER')
+            if(parameters.language !== undefined)
+                args = args.concat(['LANGUAGE', parameters.language])
+            if(parameters.expander !== undefined)
+                args = args.concat(['EXPANDER', parameters.expander])
+            if(parameters.scorer !== undefined)
+                args = args.concat(['SCORER', parameters.scorer])
+            if(parameters.explainScore !== undefined)
+                args.push('EXPLAINSCORE')
+            if(parameters.payload)
+                args = args.concat(['PAYLOAD', parameters.payload])
+            if(parameters.sortBy !== undefined)
+                args = args.concat(['SORTBY', parameters.sortBy.field, parameters.sortBy.sort])
+            if(parameters.limit !== undefined)
+                args = args.concat(['LIMIT', parameters.limit.first.toString(), parameters.limit.num.toString()])
         }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const response = await this.sendCommand('FT.SEARCH', args);
+        return this.handleResponse(response);
     }
 
     /**
@@ -183,66 +173,61 @@ export class Redisearch extends Module {
      * @returns Array Response. Each row is an array and represents a single aggregate result
      */
     async aggregate(index: string, query: string, parameters?: FTAggregateParameters): Promise<number> {
-        try {
-            let args: string[] = [index, query];
-            if(parameters !== undefined) {
-                if(parameters.load !== undefined) {
-                    args.push('LOAD')
-                    if(parameters.load.nargs !== undefined)
-                        args.push(parameters.load.nargs);
-                    if(parameters.load.property !== undefined)
-                        args.push(parameters.load.property);
-                }
-                if(parameters.groupby !== undefined){
-                    args.push('GROUPBY')
-                    if(parameters.groupby.nargs !== undefined)
-                        args.push(parameters.groupby.nargs);
-                    if(parameters.groupby.property !== undefined)
-                        args.push(parameters.groupby.property);
-                }
-                if(parameters.reduce !== undefined) {
-                    args.push('REDUCE')
-                    if(parameters.reduce.function !== undefined)
-                        args.push(parameters.reduce.function);
-                    if(parameters.reduce.nargs !== undefined)
-                        args.push(parameters.reduce.nargs);
-                    if(parameters.reduce.arg !== undefined)
-                        args.push(parameters.reduce.arg);
-                    if(parameters.reduce.as !== undefined)
-                        args = args.concat(['AS', parameters.reduce.as]);
-                }
-                if(parameters.sortby !== undefined) {
-                    args.push('SORTBY')
-                    if(parameters.sortby.nargs !== undefined)
-                        args.push(parameters.sortby.nargs);
-                    if(parameters.sortby.property !== undefined)
-                        args.push(parameters.sortby.property);
-                    if(parameters.sortby.sort !== undefined)
-                        args.push(parameters.sortby.sort);
-                    if(parameters.sortby.max !== undefined)
-                        args = args.concat(['MAX', parameters.sortby.max.toString()]);
-                }
-                if(parameters.apply !== undefined) {
-                    args.push('APPLY');
-                    if(parameters.apply.expression !== undefined)
-                        args.push(parameters.apply.expression);
-                    if(parameters.apply.as !== undefined)
-                        args.push(parameters.apply.as);
-                }
-                if(parameters.limit !== undefined) {
-                    args.push('LIMIT')
-                    if(parameters.limit.offset !== undefined)
-                        args.push(parameters.limit.offset)
-                    if(parameters.limit.numberOfResults !== undefined)
-                        args.push(parameters.limit.numberOfResults.toString());
-                }
+        let args: string[] = [index, query];
+        if(parameters !== undefined) {
+            if(parameters.load !== undefined) {
+                args.push('LOAD')
+                if(parameters.load.nargs !== undefined)
+                    args.push(parameters.load.nargs);
+                if(parameters.load.property !== undefined)
+                    args.push(parameters.load.property);
             }
-            const response = await this.sendCommand('FT.AGGREGATE', args);
-            return this.handleResponse(response);
+            if(parameters.groupby !== undefined){
+                args.push('GROUPBY')
+                if(parameters.groupby.nargs !== undefined)
+                    args.push(parameters.groupby.nargs);
+                if(parameters.groupby.property !== undefined)
+                    args.push(parameters.groupby.property);
+            }
+            if(parameters.reduce !== undefined) {
+                args.push('REDUCE')
+                if(parameters.reduce.function !== undefined)
+                    args.push(parameters.reduce.function);
+                if(parameters.reduce.nargs !== undefined)
+                    args.push(parameters.reduce.nargs);
+                if(parameters.reduce.arg !== undefined)
+                    args.push(parameters.reduce.arg);
+                if(parameters.reduce.as !== undefined)
+                    args = args.concat(['AS', parameters.reduce.as]);
+            }
+            if(parameters.sortby !== undefined) {
+                args.push('SORTBY')
+                if(parameters.sortby.nargs !== undefined)
+                    args.push(parameters.sortby.nargs);
+                if(parameters.sortby.property !== undefined)
+                    args.push(parameters.sortby.property);
+                if(parameters.sortby.sort !== undefined)
+                    args.push(parameters.sortby.sort);
+                if(parameters.sortby.max !== undefined)
+                    args = args.concat(['MAX', parameters.sortby.max.toString()]);
+            }
+            if(parameters.apply !== undefined) {
+                args.push('APPLY');
+                if(parameters.apply.expression !== undefined)
+                    args.push(parameters.apply.expression);
+                if(parameters.apply.as !== undefined)
+                    args.push(parameters.apply.as);
+            }
+            if(parameters.limit !== undefined) {
+                args.push('LIMIT')
+                if(parameters.limit.offset !== undefined)
+                    args.push(parameters.limit.offset)
+                if(parameters.limit.numberOfResults !== undefined)
+                    args.push(parameters.limit.numberOfResults.toString());
+            }
         }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const response = await this.sendCommand('FT.AGGREGATE', args);
+        return this.handleResponse(response);
     }
 
     /**
@@ -252,13 +237,8 @@ export class Redisearch extends Module {
      * @returns Returns the execution plan for a complex query
      */
     async explain(index: string, query: string): Promise<string> {
-        try {
-            const response = await this.sendCommand('FT.EXPLAIN', [index, query]);
-            return this.handleResponse(response);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const response = await this.sendCommand('FT.EXPLAIN', [index, query]);
+        return this.handleResponse(response);
     }
 
     /**
@@ -268,13 +248,8 @@ export class Redisearch extends Module {
      * @returns A string representing the execution plan.
      */
     async explainCLI(index: string, query: string): Promise<string[]> {
-        try {
-            const response = await this.sendCommand('FT.EXPLAINCLI', [index, query]);
-            return this.handleResponse(response.join(''));
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const response = await this.sendCommand('FT.EXPLAINCLI', [index, query]);
+        return this.handleResponse(response.join(''));
     }
 
     /**
@@ -286,22 +261,17 @@ export class Redisearch extends Module {
      * @returns 'OK'
      */
     async alter(index: string, field: string, fieldType: FTFieldType, options?: FTFieldOptions): Promise<'OK'> {
-        try {
-            let args = [index, 'SCHEMA', 'ADD', field, fieldType]
-            if(options !== undefined) {
-                if(options.sortable !== undefined) args.push('SORTABLE');
-                if(options.noindex !== undefined) args.push('NOINDEX');
-                if(options.nostem !== undefined) args.push('NOSTEM');
-                if(options.phonetic !== undefined) args = args.concat(['PHONETIC', options.phonetic]);
-                if(options.seperator !== undefined) args = args.concat(['SEPERATOR', options.seperator]);
-                if(options.weight !== undefined) args = args.concat(['WEIGHT', options.weight.toString()]);
-            }
-            const response = await this.sendCommand('FT.ALTER', args);
-            return this.handleResponse(response);
+        let args = [index, 'SCHEMA', 'ADD', field, fieldType]
+        if(options !== undefined) {
+            if(options.sortable !== undefined) args.push('SORTABLE');
+            if(options.noindex !== undefined) args.push('NOINDEX');
+            if(options.nostem !== undefined) args.push('NOSTEM');
+            if(options.phonetic !== undefined) args = args.concat(['PHONETIC', options.phonetic]);
+            if(options.seperator !== undefined) args = args.concat(['SEPERATOR', options.seperator]);
+            if(options.weight !== undefined) args = args.concat(['WEIGHT', options.weight.toString()]);
         }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const response = await this.sendCommand('FT.ALTER', args);
+        return this.handleResponse(response);
     }
 
     /**
@@ -311,15 +281,10 @@ export class Redisearch extends Module {
      * @returns 'OK'
      */
     async dropindex(index: string, deleteHash = false): Promise<'OK'> {
-        try {
-            const args = [index];
-            if(deleteHash === true) args.push('DD')
-            const response = await this.sendCommand('FT.DROPINDEX', args);
-            return this.handleResponse(response);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const args = [index];
+        if(deleteHash === true) args.push('DD')
+        const response = await this.sendCommand('FT.DROPINDEX', args);
+        return this.handleResponse(response);
     }
     
     /**
@@ -329,13 +294,8 @@ export class Redisearch extends Module {
      * @returns 'OK'
      */
     async aliasadd(name: string, index: string): Promise<'OK'> {
-        try {
-            const response = await this.sendCommand('FT.ALIASADD', [name, index]);
-            return this.handleResponse(response);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const response = await this.sendCommand('FT.ALIASADD', [name, index]);
+        return this.handleResponse(response);
     }
 
     /**
@@ -345,13 +305,8 @@ export class Redisearch extends Module {
      * @returns 'OK'
      */
     async aliasupdate(name: string, index: string): Promise<'OK'> {
-        try {
-            const response = await this.sendCommand('FT.ALIASUPDATE', [name, index]);
-            return this.handleResponse(response);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const response = await this.sendCommand('FT.ALIASUPDATE', [name, index]);
+        return this.handleResponse(response);
     }
 
     /**
@@ -360,13 +315,8 @@ export class Redisearch extends Module {
      * @returns 'OK'
      */
     async aliasdel(name: string): Promise<'OK'> {
-        try {
-            const response = await this.sendCommand('FT.ALIASDEL', [name]);
-            return this.handleResponse(response);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const response = await this.sendCommand('FT.ALIASDEL', [name]);
+        return this.handleResponse(response);
     }
     
     /**
@@ -376,13 +326,8 @@ export class Redisearch extends Module {
      * @returns The distinct tags indexed in a Tag field 
      */
     async tagvals(index: string, field: string): Promise<string[]> {
-        try {
-            const response = await this.sendCommand('FT.TAGVALS', [index, field]);
-            return this.handleResponse(response);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const response = await this.sendCommand('FT.TAGVALS', [index, field]);
+        return this.handleResponse(response);
     }
 
     /**
@@ -394,18 +339,13 @@ export class Redisearch extends Module {
      * @returns The current size of the suggestion dictionary
      */
     async sugadd(key: string, suggestion: string, score: number, options?: FTSugAddParameters): Promise<number>{
-        try {
-            let args = [key, suggestion, score];
-            if(options !== undefined && options.incr !== undefined)
-                args.push('INCR');
-            if(options !== undefined && options.payload !== undefined)
-                args = args.concat(['PAYLOAD', options.payload]);
-            const response = await this.sendCommand('FT.SUGADD', args);
-            return this.handleResponse(response);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        let args = [key, suggestion, score];
+        if(options !== undefined && options.incr !== undefined)
+            args.push('INCR');
+        if(options !== undefined && options.payload !== undefined)
+            args = args.concat(['PAYLOAD', options.payload]);
+        const response = await this.sendCommand('FT.SUGADD', args);
+        return this.handleResponse(response);
     }
 
     /**
@@ -416,22 +356,17 @@ export class Redisearch extends Module {
      * @returns A list of the top suggestions matching the prefix, optionally with score after each entry 
      */
     async sugget(key: string, prefix: string, options?: FTSugGetParameters): Promise<string> {
-        try {
-            let args = [key, prefix];
-            if(options !== undefined && options.fuzzy !== undefined)
-                args.push('FUZZY');
-            if(options !== undefined && options.max !== undefined)   
-                args = args.concat(['MAX', options.max.toString()]);
-            if(options !== undefined && options.withScores !== undefined)
-                args.push('WITHSCORES');
-            if(options !== undefined && options.withPayloads !== undefined)
-                args.push('WITHPAYLOADS');
-            const response = await this.sendCommand('FT.SUGGET', args);
-            return this.handleResponse(response);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        let args = [key, prefix];
+        if(options !== undefined && options.fuzzy !== undefined)
+            args.push('FUZZY');
+        if(options !== undefined && options.max !== undefined)   
+            args = args.concat(['MAX', options.max.toString()]);
+        if(options !== undefined && options.withScores !== undefined)
+            args.push('WITHSCORES');
+        if(options !== undefined && options.withPayloads !== undefined)
+            args.push('WITHPAYLOADS');
+        const response = await this.sendCommand('FT.SUGGET', args);
+        return this.handleResponse(response);
     }
 
     /**
@@ -440,13 +375,8 @@ export class Redisearch extends Module {
      * @param suggestion The suggestion
      */
     async sugdel(key: string, suggestion: string): Promise<number> {
-        try {
-            const response = await this.sendCommand('FT.SUGDEL', [key, suggestion]);
-            return this.handleResponse(response);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const response = await this.sendCommand('FT.SUGDEL', [key, suggestion]);
+        return this.handleResponse(response);
     }
 
     /**
@@ -454,13 +384,8 @@ export class Redisearch extends Module {
      * @param key The key
      */
     async suglen(key: string): Promise<number> {
-        try {
-            const response = await this.sendCommand('FT.SUGLEN', key);
-            return this.handleResponse(response);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const response = await this.sendCommand('FT.SUGLEN', key);
+        return this.handleResponse(response);
     }
 
     /**
@@ -472,16 +397,11 @@ export class Redisearch extends Module {
      * @returns 'OK'
      */
     async synupdate(index: string, groupId: number, terms: string[], skipInitialScan = false): Promise<'OK'> {
-        try {
-            const args = [index, groupId].concat(terms);
-            if(skipInitialScan === true)
-                args.push('SKIPINITIALSCAN');
-            const response = await this.sendCommand('FT.SYNUPDATE', args);
-            return this.handleResponse(response);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const args = [index, groupId].concat(terms);
+        if(skipInitialScan === true)
+            args.push('SKIPINITIALSCAN');
+        const response = await this.sendCommand('FT.SYNUPDATE', args);
+        return this.handleResponse(response);
     }
 
     /**
@@ -490,13 +410,8 @@ export class Redisearch extends Module {
      * @returns A list of synonym terms and their synonym group ids.  
      */
     async syndump(index: string): Promise<{[key: string]: string | number}> {
-        try {
-            const response = await this.sendCommand('FT.SYNDUMP', [index]);
-            return this.handleResponse(response);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const response = await this.sendCommand('FT.SYNDUMP', [index]);
+        return this.handleResponse(response);
     }
 
     /**
@@ -507,22 +422,17 @@ export class Redisearch extends Module {
      * @returns An array, in which each element represents a misspelled term from the query
      */
     async spellcheck(index: string, query: string, options?: FTSpellCheck): Promise<string[]>  {
-        try {
-            let args = [index, query];
-            if(options !== undefined && options.distance !== undefined)
-                args = args.concat(['DISTANCE', options.distance])
-            if(options !== undefined && options.terms !== undefined) {
-                args.push('TERMS');
-                for(const term of options.terms) {
-                    args = args.concat([term.type, term.dict]);
-                }
+        let args = [index, query];
+        if(options !== undefined && options.distance !== undefined)
+            args = args.concat(['DISTANCE', options.distance])
+        if(options !== undefined && options.terms !== undefined) {
+            args.push('TERMS');
+            for(const term of options.terms) {
+                args = args.concat([term.type, term.dict]);
             }
-            const response = await this.sendCommand('FT.SPELLCHECK', args);
-            return this.handleResponse(response);
         }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const response = await this.sendCommand('FT.SPELLCHECK', args);
+        return this.handleResponse(response);
     }
     
     /**
@@ -532,13 +442,8 @@ export class Redisearch extends Module {
      * @returns The number of new terms that were added
      */
     async dictadd(dict: string, terms: string[]): Promise<number> {
-        try {
-            const response = await this.sendCommand('FT.DICTADD', [dict].concat(terms));
-            return this.handleResponse(response);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const response = await this.sendCommand('FT.DICTADD', [dict].concat(terms));
+        return this.handleResponse(response);
     }
 
     /**
@@ -548,13 +453,8 @@ export class Redisearch extends Module {
      * @returns The number of terms that were deleted
      */
     async dictdel(dict: string, terms: string[]): Promise<number> {
-        try {
-            const response = await this.sendCommand('FT.DICTDEL', [dict].concat(terms));
-            return this.handleResponse(response);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const response = await this.sendCommand('FT.DICTDEL', [dict].concat(terms));
+        return this.handleResponse(response);
     }
 
     /**
@@ -563,13 +463,8 @@ export class Redisearch extends Module {
      * @returns An array, where each element is term
      */
     async dictdump(dict: string): Promise<string> {
-        try {
-            const response = await this.sendCommand('FT.DICTDUMP', [dict]);
-            return this.handleResponse(response);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const response = await this.sendCommand('FT.DICTDUMP', [dict]);
+        return this.handleResponse(response);
     }
 
     /**
@@ -578,13 +473,8 @@ export class Redisearch extends Module {
      * @returns A nested array of keys and values. 
      */
     async info(index: string): Promise<FTInfo> {
-        try {
-            const response = await this.sendCommand('FT.INFO', [index]);
-            return this.handleResponse(response);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const response = await this.sendCommand('FT.INFO', [index]);
+        return this.handleResponse(response);
     }
 
     /**
@@ -595,16 +485,11 @@ export class Redisearch extends Module {
      * @returns If 'SET' command, returns 'OK' for valid runtime-settable option names and values. If 'GET' command, returns a string with the current option's value.
      */
     async config(command: 'GET' | 'SET' | 'HELP', option: string, value?: string): Promise<FTConfig> {
-        try {
-            const args = [command, option];
-            if(command === 'SET')
-                args.push(value);
-            const response = await this.sendCommand('FT.CONFIG', args);
-            return this.handleResponse(response);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const args = [command, option];
+        if(command === 'SET')
+            args.push(value);
+        const response = await this.sendCommand('FT.CONFIG', args);
+        return this.handleResponse(response);
     }
 }
 

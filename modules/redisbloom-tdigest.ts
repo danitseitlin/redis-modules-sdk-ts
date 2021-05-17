@@ -21,12 +21,7 @@ export class RedisBloomTDigest extends Module {
      * @returns OK on success, error otherwise
      */
     async create(key: string, compression: number): Promise<'OK'> {
-        try {
-            return await this.sendCommand('TDIGEST.CREATE', [key, `${compression}`]);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('TDIGEST.CREATE', [key, `${compression}`]);
     }
 
     /**
@@ -35,12 +30,7 @@ export class RedisBloomTDigest extends Module {
      * @returns OK on success, error otherwise
      */
     async reset(key: string): Promise<'OK'> {
-        try {
-            return await this.sendCommand('TDIGEST.RESET', [key]);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('TDIGEST.RESET', [key]);
     }
 
     /**
@@ -50,15 +40,10 @@ export class RedisBloomTDigest extends Module {
      * @returns OK on success, error otherwise
      */
     async add(key: string, parameters: TDigestAddParameters[]): Promise<'OK'> {  
-        try {
-            let args = [key]
-            for(const pair of parameters)
-                args = args.concat([`${pair.value}`, `${pair.weight}`])
-            return await this.sendCommand('TDIGEST.ADD', args);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        let args = [key]
+        for(const pair of parameters)
+            args = args.concat([`${pair.value}`, `${pair.weight}`])
+        return await this.sendCommand('TDIGEST.ADD', args);
     }
 
     /**
@@ -68,12 +53,7 @@ export class RedisBloomTDigest extends Module {
      * @returns OK on success, error otherwise
      */
     async merge(fromKey: string, toKey: string): Promise<'OK'> {
-        try {
-            return await this.sendCommand('TDIGEST.MERGE', [toKey, fromKey]);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('TDIGEST.MERGE', [toKey, fromKey]);
     }
 
     /**
@@ -82,12 +62,7 @@ export class RedisBloomTDigest extends Module {
      * @returns DBL_MAX if the sketch is empty
      */
     async min(key: string): Promise<number> {
-        try {
-            return await this.sendCommand('TDIGEST.MIN', [key]);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('TDIGEST.MIN', [key]);
     }
 
     /**
@@ -96,12 +71,7 @@ export class RedisBloomTDigest extends Module {
      * @returns DBL_MIN if the sketch is empty
      */
     async max(key: string): Promise<number> {
-        try {
-            return await this.sendCommand('TDIGEST.MAX', [key]);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('TDIGEST.MAX', [key]);
     }
 
     /**
@@ -111,12 +81,7 @@ export class RedisBloomTDigest extends Module {
      * @returns Double value estimate of the cutoff such that a specified fraction of the data added to this TDigest would be less than or equal to the cutoff
      */
     async quantile(key: string, quantile: number): Promise<number> {
-        try {
-            return await this.sendCommand('TDIGEST.QUANTILE', [key, quantile]);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('TDIGEST.QUANTILE', [key, quantile]);
     }
 
     /**
@@ -126,12 +91,7 @@ export class RedisBloomTDigest extends Module {
      * @returns Returns compression, capacity, total merged and unmerged nodes, the total compressions made up to date on that key, and merged and unmerged weight
      */
     async cdf(key: string, value: number): Promise<number> {
-        try {
-            return await this.sendCommand('TDIGEST.CDF', [key, value]);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('TDIGEST.CDF', [key, value]);
     }
 
     /**
@@ -139,13 +99,8 @@ export class RedisBloomTDigest extends Module {
      * @param key The name of the sketch
      */
     async info(key: string): Promise<TDigestInfo> {
-        try {
-            const response = await this.sendCommand('TDIGEST.INFO', [key]);
-            return this.handleResponse(response)
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const response = await this.sendCommand('TDIGEST.INFO', [key]);
+        return this.handleResponse(response)
     }
 }
 

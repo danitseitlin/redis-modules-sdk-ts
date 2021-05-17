@@ -22,17 +22,12 @@ export class RedisBloom extends Module {
      * @param options The additional optional parameters
      */
     async reserve(key: string, errorRate: number, capacity: number, options?: BFReserveParameter): Promise<'OK'> {
-        try {
-            const args = [key, errorRate, capacity];
-            if(options !== undefined && options.expansion !== undefined)
-                args.push(options.expansion);
-            if(options !== undefined && options.nonscaling === true)
-                args.push('NONSCALING');
-            return await this.sendCommand('BF.RESERVE', args);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const args = [key, errorRate, capacity];
+        if(options !== undefined && options.expansion !== undefined)
+            args.push(options.expansion);
+        if(options !== undefined && options.nonscaling === true)
+            args.push('NONSCALING');
+        return await this.sendCommand('BF.RESERVE', args);
     }
 
     /**
@@ -41,12 +36,7 @@ export class RedisBloom extends Module {
      * @param item The item of the 'BF.ADD' command
      */
     async add(key: string, item: string): Promise<BFResponse> {
-        try {
-            return await this.sendCommand('BF.ADD', [key, item])
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('BF.ADD', [key, item])
     }
 
     /**
@@ -54,12 +44,7 @@ export class RedisBloom extends Module {
      * @param items The items of the 'BF.MADD' command
      */
     async madd(key: string, items: string[]): Promise<BFResponse[]> {
-        try {
-            return await this.sendCommand('BF.MADD', [key].concat(items))
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('BF.MADD', [key].concat(items))
     }
 
     /**
@@ -69,24 +54,19 @@ export class RedisBloom extends Module {
      * @param options The additional optional parameters of the 'BF.INSERT' command
      */
     async insert(key: string, items: string[], options?: BFInsertParameters): Promise<BFResponse[]> {
-        try {
-            let args = [key];
-            if(options !== undefined && options.capacity !== undefined)
-                args = args.concat(['CAPACITY', options.capacity.toString()]);
-            if(options !== undefined && options.error !== undefined)
-                args = args.concat(['ERROR', options.error]);
-            if(options !== undefined && options.expansion !== undefined)
-                args = args.concat(['EXPANSION', options.expansion]);
-            if(options !== undefined && options.nocreate !== undefined)
-                args.push('NOCREATE');
-            if(options !== undefined && options.noscaling !== undefined)
-                args.push('NOSCALING');
-            args.push('ITEMS')
-            return await this.sendCommand('BF.INSERT', args.concat(items));
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        let args = [key];
+        if(options !== undefined && options.capacity !== undefined)
+            args = args.concat(['CAPACITY', options.capacity.toString()]);
+        if(options !== undefined && options.error !== undefined)
+            args = args.concat(['ERROR', options.error]);
+        if(options !== undefined && options.expansion !== undefined)
+            args = args.concat(['EXPANSION', options.expansion]);
+        if(options !== undefined && options.nocreate !== undefined)
+            args.push('NOCREATE');
+        if(options !== undefined && options.noscaling !== undefined)
+            args.push('NOSCALING');
+        args.push('ITEMS')
+        return await this.sendCommand('BF.INSERT', args.concat(items));
     }
 
     /**
@@ -95,12 +75,7 @@ export class RedisBloom extends Module {
      * @param item The key of the 'BF.EXISTS' command
      */
     async exists(key: string, item: string): Promise<BFResponse> {
-        try {
-            return await this.sendCommand('BF.EXISTS', [key, item]);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('BF.EXISTS', [key, item]);
     }
 
     /**
@@ -109,12 +84,7 @@ export class RedisBloom extends Module {
      * @param items The items of the 'BF.MEXISTS' command
      */
     async mexists(key: string, items: string[]): Promise<BFResponse[]> {
-        try {
-            return await this.sendCommand('BF.MEXISTS', [key].concat(items))
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('BF.MEXISTS', [key].concat(items))
     }
 
     /**
@@ -123,12 +93,7 @@ export class RedisBloom extends Module {
      * @param iterator The iterator of the 'BF.SCANDUMP' command
      */
     async scandump(key: string, iterator: number): Promise<string[]> {
-        try {
-            return await this.sendCommand('BF.SCANDUMP', [key, iterator])
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('BF.SCANDUMP', [key, iterator])
     }
 
     /**
@@ -138,12 +103,7 @@ export class RedisBloom extends Module {
      * @param data The data of the 'BF.LOADCHUNK' command
      */
     async loadchunk(key: string, iterator: number, data: string): Promise<'OK'> {
-        try {
-            return await this.sendCommand('BF.LOADCHUNK', [key, iterator, data]);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('BF.LOADCHUNK', [key, iterator, data]);
     }
 
     /**
@@ -151,12 +111,7 @@ export class RedisBloom extends Module {
      * @param key The key of the 'BF.INFO' command
      */
     async info(key: string): Promise<string[]> {
-        try {
-            return await this.sendCommand('BF.INFO', [key]);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('BF.INFO', [key]);
     }
 }
 

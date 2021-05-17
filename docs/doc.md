@@ -340,21 +340,21 @@ expect(response).to.eql('OK', 'The response of tensorset')
 await client.disconnect();
 ```
 ### Functions list :floppy_disk:
-| Functions  | Command         |
-|:---------- |:--------------- |
-| tensorset  | AI.TENSORSET    |
-| tensorget  | AI.TENSORGET    |
-| modelset   | AI.MODELSET     |
-| modelget   | AI.MODELGET     |
-| modeldel   | AI.MODELDEL     |
-| modelrun   | AI.MODELRUN     |
-| modelscan  | AI._MODELSCAN   |
-| scriptset  | AI.SCRIPTSET    |
-| scriptget  | AI.SCRIPTGET    |
-| scriptdel  | AI.SCRIPTDEL    |
-| scriptrun  | AI.SCRIPTRUN    |
-| scriptscan | AI._SCRIPTSCAN  |
-| dagrun     | AI.DAGRUN       |
-| dagrunRO   | AI.DAGRUN_RO    |
-| info       | AI.INFO         |
-| config     | AI.CONFIG       |
+| Functions     | Command          |
+|:------------- |:---------------- |
+| tensorset     | AI.TENSORSET     |
+| tensorget     | AI.TENSORGET     |
+| modelstore    | AI.MODELSTORE    |
+| modelget      | AI.MODELGET      |
+| modeldel      | AI.MODELDEL      |
+| modelexecute  | AI.MODELEXECUTE  |
+| modelscan     | AI._MODELSCAN    |
+| scriptset     | AI.SCRIPTSET     |
+| scriptget     | AI.SCRIPTGET     |
+| scriptdel     | AI.SCRIPTDEL     |
+| scriptexecute | AI.SCRIPTEXECUTE |
+| scriptscan    | AI._SCRIPTSCAN   |
+| dagexecute    | AI.DAGEXECUTE    |
+| dagexecuteRO  | AI.DAGEXECUTE_RO |
+| info          | AI.INFO          |
+| config        | AI.CONFIG        |
