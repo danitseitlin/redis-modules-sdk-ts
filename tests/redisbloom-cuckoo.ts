@@ -3,12 +3,11 @@ import { expect } from 'chai'
 import { RedisBloomCuckoo } from '../modules/redisbloom-cuckoo';
 import { Redis } from '../modules/redis';
 const key1 = 'key1cuckoo'
-const key2 = 'key2cuckoo'
-const key3 = 'key3cuckoo'
+const key2 = '1'
+const key3 = 'cuckoo'
+const chunks: {iterator: number, data: string}[] = [];
 let client: RedisBloomCuckoo;
 let redis: Redis;
-let dataIterator: number;
-let data: string;
 
 describe('RedisBloom Cuckoo filter testing', async function() {
     before(async () => {
@@ -28,8 +27,16 @@ describe('RedisBloom Cuckoo filter testing', async function() {
         await redis.disconnect();
     })
 
+    it('reserve function', async () => {
+        const response = await client.reserve(key2, 100, {
+            bucketSize: 1
+        });
+        expect(response).to.equal('OK', 'The response of the \'CF.RESERVE\' command');
+    })
     it('add function', async () => {
-        const response = await client.add(key1, 'item');
+        let response = await client.add(key1, 'item');
+        expect(response).to.equal(1, 'The response of the CF.ADD command');
+        response = await client.add(key2, 'X');
         expect(response).to.equal(1, 'The response of the CF.ADD command');
     });
     it('addnx function', async () => {
@@ -52,19 +59,25 @@ describe('RedisBloom Cuckoo filter testing', async function() {
         const response = await client.count(key1, 'item1');
         expect(response).to.equal(1, 'The response of the CF.COUNT command');
     });
-    it.skip('scandump function', async () => {
-        await client.add(key2, 'item');
-        await client.redis.del(key2);
-        const response = await client.scandump(key1, 123)
-        console.log(response)
-        dataIterator = parseInt(response[0])
-        expect(dataIterator).to.equal(1, 'The chunk data iterator');
-        data = response[1];
-        expect(data).to.not.equal('', 'The chunk data')
+    it('scandump function', async () => {
+        let iter = 0;
+        let response = await client.scandump(key2, iter)
+        let data = response[1]
+        chunks.push({iterator: iter, data: data})
+        iter = parseInt(response[0])
+        while(iter != 0){
+            response = await client.scandump(key2, iter)
+            iter = parseInt(response[0])
+            data = response[1]
+            chunks.push({iterator: iter, data: data})
+        }
+        console.log(chunks)
+        expect(chunks.length).gt(0, `The count of chunks of key ${key2}`)
     });
     it.skip('loadchunk function', async () => {
-        const response = await client.loadchunk(key2, dataIterator, data);
-        console.log(response)
+        const chunk = chunks[1];
+        const res = await client.loadchunk(key2, chunk.iterator, chunk.data.replace(/�/g, 'fffd'));
+        expect(res).to.equal('OK', `The response of load chunk with iterator ${chunk.iterator}`)
     });
     it('info function', async () => {
         const response = await client.info(key1);

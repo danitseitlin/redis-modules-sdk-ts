@@ -112,6 +112,7 @@ export type RedisBloomCMKMixin = {
  * The Redis 'All in One' RedisBloomCuckoo module functions
  */
 export type RedisBloomCuckooMixin = {
+	bloom_cuckoo_module_reserve: typeof RedisBloomCuckoo.prototype.reserve,
 	bloom_cuckoo_module_add: typeof RedisBloomCuckoo.prototype.add,
 	bloom_cuckoo_module_addnx: typeof RedisBloomCuckoo.prototype.addnx,
 	bloom_cuckoo_module_insert: typeof RedisBloomCuckoo.prototype.insert,
