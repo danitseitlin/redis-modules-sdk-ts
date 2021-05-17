@@ -15,7 +15,7 @@ export class RedisBloomCuckoo extends Module {
     }
 
     /**
-     * Creating an empty Bloom Cuckoo filter with a given desired error ratio and initial capacity.
+     * Creating an empty Bloom Cuckoo filter with a given initial capacity.
      * @param key The key under which the filter is to be found
      * @param capacity The number of entries you intend to add to the filter. Performance will begin to degrade after adding more items than this number. The actual degradation will depend on how far the limit has been exceeded. Performance will degrade linearly as the number of entries grow exponentially. 
      * @param options The additional optional parameters
