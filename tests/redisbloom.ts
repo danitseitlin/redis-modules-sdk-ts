@@ -72,9 +72,12 @@ describe('RedisBloom Module testing', async function() {
             chunks.push({iterator: iter, data: data})
         }
 
+        console.log(await client.redis.del(key1));
+        
+
         for(const chunk of chunks) {
             console.log(chunk)
-            const res = await client.loadchunk(key2, chunk.iterator, chunk.data);
+            const res = await client.loadchunk(key1, chunk.iterator, chunk.data);
             expect(res).to.equal('OK', `The response of load chunk with iterator ${chunk.iterator}`)
         }
 
