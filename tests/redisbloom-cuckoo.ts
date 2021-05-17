@@ -36,7 +36,7 @@ describe('RedisBloom Cuckoo filter testing', async function() {
     it('add function', async () => {
         let response = await client.add(key1, 'item');
         expect(response).to.equal(1, 'The response of the CF.ADD command');
-        response = await client.add(key2, '1');
+        response = await client.add(key2, 'X');
         expect(response).to.equal(1, 'The response of the CF.ADD command');
     });
     it('addnx function', async () => {
@@ -63,20 +63,20 @@ describe('RedisBloom Cuckoo filter testing', async function() {
         let iter = 0;
         let response = await client.scandump(key2, iter)
         let data = response[1]
-        chunks.push({iterator: iter, data: `"${data}"`})
+        chunks.push({iterator: iter, data: data})
         iter = parseInt(response[0])
         while(iter != 0){
             response = await client.scandump(key2, iter)
             iter = parseInt(response[0])
             data = response[1]
-            chunks.push({iterator: iter, data: `"${data}"`})
+            chunks.push({iterator: iter, data: data})
         }
         console.log(chunks)
         expect(chunks.length).gt(0, `The count of chunks of key ${key2}`)
     });
     it('loadchunk function', async () => {
         const chunk = chunks[1];
-        const res = await client.loadchunk(key2, chunk.iterator, chunk.data);
+        const res = await client.loadchunk(key2, chunk.iterator, chunk.data.replace(/�/g, 'fffd'));
         expect(res).to.equal('OK', `The response of load chunk with iterator ${chunk.iterator}`)
     });
     it('info function', async () => {
