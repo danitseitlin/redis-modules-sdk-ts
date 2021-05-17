@@ -72,8 +72,10 @@ describe('RedisBloom Module testing', async function() {
             chunks.push({iterator: iter, data: data})
         }
 
+        console.log(chunks)
+
         console.log(await client.redis.del(key1));
-        
+        console.log(await client.redis.get(key1));
 
         for(const chunk of chunks) {
             console.log(chunk)
