@@ -56,7 +56,6 @@ export class Module {
      * @param error The message of the error
      */
     handleError(error: string): any {
-        ///const err = `${this.name} class (${this}): ${error}`
         if(this.isHandleError)
             throw new Error(error);
         return error;
