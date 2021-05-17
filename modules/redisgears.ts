@@ -19,12 +19,7 @@ export class RedisGears extends Module {
      * @param id The id of the execution
      */
     async abortExecution(id: string): Promise<'OK'> {
-        try {
-            return await this.sendCommand('RG.ABORTEXECUTION', [id]);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('RG.ABORTEXECUTION', [id]);
     }
 
     /**
@@ -32,12 +27,7 @@ export class RedisGears extends Module {
      * @param key A list of keys
      */
     async configGet(key: string[]): Promise<number> {
-        try {
-            return await this.sendCommand('RG.CONFIGGET', key);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('RG.CONFIGGET', key);
     }
 
     /**
@@ -45,15 +35,10 @@ export class RedisGears extends Module {
      * @param keyvalue A key value array, i.e. [['key', 'value]]
      */
     async configSet(keyvalues: string[][]): Promise<'OK'[]> {
-        try {
-            const args = [];
-            for(const keyvalue of keyvalues)
-                args.concat(keyvalue)
-            return await this.sendCommand('RG.CONFIGSET', args);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const args = [];
+        for(const keyvalue of keyvalues)
+            args.concat(keyvalue)
+        return await this.sendCommand('RG.CONFIGSET', args);
     }
 
     /**
@@ -61,36 +46,21 @@ export class RedisGears extends Module {
      * @param id The id of the execution
      */
     async dropExecution(id: string): Promise<'OK'> {
-        try {
-            return await this.sendCommand('RG.DROPEXECUTION', [id]);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('RG.DROPEXECUTION', [id]);
     }
 
     /**
      * Dumping all of the executions
      */
     async dumpExecutions(): Promise<string[][]> {
-        try {
-            return await this.sendCommand('RG.DUMPEXECUTIONS');
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('RG.DUMPEXECUTIONS');
     }
 
     /**
      * Dumping all of the registrations
      */
     async dumpRegistrations(): Promise<string[][]> {
-        try {
-            return await this.sendCommand('RG.DUMPREGISTRATIONS');
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('RG.DUMPREGISTRATIONS');
     }
 
     /**
@@ -99,15 +69,10 @@ export class RedisGears extends Module {
      * @param options The additional optional parameters
      */
     async getExecution(id: string, options?: RGGetExecutionParameters): Promise<string[][]> {
-        try {
-            const args = [id.toString()];
-            if(options !== undefined && options.shard === true) args.push('SHARD');
-            if(options !== undefined && options.cluster === true) args.push('CLUSTER');
-            return await this.sendCommand('RG.GETEXECUTION', args);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const args = [id.toString()];
+        if(options !== undefined && options.shard === true) args.push('SHARD');
+        if(options !== undefined && options.cluster === true) args.push('CLUSTER');
+        return await this.sendCommand('RG.GETEXECUTION', args);
     }
 
     /**
@@ -115,12 +80,7 @@ export class RedisGears extends Module {
      * @param id The id of the execution
      */
     async getResults(id: string): Promise<string> {
-        try {
-            return await this.sendCommand('RG.GETRESULTS', [id])
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('RG.GETRESULTS', [id])
     }
 
     /**
@@ -128,24 +88,14 @@ export class RedisGears extends Module {
      * @param id The id of the execution
      */
     async getResultsBlocking(id: string): Promise<string> {
-        try {
-            return await this.sendCommand('RG.GETRESULTSBLOCKING', [id])
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('RG.GETRESULTSBLOCKING', [id])
     }
     
     /**
      * Retrieving information about the cluster
      */
     async infocluster(): Promise<string[]> {
-        try {
-            return await this.sendCommand('RG.INFOCLUSTER')
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('RG.INFOCLUSTER')
     }
 
     /**
@@ -154,51 +104,31 @@ export class RedisGears extends Module {
      * @param options The additional optional arguments
      */
     async pyexecute(func: string, options?: RGPyExecuteParameters): Promise<string> {
-        try {
-            const args = [func];
-            if(options !== undefined && options.unblocking === true) args.push('UNBLOCKING');
-            if(options !== undefined && options.requirements !== undefined) args.concat(['REQUIREMENTS'].concat(options.requirements));
-            return await this.sendCommand('RG.PYEXECUTE', args);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const args = [func];
+        if(options !== undefined && options.unblocking === true) args.push('UNBLOCKING');
+        if(options !== undefined && options.requirements !== undefined) args.concat(['REQUIREMENTS'].concat(options.requirements));
+        return await this.sendCommand('RG.PYEXECUTE', args);
     }
 
     /**
      * Retrieving memory usage statistics from the 'Python interpreter'
      */
     async pystats(): Promise<string[]> {
-        try {
-            return await this.sendCommand('RG.PYSTATS');
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('RG.PYSTATS');
     }
 
     /**
      * Retrieving a list of all the python requirements available
      */
     async pydumpreqs(): Promise<string[]> {
-        try {
-            return await this.sendCommand('RG.PYDUMPREQS');
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('RG.PYDUMPREQS');
     }
 
     /**
      * Refreshing the node's view of the cluster's topology
      */
     async refreshCluster(): Promise<'OK'> {
-        try {
-            return await this.sendCommand('RG.REFRESHCLUSTER');
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('RG.REFRESHCLUSTER');
     }
 
     /**
@@ -207,12 +137,7 @@ export class RedisGears extends Module {
      * @param args The additional arguments
      */
     async trigger(trigger: string, args: string[]): Promise<string[]> {
-        try {
-            return await this.sendCommand('RG.TRIGGER', [trigger].concat(args));
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('RG.TRIGGER', [trigger].concat(args));
     }
 
     /**
@@ -220,12 +145,7 @@ export class RedisGears extends Module {
      * @param id The id of the execution
      */
     async unregister(id: string): Promise<'OK'> {
-        try {
-            return await this.sendCommand('RG.UNREGISTER', [id]);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('RG.UNREGISTER', [id]);
     }
 }
 
