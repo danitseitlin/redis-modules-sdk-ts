@@ -15,6 +15,22 @@ export class RedisBloomCuckoo extends Module {
     }
 
     /**
+     * Creating an empty Bloom Cuckoo filter with a given desired error ratio and initial capacity.
+     * @param key The key under which the filter is to be found
+     * @param errorRate The desired probability for false positives. This should be a decimal value between 0 and 1. For example, for a desired false positive rate of 0.1% (1 in 1000), error_rate should be set to 0.001. The closer this number is to zero, the greater the memory consumption per item and the more CPU usage per operation.
+     * @param capacity The number of entries you intend to add to the filter. Performance will begin to degrade after adding more items than this number. The actual degradation will depend on how far the limit has been exceeded. Performance will degrade linearly as the number of entries grow exponentially. 
+     * @param options The additional optional parameters
+     */
+    async reserve(key: string, errorRate: number, capacity: number, options?: CFReserveParameter): Promise<'OK'> {
+        const args = [key, errorRate, capacity];
+        if(options !== undefined && options.expansion !== undefined)
+            args.push(options.expansion);
+        if(options !== undefined && options.nonscaling === true)
+            args.push('NONSCALING');
+        return await this.sendCommand('CF.RESERVE', args);
+    }
+
+    /**
      * Adding an item to the cuckoo filter, creating the filter if it does not exist.
      * @param key The name of the filter
      * @param item The item to add
@@ -133,3 +149,13 @@ export type CFInsertParameters = {
  * @param 0 Stands for 'false'
  */
 export type CFResponse = '1' | '0';
+
+/**
+ * The additional optional parameters of the 'CF.RESERVE' command
+ * @param expansion If a new sub-filter is created, its size will be the size of the current filter multiplied by expansion.
+ * @param nonscaling Prevents the filter from creating additional sub-filters if initial capacity is reached.
+ */
+ export type CFReserveParameter = {
+    expansion?: number,
+    nonscaling?: boolean
+}

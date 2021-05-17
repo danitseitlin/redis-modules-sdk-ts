@@ -29,10 +29,12 @@ describe('RedisBloom Cuckoo filter testing', async function() {
         await redis.disconnect();
     })
 
+    it('reserve function', async () => {
+        const response = await client.reserve(key2, 0.01, 100);
+        expect(response).to.equal('OK', 'The response of the \'BF.RESERVE\' command');
+    })
     it('add function', async () => {
         let response = await client.add(key1, 'item');
-        expect(response).to.equal(1, 'The response of the CF.ADD command');
-        response = await client.add(key2, '1');
         expect(response).to.equal(1, 'The response of the CF.ADD command');
     });
     it('addnx function', async () => {
