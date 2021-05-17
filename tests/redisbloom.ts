@@ -72,6 +72,7 @@ describe('RedisBloom Module testing', async function() {
 // 127.0.0.1:6379> BF.SCANDUMP 1 0
 // 1) (integer) 1
 // 2) "\x03\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x05\x00\x00\x00\x02\x00\x00\x00\x90\x00\x00\x00\x00\x00\x00\x00\x80\x04\x00\x00\x00\x00\x00\x00\x03\x00\x00\x00\x00\x00\x00\x00{\x14\xaeG\xe1zt?\xe9\x86/\xb25\x0e&@\b\x00\x00\x00d\x00\x00\x00\x00\x00\x00\x00\x00
+//    "\x03\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x05\x00\x00\x00\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x03\x00\x00\x00\x00\x00\x00\x00{\x14�G�zt?�/�5\x0E&@\b\x00\x00\x00d\x00\x00\x00\x00\x00\x00\x00\x00"   
         await client.add(key2, '1')
         await client.add(key2, '2')
         await client.add(key2, '3')
@@ -89,8 +90,8 @@ describe('RedisBloom Module testing', async function() {
 
         console.log(chunks)
 
-        console.log(await client.redis.del(key2));
-        console.log(await client.redis.get(key2));
+        // console.log(await client.redis.del(key2));
+        // console.log(await client.redis.get(key2));
         const chunk = chunks[1];
         const res = await client.loadchunk(key2, chunk.iterator, chunk.data);
             expect(res).to.equal('OK', `The response of load chunk with iterator ${chunk.iterator}`)
