@@ -119,20 +119,9 @@ describe('AI testing', async function() {
         expect(response).to.eql('OK', 'The response of config')
     });
     it('dagexecute function', async () => {
-        const blob = fs.readFileSync('./tests/data/models/graph.pb');
-        await client.modelstore('mymodel-dag', 'TF', 'CPU', blob, {
-            inputs: ['a', 'b'],
-            inputsCount: 2,
-            outputs: ['c'],
-            outputsCount: 1,
-            tag: 'test_tag'
-        })
         await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3]);
-        await client.tensorset('tensorB', 'FLOAT', [1, 2], [3, 5]);
         const response = await client.dagexecute([
             'AI.TENSORGET tensorA VALUES'
-            // 'AI.TENSORSET tensorB FLOAT INPUTS 1 2 OUTPUTS 3 5',
-            // 'AI.MODELEXECUTE mymodel-dag INPUTS 2 tensorA tensorB OUTPUTS 1 tensorC'
         ], {
             keyCount: 1,
             keys: ['tensorA']
@@ -145,25 +134,18 @@ describe('AI testing', async function() {
         ], 'The response of dagexecute')
     });
     it('dagexecuteRO function', async () => {
-        const blob = fs.readFileSync('./tests/data/models/graph.pb');
-        await client.modelstore('mymodel-dag', 'TF', 'CPU', blob, {
-            inputs: ['a', 'b'],
-            inputsCount: 2,
-            outputs: ['c'],
-            outputsCount: 1,
-            tag: 'test_tag'
-        })
         await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3]);
-        await client.tensorset('tensorB', 'FLOAT', [1, 2], [3, 5]);
         const response = await client.dagexecuteRO([
             'AI.TENSORGET tensorA VALUES'
-            // 'AI.TENSORSET tensorA FLOAT INPUTS 1 2 OUTPUTS 2 3',
-            // 'AI.TENSORSET tensorB FLOAT INPUTS 1 2 OUTPUTS 3 5',
-            //'AI.MODELEXECUTE mymodel-dag INPUTS 2 tensorA tensorB OUTPUTS 1 tensorC'
         ], {
             keyCount: 1,
             keys: ['tensorA']
         })
-        expect(response).to.eql([], 'The response of dagexecute_RO')
+        expect(response).to.eql([
+            [
+                "2",
+                "3"
+            ]
+        ], 'The response of dagexecute_RO')
     });
 })
