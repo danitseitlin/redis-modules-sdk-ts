@@ -5,11 +5,9 @@ import { Redis } from '../modules/redis';
 let client: RedisBloom;
 let redis: Redis;
 const key1 = 'key1bloom';
-const key2 = 'key2bloom';
+const key2 = '1';
 const item1 = 'item1';
-const responses = []
-let dataIterator: number;
-let data: string;
+const chunks: {iterator: number, data: string}[] = [];
 
 describe('RedisBloom Module testing', async function() {
     before(async () => {
@@ -30,7 +28,7 @@ describe('RedisBloom Module testing', async function() {
     })
     
     it('reserve function', async () => {
-        const response = await client.reserve(key2, 0.1, 1);
+        const response = await client.reserve(key2, 0.01, 100);
         expect(response).to.equal('OK', 'The response of the \'BF.RESERVE\' command');
     })
     it('add function', async () => {
@@ -58,38 +56,23 @@ describe('RedisBloom Module testing', async function() {
         expect(response[0]).to.equal('Capacity', 'The first item of the information')
         expect(response[1]).to.equal(100, 'The value of the \'Capacity\' item')
     });
-    it.skip('scandump function', async () => {
-        //responses = [];
-        let response = await client.scandump(key2, 0)
-        console.log(response)
-        dataIterator = parseInt(response[0])
-        expect(dataIterator).to.equal(1, 'The chunk data iterator');
-        while(parseInt(response[0]) > 0){
-            responses.push(response);
-            response = await client.scandump(key2, dataIterator)
-            dataIterator = parseInt(response[0])
-            console.log(response)
+    it('scandump function', async () => {
+        let iter = 0;
+        let response = await client.scandump(key2, iter)
+        let data = response[1]
+        chunks.push({iterator: iter, data: data})
+        iter = parseInt(response[0])
+        while(iter != 0){
+            response = await client.scandump(key2, iter)
+            iter = parseInt(response[0])
+            data = response[1]
+            chunks.push({iterator: iter, data: data})
         }
-        //const buffer = Buffer.from(response[1], 'hex');
-        //console.log(buffer.toString())
-        //data = buffer.toString('hex')//Buffer.from(response[1], 'utf16');//Buffer.from(response[1]).toString();
-        console.log(data)
-        expect(data).to.not.equal('', 'The chunk data')
+        expect(chunks.length).gt(0, `The count of chunks of key ${key2}`)
     });
-    it.skip('loadchunk function', async () => {
-        await client.redis.del(key2);
-        for(const res of responses) {
-            console.log(`\n=== ${res[0]} ===`)
-            console.log(Buffer.from(res[1], 'ascii').toString('hex'))
-            console.log(Buffer.from(res[1], 'ascii').toString('ascii'))
-            console.log(Buffer.from(res[1], 'ascii').toString('base64'))
-            console.log(Buffer.from(res[1], 'ascii').toString('binary'))
-            console.log(Buffer.from(res[1], 'ascii').toString('utf-8'))
-            console.log(Buffer.from(res[1], 'ascii').toString('utf8'))
-            console.log(Buffer.from(res[1], 'ascii').toString('utf16le'))
-            console.log(await client.loadchunk(key2, res[0], Buffer.from(res[1], 'ascii').toString('utf8')))
-        }
-        //const response = await client.loadchunk(key2, dataIterator, data)
-        //console.log(response)
+    it('loadchunk function', async () => {
+        const chunk = chunks[1];
+        const res = await client.loadchunk(key2, chunk.iterator, chunk.data);
+        expect(res).to.equal('OK', `The response of load chunk with iterator ${chunk.iterator}`)
     });
 });
