@@ -20,15 +20,10 @@ export class RedisIntervalSets extends Module {
      * @param sets A list of sets to create. At least 1 set is required.
      */
     async add(key: string, sets: RISSet[]): Promise<'OK'> {
-        try {
-            let args: (number | string)[] = [key];
-            for(const set of sets)
-                args = args.concat([set.name, set.minimum, set.maximum])
-            return await this.sendCommand('iset.add', args)
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        let args: (number | string)[] = [key];
+        for(const set of sets)
+            args = args.concat([set.name, set.minimum, set.maximum])
+        return await this.sendCommand('iset.add', args)
     }
 
     /**
@@ -37,16 +32,11 @@ export class RedisIntervalSets extends Module {
      * @param setName Optional. The name of specific set. If not passed all interval sets under key will be retrieved. 
      */
     async get(key: string, setName?: string): Promise<RISSet[]> {
-        try {
-            const args = [key];
-            if(setName)
-                args.push(setName)
-            const response = await this.sendCommand('iset.get', args)
-            return this.parseGet(response)
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const args = [key];
+        if(setName)
+            args.push(setName)
+        const response = await this.sendCommand('iset.get', args)
+        return this.parseGet(response)
     }
 
     /**
@@ -55,12 +45,7 @@ export class RedisIntervalSets extends Module {
      * @param setNames Optional. A list of set names to delete. If not passed all interval sets under key will be removed. 
      */
     async del(key: string, setNames?: string[]): Promise<'OK'> {
-        try {
-            return await this.sendCommand('iset.del', [key].concat(setNames))
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('iset.del', [key].concat(setNames))
     }
 
     /**
@@ -69,12 +54,7 @@ export class RedisIntervalSets extends Module {
      * @param score The score of the set
      */
     async score(key: string, score: number): Promise<string[]> {
-        try {
-            return await this.sendCommand('iset.score', [key, score])
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('iset.score', [key, score])
     }
 
     /**
@@ -83,12 +63,7 @@ export class RedisIntervalSets extends Module {
      * @param score The score of the set
      */
     async notScore(key: string, score: number): Promise<string[]> {
-        try {
-            return await this.sendCommand('iset.not_score', [key, score])
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('iset.not_score', [key, score])
     }
 
     /**

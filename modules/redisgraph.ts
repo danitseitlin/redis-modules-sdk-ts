@@ -21,12 +21,7 @@ export class RedisGraph extends Module {
      * @returns Result set
      */
     async query(name: string, query: string): Promise<string[][]> {
-        try {
-            return await this.sendCommand('GRAPH.QUERY', [name, query])
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('GRAPH.QUERY', [name, query])
     }
 
     /**
@@ -36,12 +31,7 @@ export class RedisGraph extends Module {
      * @returns Result set
      */
     async readonlyQuery(name: string, query: string): Promise<string[][]> {
-        try {
-            return await this.sendCommand('GRAPH.RO_QUERY', [name, query])
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('GRAPH.RO_QUERY', [name, query])
     }
 
     /**
@@ -51,12 +41,7 @@ export class RedisGraph extends Module {
      * @returns String representation of a query execution plan, with details on results produced by and time spent in each operation.
      */
     async profile(name: string, query: string): Promise<string[]> {
-        try {
-            return await this.sendCommand('GRAPH.PROFILE', [name, query])
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('GRAPH.PROFILE', [name, query])
     }
 
     /**
@@ -65,12 +50,7 @@ export class RedisGraph extends Module {
      * @returns String indicating if operation succeeded or failed.
      */
     async delete(name: string): Promise<string> {
-        try {
-            return await this.sendCommand('GRAPH.DELETE', [name])
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('GRAPH.DELETE', [name])
     }
 
     /**
@@ -80,12 +60,7 @@ export class RedisGraph extends Module {
      * @returns String representation of a query execution plan
      */
     async explain(name: string, query: string): Promise<string[]> {
-        try {
-            return await this.sendCommand('GRAPH.EXPLAIN', [name, query])
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('GRAPH.EXPLAIN', [name, query])
     }
 
     /**
@@ -94,12 +69,7 @@ export class RedisGraph extends Module {
      * @returns A list containing up to 10 of the slowest queries issued against the given graph ID. 
      */
     async slowlog(id: number): Promise<string[]> {
-        try {
-            return await this.sendCommand('GRAPH.SLOWLOG', [id])
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('GRAPH.SLOWLOG', [id])
     }
 
     /**
@@ -110,16 +80,11 @@ export class RedisGraph extends Module {
      * @returns If 'SET' command, returns 'OK' for valid runtime-settable option names and values. If 'GET' command, returns a string with the current option's value.
      */
     async config(command: 'GET' | 'SET' | 'HELP', option: string, value?: string): Promise<GraphConfigInfo | 'OK' | string | number> {
-        try {
-            const args = [command, option];
-            if(command === 'SET')
-                args.push(value);
-            const response = await this.sendCommand('GRAPH.CONFIG', args);
-            return this.handleResponse(response);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        const args = [command, option];
+        if(command === 'SET')
+            args.push(value);
+        const response = await this.sendCommand('GRAPH.CONFIG', args);
+        return this.handleResponse(response);
     }
 }
 
