@@ -67,6 +67,7 @@ describe('RedisBloom Cuckoo filter testing', async function() {
             data = response[1]
             chunks.push({iterator: iter, data: data})
         }
+        console.log(chunks)
         expect(chunks.length).gt(0, `The count of chunks of key ${key2}`)
     });
     it('loadchunk function', async () => {
