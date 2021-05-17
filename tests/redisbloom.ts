@@ -58,23 +58,38 @@ describe('RedisBloom Module testing', async function() {
         expect(response[0]).to.equal('Capacity', 'The first item of the information')
         expect(response[1]).to.equal(100, 'The value of the \'Capacity\' item')
     });
-    it.skip('scandump function', async () => {
+    it('scandump function', async () => {
         //responses = [];
-        let response = await client.scandump(key2, 0)
-        console.log(response)
-        dataIterator = parseInt(response[0])
-        expect(dataIterator).to.equal(1, 'The chunk data iterator');
-        while(parseInt(response[0]) > 0){
-            responses.push(response);
-            response = await client.scandump(key2, dataIterator)
-            dataIterator = parseInt(response[0])
-            console.log(response)
+        let iter = 0;
+        let response = await client.scandump(key2, iter)
+        let data = response[1]
+        const chunks = [{iterator: iter, data: data}]
+        iter = parseInt(response[0])
+        while(iter != 0){
+            response = await client.scandump(key2, iter)
+            iter = parseInt(response[0])
+            data = response[1]
+            chunks.push({iterator: iter, data: data})
         }
-        //const buffer = Buffer.from(response[1], 'hex');
-        //console.log(buffer.toString())
-        //data = buffer.toString('hex')//Buffer.from(response[1], 'utf16');//Buffer.from(response[1]).toString();
-        console.log(data)
-        expect(data).to.not.equal('', 'The chunk data')
+
+        for(const chunk of chunks) {
+            const res = await client.loadchunk(key2, chunk.iterator, chunk.data);
+            expect(res).to.equal('OK', `The response of load chunk with iterator ${chunk.iterator}`)
+        }
+
+        // chunks = []
+        // iter = 0
+        // while True:
+        //     iter, data = BF.SCANDUMP(key, iter)
+        //     if iter == 0:
+        //         break
+        //     else:
+        //         chunks.append([iter, data])
+
+        // # Load it back
+        // for chunk in chunks:
+        //     iter, data = chunk
+        //     BF.LOADCHUNK(key, iter, data)
     });
     it.skip('loadchunk function', async () => {
         await client.redis.del(key2);
