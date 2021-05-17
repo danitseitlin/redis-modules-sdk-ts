@@ -8,8 +8,6 @@ const key3 = 'cuckoo'
 const chunks: {iterator: number, data: string}[] = [];
 let client: RedisBloomCuckoo;
 let redis: Redis;
-let dataIterator: number;
-let data: string;
 
 describe('RedisBloom Cuckoo filter testing', async function() {
     before(async () => {
@@ -31,7 +29,7 @@ describe('RedisBloom Cuckoo filter testing', async function() {
 
     it('reserve function', async () => {
         const response = await client.reserve(key2, 0.01, 100);
-        expect(response).to.equal('OK', 'The response of the \'BF.RESERVE\' command');
+        expect(response).to.equal('OK', 'The response of the \'CF.RESERVE\' command');
     })
     it('add function', async () => {
         let response = await client.add(key1, 'item');
