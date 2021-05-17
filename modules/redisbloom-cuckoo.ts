@@ -20,12 +20,7 @@ export class RedisBloomCuckoo extends Module {
      * @param item The item to add
      */
     async add(key: string, item: string): Promise<CFResponse> {
-        try {
-            return await this.sendCommand('CF.ADD', [key, item])
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('CF.ADD', [key, item])
     }
 
     /**
@@ -34,12 +29,7 @@ export class RedisBloomCuckoo extends Module {
      * @param item The item to add
      */
     async addnx(key: string, item: string): Promise<CFResponse> {
-        try {
-            return await this.sendCommand('CF.ADDNX', [key, item])
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('CF.ADDNX', [key, item])
     }
 
     /**
@@ -49,17 +39,12 @@ export class RedisBloomCuckoo extends Module {
      * @param options The additional optional parameters of the 'CF.INSERT' command
      */
     async insert(key: string, items: string[], options?: CFInsertParameters): Promise<CFResponse[]> {
-        try {
-            let args = [key];
-            if(options !== undefined && options.capacity !== undefined)
-                args = args.concat(['CAPACITY', options.capacity.toString()]);
-            if(options !== undefined && options.nocreate !== undefined)
-                args.push('NOCREATE');
-            return await this.sendCommand('CF.INSERT', args.concat(['ITEMS']).concat(items));
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        let args = [key];
+        if(options !== undefined && options.capacity !== undefined)
+            args = args.concat(['CAPACITY', options.capacity.toString()]);
+        if(options !== undefined && options.nocreate !== undefined)
+            args.push('NOCREATE');
+        return await this.sendCommand('CF.INSERT', args.concat(['ITEMS']).concat(items));
     }
 
     /**
@@ -69,17 +54,12 @@ export class RedisBloomCuckoo extends Module {
      * @param options The additional optional parameters of the 'CF.INSERTNX' command
      */
     async insertnx(key: string, items: string[], options?: CFInsertParameters): Promise<CFResponse[]> {
-        try {
-            let args = [key];
-            if(options !== undefined && options.capacity !== undefined)
-                args = args.concat(['CAPACITY', options.capacity.toString()]);
-            if(options !== undefined && options.nocreate !== undefined)
-                args.push('NOCREATE');
-            return await this.sendCommand('CF.INSERTNX', args.concat(['ITEMS']).concat(items));
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        let args = [key];
+        if(options !== undefined && options.capacity !== undefined)
+            args = args.concat(['CAPACITY', options.capacity.toString()]);
+        if(options !== undefined && options.nocreate !== undefined)
+            args.push('NOCREATE');
+        return await this.sendCommand('CF.INSERTNX', args.concat(['ITEMS']).concat(items));
     }
 
     /**
@@ -88,12 +68,7 @@ export class RedisBloomCuckoo extends Module {
      * @param item The item to check for
      */
     async exists(key: string, item: string): Promise<CFResponse> {
-        try {
-            return await this.sendCommand('CF.EXISTS', [key, item]);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('CF.EXISTS', [key, item]);
     }
 
     /**
@@ -102,12 +77,7 @@ export class RedisBloomCuckoo extends Module {
      * @param item The item to delete from the filter
      */
     async del(key: string, item: string): Promise<CFResponse> {
-        try {
-            return await this.sendCommand('CF.DEL', [key, item]);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('CF.DEL', [key, item]);
     }
 
     /**
@@ -116,12 +86,7 @@ export class RedisBloomCuckoo extends Module {
      * @param item The item to count
      */
     async count(key: string, item: string): Promise<number> {
-        try {
-            return await this.sendCommand('CF.COUNT', [key, item]);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('CF.COUNT', [key, item]);
     }
 
     /**
@@ -130,12 +95,7 @@ export class RedisBloomCuckoo extends Module {
      * @param iterator Iterator value. This is either 0, or the iterator from a previous invocation of this command
      */
     async scandump(key: string, iterator: number): Promise<string[]> {
-        try {
-            return await this.sendCommand('CF.SCANDUMP', [key, iterator])
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('CF.SCANDUMP', [key, iterator])
     }
 
     /**
@@ -145,12 +105,7 @@ export class RedisBloomCuckoo extends Module {
      * @param data The current data chunk (returned by SCANDUMP ) 
      */
     async loadchunk(key: string, iterator: number, data: string): Promise<'OK'> {
-        try {
-            return await this.sendCommand('CF.LOADCHUNK', [key, iterator, data]);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('CF.LOADCHUNK', [key, iterator, data]);
     }
     
     /**
@@ -158,12 +113,7 @@ export class RedisBloomCuckoo extends Module {
      * @param key The name of the filter
      */
     async info(key: string): Promise<string[]> {
-        try {
-            return await this.sendCommand('CF.INFO', [key]);
-        }
-        catch(error) {
-            return this.handleError(error);
-        }
+        return await this.sendCommand('CF.INFO', [key]);
     }
 }
 

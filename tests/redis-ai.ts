@@ -10,7 +10,7 @@ describe('AI testing', async function() {
     before(async () => {
         client = new RedisAI({
             host: cliArguments.host,
-            port: parseInt(cliArguments.port),
+            port: parseInt(cliArguments.port)
         });
         redis = new Redis({
             host: cliArguments.host,
@@ -38,9 +38,9 @@ describe('AI testing', async function() {
         response = await redis.ai_module_tensorget('blob-key', 'BLOB', true) as AITensorInfo
         expect(response.dtype).to.eql('FLOAT', 'The dtype of tensor')
     });
-    it('modelset function', async () => {
+    it('modelstore function', async () => {
         const file = fs.readFileSync('./tests/data/models/model1.onnx')
-        const response = await client.modelset('blob-model', 'ONNX', 'CPU', file)
+        const response = await client.modelstore('blob-model', 'ONNX', 'CPU', file)
         expect(response).to.eql('OK', 'The response of modelset')
     });
     it('modelget function', async () => {
@@ -48,16 +48,24 @@ describe('AI testing', async function() {
         const response = await client.modelget('blob-model', true, true) as AIModel;
         expect(response.device).to.eql('CPU', `The device of key ${modelName}`)
     });
-    it('modelrun function', async () => {
+    it('modelexecute function', async () => {
         let response = await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3])
         response = await client.tensorset('tensorB', 'FLOAT', [1, 2], [3, 5])
         const blob = fs.readFileSync('./tests/data/models/graph.pb');
-        response = await client.modelset('mymodel', 'TF', 'CPU', blob, {
+        response = await client.modelstore('mymodel', 'TF', 'CPU', blob, {
             inputs: ['a', 'b'],
-            outputs: ['c']
+            inputsCount: 2,
+            outputs: ['c'],
+            outputsCount: 1
         })
-        response = await client.modelrun('mymodel', ['tensorA', 'tensorB'], ['tensorC'])
-        expect(response).to.eql('OK', 'The response of modelrun')
+        expect(response).to.eql('OK', 'The response of modelstore')
+        response = await client.modelexecute('mymodel', {
+            inputs: ['tensorA', 'tensorB'],
+            outputs: ['tensorC'],
+            inputsCount: 2,
+            outputsCount: 1
+        })
+        expect(response).to.eql('OK', 'The response of modelexecute')
     });
     it('modelscan function', async () => {
         const response = await client.modelscan();
@@ -81,11 +89,18 @@ describe('AI testing', async function() {
         expect(response.device).to.eql('CPU', `The device of script ${scriptName}`)
     });
     
-    it('scriptrun function', async () => {
+    it('scriptexecute function', async () => {
         await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3]);
         await client.tensorset('tensorB', 'FLOAT', [1, 2], [3, 5]);
-        const response = await client.scriptrun('myscript', 'bar', ['tensorA', 'tensorB'], ['tensorC'])
-        expect(response).to.eql('OK', 'The response of scriptrun')
+        const response = await client.scriptexecute('myscript', 'bar', {
+            numberOfKeys: 3,
+            keys: ['tensorA', 'tensorB', 'tensorC'],
+            numberOfInputs: 2,
+            inputs: ['tensorA', 'tensorB'],
+            numberOfOutputs: 1,
+            outputs: ['tensorC']
+        })
+        expect(response).to.eql('OK', 'The response of scriptexecute')
     });
     it('scriptscan function', async () => {
         const response = await client.scriptscan();
@@ -103,36 +118,36 @@ describe('AI testing', async function() {
         const response = await client.config('/usr/lib/redis/modules/backends/')
         expect(response).to.eql('OK', 'The response of config')
     });
-    it('dagrun function', async () => {
-        const blob = fs.readFileSync('./tests/data/models/graph.pb');
-        await client.modelset('mymodel-dag', 'TF', 'CPU', blob, {
-            inputs: ['a', 'b'],
-            outputs: ['c'],
-            tag: 'test_tag'
-        })
+    it('dagexecute function', async () => {
         await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3]);
-        await client.tensorset('tensorB', 'FLOAT', [1, 2], [3, 5]);
-        const response = await client.dagrun([
-            'AI.TENSORSET tensorA FLOAT INPUTS 1 2 OUTPUTS 3 5',
-            'AI.TENSORSET tensorB FLOAT INPUTS 1 2 OUTPUTS 3 5',
-            'AI.MODELRUN mymodel-dag INPUTS tensorA tensorB OUTPUTS tensorC'
+        const response = await client.dagexecute({
+            type: 'load',
+            numberOfKeys: 1,
+            keys: ['tensorA']
+        }, [
+            'AI.TENSORGET tensorA VALUES'
         ])
-        expect(response).to.eql([], 'The response of dagrun')
+        expect(response).to.eql([
+            [
+                "2",
+                "3"
+            ]
+        ], 'The response of dagexecute')
     });
-    it('dagrunRO function', async () => {
-        const blob = fs.readFileSync('./tests/data/models/graph.pb');
-        await client.modelset('mymodel-dag', 'TF', 'CPU', blob, {
-            inputs: ['a', 'b'],
-            outputs: ['c'],
-            tag: 'test_tag'
-        })
+    it('dagexecuteRO function', async () => {
         await client.tensorset('tensorA', 'FLOAT', [1, 2], [2, 3]);
-        await client.tensorset('tensorB', 'FLOAT', [1, 2], [3, 5]);
-        const response = await client.dagrunRO([
-            'AI.TENSORSET tensorA FLOAT INPUTS 1 2 OUTPUTS 3 5',
-            'AI.TENSORSET tensorB FLOAT INPUTS 1 2 OUTPUTS 3 5',
-            'AI.MODELRUN mymodel-dag INPUTS tensorA tensorB OUTPUTS tensorC'
+        const response = await client.dagexecuteRO({
+            type: 'load',
+            numberOfKeys: 1,
+            keys: ['tensorA']
+        }, [
+            'AI.TENSORGET tensorA VALUES'
         ])
-        expect(response).to.eql([], 'The response of dagrun_RO')
+        expect(response).to.eql([
+            [
+                "2",
+                "3"
+            ]
+        ], 'The response of dagexecute_RO')
     });
 })
