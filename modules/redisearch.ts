@@ -120,11 +120,11 @@ export class Redisearch extends Module {
                         args = args.concat([field.num.toString(), field.field]);
                     }
                 }
-                if(parameters.summarize.frags !== undefined) 
+                if(parameters.summarize.frags !== undefined)
                     args = args.concat(['FRAGS', parameters.summarize.frags.toString()])
-                if(parameters.summarize.len !== undefined) 
+                if(parameters.summarize.len !== undefined)
                     args = args.concat(['LEN', parameters.summarize.len.toString()])
-                if(parameters.summarize.seperator !== undefined) 
+                if(parameters.summarize.seperator !== undefined)
                     args = args.concat(['SEPARATOR', parameters.summarize.seperator])
             }
             if(parameters.highlight !== undefined) {
@@ -175,54 +175,60 @@ export class Redisearch extends Module {
     async aggregate(index: string, query: string, parameters?: FTAggregateParameters): Promise<number> {
         let args: string[] = [index, query];
         if(parameters !== undefined) {
-            if(parameters.load !== undefined) {
-                args.push('LOAD')
-                if(parameters.load.nargs !== undefined)
+            if (parameters.load !== undefined) {
+                args.push('LOAD');
+                if (parameters.load.nargs !== undefined)
                     args.push(parameters.load.nargs);
-                if(parameters.load.property !== undefined)
+                if (parameters.load.property !== undefined)
                     args.push(parameters.load.property);
             }
-            if(parameters.groupby !== undefined){
-                args.push('GROUPBY')
-                if(parameters.groupby.nargs !== undefined)
+            if (parameters.groupby !== undefined) {
+                args.push('GROUPBY');
+                if (parameters.groupby.nargs !== undefined)
                     args.push(parameters.groupby.nargs);
-                if(parameters.groupby.property !== undefined)
-                    args.push(parameters.groupby.property);
+                if (parameters.groupby.property !== undefined) {
+                    parameters.groupby.property.split(" ").forEach((property) => {
+                        args.push(property);
+                    });
+
+                }
             }
-            if(parameters.reduce !== undefined) {
-                args.push('REDUCE')
-                if(parameters.reduce.function !== undefined)
+            if (parameters.reduce !== undefined) {
+                args.push('REDUCE');
+                if (parameters.reduce.function !== undefined)
                     args.push(parameters.reduce.function);
-                if(parameters.reduce.nargs !== undefined)
+                if (parameters.reduce.nargs !== undefined)
                     args.push(parameters.reduce.nargs);
-                if(parameters.reduce.arg !== undefined)
+                if (parameters.reduce.arg !== undefined)
                     args.push(parameters.reduce.arg);
-                if(parameters.reduce.as !== undefined)
+                if (parameters.reduce.as !== undefined)
                     args = args.concat(['AS', parameters.reduce.as]);
             }
-            if(parameters.sortby !== undefined) {
-                args.push('SORTBY')
-                if(parameters.sortby.nargs !== undefined)
+            if (parameters.sortby !== undefined) {
+                args.push('SORTBY');
+                if (parameters.sortby.nargs !== undefined)
                     args.push(parameters.sortby.nargs);
-                if(parameters.sortby.property !== undefined)
-                    args.push(parameters.sortby.property);
-                if(parameters.sortby.sort !== undefined)
-                    args.push(parameters.sortby.sort);
-                if(parameters.sortby.max !== undefined)
+                if (parameters.sortby.properties !== undefined)
+                    parameters.sortby.properties.forEach((property) => {
+                        args.push(property.fieldName);
+                        args.push(property.sort)
+                    });
+                if (parameters.sortby.max !== undefined)
                     args = args.concat(['MAX', parameters.sortby.max.toString()]);
             }
-            if(parameters.apply !== undefined) {
-                args.push('APPLY');
-                if(parameters.apply.expression !== undefined)
-                    args.push(parameters.apply.expression);
-                if(parameters.apply.as !== undefined)
-                    args.push(parameters.apply.as);
+            if (parameters.apply !== undefined) {
+                if (parameters.apply.expressions !== undefined)
+                    parameters.apply.expressions.forEach((expression) => {
+                        args.push('APPLY');
+                        args.push(expression.expression);
+                        args = args.concat(['AS', expression.as]);
+                    });
             }
-            if(parameters.limit !== undefined) {
-                args.push('LIMIT')
-                if(parameters.limit.offset !== undefined)
-                    args.push(parameters.limit.offset)
-                if(parameters.limit.numberOfResults !== undefined)
+            if (parameters.limit !== undefined) {
+                args.push('LIMIT');
+                if (parameters.limit.offset !== undefined)
+                    args.push(parameters.limit.offset);
+                if (parameters.limit.numberOfResults !== undefined)
                     args.push(parameters.limit.numberOfResults.toString());
             }
         }
@@ -242,7 +248,7 @@ export class Redisearch extends Module {
     }
 
     /**
-     * Retrieving the execution plan for a complex query but formatted for easier reading without using redis-cli --raw 
+     * Retrieving the execution plan for a complex query but formatted for easier reading without using redis-cli --raw
      * @param index The index
      * @param query The query
      * @returns A string representing the execution plan.
@@ -286,7 +292,7 @@ export class Redisearch extends Module {
         const response = await this.sendCommand('FT.DROPINDEX', args);
         return this.handleResponse(response);
     }
-    
+
     /**
      * Adding alias fron an index
      * @param name The alias name
@@ -318,12 +324,12 @@ export class Redisearch extends Module {
         const response = await this.sendCommand('FT.ALIASDEL', [name]);
         return this.handleResponse(response);
     }
-    
+
     /**
      * Retrieving the distinct tags indexed in a Tag field
      * @param index The index
      * @param field The field name
-     * @returns The distinct tags indexed in a Tag field 
+     * @returns The distinct tags indexed in a Tag field
      */
     async tagvals(index: string, field: string): Promise<string[]> {
         const response = await this.sendCommand('FT.TAGVALS', [index, field]);
@@ -353,13 +359,13 @@ export class Redisearch extends Module {
      * @param key The key
      * @param prefix The prefix of the suggestion
      * @param options The additional optional parameter
-     * @returns A list of the top suggestions matching the prefix, optionally with score after each entry 
+     * @returns A list of the top suggestions matching the prefix, optionally with score after each entry
      */
     async sugget(key: string, prefix: string, options?: FTSugGetParameters): Promise<string> {
         let args = [key, prefix];
         if(options !== undefined && options.fuzzy !== undefined)
             args.push('FUZZY');
-        if(options !== undefined && options.max !== undefined)   
+        if(options !== undefined && options.max !== undefined)
             args = args.concat(['MAX', options.max.toString()]);
         if(options !== undefined && options.withScores !== undefined)
             args.push('WITHSCORES');
@@ -392,7 +398,7 @@ export class Redisearch extends Module {
      * Updating a synonym group
      * @param index The index
      * @param groupId The group id
-     * @param terms A list of terms 
+     * @param terms A list of terms
      * @param skipInitialScan If set, we do not scan and index.
      * @returns 'OK'
      */
@@ -407,7 +413,7 @@ export class Redisearch extends Module {
     /**
      * Dumps the contents of a synonym group
      * @param index The index
-     * @returns A list of synonym terms and their synonym group ids.  
+     * @returns A list of synonym terms and their synonym group ids.
      */
     async syndump(index: string): Promise<{[key: string]: string | number}> {
         const response = await this.sendCommand('FT.SYNDUMP', [index]);
@@ -434,7 +440,7 @@ export class Redisearch extends Module {
         const response = await this.sendCommand('FT.SPELLCHECK', args);
         return this.handleResponse(response);
     }
-    
+
     /**
      * Adding terms to a dictionary
      * @param dict The dictionary
@@ -470,7 +476,7 @@ export class Redisearch extends Module {
     /**
      * Retrieving infromation and statistics on the index
      * @param index The index
-     * @returns A nested array of keys and values. 
+     * @returns A nested array of keys and values.
      */
     async info(index: string): Promise<FTInfo> {
         const response = await this.sendCommand('FT.INFO', [index]);
@@ -503,16 +509,16 @@ export class Redisearch extends Module {
  * @param nohl The 'NOHL' parameter. Conserves storage space and memory by disabling highlighting support. If set, we do not store corresponding byte offsets for term positions.
  * @param noFields The 'NOFIELDS' parameter. If set, we do not store field bits for each term.
  * @param noFreqs The 'NOFREQS' parameter.  If set, we avoid saving the term frequencies in the index.
- * @param skipInitialScan The 'SKIPINITIALSCAN' parameter. If set, we do not scan and index. 
+ * @param skipInitialScan The 'SKIPINITIALSCAN' parameter. If set, we do not scan and index.
  * @param prefix The 'PREFIX' parameter. tells the index which keys it should index.
- * @param prefix.count The count argument of the 'PREFIX' parameter. 
- * @param prefix.name The name argument of the 'PREFIX' parameter. 
+ * @param prefix.count The count argument of the 'PREFIX' parameter.
+ * @param prefix.name The name argument of the 'PREFIX' parameter.
  * @param language The 'LANGUAGE' parameter.  If set indicates the default language for documents in the index.
  * @param languageField The 'LANGUAGE_FIELD' parameter. If set indicates the document field that should be used as the document language.
  * @param score The 'SCORE' parameter. If set indicates the default score for documents in the index.
- * @param scoreField The 'SCORE_FIELD' parameter. If set indicates the document field that should be used as the document's rank based on the user's ranking. 
+ * @param scoreField The 'SCORE_FIELD' parameter. If set indicates the document field that should be used as the document's rank based on the user's ranking.
  * @param stopwords The 'STOPWORDS' parameter. If set, we set the index with a custom stopword list, to be ignored during indexing and search time.
- * @param stopwords.num The num argument of the 'STOPWORDS' parameter. 
+ * @param stopwords.num The num argument of the 'STOPWORDS' parameter.
  * @param stopwords.stopword The stopword argument of the 'STOPWORDS' parameter.
  */
 export type FTCreateParameters = {
@@ -577,11 +583,11 @@ export interface FTSchemaField extends FTFieldOptions {
  * The parameter of the 'FT.SEARCH' command
  * @param noContent The 'NOTCONTENT' parameter. If it appears after the query, we only return the document ids and not the content.
  * @param verbatim The 'VERBATIM' parameter.  if set, we do not try to use stemming for query expansion but search the query terms verbatim.
- * @param noStopWords The 'noStopWords' parameter. If set, we do not filter stopwords from the query. 
+ * @param noStopWords The 'noStopWords' parameter. If set, we do not filter stopwords from the query.
  * @param withScores The 'WITHSCORES' parameter. If set, we also return the relative internal score of each document.
  * @param withPayloads The 'WITHPAYLOADS' parameter. If set, we retrieve optional document payloads (see FT.ADD).
  * @param withSoryKeys The 'WITHSORTKEYS' parameter. Only relevant in conjunction with SORTBY . Returns the value of the sorting key, right after the id and score and /or payload if requested.
- * @param filter The 'FILTER' parameter.  If set, and numeric_field is defined as a numeric field in FT.CREATE, we will limit results to those having numeric values ranging between min and max. min and max follow ZRANGE syntax, and can be -inf , +inf and use ( for exclusive ranges. 
+ * @param filter The 'FILTER' parameter.  If set, and numeric_field is defined as a numeric field in FT.CREATE, we will limit results to those having numeric values ranging between min and max. min and max follow ZRANGE syntax, and can be -inf , +inf and use ( for exclusive ranges.
  * @param filter.field The numeric_field argument of the 'FILTER' parameter
  * @param filter.min The min argument of the 'FILTER' parameter
  * @param filter.max The max argument of the 'FILTER' parameter
@@ -615,7 +621,7 @@ export interface FTSchemaField extends FTFieldOptions {
  * @param highlight.open The open argument of the tags argument
  * @param highlight.close The close argument of the tags argument
  * @param slop The 'SLOP' parameter. If set, we allow a maximum of N intervening number of unmatched offsets between phrase terms.
- * @param inorder The 'INORDER' parameter. If set, and usually used in conjunction with SLOP, we make sure the query terms appear in the same order in the document as in the query, regardless of the offsets between them. 
+ * @param inorder The 'INORDER' parameter. If set, and usually used in conjunction with SLOP, we make sure the query terms appear in the same order in the document as in the query, regardless of the offsets between them.
  * @param language The 'LANGUAGE' parameter. If set, we use a stemmer for the supplied language during search for query expansion.
  * @param expander The 'EXPANDER' parameter. If set, we will use a custom query expander instead of the stemmer.
  * @param scorer The 'SCORER' parameter. If set, we will use a custom scoring function defined by the user.
@@ -697,7 +703,7 @@ export type FTSearchParameters = {
 
 /**
  * The additional parameter of 'FT.AGGREGATE' command
- * @param load The 'LOAD' parameter. 
+ * @param load The 'LOAD' parameter.
  * @param load.nargs The number of arguments
  * @param load.property The property name
  * @param groupby The 'GROUPBY' parameter.
@@ -708,12 +714,12 @@ export type FTSearchParameters = {
  * @param reduce.nargs The number of arguments of the 'REDUCE' parameter
  * @param reduce.arg The argument of the 'REDUCE' parameter
  * @param reduce.as The name of the function of the 'REDUCE' parameter
- * @param sortby The 'SORTBY' parameter. 
+ * @param sortby The 'SORTBY' parameter.
  * @param sortby.nargs The number of arguments of the 'SORTBY' parameter
  * @param sortby.property The property name of the 'SORTBY' parameter
  * @param sortby.sort The sort type of the 'SORTBY' parameter
  * @param sortby.max The max of the 'SORTBY' parameter
- * @param apply The 'APPLY' parameter. 
+ * @param apply The 'APPLY' parameter.
  * @param apply.expression The expression of the 'APPLY' parameter
  * @param apply.as The as of the 'APPLY' parameter
  * @param limit The 'LIMIT' parameter.
@@ -721,37 +727,46 @@ export type FTSearchParameters = {
  * @param limit.numberOfResults The number of results of the 'LIMIT' parameter
  * @param filter The expression of the 'FILTER' parameter.
  */
-export type FTAggregateParameters = {
+export declare type FTAggregateParameters = {
     load?: {
-        nargs: string,
-        property: string
-    },
+        nargs: string;
+        property: string;
+    };
     groupby?: {
-        nargs: string,
-        property: string
-    },
+        nargs: string;
+        property: string;
+    };
     reduce?: {
-        function: string,
-        nargs: string,
-        arg: string,
-        as: string
-    },
+        function: string;
+        nargs: string;
+        arg: string;
+        as: string;
+    };
     sortby?: {
-        nargs: string,
-        property: string,
-        sort: 'ASC' | 'DESC',
-        max: number
-    },
+        nargs: string;
+        properties: SortByProperty[]
+        max: number;
+    };
     apply?: {
-        expression: string,
-        as: string
-    },
+        expressions: Expressions[];
+    };
     limit?: {
-        offset: string,
-        numberOfResults: number
-    },
-    filter?: string
-}
+        offset: string;
+        numberOfResults: number;
+    };
+    filter?: string;
+};
+
+
+declare type SortByProperty = {
+    fieldName: string,
+    sort: 'ASC' | 'DESC';
+};
+
+declare type Expressions = {
+    expression: string,
+    as: string,
+};
 
 /**
  * The additional parameters of 'FT.SUGADD' command
