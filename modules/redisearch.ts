@@ -73,6 +73,8 @@ export class Redisearch extends Module {
         return this.handleResponse(response);
     }
 
+    
+
     /**
      * Searching the index with a textual query
      * @param index The index
@@ -80,7 +82,7 @@ export class Redisearch extends Module {
      * @param parameters The additional optional parameter
      * @returns Array reply, where the first element is the total number of results, and then pairs of document id, and a nested array of field/value.
      */
-    async search(index: string, query: string, parameters?: FTSearchParameters): Promise<[number, ...any]> {
+    async search(index: string, query: string, parameters?: FTSearchParameters): Promise<[number, ...Array<string | string[]>]> {
         let args: string[] = [index, query];
         if(parameters !== undefined) {
             if(parameters.noContent === true)
@@ -172,7 +174,7 @@ export class Redisearch extends Module {
      * @param parameters The additional optional parameters
      * @returns Array Response. Each row is an array and represents a single aggregate result
      */
-    async aggregate(index: string, query: string, parameters?: FTAggregateParameters): Promise<[number, ...any]> {
+    async aggregate(index: string, query: string, parameters?: FTAggregateParameters): Promise<[number, ...Array<string[]>]> {
         let args: string[] = [index, query];
         if(parameters !== undefined) {
             if(parameters.load !== undefined) {
