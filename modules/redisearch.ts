@@ -19,9 +19,9 @@ export class Redisearch extends Module {
      * Creating an index with a given spec
      * @param parameters The additional parameters of the spec
      * @param schemaFields The filter set after the 'SCHEMA' argument
-     * @returns 'OK'
+     * @returns 'OK' or error
      */
-    async create(index: string, schemaFields: FTSchemaField[], parameters?: FTCreateParameters): Promise<'OK'> {
+    async create(index: string, schemaFields: FTSchemaField[], parameters?: FTCreateParameters): Promise<'OK' | string> {
         let args: string[] = [index]
         args = args.concat(['ON', 'HASH']);
         if(parameters !== undefined) {
@@ -80,7 +80,7 @@ export class Redisearch extends Module {
      * @param parameters The additional optional parameter
      * @returns Array reply, where the first element is the total number of results, and then pairs of document id, and a nested array of field/value.
      */
-    async search(index: string, query: string, parameters?: FTSearchParameters): Promise<number> {
+    async search(index: string, query: string, parameters?: FTSearchParameters): Promise<[number, ...Array<string | string[]>]> {
         let args: string[] = [index, query];
         if(parameters !== undefined) {
             if(parameters.noContent === true)
@@ -172,7 +172,7 @@ export class Redisearch extends Module {
      * @param parameters The additional optional parameters
      * @returns Array Response. Each row is an array and represents a single aggregate result
      */
-    async aggregate(index: string, query: string, parameters?: FTAggregateParameters): Promise<number> {
+    async aggregate(index: string, query: string, parameters?: FTAggregateParameters): Promise<[number, ...Array<string[]>]> {
         let args: string[] = [index, query];
         if(parameters !== undefined) {
             if (parameters.load !== undefined) {
@@ -264,9 +264,9 @@ export class Redisearch extends Module {
      * @param field The field name
      * @param fieldType The field type
      * @param options The additional optional parameters
-     * @returns 'OK'
+     * @returns 'OK' or error
      */
-    async alter(index: string, field: string, fieldType: FTFieldType, options?: FTFieldOptions): Promise<'OK'> {
+    async alter(index: string, field: string, fieldType: FTFieldType, options?: FTFieldOptions): Promise<'OK' | string> {
         let args = [index, 'SCHEMA', 'ADD', field, fieldType]
         if(options !== undefined) {
             if(options.sortable !== undefined) args.push('SORTABLE');
@@ -284,9 +284,9 @@ export class Redisearch extends Module {
      * Deleting the index
      * @param index The index
      * @param deleteHash If set, the drop operation will delete the actual document hashes.
-     * @returns 'OK'
+     * @returns 'OK' or error
      */
-    async dropindex(index: string, deleteHash = false): Promise<'OK'> {
+    async dropindex(index: string, deleteHash = false): Promise<'OK' | string> {
         const args = [index];
         if(deleteHash === true) args.push('DD')
         const response = await this.sendCommand('FT.DROPINDEX', args);
@@ -297,9 +297,9 @@ export class Redisearch extends Module {
      * Adding alias fron an index
      * @param name The alias name
      * @param index The alias index
-     * @returns 'OK'
+     * @returns 'OK' or error
      */
-    async aliasadd(name: string, index: string): Promise<'OK'> {
+    async aliasadd(name: string, index: string): Promise<'OK' | string> {
         const response = await this.sendCommand('FT.ALIASADD', [name, index]);
         return this.handleResponse(response);
     }
@@ -308,9 +308,9 @@ export class Redisearch extends Module {
      * Updating alias index
      * @param name The alias name
      * @param index The alias index
-     * @returns 'OK'
+     * @returns 'OK' or error
      */
-    async aliasupdate(name: string, index: string): Promise<'OK'> {
+    async aliasupdate(name: string, index: string): Promise<'OK' | string> {
         const response = await this.sendCommand('FT.ALIASUPDATE', [name, index]);
         return this.handleResponse(response);
     }
@@ -318,9 +318,9 @@ export class Redisearch extends Module {
     /**
      * Deleting alias fron an index
      * @param name The alias name
-     * @returns 'OK'
+     * @returns 'OK' or error
      */
-    async aliasdel(name: string): Promise<'OK'> {
+    async aliasdel(name: string): Promise<'OK' | string> {
         const response = await this.sendCommand('FT.ALIASDEL', [name]);
         return this.handleResponse(response);
     }

@@ -33,7 +33,6 @@ describe('RediSearch Module testing', async function() {
         await client.disconnect();
         await redis.disconnect();
     })
-
     it('create function', async () => {
         let response = await client.create(index, [{
             name: 'name',
@@ -55,9 +54,61 @@ describe('RediSearch Module testing', async function() {
         const response = await client.search(index, query)
         expect(response).to.equal(0, 'The response of the FT.SEARCH command')
     });
+    it('search function response test', async () => {
+        await client.create(`${index}-searchtest`, [{
+            name: 'name',
+            type: 'TEXT'
+        }], {
+            prefix: [
+                {
+                    count: 1,
+                    name: 'doc'
+                }
+            ]
+        })
+        await client.redis.hset('doc:1', { name: 'John Doe'  });
+        await client.redis.hset('doc:2', { name: 'Jane Doe'  });
+        await client.redis.hset('doc:3', { name: 'Sarah Brown'  });
+        const [count, ...result] = await client.search(`${index}-searchtest`, '@name:Doe');
+        await client.dropindex(`${index}-searchtest`);
+        expect(count).to.equal(2, 'Total number of returining document of FT.SEARCH command')
+        expect(result[0].indexOf('doc')).to.equal(0, 'first document key')
+    });
     it('aggregate function', async () => {
         const response = await client.aggregate(index, query)
-        expect(response).to.equal(0, 'The response of the FT.SEARCH command')
+        expect(response).to.equal(0, 'The response of the FT.AGGREGATE command')
+    });
+    it('aggregate function response', async () => {
+        await client.create(`${index}-aggreagtetest`, [{
+            name: 'name',
+            type: 'TEXT'
+        }, 
+        {
+            name: 'city',
+            type: 'TEXT'
+        },
+        {
+            name: 'gender',
+            type: 'TAG'
+        }
+        ], {
+            prefix: [
+                {
+                    count: 1,
+                    name: 'person'
+                }
+            ]
+        })
+        await client.redis.hset('person:1', { name: 'John Doe', city: 'London', gender: 'male'  });
+        await client.redis.hset('person:2', { name: 'Jane Doe', city: 'London', gender: 'female'  });
+        await client.redis.hset('person:3', { name: 'Sarah Brown', city: 'New York', gender: 'female'  });
+        await client.redis.hset('person:3', { name: 'Michael Doe', city: 'New York', gender: 'male'  });
+        const [count, ...result] = await client.aggregate(`${index}-aggreagtetest`, 'Doe', {
+            groupby: { property: '@city', nargs: '1' }
+        });
+        await client.dropindex(`${index}-aggreagtetest`);
+        expect(count).to.equal(2, 'Total number of the FT.AGGREGATE command result');
+        expect(result[0][0]).to.equal('city', 'Aggreagated prop of the FT.AGGREGATE command result');
     });
     it('explain function', async () => {
         const response = await client.explain(index, query)
@@ -71,7 +122,6 @@ describe('RediSearch Module testing', async function() {
         const response = await client.alter(index, 'tags', 'TAG')
         expect(response).to.equal('OK', 'The response of the FT.ALTER command');
     });
-    
     it('aliasadd function', async () => {
         const response = await client.aliasadd(alias, index)
         expect(response).to.equal('OK', 'The response of the FT.ALIASADD command');
@@ -84,7 +134,6 @@ describe('RediSearch Module testing', async function() {
         const response = await client.aliasdel(alias)
         expect(response).to.equal('OK', 'The response of the FT.ALIASDEL command');
     });
-    
     it('sugadd function', async () => {
         const response = await client.sugadd(sug.key, sug.string, sug.score);
         expect(response).to.equal(1, 'The response of the FT.SUGADD command');
@@ -118,18 +167,19 @@ describe('RediSearch Module testing', async function() {
         expect(response.length).to.be.greaterThan(0, 'The response of the FT.SPELLCHECK command')
     });
     it('dictadd function', async () => {
-        let response = await client.dictadd(dict.name, [dict.term])
-        expect(response).to.equal(1, 'The response of the FT.DICTADD command');
-        response = await client.dictadd(`${dict.name}1`, [dict.term+'1'])
+        const response = await client.dictadd(dict.name, [dict.term]);
         expect(response).to.equal(1, 'The response of the FT.DICTADD command');
     });
     it('dictdel function', async () => {
-        const response = await client.dictdel(dict.name, [dict.term])
+        await client.dictadd(dict.name, [dict.term]);
+        const response = await client.dictdel(dict.name, [dict.term]);
         expect(response).to.equal(1, 'The response of the FT.DICDEL command');
     });
     it('dictdump function', async () => {
-        const response = await client.dictdump(`${dict.name}1`)
+        await client.dictadd(`${dict.name}1`, [`${dict.term}1`]);
+        const response = await client.dictdump(`${dict.name}1`);
         expect(response).to.equal('termY1', 'The response of the FT.DICTDUMP command');
+        await client.dictdel(`${dict.name}1`, [`${dict.term}1`]);
     });
     it('info function', async () => {
         const response = await client.info(index)
@@ -140,7 +190,11 @@ describe('RediSearch Module testing', async function() {
         expect(response.EXTLOAD).to.equal(null, 'The EXTLOAD value');
     });
     it('dropindex function', async () => {
-        const response = await client.dropindex(index)
+        await client.create(`${index}-droptest`, [{
+            name: 'name',
+            type: 'TEXT'
+        }])
+        const response = await client.dropindex(`${index}-droptest`)
         expect(response).to.equal('OK', 'The response of the FT.DROPINDEX command');
     });
 });
