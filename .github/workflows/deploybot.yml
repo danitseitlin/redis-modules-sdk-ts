@@ -12,7 +12,7 @@ jobs:
     - name: Build
       run: npm run build
     - name: Deploying version
-      uses: danitseitlin/npm-package-deployer@dtseitlin--add-support-for-pkg-manager
+      uses: danitseitlin/npm-package-deployer@master
       with:
         pkg_name: redis-modules-sdk
         pkg_managers: '[github, npm]'
