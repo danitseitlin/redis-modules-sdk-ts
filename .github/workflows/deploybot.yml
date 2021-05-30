@@ -15,6 +15,6 @@ jobs:
       uses: danitseitlin/npm-package-deployer@dtseitlin--add-support-for-pkg-manager
       with:
         pkg_name: redis-modules-sdk
-        pkg_managers: '[github, npm]'
+        pkg_managers: '[github]'
         npm_access_token: ${{secrets.NPM_AUTH_TOKEN}}
         github_access_token: ${{secrets.G_AUTH_TOKEN}}
