@@ -1,4 +1,4 @@
 node_modules
 lib
-
-data_redis/
+yarn.lock
+package-lock.json

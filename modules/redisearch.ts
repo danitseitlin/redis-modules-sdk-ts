@@ -73,8 +73,6 @@ export class Redisearch extends Module {
         return this.handleResponse(response);
     }
 
-    
-
     /**
      * Searching the index with a textual query
      * @param index The index
