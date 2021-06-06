@@ -21,9 +21,9 @@ export class Redisearch extends Module {
      * @param schemaFields The filter set after the 'SCHEMA' argument
      * @returns 'OK' or error
      */
-    async create(index: string, schemaFields: FTSchemaField[], parameters?: FTCreateParameters): Promise<'OK' | string> {
+    async create(index: string, indexType: FTIndexType, schemaFields: FTSchemaField[], parameters?: FTCreateParameters): Promise<'OK' | string> {
         let args: string[] = [index]
-        args = args.concat(['ON', 'HASH']);
+        args = args.concat(['ON', indexType]);
         if(parameters !== undefined) {
             if(parameters.prefix !== undefined) {
                 args.push('PREFIX');
@@ -799,6 +799,13 @@ export type FTSpellCheck = {
  * @param TAG The tag type
  */
 export type FTFieldType = 'TEXT' | 'NUMERIC' | 'TAG' | string;
+
+/**
+ * The available index types
+ * @param HASH The hash index type
+ * @param JSON The JSON index type
+ */
+export type FTIndexType = 'HASH' | 'JSON';
 
 /**
  * The config response
