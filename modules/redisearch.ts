@@ -17,8 +17,10 @@ export class Redisearch extends Module {
 
     /**
      * Creating an index with a given spec
-     * @param parameters The additional parameters of the spec
+     * @param index The index of the schema
+     * @param indexType The index type of the schema
      * @param schemaFields The filter set after the 'SCHEMA' argument
+     * @param parameters The additional parameters of the spec
      * @returns 'OK' or error
      */
     async create(index: string, indexType: FTIndexType, schemaFields: FTSchemaField[], parameters?: FTCreateParameters): Promise<'OK' | string> {
