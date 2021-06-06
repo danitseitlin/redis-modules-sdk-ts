@@ -34,12 +34,12 @@ describe('RediSearch Module testing', async function() {
         await redis.disconnect();
     })
     it('create function', async () => {
-        let response = await client.create(index, [{
+        let response = await client.create(index, 'HASH', [{
             name: 'name',
             type: 'TEXT'
         }])
         expect(response).to.equal('OK', 'The response of the FT.CREATE command');
-        response = await client.create(`${index}1`, [{
+        response = await client.create(`${index}1`, 'HASH', [{
             name: 'name',
             type: 'TEXT'
         }, {
@@ -55,7 +55,7 @@ describe('RediSearch Module testing', async function() {
         expect(response).to.equal(0, 'The response of the FT.SEARCH command')
     });
     it('search function response test', async () => {
-        await client.create(`${index}-searchtest`, [{
+        await client.create(`${index}-searchtest`, 'HASH', [{
             name: 'name',
             type: 'TEXT'
         }], {
@@ -79,7 +79,7 @@ describe('RediSearch Module testing', async function() {
         expect(response).to.equal(0, 'The response of the FT.AGGREGATE command')
     });
     it('aggregate function response', async () => {
-        await client.create(`${index}-aggreagtetest`, [{
+        await client.create(`${index}-aggreagtetest`, 'HASH', [{
             name: 'name',
             type: 'TEXT'
         }, 
@@ -190,7 +190,7 @@ describe('RediSearch Module testing', async function() {
         expect(response.EXTLOAD).to.equal(null, 'The EXTLOAD value');
     });
     it('dropindex function', async () => {
-        await client.create(`${index}-droptest`, [{
+        await client.create(`${index}-droptest`, 'HASH', [{
             name: 'name',
             type: 'TEXT'
         }])
