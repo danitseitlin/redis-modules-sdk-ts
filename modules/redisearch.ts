@@ -181,15 +181,20 @@ export class Redisearch extends Module {
                 args.push('LOAD')
                 if(parameters.load.nargs !== undefined)
                     args.push(parameters.load.nargs);
-                if(parameters.load.property !== undefined)
-                    args.push(parameters.load.property);
+                if(parameters.load.properties !== undefined)
+                    parameters.load.properties.forEach(property => {
+                        args.push(property);
+                    })
             }
             if(parameters.groupby !== undefined){
                 args.push('GROUPBY')
                 if(parameters.groupby.nargs !== undefined)
                     args.push(parameters.groupby.nargs);
-                if(parameters.groupby.property !== undefined)
-                    args.push(parameters.groupby.property);
+                if(parameters.groupby.properties !== undefined) {
+                    parameters.groupby.properties.forEach((property) => {
+                        args.push(property);
+                    })
+                }
             }
             if(parameters.reduce !== undefined) {
                 args.push('REDUCE')
@@ -197,8 +202,10 @@ export class Redisearch extends Module {
                     args.push(parameters.reduce.function);
                 if(parameters.reduce.nargs !== undefined)
                     args.push(parameters.reduce.nargs);
-                if(parameters.reduce.arg !== undefined)
-                    args.push(parameters.reduce.arg);
+                if(parameters.reduce.args)
+                    parameters.reduce.args.forEach(arg => {
+                        args.push(arg);
+                    })
                 if(parameters.reduce.as !== undefined)
                     args = args.concat(['AS', parameters.reduce.as]);
             }
@@ -206,19 +213,22 @@ export class Redisearch extends Module {
                 args.push('SORTBY')
                 if(parameters.sortby.nargs !== undefined)
                     args.push(parameters.sortby.nargs);
-                if(parameters.sortby.property !== undefined)
-                    args.push(parameters.sortby.property);
-                if(parameters.sortby.sort !== undefined)
-                    args.push(parameters.sortby.sort);
+                if(parameters.sortby.properties)
+                    parameters.sortby.properties.forEach(property => {
+                        args.push(property.property);
+                        args.push(property.sort);
+                    })
                 if(parameters.sortby.max !== undefined)
                     args = args.concat(['MAX', parameters.sortby.max.toString()]);
             }
-            if(parameters.apply !== undefined) {
-                args.push('APPLY');
-                if(parameters.apply.expression !== undefined)
-                    args.push(parameters.apply.expression);
-                if(parameters.apply.as !== undefined)
-                    args.push(parameters.apply.as);
+            if(parameters.expressions !== undefined) {
+                parameters.expressions.forEach(expression => {
+                    args.push('APPLY');
+                    args.push(expression.expression);
+                    if(expression.as)
+                        args = args.concat(['AS', expression.as]);
+                })
+                
             }
             if(parameters.limit !== undefined) {
                 args.push('LIMIT')
@@ -704,7 +714,7 @@ export type FTSearchParameters = {
  * @param load.property The property name
  * @param groupby The 'GROUPBY' parameter.
  * @param groupby.nargs The number of arguments of the 'GROUPBY' parameter
- * @param groupby.property The property name of the 'GROUPBY' parameter
+ * @param groupby.properties The property name of the 'GROUPBY' parameter
  * @param reduce The 'REDUCE' parameter.
  * @param reduce.function A function of the 'REDUCE' parameter
  * @param reduce.nargs The number of arguments of the 'REDUCE' parameter
@@ -712,7 +722,7 @@ export type FTSearchParameters = {
  * @param reduce.as The name of the function of the 'REDUCE' parameter
  * @param sortby The 'SORTBY' parameter. 
  * @param sortby.nargs The number of arguments of the 'SORTBY' parameter
- * @param sortby.property The property name of the 'SORTBY' parameter
+ * @param sortby.properties The property name of the 'SORTBY' parameter
  * @param sortby.sort The sort type of the 'SORTBY' parameter
  * @param sortby.max The max of the 'SORTBY' parameter
  * @param apply The 'APPLY' parameter. 
@@ -726,34 +736,51 @@ export type FTSearchParameters = {
 export type FTAggregateParameters = {
     load?: {
         nargs: string,
-        property: string
+        properties: string[]
     },
     groupby?: {
         nargs: string,
-        property: string
+        properties: string[]
     },
     reduce?: {
         function: string,
         nargs: string,
-        arg: string,
-        as: string
+        args: string[],
+        as?: string
     },
     sortby?: {
         nargs: string,
-        property: string,
-        sort: 'ASC' | 'DESC',
+        properties: FTSortByProperty[],
         max: number
     },
-    apply?: {
-        expression: string,
-        as: string
-    },
+    expressions?: FTExpression[],
     limit?: {
         offset: string,
         numberOfResults: number
     },
     filter?: string
 }
+
+/**
+ * 
+ */
+export type FTExpression = {
+    expression: string,
+    as: string
+}
+
+/**
+ * 
+ */
+export type FTSortByProperty = {
+    property: string,
+    sort: FTSort
+}
+
+/**
+ * 
+ */
+export type FTSort = 'ASC' | 'DESC';
 
 /**
  * The additional parameters of 'FT.SUGADD' command
