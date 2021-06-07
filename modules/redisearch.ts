@@ -24,8 +24,7 @@ export class Redisearch extends Module {
      * @returns 'OK' or error
      */
     async create(index: string, indexType: FTIndexType, schemaFields: FTSchemaField[], parameters?: FTCreateParameters): Promise<'OK' | string> {
-        let args: string[] = [index]
-        args = args.concat(['ON', indexType]);
+        let args: string[] = [index, 'ON', indexType]
         if(parameters !== undefined) {
             if(parameters.prefix !== undefined) {
                 args.push('PREFIX');
@@ -228,7 +227,6 @@ export class Redisearch extends Module {
                     if(expression.as)
                         args = args.concat(['AS', expression.as]);
                 })
-                
             }
             if(parameters.limit !== undefined) {
                 args.push('LIMIT')
@@ -699,7 +697,7 @@ export type FTSearchParameters = {
     payload?: string,
     sortBy?: {
         field: string,
-        sort: 'ASC' | 'DESC'
+        sort: FTSort
     },
     limit?: {
         first: number,
@@ -722,12 +720,10 @@ export type FTSearchParameters = {
  * @param reduce.as The name of the function of the 'REDUCE' parameter
  * @param sortby The 'SORTBY' parameter. 
  * @param sortby.nargs The number of arguments of the 'SORTBY' parameter
- * @param sortby.properties The property name of the 'SORTBY' parameter
+ * @param sortby.properties A list of property names of the 'SORTBY' parameter
  * @param sortby.sort The sort type of the 'SORTBY' parameter
  * @param sortby.max The max of the 'SORTBY' parameter
- * @param apply The 'APPLY' parameter. 
- * @param apply.expression The expression of the 'APPLY' parameter
- * @param apply.as The as of the 'APPLY' parameter
+ * @param expression Given expressions starting by the 'APPLY' keyword
  * @param limit The 'LIMIT' parameter.
  * @param limit.offset The offset of the 'LIMIT' parameter
  * @param limit.numberOfResults The number of results of the 'LIMIT' parameter
@@ -762,7 +758,9 @@ export type FTAggregateParameters = {
 }
 
 /**
- * 
+ * The expressions given to the 'APPLY' key word
+ * @param expression The expression given
+ * @param as The value of 'AS' of the expression determining the name of it.
  */
 export type FTExpression = {
     expression: string,
@@ -770,7 +768,9 @@ export type FTExpression = {
 }
 
 /**
- * 
+ * The 'SORT BY' property object
+ * @param property The value of the property
+ * @param sort The 'SORT' value of the property
  */
 export type FTSortByProperty = {
     property: string,
@@ -778,7 +778,9 @@ export type FTSortByProperty = {
 }
 
 /**
- * 
+ * The available 'SORT' methods
+ * @param ASC The ascending sort
+ * @param DESC The descending sort
  */
 export type FTSort = 'ASC' | 'DESC';
 
