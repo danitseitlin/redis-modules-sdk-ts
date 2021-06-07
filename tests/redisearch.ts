@@ -104,7 +104,7 @@ describe('RediSearch Module testing', async function() {
         await client.redis.hset('person:3', { name: 'Sarah Brown', city: 'New York', gender: 'female'  });
         await client.redis.hset('person:3', { name: 'Michael Doe', city: 'New York', gender: 'male'  });
         const [count, ...result] = await client.aggregate(`${index}-aggreagtetest`, 'Doe', {
-            groupby: { property: '@city', nargs: '1' }
+            groupby: { properties: ['@city'], nargs: '1' }
         });
         await client.dropindex(`${index}-aggreagtetest`);
         expect(count).to.equal(2, 'Total number of the FT.AGGREGATE command result');
