@@ -111,8 +111,13 @@ export class Redisearch extends Module {
                 args = args.concat(['INKEYS', parameters.inKeys.num.toString(), parameters.inKeys.field])
             if(parameters.inFields !== undefined)
                 args = args.concat(['INFIELDS', parameters.inFields.num.toString(), parameters.inFields.field])
-            if(parameters.return !== undefined)
-                args = args.concat(['RETURN', parameters.return.num.toString()].concat(parameters.return.fields))
+            if(parameters.return !== undefined) {
+                args.push('RETURN');
+                if(parameters.return.num)
+                    args.push(parameters.return.num.toString());
+                if(parameters.return.fields)    
+                    args = args.concat(parameters.return.fields);
+            }
             if(parameters.summarize !== undefined) {
                 args.push('SUMMARIZE')
                 if(parameters.summarize.fields !== undefined) {
@@ -608,11 +613,11 @@ export interface FTSchemaField extends FTFieldOptions {
  * @param inFields.num The num argument of the 'INFIELDS' parameter
  * @param inFields.field The field argument of the 'INFIELDS' parameter
  * @param return The 'RETURN' parameter. Use this keyword to limit which fields from the document are returned.
- * @param return.num The num argument of the 'RETURN' parameter
- * @param return.fields The fields of the 'RETURN' parameter
+ * @param return.num The num argument of the 'RETURN' parameter. If num is 0, it acts like NOCONTENT.
+ * @param return.fields The fields of the 'RETURN' parameter. No need to pass if num is 0.
  * @param summarize The 'SUMMARIZE' parameter. Use this option to return only the sections of the field which contain the matched text.
  * @param summarize.fields The fields argument of the 'SUMMARIZE' parameter
- * @param summarize.fields.num The num argument of the fields argument
+ * @param summarize.fields.num The num argument of the fields argument. 
  * @param summarize.fields.field The field argument of the fields argument
  * @param summarize.frags The fargs argument of the 'SUMMARIZE' parameter
  * @param summarize.len The len argument of the 'SUMMARIZE' parameter
@@ -667,7 +672,7 @@ export type FTSearchParameters = {
     },
     return?: {
         num: number,
-        fields: string[]
+        fields?: string[]
     },
     summarize?: {
         fields?: {
