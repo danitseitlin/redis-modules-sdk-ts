@@ -193,6 +193,14 @@ export class Redisearch extends Module {
                         args.push(property);
                     })
             }
+            if(parameters.apply !== undefined) {
+                parameters.apply.forEach(apply => {
+                    args.push('APPLY');
+                    args.push(apply.expression);
+                    if(apply.as)
+                        args = args.concat(['AS', apply.as]);
+                })
+            }
             if(parameters.groupby !== undefined){
                 args.push('GROUPBY')
                 if(parameters.groupby.nargs !== undefined)
@@ -204,17 +212,19 @@ export class Redisearch extends Module {
                 }
             }
             if(parameters.reduce !== undefined) {
-                args.push('REDUCE')
-                if(parameters.reduce.function !== undefined)
-                    args.push(parameters.reduce.function);
-                if(parameters.reduce.nargs !== undefined)
-                    args.push(parameters.reduce.nargs);
-                if(parameters.reduce.args)
-                    parameters.reduce.args.forEach(arg => {
-                        args.push(arg);
-                    })
-                if(parameters.reduce.as !== undefined)
-                    args = args.concat(['AS', parameters.reduce.as]);
+                parameters.reduce.forEach(reduce => {
+                    args.push('REDUCE')
+                    if(reduce.function !== undefined)
+                        args.push(reduce.function);
+                    if(reduce.nargs !== undefined)
+                        args.push(reduce.nargs);
+                    if(reduce.args)
+                        reduce.args.forEach(arg => {
+                            args.push(arg);
+                        })
+                    if(reduce.as !== undefined)
+                        args = args.concat(['AS', reduce.as]);
+                })
             }
             if(parameters.sortby !== undefined) {
                 args.push('SORTBY')
@@ -720,14 +730,11 @@ export type FTSearchParameters = {
  * @param load The 'LOAD' parameter. 
  * @param load.nargs The number of arguments
  * @param load.property The property name
+ * @param apply Create new fields using 'APPLY' keyword for aggregations
  * @param groupby The 'GROUPBY' parameter.
  * @param groupby.nargs The number of arguments of the 'GROUPBY' parameter
  * @param groupby.properties The property name of the 'GROUPBY' parameter
  * @param reduce The 'REDUCE' parameter.
- * @param reduce.function A function of the 'REDUCE' parameter
- * @param reduce.nargs The number of arguments of the 'REDUCE' parameter
- * @param reduce.arg The argument of the 'REDUCE' parameter
- * @param reduce.as The name of the function of the 'REDUCE' parameter
  * @param sortby The 'SORTBY' parameter. 
  * @param sortby.nargs The number of arguments of the 'SORTBY' parameter
  * @param sortby.properties A list of property names of the 'SORTBY' parameter
@@ -744,16 +751,12 @@ export type FTAggregateParameters = {
         nargs: string,
         properties: string[]
     },
+    apply?: FTExpression[],
     groupby?: {
         nargs: string,
         properties: string[]
     },
-    reduce?: {
-        function: string,
-        nargs: string,
-        args: string[],
-        as?: string
-    },
+    reduce?: FTReduce[],
     sortby?: {
         nargs: string,
         properties: FTSortByProperty[],
@@ -775,6 +778,20 @@ export type FTAggregateParameters = {
 export type FTExpression = {
     expression: string,
     as: string
+}
+
+/**
+ * The 'REDUCE' parameter.
+ * @param function A function of the 'REDUCE' parameter
+ * @param nargs The number of arguments of the 'REDUCE' parameter
+ * @param arg The argument of the 'REDUCE' parameter
+ * @param as The name of the function of the 'REDUCE' parameter
+ */
+export type FTReduce = {
+    function: string,
+    nargs: string,
+    args: string[],
+    as?: string
 }
 
 /**
