@@ -90,6 +90,11 @@ describe('RediSearch Module testing', async function() {
         {
             name: 'gender',
             type: 'TAG'
+        },
+        {
+            name: 'timestamp',
+            type: 'NUMERIC',
+            sortable: true
         }
         ], {
             prefix: [
@@ -98,17 +103,32 @@ describe('RediSearch Module testing', async function() {
                     name: 'person'
                 }
             ]
-        })
-        await client.redis.hset('person:1', { name: 'John Doe', city: 'London', gender: 'male'  });
-        await client.redis.hset('person:2', { name: 'Jane Doe', city: 'London', gender: 'female'  });
-        await client.redis.hset('person:3', { name: 'Sarah Brown', city: 'New York', gender: 'female'  });
-        await client.redis.hset('person:3', { name: 'Michael Doe', city: 'New York', gender: 'male'  });
+        });
+
+        const time = new Date();
+
+        await client.redis.hset('person:1', { name: 'John Doe', city: 'London', gender: 'male', timestamp: (time.getTime() / 1000).toFixed(0) });
+        await client.redis.hset('person:2', { name: 'Jane Doe', city: 'London', gender: 'female', timestamp: (time.getTime() / 1000).toFixed(0) });
+
+        time.setHours(time.getHours() - 3);
+
+        await client.redis.hset('person:3', { name: 'Sarah Brown', city: 'New York', gender: 'female', timestamp: (time.getTime() / 1000).toFixed(0) });
+        await client.redis.hset('person:3', { name: 'Michael Doe', city: 'New York', gender: 'male', timestamp: (time.getTime() / 1000).toFixed(0) });
+
         const [count, ...result] = await client.aggregate(`${index}-aggreagtetest`, 'Doe', {
             groupby: { properties: ['@city'], nargs: '1' }
         });
-        await client.dropindex(`${index}-aggreagtetest`);
         expect(count).to.equal(2, 'Total number of the FT.AGGREGATE command result');
         expect(result[0][0]).to.equal('city', 'Aggreagated prop of the FT.AGGREGATE command result');
+
+        const [count2, ...results2] = await client.aggregate(`${index}-aggreagtetest`, '*', {
+            apply: [ { expression: 'hour(@timestamp)', as: 'hour' } ],
+            groupby: { properties: ['@hour'], nargs: '1'}
+        })
+        expect(count2).to.equal(2, 'Total number of the FT.AGGREGATE command result');
+        expect(results2[0][0]).to.equal('hour', 'Aggreagated apply prop of the FT.AGGREGATE command result');
+
+        await client.dropindex(`${index}-aggreagtetest`);
     });
     it('explain function', async () => {
         const response = await client.explain(index, query)
