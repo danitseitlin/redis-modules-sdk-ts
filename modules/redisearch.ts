@@ -62,7 +62,10 @@ export class Redisearch extends Module {
         }
         args.push('SCHEMA');
         for(const field of schemaFields) {
-            args = args.concat([field.name, field.type]);
+            args.push(field.name)
+            if(field.as)
+                args = args.concat(['AS', field.as])
+            args.push(field.type);
             if(field.nostem !== undefined) args.push('NOSTEM');
             if(field.weight !== undefined) args = args.concat(['WEIGHT', field.weight.toString()]);
             if(field.phonetic !== undefined) args = args.concat(['PHONETIC', field.phonetic]);
@@ -582,10 +585,12 @@ export type FTFieldOptions = {
  * @param phonetic The 'PHONETIC' parameter. Declaring a text field as PHONETIC will perform phonetic matching on it in searches by default. The obligatory {matcher} argument specifies the phonetic algorithm and language used.
  * @param weight The 'WEIGHT' parameter. For TEXT fields, declares the importance of this field when calculating result accuracy. This is a multiplication factor, and defaults to 1 if not specified.
  * @param seperator The 'SEPERATOR' parameter. For TAG fields, indicates how the text contained in the field is to be split into individual tags. The default is , . The value must be a single character.
+ * @param as The 'AS' parameter. Used when creating an index on 'JSON'.
  */
 export interface FTSchemaField extends FTFieldOptions {
     name: string,
     type: FTFieldType,
+    as?: string
 }
 
 /**
