@@ -12,7 +12,7 @@ export {
 } from './modules/rts';
 export {
     Redisearch, FTCreateParameters, FTFieldOptions, FTSchemaField, FTSearchParameters, FTAggregateParameters, FTSugAddParameters, FTSugGetParameters, FTSpellCheck,
-    FTFieldType, FTConfig, FTInfo, FTIndexType, FTSort, FTExpression, FTSortByProperty
+    FTFieldType, FTConfig, FTInfo, FTIndexType, FTSort, FTExpression, FTSortByProperty, FTReduce
 } from './modules/redisearch'
 export {
     RedisAI, AIBackend, AIDagExecuteParameters, AIDevice, AIModel, AIScript, AIScriptInfo, AIScriptSetParameters, AITensor, AITensorInfo, AIModelExecute,
