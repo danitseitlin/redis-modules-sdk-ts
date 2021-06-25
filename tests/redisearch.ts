@@ -49,7 +49,7 @@ describe('RediSearch Module testing', async function() {
             weight: 2
         }])
         expect(response).to.equal('OK', 'The response of the FT.CREATE command');
-        response = await client.create(index, 'JSON', [{
+        response = await client.create(`${index}-json`, 'JSON', [{
             name: '$.name',
             type: 'TEXT',
             as: 'name'
