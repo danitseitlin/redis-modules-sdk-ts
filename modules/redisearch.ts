@@ -634,7 +634,8 @@ export interface FTSchemaField extends FTFieldOptions {
  * @param return The 'RETURN' parameter. Use this keyword to limit which fields from the document are returned.
  * @param return.num The num argument of the 'RETURN' parameter. If num is 0, it acts like NOCONTENT.
  * @param return.fields The fields of the 'RETURN' parameter. No need to pass if num is 0.
- * @param return.as The 'AS' parameter following a "field" name, used by index type "JSON".
+ * @param return.fields.name The name of the field.
+ * @param return.fields.as The 'AS' parameter following a "field" name, used by index type "JSON".
  * @param summarize The 'SUMMARIZE' parameter. Use this option to return only the sections of the field which contain the matched text.
  * @param summarize.fields The fields argument of the 'SUMMARIZE' parameter
  * @param summarize.fields.num The num argument of the fields argument. 
@@ -692,9 +693,7 @@ export type FTSearchParameters = {
     },
     return?: {
         num: number,
-        //fields?: string[],
-        //as?: string
-        fields: {
+        fields?: {
             name: string,
             as?: string
         }[]
