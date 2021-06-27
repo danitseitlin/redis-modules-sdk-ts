@@ -62,7 +62,10 @@ export class Redisearch extends Module {
         }
         args.push('SCHEMA');
         for(const field of schemaFields) {
-            args = args.concat([field.name, field.type]);
+            args.push(field.name)
+            if(field.as)
+                args = args.concat(['AS', field.as])
+            args.push(field.type);
             if(field.nostem !== undefined) args.push('NOSTEM');
             if(field.weight !== undefined) args = args.concat(['WEIGHT', field.weight.toString()]);
             if(field.phonetic !== undefined) args = args.concat(['PHONETIC', field.phonetic]);
@@ -116,7 +119,11 @@ export class Redisearch extends Module {
                 if(parameters.return.num)
                     args.push(parameters.return.num.toString());
                 if(parameters.return.fields)    
-                    args = args.concat(parameters.return.fields);
+                    parameters.return.fields.forEach(field => {
+                        args.push(field.name)
+                        if(field.as)
+                            args = args.concat(['AS', field.as])
+                    })
             }
             if(parameters.summarize !== undefined) {
                 args.push('SUMMARIZE')
@@ -592,10 +599,12 @@ export type FTFieldOptions = {
  * @param phonetic The 'PHONETIC' parameter. Declaring a text field as PHONETIC will perform phonetic matching on it in searches by default. The obligatory {matcher} argument specifies the phonetic algorithm and language used.
  * @param weight The 'WEIGHT' parameter. For TEXT fields, declares the importance of this field when calculating result accuracy. This is a multiplication factor, and defaults to 1 if not specified.
  * @param seperator The 'SEPERATOR' parameter. For TAG fields, indicates how the text contained in the field is to be split into individual tags. The default is , . The value must be a single character.
+ * @param as The 'AS' parameter. Used when creating an index on 'JSON'.
  */
 export interface FTSchemaField extends FTFieldOptions {
     name: string,
     type: FTFieldType,
+    as?: string
 }
 
 /**
@@ -625,6 +634,8 @@ export interface FTSchemaField extends FTFieldOptions {
  * @param return The 'RETURN' parameter. Use this keyword to limit which fields from the document are returned.
  * @param return.num The num argument of the 'RETURN' parameter. If num is 0, it acts like NOCONTENT.
  * @param return.fields The fields of the 'RETURN' parameter. No need to pass if num is 0.
+ * @param return.fields.name The name of the field.
+ * @param return.fields.as The 'AS' parameter following a "field" name, used by index type "JSON".
  * @param summarize The 'SUMMARIZE' parameter. Use this option to return only the sections of the field which contain the matched text.
  * @param summarize.fields The fields argument of the 'SUMMARIZE' parameter
  * @param summarize.fields.num The num argument of the fields argument. 
@@ -682,7 +693,10 @@ export type FTSearchParameters = {
     },
     return?: {
         num: number,
-        fields?: string[]
+        fields?: {
+            name: string,
+            as?: string
+        }[]
     },
     summarize?: {
         fields?: {
