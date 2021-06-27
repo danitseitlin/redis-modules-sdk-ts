@@ -61,7 +61,7 @@ describe('RediSearch Module testing', async function() {
         expect(response).to.equal(0, 'The response of the FT.SEARCH command')
         response = await client.search(index, query, {
             return: {
-                num: 1,
+                num: 3,
                 fields: [{
                     name: '$.name',
                     as: 'name'
