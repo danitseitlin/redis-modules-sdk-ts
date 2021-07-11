@@ -16,6 +16,7 @@
 ## <img src='https://oss.redislabs.com/redisjson/images/logo.svg' style='max-width:100%;' height='30'/> ReJSON module
 ### Quick start :toolbox:
 ```
+import { ReJSON } from 'redis-modules-sdk';
 const client = new ReJSON({
     host: 'hostname',
     port: 43758,
@@ -58,6 +59,7 @@ await client.disconnect();
 ## <img src='https://oss.redislabs.com/redistimeseries/images/logo.svg' style='max-width:100%;' height='30'/> RedisTimeSeries module
 ### Quick start :toolbox:
 ```
+import { RedisTimeSeries } from 'redis-modules-sdk';
 const client = new RedisTimeSeries({
     host: 'hostname',
     port: 43758,
@@ -96,6 +98,7 @@ await client.disconnect();
 ## <img src='https://oss.redislabs.com/redisearch/img/logo.svg' style='max-width:100%;' height='30'/> Redisearch module
 ### Quick start :toolbox:
 ```
+import { Redisearch } from 'redis-modules-sdk';
 const client = new Redisearch({
     host: 'hostname',
     port: 43758,
@@ -141,6 +144,7 @@ await client.disconnect();
 ## <img src='https://oss.redislabs.com/redisgraph/images/logo.svg' style='max-width:100%;' height='30'/> RedisGraph module
 ### Quick start :toolbox:
 ```
+import { RedisGraph } from 'redis-modules-sdk';
 const client = new RedisGraph({
     host: 'hostname',
     port: 43758,
@@ -170,6 +174,7 @@ await client.disconnect();
 ## <img src='https://oss.redislabs.com/redisgears/images/RedisGears.png' style='max-width:100%;' height='30'/> RedisGears module
 ### Quick start :toolbox:
 ```
+import { RedisGears } from 'redis-modules-sdk';
 const client = new RedisGears({
     host: 'hostname',
     port: 43758,
@@ -209,6 +214,7 @@ await client.disconnect();
 ### Bloom filter
 #### Quick start :toolbox:
 ```
+import { RedisBloom } from 'redis-modules-sdk';
 const client = new RedisBloom({
     host: 'hostname',
     port: 43758,
@@ -239,6 +245,7 @@ await client.disconnect();
 ### TopK filter
 #### Quick start :toolbox:
 ```
+import { RedisBloomTopK } from 'redis-modules-sdk';
 const client = new RedisBloomTopK({
     host: 'hostname',
     port: 43758,
@@ -266,6 +273,7 @@ await client.disconnect();
 ### Cuckoo filter
 #### Quick start :toolbox:
 ```
+import { RedisBloomCuckoo } from 'redis-modules-sdk';
 const client = new RedisBloomCuckoo({
     host: 'hostname',
     port: 43758,
@@ -297,6 +305,7 @@ await client.disconnect();
 ### Count-Min Sketch filter
 #### Quick start :toolbox:
 ```
+import { RedisBloomCMK } from 'redis-modules-sdk';
 const client = new RedisBloomCMK({
     host: 'hostname',
     port: 43758,
@@ -324,6 +333,7 @@ await client.disconnect();
 ## <img src='https://oss.redislabs.com/redisai/images/logo.svg' style='max-width:100%;' height='30'/> RedisAI module
 ### Quick start :toolbox:
 ```
+import { RedisAI } from 'redis-modules-sdk';
 const client = new RedisAI({
     host: 'hostname',
     port: 43758,
