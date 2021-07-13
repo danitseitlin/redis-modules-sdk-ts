@@ -11,8 +11,9 @@
 | [RedisBloom: TopK filter](https://github.com/RedisBloom/RedisBloom)             | [Section](#topk-filter)             | [QuickStart](#quick-start-toolbox-6) | [Functions](#functions-list-floppy_disk-6) |
 | [RedisBloom: Cuckoo filter](https://github.com/RedisBloom/RedisBloom)           | [Section](#cuckoo-filter)           | [QuickStart](#quick-start-toolbox-7) | [Functions](#functions-list-floppy_disk-7) |
 | [RedisBloom: Count Min Sketch filter](https://github.com/RedisBloom/RedisBloom) | [Section](#count-min-sketch-filter) | [QuickStart](#quick-start-toolbox-8) | [Functions](#functions-list-floppy_disk-8) |
-| [RedisAI](https://github.com/RedisAI/RedisAI)                                   | [Section](#-redisai-module)         | [QuickStart](#quick-start-toolbox-9) | [Functions](#functions-list-floppy_disk-9) |
-| [RedisIntervalSets](https://github.com/danitseitlin/redis-interval-sets)        | [Section](#redis-interval-sets-module)         | [QuickStart](#quick-start-toolbox-10) | [Functions](#functions-list-floppy_disk-10) |
+| [RedisBloom: TDigest](https://github.com/RedisBloom/RedisBloom) | [Section](#tdigest-filter) | [QuickStart](#quick-start-toolbox-9) | [Functions](#functions-list-floppy_disk-9) |
+| [RedisAI](https://github.com/RedisAI/RedisAI)                                   | [Section](#-redisai-module)         | [QuickStart](#quick-start-toolbox-10) | [Functions](#functions-list-floppy_disk-10) |
+| [RedisIntervalSets](https://github.com/danitseitlin/redis-interval-sets)        | [Section](#redis-interval-sets-module)         | [QuickStart](#quick-start-toolbox-11) | [Functions](#functions-list-floppy_disk-11) |
 
 ### [Redis 'All in One' feature](#redis-all-in-one-feature)
 
@@ -346,21 +347,23 @@ const client = new RedisBloomTDigest({
 await client.connect();
 
 //Adding a key
-const response = await client.initbydim('dest', 1, 2);
+const response = await client.create('dest', 1000);
 
 //Disconnect from the Redis database with RedisBloom TDigest filter
 await client.disconnect();
 ```
 #### Functions list :floppy_disk:
-| Functions  | Command                             |
-|:---------- |:----------------------------------- |
-| initbydim  | CMS.INITBYDIM                       |
-| initbyprob | CMS.INITBYPROB                      |
-| incrby     | CMS.INCRBY                          |
-| query      | CMS.QUERY                           |
-| merge      | CMS.MERGE                           |
-| info       | CMS.INFO                            |
-
+| Functions  | Command          |
+|:---------- |:---------------- |
+| create     | TDIGEST.CREATE   |
+| reset      | TDIGEST.RESET    |
+| add        | TDIGEST.ADD      |
+| merge      | TDIGEST.MERGE    |
+| min        | TDIGEST.MIN      |
+| max        | TDIGEST.MAX      |
+| quantile   | TDIGEST.QUANTILE |
+| cdf        | TDIGEST.CDF      |
+| info       | TDIGEST.INFO     |
 
 ## <img src='https://oss.redislabs.com/redisai/images/logo.svg' style='max-width:100%;' height='30'/> RedisAI module
 ### Quick start :toolbox:
