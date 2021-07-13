@@ -20,7 +20,7 @@
 import { ReJSON } from 'redis-modules-sdk';
 const client = new ReJSON({
     host: 'hostname',
-    port: 43758,
+    port: 6379
 });
 
 //Connect to the Redis database with ReJSON module
@@ -63,7 +63,7 @@ await client.disconnect();
 import { RedisTimeSeries } from 'redis-modules-sdk';
 const client = new RedisTimeSeries({
     host: 'hostname',
-    port: 43758,
+    port: 6379
 });
 
 //Connect to the Redis database with RedisTimeSeries module
@@ -102,7 +102,7 @@ await client.disconnect();
 import { Redisearch } from 'redis-modules-sdk';
 const client = new Redisearch({
     host: 'hostname',
-    port: 43758,
+    port: 6379
 });
 
 //Connect to the Redis database with Redisearch module
@@ -148,7 +148,7 @@ await client.disconnect();
 import { RedisGraph } from 'redis-modules-sdk';
 const client = new RedisGraph({
     host: 'hostname',
-    port: 43758,
+    port: 6379
 });
 
 //Connect to the Redis database with RedisGraph module
@@ -178,7 +178,7 @@ await client.disconnect();
 import { RedisGears } from 'redis-modules-sdk';
 const client = new RedisGears({
     host: 'hostname',
-    port: 43758,
+    port: 6379
 });
 
 //Connect to the Redis database with RedisGears module
@@ -218,7 +218,7 @@ await client.disconnect();
 import { RedisBloom } from 'redis-modules-sdk';
 const client = new RedisBloom({
     host: 'hostname',
-    port: 43758,
+    port: 6379
 });
 
 //Connect to the Redis database with RedisBloom module
@@ -249,7 +249,7 @@ await client.disconnect();
 import { RedisBloomTopK } from 'redis-modules-sdk';
 const client = new RedisBloomTopK({
     host: 'hostname',
-    port: 43758,
+    port: 6379
 });
 
 //Connect to the Redis database with RedisBloom TopK filter
@@ -277,7 +277,7 @@ await client.disconnect();
 import { RedisBloomCuckoo } from 'redis-modules-sdk';
 const client = new RedisBloomCuckoo({
     host: 'hostname',
-    port: 43758,
+    port: 6379
 });
 
 //Connect to the Redis database with RedisBloom Cuckoo filter
@@ -309,7 +309,7 @@ await client.disconnect();
 import { RedisBloomCMK } from 'redis-modules-sdk';
 const client = new RedisBloomCMK({
     host: 'hostname',
-    port: 43758,
+    port: 6379
 });
 
 //Connect to the Redis database with RedisBloom Count-Min Sketch filter
@@ -337,7 +337,7 @@ await client.disconnect();
 import { RedisAI } from 'redis-modules-sdk';
 const client = new RedisAI({
     host: 'hostname',
-    port: 43758,
+    port: 6379
 });
 
 //Connect to the Redis database with RedisAI module
@@ -376,7 +376,7 @@ await client.disconnect();
 import { RedisIntervalSets } from 'redis-modules-sdk';
 const client = new RedisIntervalSets({
     host: 'hostname',
-    port: 43758,
+    port: 6379
 });
 
 //Connect to the Redis database with RIS module
@@ -397,3 +397,43 @@ await client.disconnect();
 | del      | iset.del       |
 | score    | iset.score     |
 | notScore | iset.not_score |
+
+
+## Redis 'All in One' feature
+### Quick start :toolbox:
+This feature is meant to open a connection for a database and support more than 1 module at once.
+The 'Redis' class supports all existing modules in the project.
+
+#### Module function prefixes:
+| Module                               | Prefix                |
+|:------------------------------------ |:--------------------- |
+| ReJSON                               | rejson_module_        |
+| RedisTimeSeries                      | rts_module_           |
+| RediSearch                           | search_module_        |
+| RedisGraph                           | graph_module_         |
+| RedisGears                           | gears_module_         |
+| RedisBloom (Bloom filter)            | bloom_module_         | 
+| RedisBloom (TopK filer)              | bloom_topk_module_    |
+| RedisBloom (Cuckoo filter)           | bloom_cuckoo_module_  |
+| RedisBloom (Count Min Sketch filter) | bloom_cmk_module_     |
+| RedisBloom (TDigest)                 | bloom_tdigest_module_ |
+| RedisAI                              | ai_module_            |
+| RedisIntervalSets                    | ris_module_           |
+
+```
+import { Redis } from 'redis-modules-sdk';
+const client = new Redis({
+    host: 'hostname',
+    port: 43758
+})
+
+//Connect to the Redis database
+await client.connect();
+
+//For example, using Redis Interval Sets
+const sets = await client.ris_module_get('ages')
+expect(sets.length).to.eql(2, 'The number of sets');
+
+//Disconnect from the Redis database
+await client.disconnect();
+```
