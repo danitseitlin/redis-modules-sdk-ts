@@ -14,6 +14,8 @@
 | [RedisAI](https://github.com/RedisAI/RedisAI)                                   | [Section](#-redisai-module)         | [QuickStart](#quick-start-toolbox-9) | [Functions](#functions-list-floppy_disk-9) |
 | [RedisIntervalSets](https://github.com/danitseitlin/redis-interval-sets)        | [Section](#redis-interval-sets-module)         | [QuickStart](#quick-start-toolbox-10) | [Functions](#functions-list-floppy_disk-10) |
 
+### [Redis 'All in One' feature](#redis-all-in-one-feature)
+
 ## <img src='https://oss.redislabs.com/redisjson/images/logo.svg' style='max-width:100%;' height='30'/> ReJSON module
 ### Quick start :toolbox:
 ```
