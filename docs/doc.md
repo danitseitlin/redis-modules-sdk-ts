@@ -12,6 +12,7 @@
 | [RedisBloom: Cuckoo filter](https://github.com/RedisBloom/RedisBloom)           | [Section](#cuckoo-filter)           | [QuickStart](#quick-start-toolbox-7) | [Functions](#functions-list-floppy_disk-7) |
 | [RedisBloom: Count Min Sketch filter](https://github.com/RedisBloom/RedisBloom) | [Section](#count-min-sketch-filter) | [QuickStart](#quick-start-toolbox-8) | [Functions](#functions-list-floppy_disk-8) |
 | [RedisAI](https://github.com/RedisAI/RedisAI)                                   | [Section](#-redisai-module)         | [QuickStart](#quick-start-toolbox-9) | [Functions](#functions-list-floppy_disk-9) |
+| [RedisIntervalSets](https://github.com/danitseitlin/redis-interval-sets)        | [Section](#redis-interval-sets-module)         | [QuickStart](#quick-start-toolbox-10) | [Functions](#functions-list-floppy_disk-10) |
 
 ## <img src='https://oss.redislabs.com/redisjson/images/logo.svg' style='max-width:100%;' height='30'/> ReJSON module
 ### Quick start :toolbox:
@@ -368,3 +369,31 @@ await client.disconnect();
 | dagexecuteRO  | AI.DAGEXECUTE_RO |
 | info          | AI.INFO          |
 | config        | AI.CONFIG        |
+
+## Redis Interval Sets module
+### Quick start :toolbox:
+```
+import { RedisIntervalSets } from 'redis-modules-sdk';
+const client = new RedisIntervalSets({
+    host: 'hostname',
+    port: 43758,
+});
+
+//Connect to the Redis database with RIS module
+await client.connect();
+
+//Retrieving a list of sets
+const sets = await client.get('ages')
+expect(sets.length).to.eql(2, 'The number of sets');
+
+//Disconnect from the Redis database with RIS module
+await client.disconnect();
+```
+### Functions list :floppy_disk:
+| Functions| Command        |
+|:-------- |:-------------- |
+| add      | iset.add       |
+| get      | iset.get       |
+| del      | iset.del       |
+| score    | iset.score     |
+| notScore | iset.not_score |
