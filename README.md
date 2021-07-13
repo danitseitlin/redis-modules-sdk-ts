@@ -44,6 +44,15 @@ npm install redis-modules-sdk@latest
 
 # Documentation :book:
 Come and read our documentation [here](https://github.com/danitseitlin/redis-modules-sdk/blob/master/docs/doc.md#documentation-book) before starting
+* [Redis All in One](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#redis-all-in-one-feature)
+* [ReJSON](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#-rejson-module)
+* [RedisTimeSeries](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#-redistimeseries-module) (RTS)
+* [RediSearch](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#-redisearch-module)
+* [RedisGraph](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#-redisgraph-module)
+* [RedisGears](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#-redisgears-module)
+* [RedisBloom](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#bloom-filter)
+* [RedisAI](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#-redisai-module)
+* [RedisIntervalSets](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#ris-module)
 
 # Redis "All in One"! :scream:
 A class built for integrating more than one Redis module without creating more than one class!
