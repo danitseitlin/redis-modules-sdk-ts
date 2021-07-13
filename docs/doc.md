@@ -11,7 +11,11 @@
 | [RedisBloom: TopK filter](https://github.com/RedisBloom/RedisBloom)             | [Section](#topk-filter)             | [QuickStart](#quick-start-toolbox-6) | [Functions](#functions-list-floppy_disk-6) |
 | [RedisBloom: Cuckoo filter](https://github.com/RedisBloom/RedisBloom)           | [Section](#cuckoo-filter)           | [QuickStart](#quick-start-toolbox-7) | [Functions](#functions-list-floppy_disk-7) |
 | [RedisBloom: Count Min Sketch filter](https://github.com/RedisBloom/RedisBloom) | [Section](#count-min-sketch-filter) | [QuickStart](#quick-start-toolbox-8) | [Functions](#functions-list-floppy_disk-8) |
-| [RedisAI](https://github.com/RedisAI/RedisAI)                                   | [Section](#-redisai-module)         | [QuickStart](#quick-start-toolbox-9) | [Functions](#functions-list-floppy_disk-9) |
+| [RedisBloom: TDigest](https://github.com/RedisBloom/RedisBloom) | [Section](#tdigest-filter) | [QuickStart](#quick-start-toolbox-9) | [Functions](#functions-list-floppy_disk-9) |
+| [RedisAI](https://github.com/RedisAI/RedisAI)                                   | [Section](#-redisai-module)         | [QuickStart](#quick-start-toolbox-10) | [Functions](#functions-list-floppy_disk-10) |
+| [RedisIntervalSets](https://github.com/danitseitlin/redis-interval-sets)        | [Section](#redis-interval-sets-module)         | [QuickStart](#quick-start-toolbox-11) | [Functions](#functions-list-floppy_disk-11) |
+
+### [Redis 'All in One' feature](#redis-all-in-one-feature)
 
 ## <img src='https://oss.redislabs.com/redisjson/images/logo.svg' style='max-width:100%;' height='30'/> ReJSON module
 ### Quick start :toolbox:
@@ -19,7 +23,7 @@
 import { ReJSON } from 'redis-modules-sdk';
 const client = new ReJSON({
     host: 'hostname',
-    port: 43758,
+    port: 6379
 });
 
 //Connect to the Redis database with ReJSON module
@@ -62,7 +66,7 @@ await client.disconnect();
 import { RedisTimeSeries } from 'redis-modules-sdk';
 const client = new RedisTimeSeries({
     host: 'hostname',
-    port: 43758,
+    port: 6379
 });
 
 //Connect to the Redis database with RedisTimeSeries module
@@ -101,7 +105,7 @@ await client.disconnect();
 import { Redisearch } from 'redis-modules-sdk';
 const client = new Redisearch({
     host: 'hostname',
-    port: 43758,
+    port: 6379
 });
 
 //Connect to the Redis database with Redisearch module
@@ -147,7 +151,7 @@ await client.disconnect();
 import { RedisGraph } from 'redis-modules-sdk';
 const client = new RedisGraph({
     host: 'hostname',
-    port: 43758,
+    port: 6379
 });
 
 //Connect to the Redis database with RedisGraph module
@@ -177,7 +181,7 @@ await client.disconnect();
 import { RedisGears } from 'redis-modules-sdk';
 const client = new RedisGears({
     host: 'hostname',
-    port: 43758,
+    port: 6379
 });
 
 //Connect to the Redis database with RedisGears module
@@ -217,7 +221,7 @@ await client.disconnect();
 import { RedisBloom } from 'redis-modules-sdk';
 const client = new RedisBloom({
     host: 'hostname',
-    port: 43758,
+    port: 6379
 });
 
 //Connect to the Redis database with RedisBloom module
@@ -248,7 +252,7 @@ await client.disconnect();
 import { RedisBloomTopK } from 'redis-modules-sdk';
 const client = new RedisBloomTopK({
     host: 'hostname',
-    port: 43758,
+    port: 6379
 });
 
 //Connect to the Redis database with RedisBloom TopK filter
@@ -276,7 +280,7 @@ await client.disconnect();
 import { RedisBloomCuckoo } from 'redis-modules-sdk';
 const client = new RedisBloomCuckoo({
     host: 'hostname',
-    port: 43758,
+    port: 6379
 });
 
 //Connect to the Redis database with RedisBloom Cuckoo filter
@@ -308,7 +312,7 @@ await client.disconnect();
 import { RedisBloomCMK } from 'redis-modules-sdk';
 const client = new RedisBloomCMK({
     host: 'hostname',
-    port: 43758,
+    port: 6379
 });
 
 //Connect to the Redis database with RedisBloom Count-Min Sketch filter
@@ -330,13 +334,44 @@ await client.disconnect();
 | merge      | CMS.MERGE                           |
 | info       | CMS.INFO                            |
 
+### TDigest filter
+#### Quick start :toolbox:
+```
+import { RedisBloomTDigest } from 'redis-modules-sdk';
+const client = new RedisBloomTDigest({
+    host: 'hostname',
+    port: 6379
+});
+
+//Connect to the Redis database with RedisBloom TDigest filter
+await client.connect();
+
+//Adding a key
+const response = await client.create('dest', 1000);
+
+//Disconnect from the Redis database with RedisBloom TDigest filter
+await client.disconnect();
+```
+#### Functions list :floppy_disk:
+| Functions  | Command          |
+|:---------- |:---------------- |
+| create     | TDIGEST.CREATE   |
+| reset      | TDIGEST.RESET    |
+| add        | TDIGEST.ADD      |
+| merge      | TDIGEST.MERGE    |
+| min        | TDIGEST.MIN      |
+| max        | TDIGEST.MAX      |
+| quantile   | TDIGEST.QUANTILE |
+| cdf        | TDIGEST.CDF      |
+| info       | TDIGEST.INFO     |
+
 ## <img src='https://oss.redislabs.com/redisai/images/logo.svg' style='max-width:100%;' height='30'/> RedisAI module
 ### Quick start :toolbox:
 ```
 import { RedisAI } from 'redis-modules-sdk';
 const client = new RedisAI({
     host: 'hostname',
-    port: 43758,
+    port: 6379
 });
 
 //Connect to the Redis database with RedisAI module
@@ -368,3 +403,71 @@ await client.disconnect();
 | dagexecuteRO  | AI.DAGEXECUTE_RO |
 | info          | AI.INFO          |
 | config        | AI.CONFIG        |
+
+## Redis Interval Sets module
+### Quick start :toolbox:
+```
+import { RedisIntervalSets } from 'redis-modules-sdk';
+const client = new RedisIntervalSets({
+    host: 'hostname',
+    port: 6379
+});
+
+//Connect to the Redis database with RIS module
+await client.connect();
+
+//Retrieving a list of sets
+const sets = await client.get('ages')
+expect(sets.length).to.eql(2, 'The number of sets');
+
+//Disconnect from the Redis database with RIS module
+await client.disconnect();
+```
+### Functions list :floppy_disk:
+| Functions| Command        |
+|:-------- |:-------------- |
+| add      | iset.add       |
+| get      | iset.get       |
+| del      | iset.del       |
+| score    | iset.score     |
+| notScore | iset.not_score |
+
+
+## Redis 'All in One' feature
+### Quick start :toolbox:
+This feature is meant to open a connection for a database and support more than 1 module at once.
+The 'Redis' class supports all existing modules in the project.
+
+#### Module function prefixes:
+| Module                               | Prefix                |
+|:------------------------------------ |:--------------------- |
+| ReJSON                               | rejson_module_        |
+| RedisTimeSeries                      | rts_module_           |
+| RediSearch                           | search_module_        |
+| RedisGraph                           | graph_module_         |
+| RedisGears                           | gears_module_         |
+| RedisBloom (Bloom filter)            | bloom_module_         | 
+| RedisBloom (TopK filer)              | bloom_topk_module_    |
+| RedisBloom (Cuckoo filter)           | bloom_cuckoo_module_  |
+| RedisBloom (Count Min Sketch filter) | bloom_cmk_module_     |
+| RedisBloom (TDigest)                 | bloom_tdigest_module_ |
+| RedisAI                              | ai_module_            |
+| RedisIntervalSets                    | ris_module_           |
+
+```
+import { Redis } from 'redis-modules-sdk';
+const client = new Redis({
+    host: 'hostname',
+    port: 43758
+})
+
+//Connect to the Redis database
+await client.connect();
+
+//For example, using Redis Interval Sets
+const sets = await client.ris_module_get('ages')
+expect(sets.length).to.eql(2, 'The number of sets');
+
+//Disconnect from the Redis database
+await client.disconnect();
+```
