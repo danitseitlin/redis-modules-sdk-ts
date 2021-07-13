@@ -333,6 +333,35 @@ await client.disconnect();
 | merge      | CMS.MERGE                           |
 | info       | CMS.INFO                            |
 
+### TDigest filter
+#### Quick start :toolbox:
+```
+import { RedisBloomTDigest } from 'redis-modules-sdk';
+const client = new RedisBloomTDigest({
+    host: 'hostname',
+    port: 6379
+});
+
+//Connect to the Redis database with RedisBloom TDigest filter
+await client.connect();
+
+//Adding a key
+const response = await client.initbydim('dest', 1, 2);
+
+//Disconnect from the Redis database with RedisBloom TDigest filter
+await client.disconnect();
+```
+#### Functions list :floppy_disk:
+| Functions  | Command                             |
+|:---------- |:----------------------------------- |
+| initbydim  | CMS.INITBYDIM                       |
+| initbyprob | CMS.INITBYPROB                      |
+| incrby     | CMS.INCRBY                          |
+| query      | CMS.QUERY                           |
+| merge      | CMS.MERGE                           |
+| info       | CMS.INFO                            |
+
+
 ## <img src='https://oss.redislabs.com/redisai/images/logo.svg' style='max-width:100%;' height='30'/> RedisAI module
 ### Quick start :toolbox:
 ```
