@@ -61,6 +61,14 @@ jobs:
         run: ./node_modules/.bin/eslint .
       - name: Build
         run: npm run build
+      - uses: docker-practice/actions-setup-docker@master
+        with:
+          docker_channel: nightly
+          docker_nightly_version: snapshot-20200915
+      - name: Setting up Redis
+        run: docker run -p 6379:6379 -d --rm redislabs/rejson:latest && docker ps -a
+      - name: Running tests
+        run: npm i && npm run redis-module-base-tests
   #Build for 'ReJSON' module
   ReJSON:
     needs: Setup
