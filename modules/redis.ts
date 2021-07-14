@@ -19,14 +19,26 @@ import { RedisTimeSeries } from './rts';
 export class Redis extends Module {
 	
 	/**
-	 * Initializing the 'All In One' Redis object
-	 * @param options The options of the Redis database.
+     * Initializing the module object
+     * @param name The name of the module
+     * @param clusterNodes The nodes of the cluster
+     * @param moduleOptions The additional module options
+     * @param moduleOptions.isHandleError If to throw error on error
+     * @param moduleOptions.showDebugLogs If to print debug logs
+     * @param clusterOptions The options of the clusters
+     */
+	constructor(clusterNodes: IORedis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: IORedis.ClusterOptions)
+	/**
+	 * Initializing the module object
+	 * @param name The name of the module
+	 * @param redisOptions The options of the redis database
 	 * @param moduleOptions The additional module options
 	 * @param moduleOptions.isHandleError If to throw error on error
 	 * @param moduleOptions.showDebugLogs If to print debug logs
 	 */
-	constructor(options: IORedis.RedisOptions, public moduleOptions?: RedisModuleOptions) {
-		super('Redis', options, moduleOptions)
+	constructor(redisOptions: IORedis.RedisOptions, moduleOptions?: RedisModuleOptions)
+	constructor(options: IORedis.RedisOptions & IORedis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: IORedis.ClusterOptions) {
+		super(Redis.name, options, moduleOptions, clusterOptions) 
 		this.applyMixins(Redis, [
 			RedisAI, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, RedisBloomTDigest, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries
 		])
