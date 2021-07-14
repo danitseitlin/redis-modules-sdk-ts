@@ -2,34 +2,64 @@
 import * as IORedis from 'ioredis';
 
 export class Module {
+    public name: string
     public redis: IORedis.Redis;
+    public redisOptions: IORedis.RedisOptions
+    public cluster: IORedis.Cluster;
+    public clusterNodes: IORedis.ClusterNode[]
+    public clusterOptions: IORedis.ClusterOptions
     public isHandleError: boolean;
     public showDebugLogs: boolean;
 
     /**
      * Initializing the module object
-     * @param redisOptions The options of the Redis database
+     * @param name The name of the module
+     * @param clusterNodes The nodes of the cluster
+     * @param moduleOptions The additional module options
+     * @param moduleOptions.isHandleError If to throw error on error
+     * @param moduleOptions.showDebugLogs If to print debug logs
+     * @param clusterOptions The options of the clusters
+     */
+    constructor(name: string, clusterNodes: IORedis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: IORedis.ClusterOptions, )
+    /**
+     * Initializing the module object
+     * @param name The name of the module
+     * @param redisOptions The options of the redis database
      * @param moduleOptions The additional module options
      * @param moduleOptions.isHandleError If to throw error on error
      * @param moduleOptions.showDebugLogs If to print debug logs
      */
-    constructor(public name: string, public redisOptions: IORedis.RedisOptions, public moduleOptions?: RedisModuleOptions) {
+    constructor(name: string, redisOptions: IORedis.RedisOptions, moduleOptions?: RedisModuleOptions)
+    constructor(name: string, options: IORedis.RedisOptions | IORedis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: IORedis.ClusterOptions) {
+        this.name = name;
+        //If it's a list of cluster nodes
+        if(Array.isArray(options))
+            this.clusterNodes = options as IORedis.ClusterNode[];
+        else
+            this.redisOptions = options as IORedis.RedisOptions;
         this.isHandleError = moduleOptions && moduleOptions.isHandleError ? moduleOptions.isHandleError: true;
         this.showDebugLogs = moduleOptions && moduleOptions.showDebugLogs ? moduleOptions.showDebugLogs: false;
+        this.clusterOptions = clusterOptions ? clusterOptions: undefined;
     }
 
     /**
      * Connecting to the Redis database with the module
      */
     async connect(): Promise<void> {
-        this.redis = new IORedis(this.redisOptions);
+        if(this.clusterNodes)
+            this.cluster = new IORedis.Cluster(this.clusterNodes, this.clusterOptions);
+        else
+            this.redis = new IORedis(this.redisOptions);
     }
 
     /**
      * Disconnecting from the Redis database with the module
      */
     async disconnect(): Promise<void> {
-        await this.redis.quit();
+        if(this.clusterNodes)
+            await this.cluster.quit();
+        else
+            await this.redis.quit();
     }
 
     /**
@@ -41,7 +71,7 @@ export class Module {
         try {
             if(this.showDebugLogs)
                 console.log(`${this.name}: Running command ${command} with arguments: ${args}`);
-            const response = await this.redis.send_command(command, args);
+            const response = this.clusterNodes ? await this.cluster.cluster.call(command, args): await this.redis.send_command(command, args);
             if(this.showDebugLogs)
                 console.log(`${this.name}: command ${command} responded with ${response}`);
             return response;
@@ -111,6 +141,13 @@ export class Module {
         })
         return newArray;
     }
+
+    //private isCluster(obj): obj is IORedis.RedisOptions {
+    //    return obj;
+    //}
+    //private isRedis() {
+//
+    //}
 }
 
 /**
