@@ -64,11 +64,11 @@ describe('Module base testing', async function() {
             [1, 2, 3],
             1
         ]
-        expect(response).to.equal(false, 'If array is two dimensional')
+        expect(clients[0].isOnlyTwoDimensionalArray(response)).to.equal(false, 'If array is two dimensional')
         response = [
             [1, 2, 3],
             [6]
         ]
-        expect(response).to.equal(true, 'If array is two dimensional')
+        expect(clients[0].isOnlyTwoDimensionalArray(response)).to.equal(true, 'If array is two dimensional')
     })
 })
