@@ -141,13 +141,6 @@ export class Module {
         })
         return newArray;
     }
-
-    //private isCluster(obj): obj is IORedis.RedisOptions {
-    //    return obj;
-    //}
-    //private isRedis() {
-//
-    //}
 }
 
 /**
