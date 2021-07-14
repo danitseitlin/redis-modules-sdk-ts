@@ -4,10 +4,10 @@ import { Module } from '../modules/module.base';
 const clients: Module[] = []
 describe('Module base testing', async function() {
     before(async () => {
-        clients.push(new Module('Module', {
+        /*clients.push(new Module('Module', {
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
-        }, { isHandleError: false }));
+        }, { isHandleError: false }));*/
         clients.push(new Module('Module', [{
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
@@ -29,7 +29,7 @@ describe('Module base testing', async function() {
             response = await client.sendCommand('get', ['foo'])
             expect(response).to.equal('bar', 'The response of the GET command')
             response = await client.sendCommand('del', ['foo'])
-            expect(response).to.equal('OK', 'The response of the DEL command')
+            expect(response).to.equal('1', 'The response of the DEL command')
             //await client.disconnect()
         }
     })
