@@ -4,14 +4,14 @@ import { Module } from '../modules/module.base';
 const clients: Module[] = []
 describe('Module base testing', async function() {
     before(async () => {
-        /*clients.push(new Module('Module', {
+        clients.push(new Module('Module', {
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
-        }, { isHandleError: false }));*/
-        clients.push(new Module('Module', [{
+        }, { isHandleError: false }));
+        /*clients.push(new Module('Module', [{
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
-        }], { isHandleError: false }));
+        }], { isHandleError: false }));*/
         for(const client of clients)
             await client.connect()
     })
