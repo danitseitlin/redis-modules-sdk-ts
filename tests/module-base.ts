@@ -16,7 +16,7 @@ describe('Module base testing', async function() {
     })
 
     it('sendCommand function', async() => {
-        const clients = [redisClient/*, clusterClient*/];
+        const clients = [redisClient, clusterClient];
         for(const client of clients) {
             await client.connect()
             let response = await client.sendCommand('set', ['foo', 'bar'])
