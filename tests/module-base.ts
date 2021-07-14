@@ -1,7 +1,7 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { Module } from '../modules/module.base';
-let clients: Module[] = []
+const clients: Module[] = []
 describe('Module base testing', async function() {
     before(async () => {
         clients.push(new Module('Module', {
