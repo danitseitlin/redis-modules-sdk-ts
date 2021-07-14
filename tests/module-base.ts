@@ -8,7 +8,9 @@ describe('Module base testing', async function() {
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         }, { isHandleError: false }));
-        /*clients.push(new Module('Module', [{
+        /*
+        Commenting this out until we find a solution for the mock server.
+        clients.push(new Module('Module', [{
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         }], { isHandleError: false }));*/
@@ -21,33 +23,30 @@ describe('Module base testing', async function() {
     })
 
     it('sendCommand function', async() => {
-        //const clients = [redisClient/*, clusterClient*/];
         for(const client of clients) {
-            //await client.connect()
             let response = await client.sendCommand('set', ['foo', 'bar'])
             expect(response).to.equal('OK', 'The response of the SET command')
             response = await client.sendCommand('get', ['foo'])
             expect(response).to.equal('bar', 'The response of the GET command')
             response = await client.sendCommand('del', ['foo'])
             expect(response).to.equal(1, 'The response of the DEL command')
-            //await client.disconnect()
         }
     })
 
-    /*it('handleResponse function', async () => {
+    it('handleResponse function', async () => {
         let response: any = 'OK';
-        let parsed = redisClient.handleResponse(response)
+        let parsed = clients[0].handleResponse(response)
         expect(parsed).to.equal(response, 'The parsed response')
         response = ['key', 'value', 'key2', 'value2'];
-        parsed = redisClient.handleResponse(response)
+        parsed = clients[0].handleResponse(response)
         expect(parsed.key).to.equal(response[1], 'The parsed response')
         expect(parsed.key2).to.equal(response[3], 'The parsed response')
         response = [
             'numbers', ['num1', 2]
         ];
-        parsed = redisClient.handleResponse(response)
+        parsed = clients[0].handleResponse(response)
         expect(parsed.numbers.num1).to.equal(response[1][1], 'The parsed response')
-        console.log(redisClient.handleResponse([
+        console.log(clients[0].handleResponse([
             'key',
             1,
             'fields',
@@ -57,7 +56,7 @@ describe('Module base testing', async function() {
             ]
         ]))
 
-        console.log(redisClient.handleResponse([ [ 'TERM', 'name', [] ] ]))
+        console.log(clients[0].handleResponse([ [ 'TERM', 'name', [] ] ]))
     });
 
     it('isOnlyTwoDimensionalArray function', async () => {
@@ -71,5 +70,5 @@ describe('Module base testing', async function() {
             [6]
         ]
         expect(response).to.equal(true, 'If array is two dimensional')
-    })*/
+    })
 })
