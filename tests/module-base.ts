@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import { Module } from '../modules/module.base';
 let redisClient: Module;
 let clusterClient: Module;
-describe('AI testing', async function() {
+describe('Module base testing', async function() {
     before(async () => {
         redisClient = new Module('Module', {
             host: cliArguments.host,
@@ -18,12 +18,14 @@ describe('AI testing', async function() {
     it('sendCommand function', async() => {
         const clients = [redisClient, clusterClient];
         for(const client of clients) {
+            await client.connect()
             let response = await client.sendCommand('set', ['foo', 'bar'])
             expect(response).to.equal('OK', 'The response of the SET command')
             response = await client.sendCommand('get', ['foo'])
             expect(response).to.equal('foo', 'The response of the GET command')
             response = await client.sendCommand('del', ['foo'])
             expect(response).to.equal('OK', 'The response of the DEL command')
+            await client.disconnect()
         }
     })
 
