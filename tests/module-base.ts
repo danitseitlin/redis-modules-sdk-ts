@@ -17,7 +17,7 @@ describe('AI testing', async function() {
 
     it('sendCommand function', async() => {
         const clients = [redisClient, clusterClient];
-        for(let client of clients) {
+        for(const client of clients) {
             let response = await client.sendCommand('set', ['foo', 'bar'])
             expect(response).to.equal('OK', 'The response of the SET command')
             response = await client.sendCommand('get', ['foo'])
