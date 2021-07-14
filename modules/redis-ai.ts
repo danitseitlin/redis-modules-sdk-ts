@@ -57,19 +57,17 @@ export class RedisAI extends Module {
      */
     async modelstore(key: string, backend: AIBackend, device: AIDevice, model: Buffer, options?: AIModelSetParameters): Promise<'OK'> {
         let args: (string | Buffer | number)[] = [key, backend, device];
-        if(options !== undefined) {
-            if(options.tag !== undefined)
-                args = args.concat(['TAG', options.tag]);
-            if(options.batch !== undefined) {
-                args = args.concat(['BATCHSIZE', options.batch.size])
-                if(options.batch.minSize !== undefined)
-                    args = args.concat(['MINBATCHSIZE', options.batch.minSize]);
-            }
-            if(options.inputs !== undefined && options.inputs.length > 0)
-                args = args.concat(['INPUTS', options.inputsCount].concat(options.inputs));
-            if(options.outputs !== undefined && options.outputs.length > 0)
-                args = args.concat(['OUTPUTS', options.outputsCount].concat(options.outputs));
+        if(options !== undefined && options.tag !== undefined)
+            args = args.concat(['TAG', options.tag]);
+        if(options !== undefined && options.batch !== undefined) {
+            args = args.concat(['BATCHSIZE', options.batch.size])
+            if(options.batch.minSize !== undefined)
+                args = args.concat(['MINBATCHSIZE', options.batch.minSize]);
         }
+        if(options !== undefined && options.inputs !== undefined && options.inputs.length > 0)
+            args = args.concat(['INPUTS', options.inputsCount].concat(options.inputs));
+        if(options !== undefined && options.outputs !== undefined && options.outputs.length > 0)
+            args = args.concat(['OUTPUTS', options.outputsCount].concat(options.outputs));
         return await this.sendCommand('AI.MODELSTORE', args.concat(['BLOB', model])); 
     }
 
@@ -103,8 +101,9 @@ export class RedisAI extends Module {
      * @param parameters The parameters of 'AI.MODELEXECUTE'
      */
     async modelexecute(key: string, parameters: AIModelExecute): Promise<'OK'> {
-        const args = [key, 'INPUTS', parameters.inputsCount].concat(parameters.inputs).concat(['OUTPUTS', parameters.outputsCount]).concat(parameters.outputs);
-        console.log(args)
+        let args = [key, 'INPUTS', parameters.inputsCount].concat(parameters.inputs).concat(['OUTPUTS', parameters.outputsCount]).concat(parameters.outputs);
+        if(parameters.timeout)
+            args = args.concat(['TIMEOUT', parameters.timeout])
         return await this.sendCommand('AI.MODELEXECUTE', args);
     }
 
@@ -158,8 +157,10 @@ export class RedisAI extends Module {
      * @param parameters The parameters of the 'AI.SCRIPTEXECUTE' command
     */
     async scriptexecute(key: string, functionName: string, parameters: AIScriptExecuteParameters): Promise<'OK'> {
-        let args = [key, functionName, 'KEYS', parameters.numberOfKeys].concat(parameters.keys).concat(['INPUTS', parameters.numberOfInputs]).concat(parameters.inputs)
-        if(parameters.listInputs && parameters.listInputs.length > 0 && parameters.numberOfListInputs)
+        let args = [key, functionName, 'KEYS', parameters.numberOfKeys].concat(parameters.keys)
+        if(parameters.inputs && parameters.numberOfInputs && parameters.inputs.length > 0)
+            args = args.concat(['INPUTS', parameters.numberOfInputs]).concat(parameters.inputs)
+        else if(parameters.listInputs && parameters.numberOfListInputs && parameters.listInputs.length > 0)
             args = args.concat('LIST_INPUTS', parameters.numberOfListInputs).concat(parameters.listInputs)
         args = args.concat('OUTPUTS', parameters.numberOfOutputs).concat(parameters.outputs)
         if(parameters.timeout)
