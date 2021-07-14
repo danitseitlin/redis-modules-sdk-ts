@@ -27,7 +27,7 @@ describe('Module base testing', async function() {
             let response = await client.sendCommand('set', ['foo', 'bar'])
             expect(response).to.equal('OK', 'The response of the SET command')
             response = await client.sendCommand('get', ['foo'])
-            expect(response).to.equal('foo', 'The response of the GET command')
+            expect(response).to.equal('bar', 'The response of the GET command')
             response = await client.sendCommand('del', ['foo'])
             expect(response).to.equal('OK', 'The response of the DEL command')
             //await client.disconnect()
