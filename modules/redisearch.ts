@@ -5,14 +5,26 @@ import { Module, RedisModuleOptions } from './module.base';
 export class Redisearch extends Module {
 
     /**
-     * Initializing the RediSearch object
-     * @param options The options of the Redis database.
+     * Initializing the module object
+     * @param name The name of the module
+     * @param clusterNodes The nodes of the cluster
+     * @param moduleOptions The additional module options
+     * @param moduleOptions.isHandleError If to throw error on error
+     * @param moduleOptions.showDebugLogs If to print debug logs
+     * @param clusterOptions The options of the clusters
+     */
+    constructor(clusterNodes: Redis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: Redis.ClusterOptions)
+    /**
+     * Initializing the module object
+     * @param name The name of the module
+     * @param redisOptions The options of the redis database
      * @param moduleOptions The additional module options
      * @param moduleOptions.isHandleError If to throw error on error
      * @param moduleOptions.showDebugLogs If to print debug logs
      */
-    constructor(options: Redis.RedisOptions, public moduleOptions?: RedisModuleOptions) {
-        super(Redisearch.name, options, moduleOptions)
+    constructor(redisOptions: Redis.RedisOptions, moduleOptions?: RedisModuleOptions)
+    constructor(options: Redis.RedisOptions & Redis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: Redis.ClusterOptions) {
+        super(Redisearch.name, options, moduleOptions, clusterOptions)
     }
 
     /**
