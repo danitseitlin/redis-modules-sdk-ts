@@ -61,7 +61,6 @@
     "@typescript-eslint/parser": "^4.8.2",
     "chai": "^4.2.0",
     "cli-argument-parser": "^0.3.4",
-    "dmock-server": "^1.7.9",
     "eslint": "^7.14.0",
     "mocha": "^8.2.0",
     "npm-package-deployer": "^0.2.9",
