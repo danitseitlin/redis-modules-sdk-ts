@@ -62,7 +62,7 @@ jobs:
       - name: Build
         run: npm run build
       - name: Setting up Redis
-      run: docker run -p 6379:6379 -d --rm redislabs/redis:latest && docker ps -a
+        run: docker run -p 6379:6379 -d --rm redislabs/redis:latest && docker ps -a
       - name: Running tests
         run: npm i && npm run redis-module-base-tests
   #Build for 'ReJSON' module
