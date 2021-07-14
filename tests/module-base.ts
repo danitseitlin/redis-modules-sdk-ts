@@ -29,7 +29,7 @@ describe('Module base testing', async function() {
             response = await client.sendCommand('get', ['foo'])
             expect(response).to.equal('bar', 'The response of the GET command')
             response = await client.sendCommand('del', ['foo'])
-            expect(response).to.equal('1', 'The response of the DEL command')
+            expect(response).to.equal(1, 'The response of the DEL command')
             //await client.disconnect()
         }
     })
