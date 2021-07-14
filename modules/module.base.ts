@@ -33,6 +33,7 @@ export class Module {
     constructor(name: string, options: IORedis.RedisOptions | IORedis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: IORedis.ClusterOptions) {
         this.name = name;
         //If it's a list of cluster nodes
+        console.log(`is ARRAY: ${Array.isArray(options)}`)
         if(Array.isArray(options))
             this.clusterNodes = options as IORedis.ClusterNode[];
         else
