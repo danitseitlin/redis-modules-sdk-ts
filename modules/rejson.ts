@@ -44,10 +44,14 @@ export class ReJSON extends Module {
      * @param key The name of the key
      * @param path The path of the key
      * @param json The JSON string of the key i.e. '{"x": 4}'
+     * @param condition The condition to set the JSON in.
      * @returns Simple String OK if executed correctly, or Null Bulk if the specified NX or XX conditions were not met. 
      */
-    async set(key: string, path: string, json: string): Promise<"OK"> {
-        return await this.sendCommand('JSON.SET', [key, path, json])
+    async set(key: string, path: string, json: string, condition?: 'NX' | 'XX'): Promise<"OK"> {
+        const args = [key, path, json]
+        if(condition)
+            args.push(condition)
+        return await this.sendCommand('JSON.SET', condition)
     }
 
     /**
