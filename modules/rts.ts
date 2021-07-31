@@ -333,6 +333,17 @@ export class RedisTimeSeries extends Module {
     async queryindex(filter: string): Promise<string[]> {
         return await this.sendCommand('TS.QUERYINDEX', filter);
     }
+
+    /**
+     * Delete data points for a given timeseries and interval range in the form of start and end delete timestamps.
+     * @param key Key name for timeseries
+     * @param fromTimestamp Start timestamp for the range deletion.
+     * @param toTimestamp End timestamp for the range deletion.
+     * @returns The count of samples deleted
+     */
+    async del(key: string, fromTimestamp: string, toTimestamp: string): Promise<number> {
+        return await this.sendCommand('TS.DEL', [key, fromTimestamp, toTimestamp]);
+    }
 }
 
 /**
