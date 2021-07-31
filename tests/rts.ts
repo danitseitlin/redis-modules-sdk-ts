@@ -120,4 +120,8 @@ describe('RTS Module testing', async function() {
         const response = await client.queryindex('label=value')
         expect(response.length).eql(1, 'The response of the queryindex command');
     });
+    it('del function', async() => {
+        const samplesCount = await client.del(key1, date.toString(), new Date().getTime().toString())
+        expect(samplesCount).eql(3, 'The response TS.DEL command')
+    })
 });
