@@ -339,9 +339,9 @@ export class RedisTimeSeries extends Module {
      * @param key Key name for timeseries
      * @param fromTimestamp Start timestamp for the range deletion.
      * @param toTimestamp End timestamp for the range deletion.
-     * @returns OK
+     * @returns The count of samples deleted
      */
-    async del(key: string, fromTimestamp: string, toTimestamp: string): Promise<"OK"> {
+    async del(key: string, fromTimestamp: string, toTimestamp: string): Promise<number> {
         return await this.sendCommand('TS.DEL', [key, fromTimestamp, toTimestamp]);
     }
 }
