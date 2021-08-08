@@ -131,8 +131,8 @@ describe('ReJSON Module testing', async function() {
 
     it('toggle function', async () => {
         const key = 'toggle'
-        const path = '.'
-        await client.set(key, path, '{"x": 1, "str": "yy"}');
+        const path = '.x'
+        await client.set(key, path, '{"x": false, "str": "yy"}');
         const response = await client.toggle(key, path);
         console.log(response)
     })
