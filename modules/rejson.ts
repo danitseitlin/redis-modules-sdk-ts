@@ -52,12 +52,12 @@ export class ReJSON extends Module {
     }
 
     /**
-     * 
-     * @param key 
-     * @param path 
-     * @returns 
+     * Toggling a JSON key
+     * @param key The name of the key
+     * @param path The path of the key defaults to root if not provided. Non-existing keys and paths are ignored. Deleting an object's root is equivalent to deleting the key from Redis.
+     * @returns The value of the path after the toggle.
      */
-    async toggle(key: string, path?: string) {
+    async toggle(key: string, path?: string): Promise<boolean> {
         const parameters = [key];
         if(path !== undefined) parameters.push(path);
         return await this.sendCommand('JSON.TOGGLE', parameters);
