@@ -129,6 +129,22 @@ describe('ReJSON Module testing', async function() {
         expect(response.toString()).to.equal('{,x,9,str,yyrrr', 'The response of the resp command');
     });
 
+    it('toggle function', async () => {
+        const key = 'toggle'
+        const path = '.'
+        await client.set(key, path, '{"x": 1, "str": "yy"}');
+        const response = await client.toggle(key, path);
+        console.log(response)
+    })
+
+    it('clear function', async () => {
+        const key = 'clear'
+        const path = '.'
+        await client.set(key, path, '{"x": 1, "str": "yy"}');
+        const response = await client.clear(key, path);
+        console.log(response)
+    })
+
     it('del function', async () => {
         const response = await client.del(key1, path);
         expect(response).to.equal(1, 'The response of the del command');
