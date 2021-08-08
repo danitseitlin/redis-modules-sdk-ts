@@ -134,7 +134,7 @@ describe('ReJSON Module testing', async function() {
         const path = '.x'
         await client.set(key, '.', '{"x": false, "str": "yy"}');
         const response = await client.toggle(key, path);
-        expect(response).to.equal(true, 'The response of JSON.TOGGLE')
+        expect(response).to.equal('true', 'The response of JSON.TOGGLE')
     })
 
     it('clear function', async () => {
