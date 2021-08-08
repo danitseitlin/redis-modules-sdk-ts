@@ -116,7 +116,7 @@ describe('ReJSON Module testing', async function() {
     
     it('debug function', async () => {
         const response = await client.debug('MEMORY', key1, path);
-        expect(response).to.equal(145, 'The response of the debug command');
+        expect(response).to.equal(72, 'The response of the debug command');
     });
     
     it('forget function', async () => {
@@ -134,7 +134,7 @@ describe('ReJSON Module testing', async function() {
         const path = '.x'
         await client.set(key, '.', '{"x": false, "str": "yy"}');
         const response = await client.toggle(key, path);
-        console.log(response)
+        expect(response).to.equal(true, 'The response of JSON.TOGGLE')
     })
 
     it('clear function', async () => {
@@ -142,7 +142,7 @@ describe('ReJSON Module testing', async function() {
         const path = '.'
         await client.set(key, path, '{"x": 1, "str": "yy"}');
         const response = await client.clear(key, path);
-        console.log(response)
+        expect(response).to.equal(1, 'The response of JSON.CLEAR')
     })
 
     it('del function', async () => {
