@@ -32,7 +32,7 @@ export class RedisGraph extends Module {
      * @param query The query to execute
      * @returns Result set
      */
-    async query(name: string, query: string, params?: {[key: string]: string}): Promise<string[][]> {
+    async query(name: string, query: string, params?: {[key: string]: string}): Promise<void>/*Promise<string[][]>*/ {
         const args = [name];
         if(params){
             args.push('CYPHER')
@@ -42,7 +42,7 @@ export class RedisGraph extends Module {
         }
         args.push(query)
         console.log(args)
-        return await this.sendCommand('GRAPH.QUERY', args)
+        //return await this.sendCommand('GRAPH.QUERY', args)
     }
 
     /**
