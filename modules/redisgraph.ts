@@ -32,11 +32,13 @@ export class RedisGraph extends Module {
      * @param query The query to execute
      * @returns Result set
      */
-    async query(name: string, query: string, params?: {[key: string]: any}): Promise<string[][]> {
-        const args: any = [name, query];
+    async query(name: string, query: string, params?: {[key: string]: string}): Promise<string[][]> {
+        const args = [name, query];
         if(params)
-            args.push(params)
-        return await this.sendCommand('GRAPH.QUERY', args)//[name, query])
+            for(const key in params) {
+                args.push(`${key}=${params[key]}`)
+            }
+        return await this.sendCommand('GRAPH.QUERY', args)
     }
 
     /**
