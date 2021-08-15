@@ -53,7 +53,7 @@ export class RedisGraph extends Module {
         if(params !== undefined){
             console.log('ENTERED!')
             args.push('CYPHER')
-            for(const key in Object.keys(params)) {
+            for(const key in params) {
                 console.log(key)
                 args.push(`${key}=${params[key]}`)
             }
