@@ -48,6 +48,7 @@ export class RedisGraph extends Module {
             }
         }
         args.push(query)
+        if(params !== undefined) args.push('--compact')
         console.log(args)
         return args;
     }
