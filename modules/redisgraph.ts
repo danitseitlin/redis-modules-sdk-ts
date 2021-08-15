@@ -33,11 +33,14 @@ export class RedisGraph extends Module {
      * @returns Result set
      */
     async query(name: string, query: string, params?: {[key: string]: string}): Promise<string[][]> {
-        const args = [name, query];
-        if(params)
+        const args = [name];
+        if(params){
+            args.push('CYPHER')
             for(const key in params) {
                 args.push(`${key}=${params[key]}`)
             }
+        }
+        args.push(query)
         return await this.sendCommand('GRAPH.QUERY', args)
     }
 
