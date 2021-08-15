@@ -47,6 +47,20 @@ export class RedisGraph extends Module {
         console.log(args)
         return await this.sendCommand('GRAPH.QUERY', args)
     }
+    buildQueryParams(name: string, query: string, params?: {[key: string]: string}): void {
+        const args = [name];
+        console.log(`params: ${params}`)
+        if(params !== undefined){
+            console.log('ENTERED!')
+            args.push('CYPHER')
+            for(const key in Object.keys(params)) {
+                console.log(key)
+                args.push(`${key}=${params[key]}`)
+            }
+        }
+        args.push(query)
+        console.log(args)
+    }
 
     /**
      * Executing the given readonly query against a specific graph
