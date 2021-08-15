@@ -251,7 +251,9 @@ export type ReJSONMixin = {
 	rejson_module_objlen: typeof ReJSON.prototype.objlen,
 	rejson_module_debug: typeof ReJSON.prototype.debug,
 	rejson_module_forget: typeof ReJSON.prototype.forget
-	rejson_module_resp: typeof ReJSON.prototype.resp
+	rejson_module_resp: typeof ReJSON.prototype.resp,
+	rejson_module_clear: typeof ReJSON.prototype.clear,
+	rejson_module_toggle: typeof ReJSON.prototype.toggle
 }
 
 /**
