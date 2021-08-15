@@ -31,7 +31,7 @@ describe('RedisGraph Module testing', async function() {
         expect(response[2][2]).to.equal('Properties set: 2', 'The response of the GRAPH.QUERY command');
         expect(response[2][3]).to.equal('Cached execution: 0', 'The response of the GRAPH.QUERY command');
         //console.log(await client.query(graphName, `MATCH (p:user) WHERE p.email='email@email.com' RETURN count(p) as count`))
-        //console.log(await client.query(graphName, `MATCH (p:user) WHERE p.email=$email RETURN count(p) as count`, { email: 'dt@gmail.com'}))
+        console.log(await client.query(graphName, `MATCH (p:user) WHERE p.name=$name RETURN count(p) as count`, { name: 'Kurt'}))
     });
     it('readonlyQuery function', async () => {
         const response = await client.readonlyQuery(graphName, 'MATCH (p:Person) WHERE p.age > 80 RETURN p')
