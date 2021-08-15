@@ -41,6 +41,7 @@ export class RedisGraph extends Module {
             }
         }
         args.push(query)
+        console.log(args)
         return await this.sendCommand('GRAPH.QUERY', args)
     }
 
