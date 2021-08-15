@@ -34,10 +34,11 @@ export class RedisGraph extends Module {
      */
     async query(name: string, query: string, params?: {[key: string]: string}): Promise<void>/*Promise<string[][]>*/ {
         const args = [name];
+        console.log(`params: ${params}`)
         if(params !== undefined){
             console.log('ENTERED!')
             args.push('CYPHER')
-            for(const key in params) {
+            for(const key in Object.keys(params)) {
                 console.log(key)
                 args.push(`${key}=${params[key]}`)
             }
