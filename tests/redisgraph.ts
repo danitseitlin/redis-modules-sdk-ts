@@ -7,6 +7,7 @@ let redis: Redis;
 const graphName = 'Test'
 
 describe('RedisGraph Module testing', async function() {
+    this.timeout(10 * 60 * 60);
     before(async () => {
         client = new RedisGraph({
             host: cliArguments.host,
@@ -30,9 +31,9 @@ describe('RedisGraph Module testing', async function() {
         expect(response[2][1]).to.equal('Nodes created: 1', 'The response of the GRAPH.QUERY command');
         expect(response[2][2]).to.equal('Properties set: 2', 'The response of the GRAPH.QUERY command');
         expect(response[2][3]).to.equal('Cached execution: 0', 'The response of the GRAPH.QUERY command');
-        client.buildQueryParams(graphName, `MATCH (p:user) WHERE p.name=$name RETURN count(p) as count`, { name: 'Kurt'},)
+        //client.buildQueryParams(graphName, `MATCH (p:user) WHERE p.name=$name RETURN count(p) as count`, { name: 'Kurt'},)
         //console.log(await client.query(graphName, `MATCH (p:user) WHERE p.email='email@email.com' RETURN count(p) as count`))
-        const res = await client.query(graphName, `MATCH (p:user) WHERE p.name=$name RETURN count(p) as count`, { name: 'Kurt'}, false)
+        const res = await client.query(graphName, `"MATCH (p:user) WHERE p.name=$name RETURN count(p) as count"`, { name: 'Kurt'}, false)
         console.log(res)
         
     });
