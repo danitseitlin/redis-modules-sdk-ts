@@ -53,7 +53,7 @@ export class RedisGraph extends Module {
 
     paramToString(paramValue: string) {
 		if (paramValue == null) return "null";
-		let paramType = typeof paramValue;
+		const paramType = typeof paramValue;
 		if (paramType == "string") {
 			let strValue = "";
             paramValue = paramValue.replace(/[\\"']/g, '\\$&');  
