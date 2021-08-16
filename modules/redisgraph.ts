@@ -34,9 +34,9 @@ export class RedisGraph extends Module {
      */
     async query(name: string, query: string, params?: {[key: string]: string}, run = true): Promise<void>/*Promise<string[][]>*/ {
         const args = this.buildQueryParams(name, query, params);
-        if(run)
-            return await this.sendCommand('GRAPH.QUERY', args)
-        return null;
+        //if(run)
+        return await this.sendCommand('GRAPH.QUERY', args)
+        //return null;
     }
     buildQueryParams(name: string, query: string, params?: {[key: string]: string}): string[] {
         const args = [name];
@@ -50,7 +50,6 @@ export class RedisGraph extends Module {
             }
         }
         args.push(query)
-        if(params !== undefined) args.push('--compact')
         console.log(args)
         return args;
     }
