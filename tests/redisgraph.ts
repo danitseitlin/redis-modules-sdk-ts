@@ -33,7 +33,7 @@ describe('RedisGraph Module testing', async function() {
         expect(response[2][3]).to.equal('Cached execution: 0', 'The response of the GRAPH.QUERY command');
         //client.buildQueryParams(graphName, `MATCH (p:user) WHERE p.name=$name RETURN count(p) as count`, { name: 'Kurt'},)
         //console.log(await client.query(graphName, `MATCH (p:user) WHERE p.email='email@email.com' RETURN count(p) as count`))
-        const res = await client.query(graphName, `MATCH (p:Person) WHERE p.name=$name RETURN count(p) as count`, { name: 'Kurt'}, false)
+        const res = await client.query(graphName, `MATCH (p:Person) WHERE p.name name=$name RETURN count(p) as count`, { name: 'Kurt'}, false)
         console.log(res)
         
     });

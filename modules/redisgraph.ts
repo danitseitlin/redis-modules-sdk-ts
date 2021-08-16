@@ -40,19 +40,38 @@ export class RedisGraph extends Module {
     }
     buildQueryParams(name: string, query: string, params?: {[key: string]: string}): string[] {
         const args = [name];
-        console.log(`params: ${params}`)
         if(params !== undefined){
-            console.log('ENTERED!')
             args.push('CYPHER')
             for(const key in params) {
-                console.log(key)
-                args.push(`${key}=${params[key]}`)
+                const value = this.paramToString(params[key])
+                args.push(`${key}=${value}`)
             }
         }
         args.push(query)
-        console.log(args)
         return args;
     }
+
+    paramToString(paramValue: string) {
+		if (paramValue == null) return "null";
+		let paramType = typeof paramValue;
+		if (paramType == "string") {
+			let strValue = "";
+            paramValue = paramValue.replace(/[\\"']/g, '\\$&');  
+			if (paramValue[0] != '"') strValue += '"';
+			strValue += paramValue;
+			if (!paramValue.endsWith('"') || paramValue.endsWith("\\\"")) strValue += '"';
+			return strValue;
+		}
+
+		if (Array.isArray(paramValue)) {
+			let stringsArr = new Array(paramValue.length);
+			for (var i = 0; i < paramValue.length; i++) {
+				stringsArr[i] = this.paramToString(paramValue[i]);
+			}
+			return ["[", stringsArr.join(", "), "]"].join("");
+		}
+		return paramValue;
+	}
 
     /**
      * Executing the given readonly query against a specific graph
