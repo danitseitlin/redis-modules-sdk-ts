@@ -64,7 +64,7 @@ export class RedisGraph extends Module {
 		}
 
 		if (Array.isArray(paramValue)) {
-			let stringsArr = new Array(paramValue.length);
+			const stringsArr = new Array(paramValue.length);
 			for (var i = 0; i < paramValue.length; i++) {
 				stringsArr[i] = this.paramToString(paramValue[i]);
 			}
