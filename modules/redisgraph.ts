@@ -44,7 +44,7 @@ export class RedisGraph extends Module {
             args.push('CYPHER')
             for(const key in params) {
                 const value = this.paramToString(params[key])
-                args.push(`${key}=\\"${value}\\"`)
+                args.push(`${key}=\\\"${value}\\\"`)
             }
         }
         args.push(query)
