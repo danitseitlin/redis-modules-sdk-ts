@@ -44,7 +44,7 @@ export class RedisGraph extends Module {
             args.push('CYPHER')
             for(const key in params) {
                 const value = this.paramToString(params[key])
-                args.push(`${key}=${value}`)
+                args.push(`${key}=\"${value}\"`)
             }
         }
         args.push(query)
@@ -57,9 +57,9 @@ export class RedisGraph extends Module {
 		if (paramType == 'string') {
 			let strValue = "";
             paramValue = paramValue.replace(/[\\"']/g, '\\$&');  
-			if (paramValue[0] != '"') strValue += '\"';
+			if (paramValue[0] != '"') strValue += '"';
 			strValue += paramValue;
-			if (!paramValue.endsWith('"') || paramValue.endsWith("\\\"")) strValue += '\"';
+			if (!paramValue.endsWith('"') || paramValue.endsWith("\\\"")) strValue += '"';
 			return strValue;
 		}
 
