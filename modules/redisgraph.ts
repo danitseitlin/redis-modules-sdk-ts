@@ -57,9 +57,9 @@ export class RedisGraph extends Module {
 		if (paramType == 'string') {
 			let strValue = "";
             paramValue = paramValue.replace(/[\\"']/g, '\\$&');  
-			if (paramValue[0] != '"') strValue += '"';
+			if (paramValue[0] != '"') strValue += '\"';
 			strValue += paramValue;
-			if (!paramValue.endsWith('"') || paramValue.endsWith("\\\"")) strValue += '"';
+			if (!paramValue.endsWith('"') || paramValue.endsWith("\\\"")) strValue += '\"';
 			return strValue;
 		}
 
