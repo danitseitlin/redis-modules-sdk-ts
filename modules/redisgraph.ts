@@ -49,7 +49,7 @@ export class RedisGraph extends Module {
                 const value = this.paramToString(params[key])
                 queryList.push(`${key}=${value}`)
             }
-            args.push(`'${name} ${queryList.join(' ')} ${query}'`)
+            args.push(`"${name} ${queryList.join(' ')} ${query}"`)
         }
         else {
             args.push(name)
