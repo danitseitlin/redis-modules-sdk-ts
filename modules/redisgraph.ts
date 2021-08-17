@@ -30,20 +30,47 @@ export class RedisGraph extends Module {
      * Executing the given query against a specific graph
      * @param name The name of the graph
      * @param query The query to execute
+     * @param params The params of the query
      * @returns Result set
      */
-    async query(name: string, query: string): Promise<string[][]> {
-        return await this.sendCommand('GRAPH.QUERY', [name, query])
+    async query(name: string, query: string, params?: {[key: string]: string}): Promise<string[][]> {
+        let args = [name]
+        args = args.concat(this.buildQuery(query, params));
+        return await this.sendCommand('GRAPH.QUERY', args)
     }
 
     /**
      * Executing the given readonly query against a specific graph
      * @param name The name of the graph
      * @param query The query to execute
+     * @param params The params of the query
      * @returns Result set
      */
-    async readonlyQuery(name: string, query: string): Promise<string[][]> {
-        return await this.sendCommand('GRAPH.RO_QUERY', [name, query])
+    async readonlyQuery(name: string, query: string, params?: {[key: string]: string}): Promise<string[][]> {
+        let args = [name]
+        args = args.concat(this.buildQuery(query, params));
+        return await this.sendCommand('GRAPH.RO_QUERY', args)
+    }
+
+    /**
+     * Building the cypher params of a query
+     * @param query The query
+     * @param params The params of the query
+     * @returns Returning an array of arguments
+     */
+    buildQuery(query: string, params?: {[key: string]: string}): string[] {
+        const args: string[] = [];
+        const queryList: string[] = []
+        if(params !== undefined){
+            queryList.push('CYPHER')
+            for(const key in params) {
+                const value = this.paramToString(params[key])
+                queryList.push(`${key}=${value}`)
+            }
+            args.push(`${queryList.join(' ')} ${query}`)
+        }
+        else args.push(query)
+        return args;
     }
 
     /**
