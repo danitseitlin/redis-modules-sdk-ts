@@ -112,7 +112,7 @@ export class Redisearch extends Module {
             if(parameters.withSortKeys === true)
                 args.push('WITHSORTKEYS')
             if(parameters.filter !== undefined)
-            args = args.concat(['FILTER', parameters.filter.field, parameters.filter.min.toString(), parameters.filter.max.toString()])
+                args = args.concat(['FILTER', parameters.filter.field, parameters.filter.min.toString(), parameters.filter.max.toString()])
             if(parameters.geoFilter !== undefined)
                 args = args.concat([
                     'GEOFILTER',
