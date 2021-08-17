@@ -40,17 +40,21 @@ export class RedisGraph extends Module {
         //return null;
     }
     buildQueryParams(name: string, query: string, params?: {[key: string]: string}): string[] {
-        const args = [name];
+        const args = [];
         const queryList = []
         if(params !== undefined){
+    
             queryList.push('CYPHER')
             for(const key in params) {
                 const value = this.paramToString(params[key])
                 queryList.push(`${key}=${value}`)
             }
-            args.push(`'${queryList.join(' ')} ${query}'`)
+            args.push(`'${name} ${queryList.join(' ')} ${query}'`)
         }
-        else args.push(query)
+        else {
+            args.push(name)
+            args.push(query)
+        }
         //args.push(`'${queryList.join(" ")}'`)
         return args;
     }
