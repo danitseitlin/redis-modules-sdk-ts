@@ -32,18 +32,23 @@ export class RedisGraph extends Module {
      * @param query The query to execute
      * @returns Result set
      */
-    async query(name: string, query: string, params?: {[key: string]: string}, run = true): Promise<void>/*Promise<string[][]>*/ {
-        const args = this.buildQueryParams(name, query, params);
-        //if(run)
-        console.log(args)
+    async query(name: string, query: string, params?: {[key: string]: string}): Promise<string[][]> {
+        let args = [name]
+        args = args.concat(this.buildQuery(query, params));
         return await this.sendCommand('GRAPH.QUERY', args)
-        //return null;
     }
-    buildQueryParams(name: string, query: string, params?: {[key: string]: string}): string[] {
-        const args = [name];
+
+
+    /**
+     * Building the cypher params of a query
+     * @param query The query
+     * @param params The params
+     * @returns Returning an array of arguments
+     */
+    buildQuery(query: string, params?: {[key: string]: string}): string[] {
+        const args = [];
         const queryList = []
         if(params !== undefined){
-    
             queryList.push('CYPHER')
             for(const key in params) {
                 const value = this.paramToString(params[key])
@@ -51,34 +56,9 @@ export class RedisGraph extends Module {
             }
             args.push(`${queryList.join(' ')} ${query}`)
         }
-        else {
-            args.push(query)
-        }
-        //args.push(`'${queryList.join(" ")}'`)
+        else args.push(query)
         return args;
     }
-
-    paramToString(paramValue: string) {
-		if (paramValue == null) return 'null';
-		const paramType = typeof paramValue;
-		if (paramType == 'string') {
-			let strValue = "";
-            paramValue = paramValue.replace(/[\\"']/g, '\\$&');  
-			if (paramValue[0] != '"') strValue += "'";
-			strValue += paramValue;
-			if (!paramValue.endsWith('"') || paramValue.endsWith("\\\"")) strValue += "'";
-			return strValue;
-		}
-
-		if (Array.isArray(paramValue)) {
-			const stringsArr = new Array(paramValue.length);
-			for (let i = 0; i < paramValue.length; i++) {
-				stringsArr[i] = this.paramToString(paramValue[i]);
-			}
-			return ["[", stringsArr.join(", "), "]"].join("");
-		}
-		return paramValue;
-	}
 
     /**
      * Executing the given readonly query against a specific graph
@@ -86,8 +66,11 @@ export class RedisGraph extends Module {
      * @param query The query to execute
      * @returns Result set
      */
-    async readonlyQuery(name: string, query: string): Promise<string[][]> {
-        return await this.sendCommand('GRAPH.RO_QUERY', [name, query])
+    async readonlyQuery(name: string, query: string, params?: {[key: string]: string}): Promise<string[][]> {
+        let args = [name]
+        args = args.concat(this.buildQuery(query, params));
+        return await this.sendCommand('GRAPH.RO_QUERY', args)
+        //return await this.sendCommand('GRAPH.RO_QUERY', [name, query])
     }
 
     /**

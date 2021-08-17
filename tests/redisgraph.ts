@@ -31,14 +31,17 @@ describe('RedisGraph Module testing', async function() {
         expect(response[2][1]).to.equal('Nodes created: 1', 'The response of the GRAPH.QUERY command');
         expect(response[2][2]).to.equal('Properties set: 2', 'The response of the GRAPH.QUERY command');
         expect(response[2][3]).to.equal('Cached execution: 0', 'The response of the GRAPH.QUERY command');
-        //client.buildQueryParams(graphName, `MATCH (p:user) WHERE p.name=$name RETURN count(p) as count`, { name: 'Kurt'},)
-        //console.log(await client.query(graphName, `MATCH (p:user) WHERE p.email='email@email.com' RETURN count(p) as count`))
-        const res = await client.query(graphName, `MATCH (p:Person) WHERE p.name=$name RETURN count(p) as count`, { name: 'Kurt'}, false)
+        const res = await client.query(graphName, `MATCH (p:Person) WHERE p.name=$name RETURN count(p) as count`, { name: 'Kurt'})
         console.log(res)
-        
+        expect(response[2][0]).to.equal('Labels added: 1', 'The response of the GRAPH.QUERY command');
+        expect(response[2][1]).to.equal('Nodes created: 1', 'The response of the GRAPH.QUERY command');
+        expect(response[2][2]).to.equal('Properties set: 2', 'The response of the GRAPH.QUERY command');
+        expect(response[2][3]).to.equal('Cached execution: 0', 'The response of the GRAPH.QUERY command');
     });
     it('readonlyQuery function', async () => {
-        const response = await client.readonlyQuery(graphName, 'MATCH (p:Person) WHERE p.age > 80 RETURN p')
+        let response = await client.readonlyQuery(graphName, 'MATCH (p:Person) WHERE p.age > 80 RETURN p');
+        expect(response[2][0]).to.equal('Cached execution: 0', 'The response of the GRAPH.RO_QUERY command');
+        response = await client.readonlyQuery(graphName, 'MATCH (p:Person) WHERE p.age > $age RETURN p', { age: '80' })
         expect(response[2][0]).to.equal('Cached execution: 0', 'The response of the GRAPH.RO_QUERY command');
     });
     it('profile function', async () => {
