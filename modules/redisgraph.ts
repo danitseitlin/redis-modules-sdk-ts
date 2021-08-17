@@ -49,6 +49,7 @@ export class RedisGraph extends Module {
                 queryList.push(`${key}="${value}"`)
             }
         }
+        queryList.push(query)
         queryList.push(`'${queryList.join(" ")}'`)
         return args;
     }
