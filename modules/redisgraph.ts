@@ -36,7 +36,7 @@ export class RedisGraph extends Module {
         const args = this.buildQueryParams(name, query, params);
         //if(run)
         console.log(args)
-        return await this.sendCommand('GRAPH.QUERY', `${args.join(" ")}`)
+        return await this.sendCommand('GRAPH.QUERY', args)
         //return null;
     }
     buildQueryParams(name: string, query: string, params?: {[key: string]: string}): string[] {
@@ -50,7 +50,7 @@ export class RedisGraph extends Module {
             }
         }
         queryList.push(query)
-        queryList.push(`'${queryList.join(" ")}'`)
+        args.push(`'${queryList.join(" ")}'`)
         return args;
     }
 
