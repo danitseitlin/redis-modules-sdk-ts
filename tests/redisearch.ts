@@ -84,11 +84,11 @@ describe('RediSearch Module testing', async function() {
         })
         await client.redis.hset('doc:1', { name: 'John Doe'  });
         await client.redis.hset('doc:2', { name: 'Jane Doe'  });
-        await client.redis.hset('doc:3', { name: 'Sarah Brown'  });
+        await client.redis.hset('doc:3', { name: 'Sarah Brown' });
         const [count, ...result] = await client.search(`${index}-searchtest`, '@name:Doe');
         console.log(await client.search(
             `${index}-searchtest`,
-            '12*',
+            '@name:Brown',
             {
                 inFields: {
                     num: 2,
