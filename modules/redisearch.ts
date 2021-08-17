@@ -97,7 +97,7 @@ export class Redisearch extends Module {
      * @returns Array reply, where the first element is the total number of results, and then pairs of document id, and a nested array of field/value.
      */
     async search(index: string, query: string, parameters?: FTSearchParameters): Promise<[number, ...Array<string | string[]>]> {
-        let args: string[] = [index, query];
+        let args: string[] = [];//[index, query];
         if(parameters !== undefined) {
             if(parameters.noContent === true)
                 args.push('NOCONTENT')
@@ -186,7 +186,7 @@ export class Redisearch extends Module {
             if(parameters.limit !== undefined)
                 args = args.concat(['LIMIT', parameters.limit.first.toString(), parameters.limit.num.toString()])
         }
-        const response = await this.sendCommand('FT.SEARCH', args);
+        const response = await this.sendCommand('FT.SEARCH', [index, query, args.join(' ')]);
         return this.handleResponse(response);
     }
 
