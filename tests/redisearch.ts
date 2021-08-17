@@ -86,6 +86,22 @@ describe('RediSearch Module testing', async function() {
         await client.redis.hset('doc:2', { name: 'Jane Doe'  });
         await client.redis.hset('doc:3', { name: 'Sarah Brown'  });
         const [count, ...result] = await client.search(`${index}-searchtest`, '@name:Doe');
+        await client.search(
+            `${index}-searchtest`,
+            '12*',
+            {
+                inFields: {
+                    num: 2,
+                    field: "tags number"
+                },
+                highlight: {
+                    tags: [{
+                        open: "<b>",
+                        close: "</b>"
+                    }],
+                }
+            }
+        );
         await client.dropindex(`${index}-searchtest`);
         expect(count).to.equal(2, 'Total number of returining document of FT.SEARCH command')
         expect(result[0].indexOf('doc')).to.equal(0, 'first document key')
