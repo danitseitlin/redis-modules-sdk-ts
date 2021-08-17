@@ -35,6 +35,7 @@ export class RedisGraph extends Module {
     async query(name: string, query: string, params?: {[key: string]: string}, run = true): Promise<void>/*Promise<string[][]>*/ {
         const args = this.buildQueryParams(name, query, params);
         //if(run)
+        console.log(args.join(" "))
         return await this.sendCommand('GRAPH.QUERY', `'${args.join(" ")}'`)
         //return null;
     }
