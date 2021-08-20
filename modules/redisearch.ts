@@ -186,7 +186,7 @@ export class Redisearch extends Module {
             if(parameters.limit !== undefined)
                 args = args.concat(['LIMIT', parameters.limit.first.toString(), parameters.limit.num.toString()])
         }
-        console.log(args.join(' '))
+        console.log(args)
         const response = await this.sendCommand('FT.SEARCH', [index, query, args.join(' ')]);
         return this.handleResponse(response);
     }
