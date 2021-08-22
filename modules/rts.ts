@@ -260,9 +260,9 @@ export class RedisTimeSeries extends Module {
             args = args.concat(['AGGREGATION', `${options.aggregation.type}`, `${options.aggregation.timeBucket}`]);
         if(options !== undefined && options.withLabels === true)
             args.push('WITHLABELS')
+        args = args.concat(['FILTER', `${filter}`])
         if(options !== undefined && options.groupBy)
             args = args.concat(['GROUPBY', `${options.groupBy.label}`, 'REDUCE', `${options.groupBy.reducer}`])
-        args = args.concat(['FILTER', `${filter}`])
         return await this.sendCommand('TS.MRANGE', args)
     }
     
