@@ -105,6 +105,7 @@ describe('RTS Module testing', async function() {
             },
             withLabels: true
         })
+        console.log(response)
         expect(response[0][0]).to.equal('key:2:32', 'The filtered key name');
     });
     it('mrevrange function', async () => {
