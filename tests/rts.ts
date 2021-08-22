@@ -102,7 +102,8 @@ describe('RTS Module testing', async function() {
             groupBy: {
                 label: 'label',
                 reducer: 'MAX'
-            }
+            },
+            withLabels: true
         })
         expect(response[0][0]).to.equal('key:2:32', 'The filtered key name');
     });
