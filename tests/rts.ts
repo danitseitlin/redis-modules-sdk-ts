@@ -96,7 +96,14 @@ describe('RTS Module testing', async function() {
     });
     it('mrange function', async () => {
         const info = await client.info(key1);
-        const response = await client.mrange((info.firstTimestamp-1).toString(), (info.lastTimestamp+10000).toString(), 'label=value')
+        const fromTimestamp = (info.firstTimestamp-1);
+        const toTimestamp = (info.lastTimestamp+10000);
+        const response = await client.mrange(`${fromTimestamp}`, `${toTimestamp}`, 'label=value', {
+            groupBy: {
+                label: 'label',
+                reducer: 'MAX'
+            }
+        })
         expect(response[0][0]).to.equal('key:2:32', 'The filtered key name');
     });
     it('mrevrange function', async () => {
