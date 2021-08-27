@@ -89,7 +89,11 @@ describe('RTS Module testing', async function() {
         let response = await client.range(key1, data[0].toString(), data[1].toString())
         expect(response.length).to.equal(0, 'The range items length of the response')
         response = await client.range(key1, `${data[0]}`, `${data[1]}`, {
-            align: 'start'
+            align: 'start',
+            aggregation: {
+                type: 'count',
+                timeBucket: 10
+            }
         });
         console.log(response)
     });
@@ -98,7 +102,11 @@ describe('RTS Module testing', async function() {
         let response = await client.revrange(key1, data[0].toString(), data[1].toString())
         expect(response.length).to.equal(0, 'The range items length of the response')
         response = await client.revrange(key1, `${data[0]}`, `${data[1]}`, {
-            align: 'start'
+            align: 'start',
+            aggregation: {
+                type: 'count',
+                timeBucket: 10
+            }
         });
         console.log(response)
     });
@@ -130,7 +138,11 @@ describe('RTS Module testing', async function() {
         let response = await client.mrevrange((info.firstTimestamp-1).toString(), (info.lastTimestamp+10000).toString(), 'label=value')
         expect(response[0][0]).to.equal('key:2:32', 'The filtered key name');
         response = await client.mrevrange(`${info.firstTimestamp-1}`, `${info.lastTimestamp+10000}`, 'label=value', {
-            align: '+'
+            align: '+',
+            aggregation: {
+                type: 'count',
+                timeBucket: 10
+            }
         })
         console.log(response);
     });
