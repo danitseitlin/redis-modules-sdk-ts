@@ -95,7 +95,7 @@ describe('RTS Module testing', async function() {
                 timeBucket: 10
             }
         });
-        console.log(response)
+        expect(response.length).to.equal(0, 'The range items length of the response')
     });
     it('revrange function', async () => {
         const data = await client.get(key1);
@@ -108,7 +108,7 @@ describe('RTS Module testing', async function() {
                 timeBucket: 10
             }
         });
-        console.log(response)
+        expect(response.length).to.equal(0, 'The range items length of the response')
     });
     it('mrange function', async () => {
         const info = await client.info(key1);
@@ -144,7 +144,7 @@ describe('RTS Module testing', async function() {
                 timeBucket: 10
             }
         })
-        console.log(response);
+        expect(response[0][0]).to.equal('key:2:32', 'The filtered key name');
     });
     it('get function', async () => {
         const response = await client.get(key1);
