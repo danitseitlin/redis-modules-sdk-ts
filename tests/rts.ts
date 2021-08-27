@@ -115,15 +115,15 @@ describe('RTS Module testing', async function() {
         for(let i=0; i < response[0].length; i++) {
             console.log(`${i}: ${response[0][i]}`)
         }
-        expect(response[0]).to.equal(filter, 'The filtered key name');
-        expect(response[1][0][0]).to.equal('label', '');
-        expect(response[1][0][1]).to.equal('value', '');
-        expect(response[1][1][0]).to.equal('__reducer__', '');
-        expect(response[1][1][1]).to.equal('max', '');
-        expect(response[1][2][0]).to.equal('__source__', '');
-        expect(response[1][2][1]).to.equal(key, '');
-        expect(response[2][0][0]).to.equal('', '');
-        expect(response[2][0][1]).to.equal(value, '');
+        expect(response[0][0]).to.equal(filter, 'The filtered key name');
+        expect(response[0][1][0]).to.equal('label', '');
+        expect(response[0][1][1]).to.equal('value', '');
+        expect(response[0][1][2]).to.equal('__reducer__', '');
+        expect(response[0][1][3]).to.equal('max', '');
+        expect(response[0][1][4]).to.equal('__source__', '');
+        expect(response[0][1][5]).to.equal(key, '');
+        expect(response[0][2][0]).to.equal('', '');
+        expect(response[0][2][0]).to.equal(value, '');
     });
     it('mrevrange function', async () => {
         const info = await client.info(key1);
