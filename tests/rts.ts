@@ -112,8 +112,8 @@ describe('RTS Module testing', async function() {
             },
             withLabels: true
         });
-        for(let i=0; i < response.length; i++) {
-            console.log(`${i}: ${response[i]}`)
+        for(let i=0; i < response[0].length; i++) {
+            console.log(`${i}: ${response[0][i]}`)
         }
         expect(response[0]).to.equal(filter, 'The filtered key name');
         expect(response[1][0][0]).to.equal('label', '');
