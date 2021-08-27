@@ -523,7 +523,7 @@ export interface TSMRangeOptions extends TSRangeOptions {
         label: string,
         reducer: 'SUM' | 'MIN' | 'MAX'
     }
-};
+}
 
 /**
  * The available values of Align aggregation
