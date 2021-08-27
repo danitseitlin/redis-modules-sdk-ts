@@ -8,7 +8,7 @@ export { RedisBloomCuckoo, CFInsertParameters, CFResponse, CFReserveParameters }
 export { RedisBloomCMK, CMKIncrbyItems } from './modules/redisbloom-cmk';
 export {
     RedisTimeSeries as RTS, RedisTimeSeries, TSCreateOptions, TSLabel, TSAddOptions, TSKeySet, TSIncrbyDecrbyOptions, TSOptions, TSCreateRule, TSAggregationType,
-    TSRangeOptions, TSMRangeOptions, TSInfo
+    TSRangeOptions, TSMRangeOptions, TSInfo, TSAlignType
 } from './modules/rts';
 export {
     Redisearch, FTCreateParameters, FTFieldOptions, FTSchemaField, FTSearchParameters, FTAggregateParameters, FTSugAddParameters, FTSugGetParameters, FTSpellCheck,
