@@ -1,4 +1,3 @@
-
 import * as Redis from 'ioredis';
 import { Module, RedisModuleOptions } from './module.base';
 
@@ -212,12 +211,8 @@ export class RedisTimeSeries extends Module {
      * @param options.aggregation.timeBucket The time bucket of the 'AGGREGATION' command
      */
     async range(key: string, fromTimestamp: string, toTimestamp: string, options?: TSRangeOptions): Promise<number[]> {
-        let args = [key, fromTimestamp, toTimestamp];
-        if(options !== undefined && options.count !== undefined)
-            args = args.concat(['COUNT', options.count.toString()]);
-        if(options !== undefined && options.aggregation !== undefined)
-            args = args.concat(['AGGREGATION', options.aggregation.type, options.aggregation.timeBucket.toString()]);
-        return await this.sendCommand('TS.RANGE', args)
+        const args = this.buildRangeCommand(key, fromTimestamp, toTimestamp, options);
+        return await this.sendCommand('TS.RANGE', args);
     }
     
     /**
@@ -232,12 +227,30 @@ export class RedisTimeSeries extends Module {
      * @param options.aggregation.timeBucket The time bucket of the 'AGGREGATION' command
      */
     async revrange(key: string, fromTimestamp: string, toTimestamp: string, options?: TSRangeOptions): Promise<number[]> {
-        let args = [key, fromTimestamp.toString(), toTimestamp.toString()];
-        if(options !== undefined && options.count !== undefined)
-            args = args.concat(['COUNT', options.count.toString()]);
-        if(options !== undefined && options.aggregation !== undefined)
-            args = args.concat(['AGGREGATION', options.aggregation.type, options.aggregation.timeBucket.toString()]);
+        const args = this.buildRangeCommand(key, fromTimestamp, toTimestamp, options);
         return await this.sendCommand('TS.REVRANGE', args)
+    }
+
+    /**
+     * Building the arguments for 'TS.RANGE'/'TS.REVRANGE' commands
+     * @param key The key
+     * @param fromTimestamp The starting timestamp
+     * @param toTimestamp The ending timestamp
+     * @param options The 'TS.RANGE'/'TS.REVRANGE' command optional parameters
+     * @returns The arguments of the command
+     */
+    buildRangeCommand(key: string, fromTimestamp: string, toTimestamp: string, options?: TSRangeOptions): string[] {
+        let args = [key, fromTimestamp, toTimestamp];
+        if(options?.count !== undefined){
+            args = args.concat(['COUNT', `${options.count}`]);
+        }
+        if(options?.align !== undefined){
+            args = args.concat(['ALIGN', `${options.align}`]);
+        }
+        if(options?.aggregation !== undefined){
+            args = args.concat(['AGGREGATION', options.aggregation.type, `${options.aggregation.timeBucket}`]);
+        }
+        return args;
     }
 
     /**
@@ -253,16 +266,7 @@ export class RedisTimeSeries extends Module {
      * @param options.withLabels The 'WITHLABELS' optional parameter
      */
     async mrange(fromTimestamp: string, toTimestamp: string, filter: string, options?: TSMRangeOptions): Promise<(string | number)[][]> {
-        let args = [fromTimestamp, toTimestamp];
-        if(options !== undefined && options.count !== undefined)
-            args = args.concat(['COUNT', `${options.count}`]);
-        if(options !== undefined && options.aggregation)
-            args = args.concat(['AGGREGATION', `${options.aggregation.type}`, `${options.aggregation.timeBucket}`]);
-        if(options !== undefined && options.withLabels === true)
-            args.push('WITHLABELS')
-        args = args.concat(['FILTER', `${filter}`])
-        if(options !== undefined && options.groupBy)
-            args = args.concat(['GROUPBY', `${options.groupBy.label}`, 'REDUCE', `${options.groupBy.reducer}`])
+        const args = this.buildMultiRangeCommand(fromTimestamp, toTimestamp, filter, options);
         return await this.sendCommand('TS.MRANGE', args)
     }
     
@@ -279,19 +283,39 @@ export class RedisTimeSeries extends Module {
      * @param options.withLabels The 'WITHLABELS' optional parameter
      */
     async mrevrange(fromTimestamp: string, toTimestamp: string, filter: string, options?: TSMRangeOptions): Promise<(string | number)[][]> {
-        let args = [fromTimestamp, toTimestamp];
-        if(options !== undefined && options.count !== undefined)
-            args = args.concat(['COUNT', options.count.toString()]);
-        if(options !== undefined && options.aggregation !== undefined)
-            args = args.concat(['AGGREGATION', options.aggregation.type, options.aggregation.timeBucket.toString()]);
-        if(options !== undefined && options.withLabels !== undefined)
-            args.push('WITHLABELS')
-        if(options !== undefined && options.groupBy)
-            args = args.concat(['GROUPBY', options.groupBy.label, 'REDUCE', options.groupBy.reducer])
-        args = args.concat(['FILTER', filter])
+        const args = this.buildMultiRangeCommand(fromTimestamp, toTimestamp, filter, options);
         return await this.sendCommand('TS.MREVRANGE', args)
     }
 
+    /**
+     * Building the arguments for 'TS.MRANGE'/'TS.MREVRANGE' commands
+     * @param fromTimestamp The starting timestamp
+     * @param toTimestamp The ending timestamp
+     * @param filter The filter
+     * @param options The 'TS.MRANGE'/'TS.MREVRANGE' command optional parameters 
+     * @returns The arguments of the command
+     */
+    buildMultiRangeCommand(fromTimestamp: string, toTimestamp: string, filter: string, options?: TSMRangeOptions): string[] {
+        let args = [fromTimestamp, toTimestamp];
+        if(options?.count !== undefined) {
+            args = args.concat(['COUNT', `${options.count}`]);
+        }
+        if(options?.align !== undefined){
+            args = args.concat(['ALIGN', `${options.align}`]);
+        }
+        if(options?.aggregation){
+            args = args.concat(['AGGREGATION', `${options.aggregation.type}`, `${options.aggregation.timeBucket}`]);
+        }
+        if(options?.withLabels === true) {
+            args.push('WITHLABELS')
+        }
+        args = args.concat(['FILTER', `${filter}`])
+        if(options?.groupBy){
+            args = args.concat(['GROUPBY', `${options.groupBy.label}`, 'REDUCE', `${options.groupBy.reducer}`])
+        }
+        return args;
+    }
+    
     /**
      * Retrieving the last sample of a key
      * @param key The key
@@ -467,6 +491,7 @@ export type TSAggregationType = 'avg' | 'sum' | 'min' | 'max' | 'range' | 'range
 
 /**
  * The 'TS.Range' command optional parameters
+ * @param align The 'ALIGN' optional parameter
  * @param count The 'COUNT' optional parameter
  * @param aggregation The 'AGGREGATION' optional parameter
  * @param aggregation.type The type of the 'AGGREGATION' command
@@ -474,6 +499,7 @@ export type TSAggregationType = 'avg' | 'sum' | 'min' | 'max' | 'range' | 'range
  */
 export type TSRangeOptions = {
     count?: number,
+    align?: TSAlignType,
     aggregation?: {
         type: TSAggregationType,
         timeBucket: number
@@ -498,3 +524,12 @@ export interface TSMRangeOptions extends TSRangeOptions {
         reducer: 'SUM' | 'MIN' | 'MAX'
     }
 }
+
+/**
+ * The available values of Align aggregation
+ * @param start The reference timestamp will be the query start interval time (fromTimestamp).
+ * @param + The reference timestamp will be the query start interval time (fromTimestamp).
+ * @param end The reference timestamp will be the signed remainder of query end interval time by the AGGREGATION time bucket (toTimestamp % timeBucket).
+ * @param - The reference timestamp will be the signed remainder of query end interval time by the AGGREGATION time bucket (toTimestamp % timeBucket).
+ */
+ export type TSAlignType = 'start' | '+' | 'end' | '-';
