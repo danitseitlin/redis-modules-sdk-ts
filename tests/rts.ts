@@ -98,15 +98,29 @@ describe('RTS Module testing', async function() {
         const info = await client.info(key1);
         const fromTimestamp = (info.firstTimestamp-1);
         const toTimestamp = (info.lastTimestamp+10000);
-        let response = await client.mrange((info.firstTimestamp-1).toString(), (info.lastTimestamp+10000).toString(), 'label=value');
-        expect(response[0][0]).to.equal('key:2:32', 'The filtered key name');
-        response = await client.mrange(`${fromTimestamp}`, `${toTimestamp}`, 'label=value', {
+        const key = 'key:2:32';
+        const value = '26';
+        const filter = 'label=value';
+        console.log(fromTimestamp)
+        console.log(toTimestamp)
+        let response = await client.mrange(`${fromTimestamp}`, `${toTimestamp}`, 'label=value');
+        expect(response[0][0]).to.equal(key, 'The filtered key name');
+        response = await client.mrange(`${fromTimestamp}`, `${toTimestamp}`, filter, {
             groupBy: {
                 label: 'label',
                 reducer: 'MAX'
             },
             withLabels: true
-        })
+        });
+        expect(response[0]).to.equal(filter, 'The filtered key name');
+        expect(response[1][0]).to.equal('label', '');
+        expect(response[1][0]).to.equal('value', '');
+        expect(response[1][0]).to.equal('__reducer__', '');
+        expect(response[1][0]).to.equal('max', '');
+        expect(response[1][0]).to.equal('__source__', '');
+        expect(response[1][0]).to.equal(key, '');
+        expect(response[2][0][0]).to.equal('', '');
+        expect(response[2][0][1]).to.equal(value, '');
         response.forEach(item => console.log(item));  
     });
     it('mrevrange function', async () => {
