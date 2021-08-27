@@ -255,14 +255,14 @@ export class RedisTimeSeries extends Module {
     async mrange(fromTimestamp: string, toTimestamp: string, filter: string, options?: TSMRangeOptions): Promise<(string | number)[][]> {
         let args = [fromTimestamp, toTimestamp];
         if(options !== undefined && options.count !== undefined)
-            args = args.concat(['COUNT', options.count.toString()]);
-        if(options !== undefined && options.aggregation !== undefined)
-            args = args.concat(['AGGREGATION', options.aggregation.type, options.aggregation.timeBucket.toString()]);
-        if(options !== undefined && options.withLabels !== undefined)
+            args = args.concat(['COUNT', `${options.count}`]);
+        if(options !== undefined && options.aggregation)
+            args = args.concat(['AGGREGATION', `${options.aggregation.type}`, `${options.aggregation.timeBucket}`]);
+        if(options !== undefined && options.withLabels === true)
             args.push('WITHLABELS')
+        args = args.concat(['FILTER', `${filter}`])
         if(options !== undefined && options.groupBy)
-            args = args.concat(['GROUPBY', options.groupBy.label, 'REDUCE', options.groupBy.reducer])
-        args = args.concat(['FILTER', filter])
+            args = args.concat(['GROUPBY', `${options.groupBy.label}`, 'REDUCE', `${options.groupBy.reducer}`])
         return await this.sendCommand('TS.MRANGE', args)
     }
     
