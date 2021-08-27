@@ -112,7 +112,7 @@ describe('RTS Module testing', async function() {
             },
             withLabels: true
         });
-        expect(response[0]).to.equal(filter, 'The filtered key name');
+        expect(response[0][0]).to.equal(filter, 'The filtered key name');
         expect(response[1][0][0]).to.equal('label', '');
         expect(response[1][0][1]).to.equal('value', '');
         expect(response[1][1][0]).to.equal('__reducer__', '');
