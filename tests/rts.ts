@@ -98,12 +98,8 @@ describe('RTS Module testing', async function() {
         const info = await client.info(key1);
         const fromTimestamp = (info.firstTimestamp-1);
         const toTimestamp = (info.lastTimestamp+10000);
-        const values = [fromTimestamp+1, '27', fromTimestamp+2, '26']
         const key = 'key:2:32';
-        const value = '26';
         const filter = 'label=value';
-        console.log(fromTimestamp)
-        console.log(toTimestamp)
         let response = await client.mrange(`${fromTimestamp}`, `${toTimestamp}`, filter);
         expect(response[0][0]).to.equal(key, 'The filtered key name');
         response = await client.mrange(`${fromTimestamp}`, `${toTimestamp}`, filter, {
@@ -113,18 +109,13 @@ describe('RTS Module testing', async function() {
             },
             withLabels: true
         });
-        for(let i=0; i < response[0].length; i++) {
-            console.log(`${i}: ${response[0][i]}`)
-        }
-        expect(response[0][0]).to.equal(filter, 'The filtered key name');
-        expect(response[0][1][0][0]).to.equal('label', '');
-        expect(response[0][1][0][1]).to.equal('value', '');
-        expect(response[0][1][1][0]).to.equal('__reducer__', '');
-        expect(response[0][1][1][1]).to.equal('max', '');
-        expect(response[0][1][2][0]).to.equal('__source__', '');
-        expect(response[0][1][2][1]).to.equal(key, '');
-        //expect(response[0][2][0]).to.equal(values, '');
-        //expect(response[0][2][0][1]).to.equal(value, '');
+        expect(response[0][0]).to.equal(filter, 'The value of the filter');
+        expect(response[0][1][0][0]).to.equal('label', 'The name of the label');
+        expect(response[0][1][0][1]).to.equal('value', 'The value of the label value');
+        expect(response[0][1][1][0]).to.equal('__reducer__', 'The key of the reducer');
+        expect(response[0][1][1][1]).to.equal('max', 'The value of the reducer');
+        expect(response[0][1][2][0]).to.equal('__source__', 'The key of the source');
+        expect(response[0][1][2][1]).to.equal(key, 'The value of the source');
     });
     it('mrevrange function', async () => {
         const info = await client.info(key1);
