@@ -1,4 +1,3 @@
-
 import * as Redis from 'ioredis';
 import { Module, RedisModuleOptions } from './module.base';
 
