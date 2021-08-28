@@ -239,8 +239,14 @@ export class RedisTimeSeries extends Module {
      * @param options The 'TS.RANGE'/'TS.REVRANGE' command optional parameters
      * @returns The arguments of the command
      */
-    buildRangeCommand(key: string, fromTimestamp: string, toTimestamp: string, options?: TSRangeOptions): string[] {
+    private buildRangeCommand(key: string, fromTimestamp: string, toTimestamp: string, options?: TSRangeOptions): string[] {
         let args = [key, fromTimestamp, toTimestamp];
+        if(options?.filterByTS !== undefined) {
+            args = args.concat(['FILTER_BY_TS', options.filterByTS.join(' ')]);
+        }
+        if(options?.filterByValue !== undefined) {
+            args = args.concat(['FILTER_BY_VALUE', `${options.filterByValue.min}`, `${options.filterByValue.max}`]);
+        }
         if(options?.count !== undefined){
             args = args.concat(['COUNT', `${options.count}`]);
         }
@@ -295,7 +301,7 @@ export class RedisTimeSeries extends Module {
      * @param options The 'TS.MRANGE'/'TS.MREVRANGE' command optional parameters 
      * @returns The arguments of the command
      */
-    buildMultiRangeCommand(fromTimestamp: string, toTimestamp: string, filter: string, options?: TSMRangeOptions): string[] {
+    private buildMultiRangeCommand(fromTimestamp: string, toTimestamp: string, filter: string, options?: TSMRangeOptions): string[] {
         let args = [fromTimestamp, toTimestamp];
         if(options?.count !== undefined) {
             args = args.concat(['COUNT', `${options.count}`]);
@@ -493,6 +499,10 @@ export type TSAggregationType = 'avg' | 'sum' | 'min' | 'max' | 'range' | 'range
  * The 'TS.Range' command optional parameters
  * @param align The 'ALIGN' optional parameter
  * @param count The 'COUNT' optional parameter
+ * @param filterByValue The 'FILTER_BY_VALUE' optional parameter. 
+ * @param filterByValue.min The min value to filter by
+ * @param filterByValue.max The max value to filter by`
+ * @param filterByTS The 'FILTER_BY_TS' optional parameter. A list of TS values.  
  * @param aggregation The 'AGGREGATION' optional parameter
  * @param aggregation.type The type of the 'AGGREGATION' command
  * @param aggregation.timeBucket The time bucket of the 'AGGREGATION' command
@@ -500,6 +510,11 @@ export type TSAggregationType = 'avg' | 'sum' | 'min' | 'max' | 'range' | 'range
 export type TSRangeOptions = {
     count?: number,
     align?: TSAlignType,
+    filterByValue?: {
+        min: number,
+        max: number
+    },
+    filterByTS?: string[],
     aggregation?: {
         type: TSAggregationType,
         timeBucket: number
