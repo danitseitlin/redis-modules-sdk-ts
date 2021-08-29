@@ -96,7 +96,7 @@ export class Module {
      * @param response The array response from the module
      * @param returnSingleDimensionArray If we should return single dimension arrays without parsing them to objects
      */
-    handleResponse(response: any, returnSingleDimensionArray: boolean = false): any {
+    handleResponse(response: any, returnSingleDimensionArray = false): any {
         const obj = {}
         //If not an array/object
         if (
