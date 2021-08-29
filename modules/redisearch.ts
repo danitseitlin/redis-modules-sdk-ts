@@ -152,15 +152,12 @@ export class Redisearch extends Module {
                 args.push('HIGHLIGHT')
                 if (parameters.highlight.fields !== undefined) {
                     args.push('FIELDS')
-                    for (const field of parameters.highlight.fields) {
-                        args = args.concat([field.num.toString(), field.field]);
-                    }
+                    args.push(parameters.highlight.fields.length.toString());
+                    args = args.concat(parameters.highlight.fields);
                 }
                 if (parameters.highlight.tags !== undefined) {
                     args.push('TAGS')
-                    for (const tag of parameters.highlight.tags) {
-                        args = args.concat([tag.open, tag.close]);
-                    }
+                    args = args.concat([parameters.highlight.tags.open, parameters.highlight.tags.close]);
                 }
             }
             if (parameters.slop !== undefined)
@@ -702,14 +699,11 @@ export type FTSearchParameters = {
         seperator?: string
     },
     highlight?: {
-        fields?: {
-            num: number,
-            field: string
-        }[],
+        fields?: string[],
         tags?: {
             open: string,
             close: string
-        }[]
+        },
     },
     slop?: number,
     inOrder?: boolean,

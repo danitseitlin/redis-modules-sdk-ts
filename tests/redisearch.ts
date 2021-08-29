@@ -240,7 +240,7 @@ describe('RediSearch Module testing', async function () {
             //FIXME: FIX it and write tests here
             console.warn(`RETURN 0 returns this: ${JSON.stringify(res)}`);
 
-            //Search tests with summarize
+            //Search test with summarize
             res = await client.search(
                 `${index}-searchtest`,
                 'De*',
@@ -257,6 +257,24 @@ describe('RediSearch Module testing', async function () {
             expect(res[0]).to.equal(2, 'Total number of returining document of FT.SEARCH command');
             expect(res[2][1].endsWith("!?!")).to.equal(true, 'Custom summarize seperator');
             expect(res[4][1].endsWith("!?!")).to.equal(true, 'Custom summarize seperator');
+
+            //Search tests with highlight
+            res = await client.search(
+                `${index}-searchtest`,
+                'Do*|De*',
+                {
+                    highlight: {
+                        fields: ["introduction"],
+                        tags: {
+                            open: "**",
+                            close: "**",
+                        }
+                    },
+                },
+            );
+            expect(res[0]).to.equal(2, 'Total number of returining document of FT.SEARCH command');
+            expect(res[2][3].includes("**")).to.equal(false, 'Name mustn\'t be highlighted');
+            expect(res[2][1].includes("**developer**")).to.equal(true, 'Introduction must be highlighted');
         } finally {
             await client.dropindex(`${index}-searchtest`);
         }
