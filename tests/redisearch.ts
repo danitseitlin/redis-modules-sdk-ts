@@ -77,6 +77,9 @@ describe('RediSearch Module testing', async function () {
         }, {
             name: 'age',
             type: 'NUMERIC'
+        }, {
+            name: 'salary',
+            type: 'NUMERIC'
         }], {
             prefix: [
                 {
@@ -85,9 +88,9 @@ describe('RediSearch Module testing', async function () {
                 }
             ]
         })
-        await client.redis.hset('doc:1', { name: 'John Doe', age: 25 });
-        await client.redis.hset('doc:2', { name: 'Jane Doe', age: 30 });
-        await client.redis.hset('doc:3', { name: 'Sarah Brown', age: 80 });
+        await client.redis.hset('doc:1', { name: 'John Doe', age: 25, salary: 2500 });
+        await client.redis.hset('doc:2', { name: 'Jane Doe', age: 30, salary: 5000 });
+        await client.redis.hset('doc:3', { name: 'Sarah Brown', age: 80, salary: 10000 });
         try {
             //Simple search test with field specified in query
             let [count, ...result] = await client.search(`${index}-searchtest`, '@name:Doe');
@@ -133,6 +136,70 @@ describe('RediSearch Module testing', async function () {
                 },
             );
             expect(res).to.equal(0, 'Total number of returining document of FT.SEARCH command');
+
+            //Search tests with filter
+            res = await client.search(
+                `${index}-searchtest`,
+                '*',
+                {
+                    filter: [{
+                        field: "age",
+                        min: 0,
+                        max: 35,
+                    }],
+                },
+            );
+            expect(res[0]).to.equal(2, 'Total number of returining document of FT.SEARCH command');
+            res = await client.search(
+                `${index}-searchtest`,
+                '*',
+                {
+                    filter: [
+                        {
+                            field: "age",
+                            min: 0,
+                            max: 35,
+                        },
+                        {
+                            field: "salary",
+                            min: 0,
+                            max: 2500,
+                        },
+                    ],
+                },
+            );
+            expect(res[0]).to.equal(1, 'Total number of returining document of FT.SEARCH command');
+
+            //Search tests with return
+            res = await client.search(
+                `${index}-searchtest`,
+                '*',
+                {
+                    return: [
+                        "age",
+                    ],
+                },
+            );
+            expect(res[0]).to.equal(3, 'Total number of returining document of FT.SEARCH command');
+            expect(res[2].length).to.equal(2, 'Total number of returned key-values');
+            expect(res[2].includes("age")).to.equal(true, 'Age must be returned');
+            expect(res[2].includes("salary")).to.equal(false, 'Salary must not be returned');
+            expect(res[2].includes("name")).to.equal(false, 'Name must not be returned');
+            expect(res[4].length).to.equal(2, 'Total number of returned key-values');
+            expect(res[6].length).to.equal(2, 'Total number of returned key-values');
+            res = await client.search(
+                `${index}-searchtest`,
+                'Sarah',
+                {
+                    return: [
+                        "age", "salary"
+                    ],
+                },
+            );
+            expect(res[0]).to.equal(1, 'Total number of returining document of FT.SEARCH command');
+            expect(res[2].includes("age")).to.equal(true, 'Age must be returned');
+            expect(res[2].includes("salary")).to.equal(true, 'Salary must be returned');
+            expect(res[2].includes("name")).to.equal(false, 'Name must not be returned');
         } finally {
             await client.dropindex(`${index}-searchtest`);
         }
