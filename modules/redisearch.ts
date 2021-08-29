@@ -180,7 +180,7 @@ export class Redisearch extends Module {
                 args = args.concat(['LIMIT', parameters.limit.first.toString(), parameters.limit.num.toString()])
         }
         const response = await this.sendCommand('FT.SEARCH', args);
-        return this.handleResponse(response);
+        return this.handleResponse(response, true);
     }
 
     /**

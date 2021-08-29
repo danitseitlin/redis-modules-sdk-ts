@@ -30,7 +30,7 @@ describe('RediSearch Module testing', async function () {
         await redis.connect();
     });
     after(async () => {
-        await client.dropindex(`${index}-searchtest`);
+        await client.sendCommand("flushdb");
         await client.disconnect();
         await redis.disconnect();
     });
@@ -61,7 +61,7 @@ describe('RediSearch Module testing', async function () {
     it('search function on JSON', async () => {
         let response = await client.search(index, query)
         expect(response).to.equal(0, 'The response of the FT.SEARCH command')
-        //FIXME: Needs more tests, also I couldn't find anything related to `RETURN AS`
+        //FIXME: JSON Needs more tests, also I couldn't find anything related to `RETURN AS`
         response = await client.search(`${index}-json`, query, {
             return: ['$.name'],
         })
@@ -233,20 +233,18 @@ describe('RediSearch Module testing', async function () {
                 return: [],
             },
         );
-        //BUG: { '3': 'doc:3', 'doc:2': 'doc:1' } This should return an array too, isn't it?
-        //FIXME: FIX it and write tests here
-        console.warn('\x1b[31m', `RETURN 0 returns this: ${JSON.stringify(res)}`);
+        expect(res.length).to.equal(4, 'Only keys should be returned (+count of them)');
     });
     it('Search test with summarize', async () => {
         const res = await client.search(
             `${index}-searchtest`,
             'De*',
             {
-                return: ['introduction'],
+                //! specifying fields in summarize while return is also specified will cause redis (edge version) to crash
+                //! Crash in redis image fabe0b38e273
+                // return: ['introduction'],
                 summarize: {
-                    /* fields: ['introduction'], */ 
-                    //! specifying fields in summarize while return is also specified will cause redis (edge version) to crash
-                    //! Crash in redis image fabe0b38e273
+                    fields: ['introduction'],
                     frags: 1,
                     len: 3,
                     seperator: ' !?!'
@@ -314,7 +312,7 @@ describe('RediSearch Module testing', async function () {
         await client.create(`${index}-aggreagtetest`, 'HASH', [{
             name: 'name',
             type: 'TEXT'
-        }, 
+        },
         {
             name: 'city',
             type: 'TEXT'
@@ -354,8 +352,8 @@ describe('RediSearch Module testing', async function () {
         expect(result[0][0]).to.equal('city', 'Aggreagated prop of the FT.AGGREGATE command result');
 
         const [count2, ...results2] = await client.aggregate(`${index}-aggreagtetest`, '*', {
-            apply: [ { expression: 'hour(@timestamp)', as: 'hour' } ],
-            groupby: { properties: ['@hour'], nargs: '1'}
+            apply: [{ expression: 'hour(@timestamp)', as: 'hour' }],
+            groupby: { properties: ['@hour'], nargs: '1' }
         })
         expect(count2).to.equal(2, 'Total number of the FT.AGGREGATE command result');
         expect(results2[0][0]).to.equal('hour', 'Aggreagated apply prop of the FT.AGGREGATE command result');
@@ -435,7 +433,7 @@ describe('RediSearch Module testing', async function () {
     });
     it('info function', async () => {
         const response = await client.info(index)
-        expect(response.index_name).to.equal(index, 'The index name'); 
+        expect(response.index_name).to.equal(index, 'The index name');
     });
     it('config function', async () => {
         const response = await client.config('GET', '*')
