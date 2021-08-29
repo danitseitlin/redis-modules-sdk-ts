@@ -21,7 +21,7 @@ describe('RediSearch Module testing', async function () {
         client = new Redisearch({
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
-        });
+        }, { showDebugLogs: true });
         redis = new Redis({
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
@@ -88,7 +88,6 @@ describe('RediSearch Module testing', async function () {
         }], {
             prefix: ["doc"],
         })
-
         await client.redis.hset(
             'doc:1',
             {
