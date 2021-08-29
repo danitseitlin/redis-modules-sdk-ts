@@ -26,12 +26,12 @@ describe('RedisGraph Module testing', async function() {
     })
 
     it('query function', async () => {
-        const response = await client.query(graphName, 'CREATE (p:Person {name: \'Kurt\', age: 27}) RETURN p')
+        let response = await client.query(graphName, 'CREATE (p:Person {name: \'Kurt\', age: 27}) RETURN p')
         expect(response[2][0]).to.equal('Labels added: 1', 'The response of the GRAPH.QUERY command');
         expect(response[2][1]).to.equal('Nodes created: 1', 'The response of the GRAPH.QUERY command');
         expect(response[2][2]).to.equal('Properties set: 2', 'The response of the GRAPH.QUERY command');
         expect(response[2][3]).to.equal('Cached execution: 0', 'The response of the GRAPH.QUERY command');
-        const res = await client.query(graphName, `MATCH (p:Person) WHERE p.name=$name RETURN count(p) as count`, { name: 'Kurt'})
+        response = await client.query(graphName, `MATCH (p:Person) WHERE p.name=$name RETURN count(p) as count`, { name: 'Kurt'})
         expect(response[2][0]).to.equal('Labels added: 1', 'The response of the GRAPH.QUERY command');
         expect(response[2][1]).to.equal('Nodes created: 1', 'The response of the GRAPH.QUERY command');
         expect(response[2][2]).to.equal('Properties set: 2', 'The response of the GRAPH.QUERY command');
