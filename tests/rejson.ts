@@ -34,6 +34,8 @@ describe('ReJSON Module testing', async function() {
         expect(response).to.equal('OK', 'The response of the set command');
         response = await client.set(key3, path, '{"items": [1]}');
         expect(response).to.equal('OK', 'The response of the set command');
+        console.log(await client.set('api:cities', '.', '{"Mingá": {"id": "18", "name": "Mingá"}}'))
+        console.log(await client.get('api:cities', '.'))
     });
 
     it('get function', async () => {
