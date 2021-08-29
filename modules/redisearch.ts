@@ -102,7 +102,7 @@ export class Redisearch extends Module {
             if (parameters.noContent === true)
                 args.push('NOCONTENT')
             if (parameters.verbatim === true)
-                args.push('VERBARIM')
+                args.push('VERBATIM')
             if (parameters.noStopWords === true)
                 args.push('NOSTOPWORDS')
             if (parameters.withScores === true)
