@@ -87,6 +87,8 @@ export class Redisearch extends Module {
             if (field.seperator !== undefined) args = args.concat(['SEPERATOR', field.seperator]);
             if (field.sortable !== undefined) args.push('SORTABLE');
             if (field.noindex !== undefined) args.push('NOINDEX');
+            if (field.unf !== undefined) args.push('UNF');
+            if (field.caseSensitive !== undefined) args.push('CASESENSITIVE');
         }
         const response = await this.sendCommand('FT.CREATE', args);
         return this.handleResponse(response);
@@ -589,6 +591,8 @@ export type FTFieldOptions = {
     phonetic?: string,
     weight?: number,
     seperator?: string
+    unf?: boolean,
+    caseSensitive?: boolean,
 }
 
 /**
