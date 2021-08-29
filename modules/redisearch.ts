@@ -138,9 +138,8 @@ export class Redisearch extends Module {
                 args.push('SUMMARIZE')
                 if (parameters.summarize.fields !== undefined) {
                     args.push('FIELDS')
-                    for (const field of parameters.summarize.fields) {
-                        args = args.concat([field.num.toString(), field.field]);
-                    }
+                    args.push(parameters.summarize.fields.length.toString())
+                    args = args.concat(parameters.summarize.fields);
                 }
                 if (parameters.summarize.frags !== undefined)
                     args = args.concat(['FRAGS', parameters.summarize.frags.toString()])
@@ -697,10 +696,7 @@ export type FTSearchParameters = {
     inFields?: (string | number)[],
     return?: string[],
     summarize?: {
-        fields?: {
-            num: number,
-            field: string
-        }[],
+        fields?: string[],
         frags?: number,
         len?: number,
         seperator?: string

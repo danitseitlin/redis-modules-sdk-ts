@@ -80,6 +80,9 @@ describe('RediSearch Module testing', async function () {
         }, {
             name: 'salary',
             type: 'NUMERIC'
+        }, {
+            name: 'introduction',
+            type: 'TEXT'
         }], {
             prefix: [
                 {
@@ -88,9 +91,35 @@ describe('RediSearch Module testing', async function () {
                 }
             ]
         })
-        await client.redis.hset('doc:1', { name: 'John Doe', age: 25, salary: 2500 });
-        await client.redis.hset('doc:2', { name: 'Jane Doe', age: 30, salary: 5000 });
-        await client.redis.hset('doc:3', { name: 'Sarah Brown', age: 80, salary: 10000 });
+
+        await client.redis.hset(
+            'doc:1',
+            {
+                name: 'John Doe',
+                age: 25,
+                salary: 2500,
+                introduction: 'John Doe is a developer at somekind of company.',
+            },
+        );
+        await client.redis.hset(
+            'doc:2',
+            {
+                name: 'Jane Doe',
+                age: 30,
+                salary: 5000,
+                introduction: 'Jane Doe is John Doe\'s sister. She is not a developer, she is a hairstylist.',
+            },
+        );
+        await client.redis.hset(
+            'doc:3',
+            {
+                name: 'Sarah Brown',
+                age: 80,
+                salary: 10000,
+                introduction: 'Sarah Brown is retired with an unusually high "salary".',
+            },
+        );
+
         try {
             //Simple search test with field specified in query
             let [count, ...result] = await client.search(`${index}-searchtest`, '@name:Doe');
@@ -200,6 +229,34 @@ describe('RediSearch Module testing', async function () {
             expect(res[2].includes("age")).to.equal(true, 'Age must be returned');
             expect(res[2].includes("salary")).to.equal(true, 'Salary must be returned');
             expect(res[2].includes("name")).to.equal(false, 'Name must not be returned');
+            res = await client.search(
+                `${index}-searchtest`,
+                '*',
+                {
+                    return: [],
+                },
+            );
+            //BUG: { '3': 'doc:3', 'doc:2': 'doc:1' } This should return an array too, isn't it?
+            //FIXME: FIX it and write tests here
+            console.warn(`RETURN 0 returns this: ${JSON.stringify(res)}`);
+
+            //Search tests with summarize
+            res = await client.search(
+                `${index}-searchtest`,
+                'De*',
+                {
+                    return: ["introduction"],
+                    summarize: {
+                        fields: ["introduction"],
+                        frags: 1,
+                        len: 3,
+                        seperator: " !?!"
+                    },
+                },
+            );
+            expect(res[0]).to.equal(2, 'Total number of returining document of FT.SEARCH command');
+            expect(res[2][1].endsWith("!?!")).to.equal(true, 'Custom summarize seperator');
+            expect(res[4][1].endsWith("!?!")).to.equal(true, 'Custom summarize seperator');
         } finally {
             await client.dropindex(`${index}-searchtest`);
         }
