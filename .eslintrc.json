@@ -18,6 +18,10 @@
                         "before": false,
                         "after": false
                     },
+                    "catch": {
+                        "before": true,
+                        "after": false
+                    },
                     "from": {
                         "before": true,
                         "after": true

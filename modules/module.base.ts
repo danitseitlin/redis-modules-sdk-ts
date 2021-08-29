@@ -75,7 +75,7 @@ export class Module {
             if(this.showDebugLogs)
                 console.log(`${this.name}: command ${command} responded with ${response}`);
             return response;
-        } catch (error) {
+        } catch(error) {
             return this.handleError(`${this.name} class (${command.split(' ')[0]}): ${error}`)
         }
     }
