@@ -61,8 +61,8 @@ describe('RediSearch Module testing', async function () {
     it('search function on JSON', async () => {
         let response = await client.search(index, query)
         expect(response).to.equal(0, 'The response of the FT.SEARCH command')
+        //FIXME: Needs more tests, also I couldn't find anything related to `RETURN AS`
         response = await client.search(`${index}-json`, query, {
-            //FIXME: Look into this
             return: ['$.name'],
         })
         expect(response).to.equal(0, 'The response of the FT.SEARCH command')
@@ -244,7 +244,9 @@ describe('RediSearch Module testing', async function () {
             {
                 return: ['introduction'],
                 summarize: {
-                    fields: ['introduction'],
+                    /* fields: ['introduction'], */ 
+                    //! specifying fields in summarize while return is also specified will cause redis (edge version) to crash
+                    //! Crash in redis image fabe0b38e273
                     frags: 1,
                     len: 3,
                     seperator: ' !?!'
@@ -304,7 +306,7 @@ describe('RediSearch Module testing', async function () {
         expect(res[0]).to.equal(3, 'Total number of returining document of FT.SEARCH command');
         expect(res.length).to.equal(3, 'Only one item should be returned');
     });
-    /* it('aggregate function', async () => {
+    it('aggregate function', async () => {
         const response = await client.aggregate(index, query)
         expect(response).to.equal(0, 'The response of the FT.AGGREGATE command')
     });
@@ -446,5 +448,5 @@ describe('RediSearch Module testing', async function () {
         }])
         const response = await client.dropindex(`${index}-droptest`)
         expect(response).to.equal('OK', 'The response of the FT.DROPINDEX command');
-    }); */
+    });
 });
