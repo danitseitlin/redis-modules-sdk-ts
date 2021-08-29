@@ -61,9 +61,13 @@ describe('RediSearch Module testing', async function () {
     it('search function on JSON', async () => {
         let response = await client.search(index, query)
         expect(response).to.equal(0, 'The response of the FT.SEARCH command')
-        //FIXME: JSON Needs more tests, also I couldn't find anything related to `RETURN AS`
+        //FIXME: JSON Needs more tests, also I couldn't find anything related to `RETURN AS` so that also needs tests
+        //! Old function ran command "FT.SEARCH" "idx" "@text:name" "RETURN" "3" "$.name" "AS" "name"
+        // So implemented it in the same way
         response = await client.search(`${index}-json`, query, {
-            return: ['$.name'],
+            return: [
+                { field: '$.name', as: 'name' },
+            ],
         })
         expect(response).to.equal(0, 'The response of the FT.SEARCH command')
         await client.dropindex(`${index}-json`);
@@ -403,7 +407,9 @@ describe('RediSearch Module testing', async function () {
         expect(response.term1).to.equal('0', 'The response of the FT.SYNDUMP command');
     });
     it('spellcheck function', async () => {
-        const response = await client.spellcheck(index, query);
+        const response = await client.spellcheck(index, query, {
+            distance: 1,
+        });
         expect(response.length).to.be.greaterThan(0, 'The response of the FT.SPELLCHECK command')
     });
     it('dictadd function', async () => {

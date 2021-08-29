@@ -136,8 +136,24 @@ export class Redisearch extends Module {
                 args = args.concat(['INFIELDS', parameters.inFields.length.toString()].concat(parameters.inFields.map(f => f.toString())))
             if (parameters.return !== undefined) {
                 args.push('RETURN')
-                args.push(parameters.return.length.toString())
-                args = args.concat(parameters.return)
+                //Else we need to expand the objects
+                let itemCount = 0;
+                let tempList = [];
+                for (const item of parameters.return) {
+                    if (typeof item === "string") {
+                        tempList.push(item);
+                        itemCount++;
+                    } else {
+                        tempList.push(item.field);
+                        itemCount++;
+                        if (item.as !== undefined) {
+                            tempList = tempList.concat(["AS", item.as]);
+                            itemCount += 2;
+                        }
+                    }
+                }
+                args.push(itemCount.toString());
+                args = args.concat(tempList);
             }
             if (parameters.summarize !== undefined) {
                 args.push('SUMMARIZE')
@@ -167,7 +183,7 @@ export class Redisearch extends Module {
             }
             if (parameters.slop !== undefined)
                 args = args.concat(['SLOP', parameters.slop.toString()])
-            if (parameters.inOrder !== undefined)
+            if (parameters.inOrder === true)
                 args.push('INORDER')
             if (parameters.language !== undefined)
                 args = args.concat(['LANGUAGE', parameters.language])
@@ -175,7 +191,7 @@ export class Redisearch extends Module {
                 args = args.concat(['EXPANDER', parameters.expander])
             if (parameters.scorer !== undefined)
                 args = args.concat(['SCORER', parameters.scorer])
-            if (parameters.explainScore !== undefined)
+            if (parameters.explainScore === true)
                 args.push('EXPLAINSCORE')
             if (parameters.payload)
                 args = args.concat(['PAYLOAD', parameters.payload])
@@ -305,12 +321,14 @@ export class Redisearch extends Module {
     async alter(index: string, field: string, fieldType: FTFieldType, options?: FTFieldOptions): Promise<'OK' | string> {
         let args = [index, 'SCHEMA', 'ADD', field, fieldType]
         if (options !== undefined) {
-            if (options.sortable !== undefined) args.push('SORTABLE');
-            if (options.noindex !== undefined) args.push('NOINDEX');
-            if (options.nostem !== undefined) args.push('NOSTEM');
+            if (options.nostem === true) args.push('NOSTEM');
+            if (options.weight !== undefined) args = args.concat(['WEIGHT', options.weight.toString()]);
             if (options.phonetic !== undefined) args = args.concat(['PHONETIC', options.phonetic]);
             if (options.seperator !== undefined) args = args.concat(['SEPERATOR', options.seperator]);
-            if (options.weight !== undefined) args = args.concat(['WEIGHT', options.weight.toString()]);
+            if (options.sortable === true) args.push('SORTABLE');
+            if (options.noindex === true) args.push('NOINDEX');
+            if (options.unf === true) args.push('UNF');
+            if (options.caseSensitive === true) args.push('CASESENSITIVE');
         }
         const response = await this.sendCommand('FT.ALTER', args);
         return this.handleResponse(response);
@@ -382,10 +400,12 @@ export class Redisearch extends Module {
      */
     async sugadd(key: string, suggestion: string, score: number, options?: FTSugAddParameters): Promise<number> {
         let args = [key, suggestion, score];
-        if (options !== undefined && options.incr !== undefined)
-            args.push('INCR');
-        if (options !== undefined && options.payload !== undefined)
-            args = args.concat(['PAYLOAD', options.payload]);
+        if (options !== undefined) {
+            if (options.incr === true)
+                args.push('INCR');
+            if (options.payload !== undefined)
+                args = args.concat(['PAYLOAD', options.payload]);
+        }
         const response = await this.sendCommand('FT.SUGADD', args);
         return this.handleResponse(response);
     }
@@ -399,14 +419,16 @@ export class Redisearch extends Module {
      */
     async sugget(key: string, prefix: string, options?: FTSugGetParameters): Promise<string> {
         let args = [key, prefix];
-        if (options !== undefined && options.fuzzy !== undefined)
-            args.push('FUZZY');
-        if (options !== undefined && options.max !== undefined)
-            args = args.concat(['MAX', options.max.toString()]);
-        if (options !== undefined && options.withScores !== undefined)
-            args.push('WITHSCORES');
-        if (options !== undefined && options.withPayloads !== undefined)
-            args.push('WITHPAYLOADS');
+        if (options !== undefined) {
+            if (options.fuzzy === true)
+                args.push('FUZZY');
+            if (options.max !== undefined)
+                args = args.concat(['MAX', options.max.toString()]);
+            if (options.withScores === true)
+                args.push('WITHSCORES');
+            if (options.withPayloads === true)
+                args.push('WITHPAYLOADS');
+        }
         const response = await this.sendCommand('FT.SUGGET', args);
         return this.handleResponse(response);
     }
@@ -439,9 +461,10 @@ export class Redisearch extends Module {
      * @returns 'OK'
      */
     async synupdate(index: string, groupId: number, terms: string[], skipInitialScan = false): Promise<'OK'> {
-        const args = [index, groupId].concat(terms);
+        let args = [index, groupId];
         if (skipInitialScan === true)
             args.push('SKIPINITIALSCAN');
+        args = args.concat(terms);
         const response = await this.sendCommand('FT.SYNUPDATE', args);
         return this.handleResponse(response);
     }
@@ -465,12 +488,14 @@ export class Redisearch extends Module {
      */
     async spellcheck(index: string, query: string, options?: FTSpellCheck): Promise<string[]> {
         let args = [index, query];
-        if (options !== undefined && options.distance !== undefined)
-            args = args.concat(['DISTANCE', options.distance])
-        if (options !== undefined && options.terms !== undefined) {
-            args.push('TERMS');
-            for (const term of options.terms) {
-                args = args.concat([term.type, term.dict]);
+        if (options !== undefined) {
+            if (options.distance !== undefined)
+                args = args.concat(['DISTANCE', options.distance.toString()]);
+            if (options.terms !== undefined) {
+                args.push('TERMS');
+                for (const term of options.terms) {
+                    args = args.concat([term.type, term.dict]);
+                }
             }
         }
         const response = await this.sendCommand('FT.SPELLCHECK', args);
@@ -691,7 +716,10 @@ export type FTSearchParameters = {
     },
     inKeys?: (string | number)[],
     inFields?: (string | number)[],
-    return?: string[],
+    return?: (string | {
+        field: string,
+        as?: string,
+    })[] ,
     summarize?: {
         fields?: string[],
         frags?: number,
@@ -814,7 +842,7 @@ export type FTSort = 'ASC' | 'DESC';
  * @param payload The 'PAYLOAD' parameter. If set, we save an extra payload with the suggestion, that can be fetched by adding the WITHPAYLOADS argument to FT.SUGGET
  */
 export type FTSugAddParameters = {
-    incr: number,
+    incr: boolean,
     payload: string
 }
 
@@ -826,7 +854,7 @@ export type FTSugAddParameters = {
  * @param withPayloads The 'WITHPAYLOADS' parameter. If set, we return optional payloads saved along with the suggestions. If no payload is present for an entry, we return a Null Reply.
  */
 export type FTSugGetParameters = {
-    fuzzy: string,
+    fuzzy: boolean,
     max: number,
     withScores: boolean,
     withPayloads: boolean
@@ -844,7 +872,7 @@ export type FTSpellCheck = {
         type: 'INCLUDE' | 'EXCLUDE',
         dict?: string
     }[],
-    distance?: string
+    distance?: number | string,
 }
 
 /**
