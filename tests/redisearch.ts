@@ -28,13 +28,13 @@ describe('RediSearch Module testing', async function () {
         });
         await client.connect();
         await redis.connect();
-    })
+    });
     after(async () => {
         await client.dropindex(`${index}-searchtest`);
         await client.disconnect();
         await redis.disconnect();
-    })
-    /* it('create function', async () => {
+    });
+    it('create function', async () => {
         let response = await client.create(index, 'HASH', [{
             name: 'name',
             type: 'TEXT'
@@ -57,17 +57,17 @@ describe('RediSearch Module testing', async function () {
         }])
         expect(response).to.equal('OK', 'The response of the FT.CREATE command');
         await client.dropindex(`${index}1`);
-        await client.dropindex(`${index}-json`);
     });
-    it('search function', async () => {
+    it('search function on JSON', async () => {
         let response = await client.search(index, query)
         expect(response).to.equal(0, 'The response of the FT.SEARCH command')
-        response = await client.search(index, query, {
+        response = await client.search(`${index}-json`, query, {
             //FIXME: Look into this
             return: ['$.name'],
         })
         expect(response).to.equal(0, 'The response of the FT.SEARCH command')
-    }); */
+        await client.dropindex(`${index}-json`);
+    });
     it('search function response test (creation phase)', async () => {
         await client.create(`${index}-searchtest`, 'HASH', [{
             name: 'name',
@@ -119,7 +119,7 @@ describe('RediSearch Module testing', async function () {
         );
     });
     it('Simple search test with field specified in query', async () => {
-        let [count, ...result] = await client.search(`${index}-searchtest`, '@name:Doe');
+        const [count, ...result] = await client.search(`${index}-searchtest`, '@name:Doe');
         expect(count).to.equal(2, 'Total number of returining document of FT.SEARCH command');
         expect(result[0].indexOf('doc')).to.equal(0, 'first document key');
     });
@@ -238,7 +238,7 @@ describe('RediSearch Module testing', async function () {
         console.warn('\x1b[31m', `RETURN 0 returns this: ${JSON.stringify(res)}`);
     });
     it('Search test with summarize', async () => {
-        let res = await client.search(
+        const res = await client.search(
             `${index}-searchtest`,
             'De*',
             {
@@ -256,7 +256,7 @@ describe('RediSearch Module testing', async function () {
         expect(res[4][1].endsWith('!?!')).to.equal(true, 'Custom summarize seperator');
     });
     it('Search tests with highlight', async () => {
-        let res = await client.search(
+        const res = await client.search(
             `${index}-searchtest`,
             'Do*|De*',
             {
@@ -274,7 +274,7 @@ describe('RediSearch Module testing', async function () {
         expect(res[2][1].includes('**developer**')).to.equal(true, 'Introduction must be highlighted');
     });
     it('Search test with sortby ', async () => {
-        let res = await client.search(
+        const res = await client.search(
             `${index}-searchtest`,
             '*',
             {
@@ -291,7 +291,7 @@ describe('RediSearch Module testing', async function () {
         expect(res[6][1]).to.equal('80', 'Ages should be returned in ascending order');
     });
     it('Search test with limit', async () => {
-        let res = await client.search(
+        const res = await client.search(
             `${index}-searchtest`,
             '*',
             {
