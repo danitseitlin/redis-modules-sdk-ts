@@ -74,6 +74,9 @@ describe('RediSearch Module testing', async function () {
         await client.create(`${index}-searchtest`, 'HASH', [{
             name: 'name',
             type: 'TEXT'
+        }, {
+            name: 'age',
+            type: 'NUMERIC'
         }], {
             prefix: [
                 {
@@ -82,34 +85,54 @@ describe('RediSearch Module testing', async function () {
                 }
             ]
         })
-        await client.redis.hset('doc:1', { name: 'John Doe' });
-        await client.redis.hset('doc:2', { name: 'Jane Doe' });
-        await client.redis.hset('doc:3', { name: 'Sarah Brown' });
+        await client.redis.hset('doc:1', { name: 'John Doe', age: 25 });
+        await client.redis.hset('doc:2', { name: 'Jane Doe', age: 30 });
+        await client.redis.hset('doc:3', { name: 'Sarah Brown', age: 80 });
         try {
-            const [count, ...result] = await client.search(`${index}-searchtest`, '@name:Doe');
-            const res = await client.search(
+            //Simple search test with field specified in query
+            let [count, ...result] = await client.search(`${index}-searchtest`, '@name:Doe');
+            expect(count).to.equal(2, 'Total number of returining document of FT.SEARCH command');
+            expect(result[0].indexOf('doc')).to.equal(0, 'first document key');
+
+            //Simple search tests with field specified using inFields
+            let res = await client.search(
                 `${index}-searchtest`,
-                'Brown',
+                'Doe',
                 {
-                    inFields: {
-                        num: 2,
-                        field: ["name", "number"],
-                    },
-                    inKeys: {
-                        num: 3,
-                        field: ["alma", 2, "asad"],
-                    },
-                    /* highlight: {
-                        tags: [{
-                            open: "<b>",
-                            close: "</b>"
-                        }],
-                    } */
-                }
+                    inFields:
+                        ["age"],
+                },
             );
-            console.log(res);
-            expect(count).to.equal(2, 'Total number of returining document of FT.SEARCH command')
-            expect(result[0].indexOf('doc')).to.equal(0, 'first document key')
+            expect(res).to.equal(0, 'Total number of returining document of FT.SEARCH command');
+            res = await client.search(
+                `${index}-searchtest`,
+                'Doe',
+                {
+                    inFields:
+                        ["name"],
+                },
+            );
+            expect(res[0]).to.equal(2, 'Total number of returining document of FT.SEARCH command');
+
+            //Search test with inkeys
+            res = await client.search(
+                `${index}-searchtest`,
+                'Doe',
+                {
+                    inKeys:
+                        ["doc:1", "doc:2"],
+                },
+            );
+            expect(res[0]).to.equal(2, 'Total number of returining document of FT.SEARCH command');
+            res = await client.search(
+                `${index}-searchtest`,
+                'Doe',
+                {
+                    inKeys:
+                        ["doc:3"],
+                },
+            );
+            expect(res).to.equal(0, 'Total number of returining document of FT.SEARCH command');
         } finally {
             await client.dropindex(`${index}-searchtest`);
         }

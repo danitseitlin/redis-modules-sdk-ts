@@ -112,7 +112,7 @@ export class Redisearch extends Module {
             if(parameters.withSortKeys === true)
                 args.push('WITHSORTKEYS')
             if(parameters.filter !== undefined)
-            args = args.concat(['FILTER', parameters.filter.field, parameters.filter.min.toString(), parameters.filter.max.toString()])
+                args = args.concat(['FILTER', parameters.filter.field, parameters.filter.min.toString(), parameters.filter.max.toString()])
             if(parameters.geoFilter !== undefined)
                 args = args.concat([
                     'GEOFILTER',
@@ -123,9 +123,9 @@ export class Redisearch extends Module {
                     parameters.geoFilter.measurement
                 ])
             if(parameters.inKeys !== undefined)
-                args = args.concat(['INKEYS', parameters.inKeys.num.toString()].concat(parameters.inKeys.field.map(f => f.toString())));
+                args = args.concat(['INKEYS', parameters.inKeys.length.toString()].concat(parameters.inKeys.map(f => f.toString())));
             if(parameters.inFields !== undefined)
-                args = args.concat(['INFIELDS', parameters.inFields.num.toString()].concat(parameters.inFields.field.map(f => f.toString())));
+                args = args.concat(['INFIELDS', parameters.inFields.length.toString()].concat(parameters.inFields.map(f => f.toString())));
             if(parameters.return !== undefined) {
                 args.push('RETURN');
                 if(parameters.return.num)
@@ -696,14 +696,8 @@ export type FTSearchParameters = {
         radius: number,
         measurement: 'm' | 'km' | 'mi' | 'ft'
     },
-    inKeys?: {
-        num: number,
-        field: (string | number)[],
-    },
-    inFields?: {
-        num: number,
-        field: (string | number)[]
-    },
+    inKeys?: (string | number)[],
+    inFields?: (string | number)[],
     return?: {
         num: number,
         fields?: {
