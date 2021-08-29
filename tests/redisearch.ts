@@ -16,7 +16,7 @@ const dict = {
     name: 'dictX',
     term: 'termY'
 }
-describe('RediSearch Module testing', async function() {
+describe('RediSearch Module testing', async function () {
     before(async () => {
         client = new Redisearch({
             host: cliArguments.host,
@@ -33,7 +33,7 @@ describe('RediSearch Module testing', async function() {
         await client.disconnect();
         await redis.disconnect();
     })
-    it('create function', async () => {
+    /* it('create function', async () => {
         let response = await client.create(index, 'HASH', [{
             name: 'name',
             type: 'TEXT'
@@ -69,7 +69,7 @@ describe('RediSearch Module testing', async function() {
             }
         })
         expect(response).to.equal(0, 'The response of the FT.SEARCH command')
-    });
+    }); */
     it('search function response test', async () => {
         await client.create(`${index}-searchtest`, 'HASH', [{
             name: 'name',
@@ -82,15 +82,35 @@ describe('RediSearch Module testing', async function() {
                 }
             ]
         })
-        await client.redis.hset('doc:1', { name: 'John Doe'  });
-        await client.redis.hset('doc:2', { name: 'Jane Doe'  });
-        await client.redis.hset('doc:3', { name: 'Sarah Brown'  });
-        const [count, ...result] = await client.search(`${index}-searchtest`, '@name:Doe');
-        await client.dropindex(`${index}-searchtest`);
-        expect(count).to.equal(2, 'Total number of returining document of FT.SEARCH command')
-        expect(result[0].indexOf('doc')).to.equal(0, 'first document key')
+        await client.redis.hset('doc:1', { name: 'John Doe' });
+        await client.redis.hset('doc:2', { name: 'Jane Doe' });
+        await client.redis.hset('doc:3', { name: 'Sarah Brown' });
+        try {
+            const [count, ...result] = await client.search(`${index}-searchtest`, '@name:Doe');
+            const res = await client.search(
+                `${index}-searchtest`,
+                '@name:Brown',
+                {
+                    inFields: {
+                        num: 2,
+                        field: ["tags", "number"],
+                    },
+                    /* highlight: {
+                        tags: [{
+                            open: "<b>",
+                            close: "</b>"
+                        }],
+                    } */
+                }
+            );
+            console.log(res);
+            expect(count).to.equal(2, 'Total number of returining document of FT.SEARCH command')
+            expect(result[0].indexOf('doc')).to.equal(0, 'first document key')
+        } finally {
+            await client.dropindex(`${index}-searchtest`);
+        }
     });
-    it('aggregate function', async () => {
+    /* it('aggregate function', async () => {
         const response = await client.aggregate(index, query)
         expect(response).to.equal(0, 'The response of the FT.AGGREGATE command')
     });
@@ -232,5 +252,5 @@ describe('RediSearch Module testing', async function() {
         }])
         const response = await client.dropindex(`${index}-droptest`)
         expect(response).to.equal('OK', 'The response of the FT.DROPINDEX command');
-    });
+    }); */
 });

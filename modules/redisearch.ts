@@ -125,7 +125,7 @@ export class Redisearch extends Module {
             if(parameters.inKeys !== undefined)
                 args = args.concat(['INKEYS', parameters.inKeys.num.toString(), parameters.inKeys.field])
             if(parameters.inFields !== undefined)
-                args = args.concat(['INFIELDS', parameters.inFields.num.toString(), parameters.inFields.field])
+                args = args.concat(['INFIELDS', parameters.inFields.num.toString()].concat(parameters.inFields.field))
             if(parameters.return !== undefined) {
                 args.push('RETURN');
                 if(parameters.return.num)
@@ -186,6 +186,7 @@ export class Redisearch extends Module {
             if(parameters.limit !== undefined)
                 args = args.concat(['LIMIT', parameters.limit.first.toString(), parameters.limit.num.toString()])
         }
+        console.log(args);
         const response = await this.sendCommand('FT.SEARCH', args);
         return this.handleResponse(response);
     }
@@ -701,7 +702,7 @@ export type FTSearchParameters = {
     },
     inFields?: {
         num: number,
-        field: string
+        field: string[]
     },
     return?: {
         num: number,
