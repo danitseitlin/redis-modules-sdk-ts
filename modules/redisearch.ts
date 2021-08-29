@@ -875,7 +875,7 @@ export interface FTSearchParameters {
 /**
  * The additional parameter of 'FT.AGGREGATE' command
  */
-export type FTAggregateParameters = {
+export interface FTAggregateParameters {
     /**
      * The 'LOAD' parameter. 
      */
@@ -1046,7 +1046,7 @@ export interface FTSugGetParameters {
 /**
  * The additional parameters of 'FT.SPELLCHECK' command
  */
-export type FTSpellCheck = {
+export interface FTSpellCheck {
     /**
      * A list of terms
      */
