@@ -81,14 +81,14 @@ export class Redisearch extends Module {
             if (field.as)
                 args = args.concat(['AS', field.as])
             args.push(field.type);
-            if (field.nostem !== undefined) args.push('NOSTEM');
+            if (field.nostem === true) args.push('NOSTEM');
             if (field.weight !== undefined) args = args.concat(['WEIGHT', field.weight.toString()]);
             if (field.phonetic !== undefined) args = args.concat(['PHONETIC', field.phonetic]);
             if (field.seperator !== undefined) args = args.concat(['SEPERATOR', field.seperator]);
-            if (field.sortable !== undefined) args.push('SORTABLE');
-            if (field.noindex !== undefined) args.push('NOINDEX');
-            if (field.unf !== undefined) args.push('UNF');
-            if (field.caseSensitive !== undefined) args.push('CASESENSITIVE');
+            if (field.sortable === true) args.push('SORTABLE');
+            if (field.noindex === true) args.push('NOINDEX');
+            if (field.unf === true) args.push('UNF');
+            if (field.caseSensitive === true) args.push('CASESENSITIVE');
         }
         const response = await this.sendCommand('FT.CREATE', args);
         return this.handleResponse(response);
