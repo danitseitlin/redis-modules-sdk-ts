@@ -86,22 +86,64 @@ describe('RTS Module testing', async function() {
     });
     it('range function', async () => {
         const data = await client.get(key1);
-        const response = await client.range(key1, data[0].toString(), data[1].toString())
+        let response = await client.range(key1, data[0].toString(), data[1].toString())
+        expect(response.length).to.equal(0, 'The range items length of the response')
+        response = await client.range(key1, `${data[0]}`, `${data[1]}`, {
+            align: 'start',
+            aggregation: {
+                type: 'count',
+                timeBucket: 10
+            }
+        });
         expect(response.length).to.equal(0, 'The range items length of the response')
     });
     it('revrange function', async () => {
         const data = await client.get(key1);
-        const response = await client.revrange(key1, data[0].toString(), data[1].toString())
+        let response = await client.revrange(key1, data[0].toString(), data[1].toString())
+        expect(response.length).to.equal(0, 'The range items length of the response')
+        response = await client.revrange(key1, `${data[0]}`, `${data[1]}`, {
+            align: 'start',
+            aggregation: {
+                type: 'count',
+                timeBucket: 10
+            }
+        });
         expect(response.length).to.equal(0, 'The range items length of the response')
     });
     it('mrange function', async () => {
         const info = await client.info(key1);
-        const response = await client.mrange((info.firstTimestamp-1).toString(), (info.lastTimestamp+10000).toString(), 'label=value')
-        expect(response[0][0]).to.equal('key:2:32', 'The filtered key name');
+        const fromTimestamp = (info.firstTimestamp-1);
+        const toTimestamp = (info.lastTimestamp+10000);
+        const key = 'key:2:32';
+        const filter = 'label=value';
+        let response = await client.mrange(`${fromTimestamp}`, `${toTimestamp}`, filter);
+        expect(response[0][0]).to.equal(key, 'The filtered key name');
+        response = await client.mrange(`${fromTimestamp}`, `${toTimestamp}`, filter, {
+            groupBy: {
+                label: 'label',
+                reducer: 'MAX'
+            },
+            withLabels: true
+        });
+        expect(response[0][0]).to.equal(filter, 'The value of the filter');
+        expect(response[0][1][0][0]).to.equal('label', 'The name of the label');
+        expect(response[0][1][0][1]).to.equal('value', 'The value of the label value');
+        expect(response[0][1][1][0]).to.equal('__reducer__', 'The key of the reducer');
+        expect(response[0][1][1][1]).to.equal('max', 'The value of the reducer');
+        expect(response[0][1][2][0]).to.equal('__source__', 'The key of the source');
+        expect(response[0][1][2][1]).to.equal(key, 'The value of the source');
     });
     it('mrevrange function', async () => {
         const info = await client.info(key1);
-        const response = await client.mrevrange((info.firstTimestamp-1).toString(), (info.lastTimestamp+10000).toString(), 'label=value')
+        let response = await client.mrevrange((info.firstTimestamp-1).toString(), (info.lastTimestamp+10000).toString(), 'label=value')
+        expect(response[0][0]).to.equal('key:2:32', 'The filtered key name');
+        response = await client.mrevrange(`${info.firstTimestamp-1}`, `${info.lastTimestamp+10000}`, 'label=value', {
+            align: '+',
+            aggregation: {
+                type: 'count',
+                timeBucket: 10
+            }
+        })
         expect(response[0][0]).to.equal('key:2:32', 'The filtered key name');
     });
     it('get function', async () => {
