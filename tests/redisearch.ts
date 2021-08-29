@@ -129,7 +129,7 @@ describe('RediSearch Module testing', async function () {
             'Doe',
             {
                 inFields:
-                    ['age'],
+                    ['age', 'salary'],
             },
         );
         expect(res).to.equal(0, 'Total number of returining document of FT.SEARCH command');
