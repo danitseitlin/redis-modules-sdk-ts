@@ -112,7 +112,7 @@ export class Redisearch extends Module {
             if (parameters.withSortKeys === true)
                 args.push('WITHSORTKEYS')
             if (parameters.filter !== undefined) {
-                for (let item of parameters.filter) {
+                for (const item of parameters.filter) {
                     args = args.concat(['FILTER', item.field, item.min.toString(), item.max.toString()])
                 }
             }
