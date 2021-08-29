@@ -75,7 +75,7 @@ export class ReJSON extends Module {
         const args = [key, path, json]
         if(condition)
             args.push(condition)
-        return await this.sendCommand('JSON.SET', args)
+        return await this.sendCommand('JSON.SET', args.concat(['--raw']))
     }
 
     /**
