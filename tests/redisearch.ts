@@ -275,6 +275,23 @@ describe('RediSearch Module testing', async function () {
             expect(res[0]).to.equal(2, 'Total number of returining document of FT.SEARCH command');
             expect(res[2][3].includes("**")).to.equal(false, 'Name mustn\'t be highlighted');
             expect(res[2][1].includes("**developer**")).to.equal(true, 'Introduction must be highlighted');
+        
+            //Search test with sortby 
+            res = await client.search(
+                `${index}-searchtest`,
+                '*',
+                {
+                    return: ["age"],
+                    sortBy: {
+                        field: "age",
+                        sort: "ASC",
+                    }
+                },
+            );
+            expect(res[0]).to.equal(3, 'Total number of returining document of FT.SEARCH command');
+            expect(res[2][1]).to.equal('25', 'Ages should be returned in ascending order');
+            expect(res[4][1]).to.equal('30', 'Ages should be returned in ascending order');
+            expect(res[6][1]).to.equal('80', 'Ages should be returned in ascending order');
         } finally {
             await client.dropindex(`${index}-searchtest`);
         }
