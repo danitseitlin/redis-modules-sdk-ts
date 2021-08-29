@@ -292,6 +292,21 @@ describe('RediSearch Module testing', async function () {
             expect(res[2][1]).to.equal('25', 'Ages should be returned in ascending order');
             expect(res[4][1]).to.equal('30', 'Ages should be returned in ascending order');
             expect(res[6][1]).to.equal('80', 'Ages should be returned in ascending order');
+
+            //Search test with limit
+            res = await client.search(
+                `${index}-searchtest`,
+                '*',
+                {
+                    limit: {
+                        first: 0,
+                        num: 1,
+                    }
+                },
+            );
+            expect(res[0]).to.equal(3, 'Total number of returining document of FT.SEARCH command');
+            expect(res.length).to.equal(3, 'Only one item should be returned');
+            
         } finally {
             await client.dropindex(`${index}-searchtest`);
         }
