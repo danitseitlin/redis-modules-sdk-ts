@@ -82,12 +82,7 @@ describe('RediSearch Module testing', async function () {
             name: 'introduction',
             type: 'TEXT'
         }], {
-            prefix: [
-                {
-                    count: 1,
-                    name: 'doc'
-                }
-            ]
+            prefix: ["doc"],
         })
 
         await client.redis.hset(
@@ -327,12 +322,7 @@ describe('RediSearch Module testing', async function () {
             sortable: true
         }
         ], {
-            prefix: [
-                {
-                    count: 1,
-                    name: 'person'
-                }
-            ]
+            prefix: ['person']
         });
 
         const time = new Date();

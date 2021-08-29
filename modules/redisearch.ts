@@ -40,8 +40,8 @@ export class Redisearch extends Module {
         if (parameters !== undefined) {
             if (parameters.prefix !== undefined) {
                 args.push('PREFIX');
-                for (const prefix of parameters.prefix)
-                    args = args.concat([prefix.count.toString(), prefix.name])
+                args.push(parameters.prefix.length.toString());
+                args = args.concat(parameters.prefix);
             }
             if (parameters.filter !== undefined)
                 args = args.concat(['FILTER', parameters.filter])
@@ -562,10 +562,7 @@ export type FTCreateParameters = {
     noFields?: string,
     noFreqs?: string,
     skipInitialScan?: boolean
-    prefix?: {
-        count: number,
-        name: string
-    }[],
+    prefix?: string[],
     language?: string,
     languageField?: string,
     score?: string,
