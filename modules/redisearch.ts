@@ -67,8 +67,11 @@ export class Redisearch extends Module {
                 args.push('NOFIELDS');
             if (parameters.noFreqs !== undefined)
                 args.push('NOFREQS');
-            if (parameters.stopwords !== undefined)
-                args = args.concat(['STOPWORDS', parameters.stopwords.num.toString(), parameters.stopwords.stopword]);
+            if (parameters.stopwords !== undefined) {
+                args.push('STOPWORDS');
+                args.push(parameters.stopwords.length.toString());
+                args = args.concat(parameters.stopwords);
+            }
             if (parameters.skipInitialScan !== undefined)
                 args.push('SKIPINITIALSCAN');
         }
@@ -567,10 +570,7 @@ export type FTCreateParameters = {
     languageField?: string,
     score?: string,
     scoreField?: string
-    stopwords?: {
-        num: number,
-        stopword: string
-    }
+    stopwords?: string[],
 }
 
 /**
