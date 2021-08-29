@@ -123,9 +123,9 @@ export class Redisearch extends Module {
                     parameters.geoFilter.measurement
                 ])
             if(parameters.inKeys !== undefined)
-                args = args.concat(['INKEYS', parameters.inKeys.num.toString(), parameters.inKeys.field])
+                args = args.concat(['INKEYS', parameters.inKeys.num.toString()].concat(parameters.inKeys.field.map(f => f.toString())));
             if(parameters.inFields !== undefined)
-                args = args.concat(['INFIELDS', parameters.inFields.num.toString()].concat(parameters.inFields.field))
+                args = args.concat(['INFIELDS', parameters.inFields.num.toString()].concat(parameters.inFields.field.map(f => f.toString())));
             if(parameters.return !== undefined) {
                 args.push('RETURN');
                 if(parameters.return.num)
@@ -698,11 +698,11 @@ export type FTSearchParameters = {
     },
     inKeys?: {
         num: number,
-        field: string
+        field: (string | number)[],
     },
     inFields?: {
         num: number,
-        field: string[]
+        field: (string | number)[]
     },
     return?: {
         num: number,

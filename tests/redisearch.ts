@@ -89,11 +89,15 @@ describe('RediSearch Module testing', async function () {
             const [count, ...result] = await client.search(`${index}-searchtest`, '@name:Doe');
             const res = await client.search(
                 `${index}-searchtest`,
-                '@name:Brown',
+                'Brown',
                 {
                     inFields: {
                         num: 2,
-                        field: ["tags", "number"],
+                        field: ["name", "number"],
+                    },
+                    inKeys: {
+                        num: 3,
+                        field: ["alma", 2, "asad"],
                     },
                     /* highlight: {
                         tags: [{
