@@ -88,7 +88,6 @@ describe('RediSearch Module testing', async function () {
         }], {
             prefix: ["doc"]
         })
-
         await client.redis.hset(
             'doc:1',
             {
