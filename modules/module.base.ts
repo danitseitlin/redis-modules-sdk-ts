@@ -20,7 +20,7 @@ export class Module {
      * @param moduleOptions.showDebugLogs If to print debug logs
      * @param clusterOptions The options of the clusters
      */
-    constructor(name: string, clusterNodes: IORedis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: IORedis.ClusterOptions,)
+    constructor(name: string, clusterNodes: IORedis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: IORedis.ClusterOptions, )
     /**
      * Initializing the module object
      * @param name The name of the module
@@ -33,7 +33,7 @@ export class Module {
     constructor(name: string, options: IORedis.RedisOptions | IORedis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: IORedis.ClusterOptions) {
         this.name = name;
         //If it's a list of cluster nodes
-        if (Array.isArray(options))
+        if(Array.isArray(options))
             this.clusterNodes = options as IORedis.ClusterNode[];
         else
             this.redisOptions = options as IORedis.RedisOptions;
@@ -46,7 +46,7 @@ export class Module {
      * Connecting to the Redis database with the module
      */
     async connect(): Promise<void> {
-        if (this.clusterNodes)
+        if(this.clusterNodes)
             this.cluster = new IORedis.Cluster(this.clusterNodes, this.clusterOptions);
         else
             this.redis = new IORedis(this.redisOptions);
@@ -56,7 +56,7 @@ export class Module {
      * Disconnecting from the Redis database with the module
      */
     async disconnect(): Promise<void> {
-        if (this.clusterNodes)
+        if(this.clusterNodes)
             await this.cluster.quit();
         else
             await this.redis.quit();
@@ -69,13 +69,13 @@ export class Module {
      */
     async sendCommand(command: string, args: IORedis.ValueType | IORedis.ValueType[] = []): Promise<any> {
         try {
-            if (this.showDebugLogs)
+            if(this.showDebugLogs)
                 console.log(`${this.name}: Running command ${command} with arguments: ${args}`);
             const response = this.clusterNodes ? await this.cluster.cluster.call(command, args) : await this.redis.send_command(command, args);
-            if (this.showDebugLogs)
+            if(this.showDebugLogs)
                 console.log(`${this.name}: command ${command} responded with ${response}`);
             return response;
-        } catch (error) {
+        } catch(error) {
             return this.handleError(`${this.name} class (${command.split(' ')[0]}): ${error}`)
         }
     }
@@ -86,7 +86,7 @@ export class Module {
      * @param error The message of the error
      */
     handleError(error: string): any {
-        if (this.isHandleError)
+        if(this.isHandleError)
             throw new Error(error);
         return error;
     }
@@ -99,7 +99,7 @@ export class Module {
     handleResponse(response: any, returnSingleDimensionArray = false): any {
         const obj = {}
         //If not an array/object
-        if (
+        if(
             typeof response === 'string' ||
             typeof response === 'number' ||
             (Array.isArray(response) && response.length % 2 === 1 && response.length > 1 && !this.isOnlyTwoDimensionalArray(response)) ||
@@ -107,23 +107,23 @@ export class Module {
         ) {
             return response;
         }
-        else if (Array.isArray(response) && response.length === 1) {
+        else if(Array.isArray(response) && response.length === 1){
             return this.handleResponse(response[0])
-        } else if (Array.isArray(response) && response.length > 1 && this.isOnlyTwoDimensionalArray(response)) {
+        }else if(Array.isArray(response) && response.length > 1 && this.isOnlyTwoDimensionalArray(response)){
             return this.handleResponse(this.reduceArrayDimension(response))
-        } else if (returnSingleDimensionArray && Array.isArray(response) && response.every(entry => !Array.isArray(entry))){
+        }else if(returnSingleDimensionArray && Array.isArray(response) && response.every(entry => !Array.isArray(entry))){
             //Return single dimension arrays
             return response;
         }
         
         //If is an array/obj we will build it
-        for (let i = 0; i < response.length; i += 2) {
-            if (response[i + 1] !== '' && response[i + 1] !== undefined) {
-                if (Array.isArray(response[i + 1]) && this.isOnlyTwoDimensionalArray(response[i + 1])) {
-                    obj[response[i]] = this.reduceArrayDimension(response[i + 1]);
+        for (let i = 0; i < response.length; i+=2) {
+            if (response[i+1] !== '' && response[i+1] !== undefined) {
+                if(Array.isArray(response[i+1]) && this.isOnlyTwoDimensionalArray(response[i+1])) {
+                    obj[response[i]] = this.reduceArrayDimension(response[i+1]);
                     continue;
                 }
-                const value = (Array.isArray(response[i + 1]) ? this.handleResponse(response[i + 1]) : response[i + 1])
+                const value = (Array.isArray(response[i+1]) ? this.handleResponse(response[i+1]) : response[i+1])
                 obj[response[i]] = value;
             }
         }
