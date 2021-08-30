@@ -27,10 +27,10 @@ describe('RedisGraph Module testing', async function() {
 
     it('query function', async () => {
         let response = await client.query(graphName, 'CREATE (p:Person {name: \'Kurt\', age: 27}) RETURN p');
-        expect(response[2].find(item => item === 'Labels added: 1')).to.not.equal(undefined, 'The response of the GRAPH.QUERY command');
-        expect(response[2].find(item => item === 'Nodes created: 1')).to.not.equal(undefined, 'The response of the GRAPH.QUERY command');
-        expect(response[2].find(item => item === 'Properties set: 2')).to.not.equal(undefined, 'The response of the GRAPH.QUERY command');
-        expect(response[2].find(item => item === 'Cached execution: 0')).to.not.equal(undefined, 'The response of the GRAPH.QUERY command');
+        expect(response[2].find(item => item === 'Labels added: 1')).to.not.equal(undefined, 'The value of Labels added');
+        expect(response[2].find(item => item === 'Nodes created: 1')).to.not.equal(undefined, 'The value of Nodes created');
+        expect(response[2].find(item => item === 'Properties set: 2')).to.not.equal(undefined, 'The value of Properties set');
+        expect(response[2].find(item => item === 'Cached execution: 0')).to.not.equal(undefined, 'The value of Cached execution');
 
         /*expect(response[2][0]).to.equal('Labels added: 1', 'The response of the GRAPH.QUERY command');
         expect(response[2][1]).to.equal('Nodes created: 1', 'The response of the GRAPH.QUERY command');
