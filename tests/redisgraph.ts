@@ -26,17 +26,26 @@ describe('RedisGraph Module testing', async function() {
     })
 
     it('query function', async () => {
-        let response = await client.query(graphName, 'CREATE (p:Person {name: \'Kurt\', age: 27}) RETURN p')
-        expect(response[2][0]).to.equal('Labels added: 1', 'The response of the GRAPH.QUERY command');
+        let response = await client.query(graphName, 'CREATE (p:Person {name: \'Kurt\', age: 27}) RETURN p');
+        expect(response[2].find(item => item === 'Labels added: 1')).ok('The response of the GRAPH.QUERY command');
+        expect(response[2].find(item => item === 'Nodes created: 1')).ok('The response of the GRAPH.QUERY command');
+        expect(response[2].find(item => item === 'Properties set: 2')).ok('The response of the GRAPH.QUERY command');
+        expect(response[2].find(item => item === 'Cached execution: 0')).ok('The response of the GRAPH.QUERY command');
+
+        /*expect(response[2][0]).to.equal('Labels added: 1', 'The response of the GRAPH.QUERY command');
         expect(response[2][1]).to.equal('Nodes created: 1', 'The response of the GRAPH.QUERY command');
         expect(response[2][2]).to.equal('Properties set: 2', 'The response of the GRAPH.QUERY command');
-        expect(response[2][3]).to.equal('Cached execution: 0', 'The response of the GRAPH.QUERY command');
+        expect(response[2][3]).to.equal('Cached execution: 0', 'The response of the GRAPH.QUERY command');*/
         response = await client.query(graphName, `MATCH (p:Person) WHERE p.name=$name RETURN count(p) as count`, { name: 'Kurt'})
         console.log(response)
-        expect(response[2][0]).to.equal('Labels added: 1', 'The response of the GRAPH.QUERY command');
+        /*expect(response[2][0]).to.equal('Labels added: 1', 'The response of the GRAPH.QUERY command');
         expect(response[2][1]).to.equal('Nodes created: 1', 'The response of the GRAPH.QUERY command');
         expect(response[2][2]).to.equal('Properties set: 2', 'The response of the GRAPH.QUERY command');
-        expect(response[2][3]).to.equal('Cached execution: 0', 'The response of the GRAPH.QUERY command');
+        expect(response[2][3]).to.equal('Cached execution: 0', 'The response of the GRAPH.QUERY command');*/
+        expect(response[2].find(item => item === 'Labels added: 1')).ok('The response of the GRAPH.QUERY command');
+        expect(response[2].find(item => item === 'Nodes created: 1')).ok('The response of the GRAPH.QUERY command');
+        expect(response[2].find(item => item === 'Properties set: 2')).ok('The response of the GRAPH.QUERY command');
+        expect(response[2].find(item => item === 'Cached execution: 0')).ok('The response of the GRAPH.QUERY command');
     });
     it('readonlyQuery function', async () => {
         let response = await client.readonlyQuery(graphName, 'MATCH (p:Person) WHERE p.age > 80 RETURN p');
