@@ -50,7 +50,9 @@ describe('RedisGraph Module testing', async function() {
             value: 25
         }];
         for(const itemToVerify of itemsToVerify) {
-            const index = response[2].findIndex(item => item === itemToVerify.key);   
+            console.log(itemToVerify)
+            const index = response[2].findIndex(item => item === itemToVerify.key);
+            console.log(index)
             expect(response[2][index]).to.equal(itemToVerify.key, `The value of ${itemToVerify.key}`);
             expect(response[2][index+1]).to.equal(itemToVerify.value, `The value of ${itemToVerify.value}`);
         }
