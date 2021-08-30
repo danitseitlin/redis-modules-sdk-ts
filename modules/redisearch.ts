@@ -37,52 +37,52 @@ export class Redisearch extends Module {
      */
     async create(index: string, indexType: FTIndexType, schemaFields: FTSchemaField[], parameters?: FTCreateParameters): Promise<'OK' | string> {
         let args: string[] = [index, 'ON', indexType]
-        if (parameters !== undefined) {
-            if (parameters.prefix !== undefined) {
+        if(parameters !== undefined) {
+            if(parameters.prefix !== undefined) {
                 args.push('PREFIX');
-                args.push(parameters.prefix.length.toString());
+                args.push(`${parameters.prefix.length}`);
                 args = args.concat(parameters.prefix);
             }
-            if (parameters.filter !== undefined)
+            if(parameters.filter !== undefined)
                 args = args.concat(['FILTER', parameters.filter])
-            if (parameters.language !== undefined)
+            if(parameters.language !== undefined)
                 args = args.concat(['LANGUAGE', parameters.language]);
-            if (parameters.languageField !== undefined)
+            if(parameters.languageField !== undefined)
                 args = args.concat(['LANGUAGE_FIELD', parameters.languageField]);
-            if (parameters.score !== undefined)
+            if(parameters.score !== undefined)
                 args = args.concat(['SCORE', parameters.score])
-            if (parameters.scoreField !== undefined)
+            if(parameters.scoreField !== undefined)
                 args = args.concat(['SCORE_FIELD', parameters.scoreField])
-            if (parameters.payloadField !== undefined)
+            if(parameters.payloadField !== undefined)
                 args = args.concat(['PAYLOAD_FIELD', parameters.payloadField])
-            if (parameters.maxTextFields !== undefined)
-                args = args.concat(['MAXTEXTFIELDS', parameters.maxTextFields.toString()])
-            if (parameters.temporary !== undefined)
-                args = args.concat(['TEMPORARY', parameters.temporary.toString()]);
-            if (parameters.noOffsets === true)
+            if(parameters.maxTextFields !== undefined)
+                args = args.concat(['MAXTEXTFIELDS', `${parameters.maxTextFields}`])
+            if(parameters.temporary !== undefined)
+                args = args.concat(['TEMPORARY', `${parameters.temporary}`]);
+            if(parameters.noOffsets === true)
                 args.push('NOOFFSETS');
-            if (parameters.nohl === true)
+            if(parameters.nohl === true)
                 args.push('NOHL');
-            if (parameters.noFields === true)
+            if(parameters.noFields === true)
                 args.push('NOFIELDS');
-            if (parameters.noFreqs === true)
+            if(parameters.noFreqs === true)
                 args.push('NOFREQS');
-            if (parameters.stopwords !== undefined) {
+            if(parameters.stopwords !== undefined) {
                 args.push('STOPWORDS');
-                args.push(parameters.stopwords.length.toString());
+                args.push(`${parameters.stopwords.length}`);
                 args = args.concat(parameters.stopwords);
             }
-            if (parameters.skipInitialScan !== undefined)
+            if(parameters.skipInitialScan !== undefined)
                 args.push('SKIPINITIALSCAN');
         }
         args.push('SCHEMA');
-        for (const field of schemaFields) {
+        for(const field of schemaFields) {
             args.push(field.name)
             if (field.as !== undefined)
                 args = args.concat(['AS', field.as])
             args.push(field.type);
             if (field.nostem === true) args.push('NOSTEM');
-            if (field.weight !== undefined) args = args.concat(['WEIGHT', field.weight.toString()]);
+            if (field.weight !== undefined) args = args.concat(['WEIGHT', `${field.weight}`]);
             if (field.phonetic !== undefined) args = args.concat(['PHONETIC', field.phonetic]);
             if (field.seperator !== undefined) args = args.concat(['SEPERATOR', field.seperator]);
             if (field.sortable === true) args.push('SORTABLE');
@@ -103,102 +103,102 @@ export class Redisearch extends Module {
      */
     async search(index: string, query: string, parameters?: FTSearchParameters): Promise<[number, ...Array<string | string[]>]> {
         let args: string[] = [index, query];
-        if (parameters !== undefined) {
-            if (parameters.noContent === true)
+        if(parameters !== undefined) {
+            if(parameters.noContent === true)
                 args.push('NOCONTENT')
-            if (parameters.verbatim === true)
+            if(parameters.verbatim === true)
                 args.push('VERBATIM')
-            if (parameters.noStopWords === true)
+            if(parameters.noStopWords === true)
                 args.push('NOSTOPWORDS')
-            if (parameters.withScores === true)
+            if(parameters.withScores === true)
                 args.push('WITHSCORES')
-            if (parameters.withPayloads === true)
+            if(parameters.withPayloads === true)
                 args.push('WITHPAYLOADS')
-            if (parameters.withSortKeys === true)
+            if(parameters.withSortKeys === true)
                 args.push('WITHSORTKEYS')
-            if (parameters.filter !== undefined) {
+            if(parameters.filter !== undefined) {
                 for (const item of parameters.filter) {
-                    args = args.concat(['FILTER', item.field, item.min.toString(), item.max.toString()])
+                    args = args.concat(['FILTER', item.field, `${item.min}`, `${item.max}`])
                 }
             }
-            if (parameters.geoFilter !== undefined)
+            if(parameters.geoFilter !== undefined)
                 args = args.concat([
                     'GEOFILTER',
                     parameters.geoFilter.field,
-                    parameters.geoFilter.lon.toString(),
-                    parameters.geoFilter.lat.toString(),
-                    parameters.geoFilter.radius.toString(),
+                    `${parameters.geoFilter.lon}`,
+                    `${parameters.geoFilter.lat}`,
+                    `${parameters.geoFilter.radius}`,
                     parameters.geoFilter.measurement
                 ])
-            if (parameters.inKeys !== undefined)
-                args = args.concat(['INKEYS', parameters.inKeys.length.toString()].concat(parameters.inKeys.map(f => f.toString())))
-            if (parameters.inFields !== undefined)
-                args = args.concat(['INFIELDS', parameters.inFields.length.toString()].concat(parameters.inFields.map(f => f.toString())))
-            if (parameters.return !== undefined) {
+            if(parameters.inKeys !== undefined)
+                args = args.concat(['INKEYS', `${parameters.inKeys.length}`].concat(parameters.inKeys.map(inKeysItem => `${inKeysItem}`)))
+            if(parameters.inFields !== undefined)
+                args = args.concat(['INFIELDS', `${parameters.inFields.length}`].concat(parameters.inFields.map(inFieldItem => `${inFieldItem}`)))
+            if(parameters.return !== undefined) {
                 args.push('RETURN')
                 //Else we need to expand the objects
                 let itemCount = 0;
                 let tempList = [];
                 for (const item of parameters.return) {
-                    if (typeof item === "string") {
+                    if(typeof item === "string") {
                         tempList.push(item);
                         itemCount++;
                     } else {
                         tempList.push(item.field);
                         itemCount++;
-                        if (item.as !== undefined) {
+                        if(item.as !== undefined) {
                             tempList = tempList.concat(["AS", item.as]);
                             itemCount += 2;
                         }
                     }
                 }
-                args.push(itemCount.toString());
+                args.push(`${itemCount}`);
                 args = args.concat(tempList);
             }
-            if (parameters.summarize !== undefined) {
+            if(parameters.summarize !== undefined) {
                 args.push('SUMMARIZE')
-                if (parameters.summarize.fields !== undefined) {
+                if(parameters.summarize.fields !== undefined) {
                     args.push('FIELDS')
-                    args.push(parameters.summarize.fields.length.toString())
+                    args.push(`${parameters.summarize.fields.length}`)
                     args = args.concat(parameters.summarize.fields);
                 }
-                if (parameters.summarize.frags !== undefined)
-                    args = args.concat(['FRAGS', parameters.summarize.frags.toString()])
-                if (parameters.summarize.len !== undefined)
-                    args = args.concat(['LEN', parameters.summarize.len.toString()])
-                if (parameters.summarize.seperator !== undefined)
+                if(parameters.summarize.frags !== undefined)
+                    args = args.concat(['FRAGS', `${parameters.summarize.frags}`])
+                if(parameters.summarize.len !== undefined)
+                    args = args.concat(['LEN', `${parameters.summarize.len}`])
+                if(parameters.summarize.seperator !== undefined)
                     args = args.concat(['SEPARATOR', parameters.summarize.seperator])
             }
-            if (parameters.highlight !== undefined) {
+            if(parameters.highlight !== undefined) {
                 args.push('HIGHLIGHT')
-                if (parameters.highlight.fields !== undefined) {
+                if(parameters.highlight.fields !== undefined) {
                     args.push('FIELDS')
-                    args.push(parameters.highlight.fields.length.toString());
+                    args.push(`${parameters.highlight.fields.length}`);
                     args = args.concat(parameters.highlight.fields);
                 }
-                if (parameters.highlight.tags !== undefined) {
+                if(parameters.highlight.tags !== undefined) {
                     args.push('TAGS')
                     args = args.concat([parameters.highlight.tags.open, parameters.highlight.tags.close]);
                 }
             }
-            if (parameters.slop !== undefined)
-                args = args.concat(['SLOP', parameters.slop.toString()])
-            if (parameters.inOrder === true)
+            if(parameters.slop !== undefined)
+                args = args.concat(['SLOP', `${parameters.slop}`])
+            if(parameters.inOrder === true)
                 args.push('INORDER')
-            if (parameters.language !== undefined)
+            if(parameters.language !== undefined)
                 args = args.concat(['LANGUAGE', parameters.language])
-            if (parameters.expander !== undefined)
+            if(parameters.expander !== undefined)
                 args = args.concat(['EXPANDER', parameters.expander])
-            if (parameters.scorer !== undefined)
+            if(parameters.scorer !== undefined)
                 args = args.concat(['SCORER', parameters.scorer])
-            if (parameters.explainScore === true)
+            if(parameters.explainScore === true)
                 args.push('EXPLAINSCORE')
-            if (parameters.payload)
+            if(parameters.payload)
                 args = args.concat(['PAYLOAD', parameters.payload])
-            if (parameters.sortBy !== undefined)
+            if(parameters.sortBy !== undefined)
                 args = args.concat(['SORTBY', parameters.sortBy.field, parameters.sortBy.sort])
-            if (parameters.limit !== undefined)
-                args = args.concat(['LIMIT', parameters.limit.first.toString(), parameters.limit.num.toString()])
+            if(parameters.limit !== undefined)
+                args = args.concat(['LIMIT', `${parameters.limit.first}`, `${parameters.limit.num}`])
         }
         const response = await this.sendCommand('FT.SEARCH', args);
         return this.handleResponse(response, true);
@@ -213,75 +213,75 @@ export class Redisearch extends Module {
      */
     async aggregate(index: string, query: string, parameters?: FTAggregateParameters): Promise<[number, ...Array<string[]>]> {
         let args: string[] = [index, query];
-        if (parameters !== undefined) {
-            if (parameters.load !== undefined) {
+        if(parameters !== undefined) {
+            if(parameters.load !== undefined) {
                 args.push('LOAD')
-                if (parameters.load.nargs !== undefined)
+                if(parameters.load.nargs !== undefined)
                     args.push(parameters.load.nargs);
-                if (parameters.load.properties !== undefined)
+                if(parameters.load.properties !== undefined)
                     parameters.load.properties.forEach(property => {
                         args.push(property);
                     })
             }
-            if (parameters.apply !== undefined) {
+            if(parameters.apply !== undefined) {
                 parameters.apply.forEach(apply => {
                     args.push('APPLY');
                     args.push(apply.expression);
-                    if (apply.as)
+                    if(apply.as)
                         args = args.concat(['AS', apply.as]);
                 })
             }
-            if (parameters.groupby !== undefined) {
+            if(parameters.groupby !== undefined) {
                 args.push('GROUPBY')
-                if (parameters.groupby.nargs !== undefined)
+                if(parameters.groupby.nargs !== undefined)
                     args.push(parameters.groupby.nargs);
-                if (parameters.groupby.properties !== undefined) {
+                if(parameters.groupby.properties !== undefined) {
                     parameters.groupby.properties.forEach((property) => {
                         args.push(property);
                     })
                 }
             }
-            if (parameters.reduce !== undefined) {
+            if(parameters.reduce !== undefined) {
                 parameters.reduce.forEach(reduce => {
                     args.push('REDUCE')
-                    if (reduce.function !== undefined)
+                    if(reduce.function !== undefined)
                         args.push(reduce.function);
-                    if (reduce.nargs !== undefined)
+                    if(reduce.nargs !== undefined)
                         args.push(reduce.nargs);
-                    if (reduce.args)
+                    if(reduce.args)
                         reduce.args.forEach(arg => {
                             args.push(arg);
                         })
-                    if (reduce.as !== undefined)
+                    if(reduce.as !== undefined)
                         args = args.concat(['AS', reduce.as]);
                 })
             }
-            if (parameters.sortby !== undefined) {
+            if(parameters.sortby !== undefined) {
                 args.push('SORTBY')
-                if (parameters.sortby.nargs !== undefined)
+                if(parameters.sortby.nargs !== undefined)
                     args.push(parameters.sortby.nargs);
-                if (parameters.sortby.properties)
+                if(parameters.sortby.properties)
                     parameters.sortby.properties.forEach(property => {
                         args.push(property.property);
                         args.push(property.sort);
                     })
-                if (parameters.sortby.max !== undefined)
-                    args = args.concat(['MAX', parameters.sortby.max.toString()]);
+                if(parameters.sortby.max !== undefined)
+                    args = args.concat(['MAX', `${parameters.sortby.max}`]);
             }
-            if (parameters.expressions !== undefined) {
+            if(parameters.expressions !== undefined) {
                 parameters.expressions.forEach(expression => {
                     args.push('APPLY');
                     args.push(expression.expression);
-                    if (expression.as)
+                    if(expression.as)
                         args = args.concat(['AS', expression.as]);
                 })
             }
-            if (parameters.limit !== undefined) {
+            if(parameters.limit !== undefined) {
                 args.push('LIMIT')
-                if (parameters.limit.offset !== undefined)
+                if(parameters.limit.offset !== undefined)
                     args.push(parameters.limit.offset)
-                if (parameters.limit.numberOfResults !== undefined)
-                    args.push(parameters.limit.numberOfResults.toString());
+                if(parameters.limit.numberOfResults !== undefined)
+                    args.push(`${parameters.limit.numberOfResults}`);
             }
         }
         const response = await this.sendCommand('FT.AGGREGATE', args);
@@ -320,9 +320,9 @@ export class Redisearch extends Module {
      */
     async alter(index: string, field: string, fieldType: FTFieldType, options?: FTFieldOptions): Promise<'OK' | string> {
         let args = [index, 'SCHEMA', 'ADD', field, fieldType]
-        if (options !== undefined) {
+        if(options !== undefined) {
             if (options.nostem === true) args.push('NOSTEM');
-            if (options.weight !== undefined) args = args.concat(['WEIGHT', options.weight.toString()]);
+            if (options.weight !== undefined) args = args.concat(['WEIGHT', `${options.weight}`]);
             if (options.phonetic !== undefined) args = args.concat(['PHONETIC', options.phonetic]);
             if (options.seperator !== undefined) args = args.concat(['SEPERATOR', options.seperator]);
             if (options.sortable === true) args.push('SORTABLE');
@@ -342,7 +342,7 @@ export class Redisearch extends Module {
      */
     async dropindex(index: string, deleteHash = false): Promise<'OK' | string> {
         const args = [index];
-        if (deleteHash === true) args.push('DD')
+        if(deleteHash === true) args.push('DD')
         const response = await this.sendCommand('FT.DROPINDEX', args);
         return this.handleResponse(response);
     }
@@ -423,7 +423,7 @@ export class Redisearch extends Module {
             if (options.fuzzy === true)
                 args.push('FUZZY');
             if (options.max !== undefined)
-                args = args.concat(['MAX', options.max.toString()]);
+                args = args.concat(['MAX', `${options.max}`]);
             if (options.withScores === true)
                 args.push('WITHSCORES');
             if (options.withPayloads === true)
@@ -474,7 +474,7 @@ export class Redisearch extends Module {
      * @param index The index
      * @returns A list of synonym terms and their synonym group ids.  
      */
-    async syndump(index: string): Promise<{ [key: string]: string | number }> {
+    async syndump(index: string): Promise<{[key: string]: string | number}> {
         const response = await this.sendCommand('FT.SYNDUMP', [index]);
         return this.handleResponse(response);
     }
@@ -490,7 +490,7 @@ export class Redisearch extends Module {
         let args = [index, query];
         if (options !== undefined) {
             if (options.distance !== undefined)
-                args = args.concat(['DISTANCE', options.distance.toString()]);
+                args = args.concat(['DISTANCE', `${options.distance}`]);
             if (options.terms !== undefined) {
                 args.push('TERMS');
                 for (const term of options.terms) {
@@ -553,7 +553,7 @@ export class Redisearch extends Module {
      */
     async config(command: 'GET' | 'SET' | 'HELP', option: string, value?: string): Promise<FTConfig> {
         const args = [command, option];
-        if (command === 'SET')
+        if(command === 'SET')
             args.push(value);
         const response = await this.sendCommand('FT.CONFIG', args);
         return this.handleResponse(response);
