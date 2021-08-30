@@ -42,10 +42,24 @@ describe('RedisGraph Module testing', async function() {
         expect(response[2][1]).to.equal('Nodes created: 1', 'The response of the GRAPH.QUERY command');
         expect(response[2][2]).to.equal('Properties set: 2', 'The response of the GRAPH.QUERY command');
         expect(response[2][3]).to.equal('Cached execution: 0', 'The response of the GRAPH.QUERY command');*/
-        expect(response[2].find(item => item === 'Labels added: 1')).to.not.equal(undefined, 'The response of the GRAPH.QUERY command');
+        const itemsToVerify = [{
+            key: 'TIMEOUT',
+            value: 0
+        },{
+            key: 'CACHE_SIZE',
+            value: 25
+        }];
+        for(const itemToVerify of itemsToVerify) {
+            const index = response[2].findIndex(item => item === itemToVerify.key);   
+            expect(itemsToVerify[index]).to.equal(itemToVerify.key, `The value of ${itemToVerify.key}`);
+            expect(itemsToVerify[index+1]).to.equal(itemToVerify.value, `The value of ${itemToVerify.value}`);
+        }
+        //TIMEOUT,0,CACHE_SIZE,25,ASYNC_DELETE,1,OMP_THREAD_COUNT,2,THREAD_COUNT,2,RESULTSET_SIZE,1000,
+        //VKEY_MAX_ENTITY_COUNT,100000,MAX_QUEUED_QUERIES,4294967295,QUERY_MEM_CAPACITY,0,DELTA_MAX_PENDING_CHANGES,10000
+        /*expect(response[2].find(item => item === 'Labels added: 1')).to.not.equal(undefined, 'The response of the GRAPH.QUERY command');
         expect(response[2].find(item => item === 'Nodes created: 1')).to.not.equal(undefined, 'The response of the GRAPH.QUERY command');
         expect(response[2].find(item => item === 'Properties set: 2')).to.not.equal(undefined, 'The response of the GRAPH.QUERY command');
-        expect(response[2].find(item => item === 'Cached execution: 0')).to.not.equal(undefined, 'The response of the GRAPH.QUERY command');
+        expect(response[2].find(item => item === 'Cached execution: 0')).to.not.equal(undefined, 'The response of the GRAPH.QUERY command');*/
     });
     it('readonlyQuery function', async () => {
         let response = await client.readonlyQuery(graphName, 'MATCH (p:Person) WHERE p.age > 80 RETURN p');
