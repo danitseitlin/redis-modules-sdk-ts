@@ -72,7 +72,7 @@ export class Redisearch extends Module {
                 args.push(`${parameters.stopwords.length}`)
                 args = args.concat(parameters.stopwords)
             }
-            if(parameters.skipInitialScan !== undefined)
+            if(parameters.skipInitialScan === true)
                 args.push('SKIPINITIALSCAN')
         }
         args.push('SCHEMA');
@@ -136,14 +136,15 @@ export class Redisearch extends Module {
                 args = args.concat(['INFIELDS', `${parameters.inFields.length}`].concat(parameters.inFields.map(inFieldItem => `${inFieldItem}`)))
             if(parameters.return !== undefined) {
                 args.push('RETURN')
-                //Else we need to expand the objects
                 let itemCount = 0
                 let tempList = []
                 for (const returnItem of parameters.return) {
                     if(typeof returnItem === "string") {
+                        //Strings can be pushed directly
                         tempList.push(returnItem)
                         itemCount++
                     } else {
+                        //Objects need to be converted to strings
                         tempList.push(returnItem.field)
                         itemCount++
                         if(returnItem.as !== undefined) {
