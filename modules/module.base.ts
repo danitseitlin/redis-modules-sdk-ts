@@ -117,8 +117,8 @@ export class Module {
         }
         
         //If is an array/obj we will build it
-        for (let i = 0; i < response.length; i+=2) {
-            if (response[i+1] !== '' && response[i+1] !== undefined) {
+        for(let i = 0; i < response.length; i+=2) {
+            if(response[i+1] !== '' && response[i+1] !== undefined) {
                 if(Array.isArray(response[i+1]) && this.isOnlyTwoDimensionalArray(response[i+1])) {
                     obj[response[i]] = this.reduceArrayDimension(response[i+1]);
                     continue;
