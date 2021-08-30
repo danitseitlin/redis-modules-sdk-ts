@@ -51,8 +51,8 @@ describe('RedisGraph Module testing', async function() {
         }];
         for(const itemToVerify of itemsToVerify) {
             const index = response[2].findIndex(item => item === itemToVerify.key);   
-            expect(itemsToVerify[index]).to.equal(itemToVerify.key, `The value of ${itemToVerify.key}`);
-            expect(itemsToVerify[index+1]).to.equal(itemToVerify.value, `The value of ${itemToVerify.value}`);
+            expect(response[2][index]).to.equal(itemToVerify.key, `The value of ${itemToVerify.key}`);
+            expect(response[2][index+1]).to.equal(itemToVerify.value, `The value of ${itemToVerify.value}`);
         }
         //TIMEOUT,0,CACHE_SIZE,25,ASYNC_DELETE,1,OMP_THREAD_COUNT,2,THREAD_COUNT,2,RESULTSET_SIZE,1000,
         //VKEY_MAX_ENTITY_COUNT,100000,MAX_QUEUED_QUERIES,4294967295,QUERY_MEM_CAPACITY,0,DELTA_MAX_PENDING_CHANGES,10000
