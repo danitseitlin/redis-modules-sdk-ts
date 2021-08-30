@@ -39,16 +39,16 @@ export class Redisearch extends Module {
         let args: string[] = [index, 'ON', indexType]
         if(parameters !== undefined) {
             if(parameters.prefix !== undefined) {
-                args.push('PREFIX');
-                args.push(`${parameters.prefix.length}`);
-                args = args.concat(parameters.prefix);
+                args.push('PREFIX')
+                args.push(`${parameters.prefix.length}`)
+                args = args.concat(parameters.prefix)
             }
             if(parameters.filter !== undefined)
                 args = args.concat(['FILTER', parameters.filter])
             if(parameters.language !== undefined)
                 args = args.concat(['LANGUAGE', parameters.language]);
             if(parameters.languageField !== undefined)
-                args = args.concat(['LANGUAGE_FIELD', parameters.languageField]);
+                args = args.concat(['LANGUAGE_FIELD', parameters.languageField])
             if(parameters.score !== undefined)
                 args = args.concat(['SCORE', parameters.score])
             if(parameters.scoreField !== undefined)
@@ -58,22 +58,22 @@ export class Redisearch extends Module {
             if(parameters.maxTextFields !== undefined)
                 args = args.concat(['MAXTEXTFIELDS', `${parameters.maxTextFields}`])
             if(parameters.temporary !== undefined)
-                args = args.concat(['TEMPORARY', `${parameters.temporary}`]);
+                args = args.concat(['TEMPORARY', `${parameters.temporary}`])
             if(parameters.noOffsets === true)
-                args.push('NOOFFSETS');
+                args.push('NOOFFSETS')
             if(parameters.nohl === true)
-                args.push('NOHL');
+                args.push('NOHL')
             if(parameters.noFields === true)
-                args.push('NOFIELDS');
+                args.push('NOFIELDS')
             if(parameters.noFreqs === true)
-                args.push('NOFREQS');
+                args.push('NOFREQS')
             if(parameters.stopwords !== undefined) {
-                args.push('STOPWORDS');
-                args.push(`${parameters.stopwords.length}`);
-                args = args.concat(parameters.stopwords);
+                args.push('STOPWORDS')
+                args.push(`${parameters.stopwords.length}`)
+                args = args.concat(parameters.stopwords)
             }
             if(parameters.skipInitialScan !== undefined)
-                args.push('SKIPINITIALSCAN');
+                args.push('SKIPINITIALSCAN')
         }
         args.push('SCHEMA');
         for(const field of schemaFields) {
@@ -82,13 +82,13 @@ export class Redisearch extends Module {
                 args = args.concat(['AS', field.as])
             args.push(field.type);
             if (field.nostem === true) args.push('NOSTEM');
-            if (field.weight !== undefined) args = args.concat(['WEIGHT', `${field.weight}`]);
-            if (field.phonetic !== undefined) args = args.concat(['PHONETIC', field.phonetic]);
-            if (field.seperator !== undefined) args = args.concat(['SEPERATOR', field.seperator]);
-            if (field.sortable === true) args.push('SORTABLE');
-            if (field.noindex === true) args.push('NOINDEX');
-            if (field.unf === true) args.push('UNF');
-            if (field.caseSensitive === true) args.push('CASESENSITIVE');
+            if (field.weight !== undefined) args = args.concat(['WEIGHT', `${field.weight}`])
+            if (field.phonetic !== undefined) args = args.concat(['PHONETIC', field.phonetic])
+            if (field.seperator !== undefined) args = args.concat(['SEPERATOR', field.seperator])
+            if (field.sortable === true) args.push('SORTABLE')
+            if (field.noindex === true) args.push('NOINDEX')
+            if (field.unf === true) args.push('UNF')
+            if (field.caseSensitive === true) args.push('CASESENSITIVE')
         }
         const response = await this.sendCommand('FT.CREATE', args);
         return this.handleResponse(response);
@@ -117,8 +117,8 @@ export class Redisearch extends Module {
             if(parameters.withSortKeys === true)
                 args.push('WITHSORTKEYS')
             if(parameters.filter !== undefined) {
-                for (const item of parameters.filter) {
-                    args = args.concat(['FILTER', item.field, `${item.min}`, `${item.max}`])
+                for (const filterItem of parameters.filter) {
+                    args = args.concat(['FILTER', filterItem.field, `${filterItem.min}`, `${filterItem.max}`])
                 }
             }
             if(parameters.geoFilter !== undefined)
@@ -137,30 +137,30 @@ export class Redisearch extends Module {
             if(parameters.return !== undefined) {
                 args.push('RETURN')
                 //Else we need to expand the objects
-                let itemCount = 0;
-                let tempList = [];
-                for (const item of parameters.return) {
-                    if(typeof item === "string") {
-                        tempList.push(item);
-                        itemCount++;
+                let itemCount = 0
+                let tempList = []
+                for (const returnItem of parameters.return) {
+                    if(typeof returnItem === "string") {
+                        tempList.push(returnItem)
+                        itemCount++
                     } else {
-                        tempList.push(item.field);
-                        itemCount++;
-                        if(item.as !== undefined) {
-                            tempList = tempList.concat(["AS", item.as]);
-                            itemCount += 2;
+                        tempList.push(returnItem.field)
+                        itemCount++
+                        if(returnItem.as !== undefined) {
+                            tempList = tempList.concat(["AS", returnItem.as])
+                            itemCount += 2
                         }
                     }
                 }
-                args.push(`${itemCount}`);
-                args = args.concat(tempList);
+                args.push(`${itemCount}`)
+                args = args.concat(tempList)
             }
             if(parameters.summarize !== undefined) {
                 args.push('SUMMARIZE')
                 if(parameters.summarize.fields !== undefined) {
                     args.push('FIELDS')
                     args.push(`${parameters.summarize.fields.length}`)
-                    args = args.concat(parameters.summarize.fields);
+                    args = args.concat(parameters.summarize.fields)
                 }
                 if(parameters.summarize.frags !== undefined)
                     args = args.concat(['FRAGS', `${parameters.summarize.frags}`])
@@ -173,12 +173,12 @@ export class Redisearch extends Module {
                 args.push('HIGHLIGHT')
                 if(parameters.highlight.fields !== undefined) {
                     args.push('FIELDS')
-                    args.push(`${parameters.highlight.fields.length}`);
-                    args = args.concat(parameters.highlight.fields);
+                    args.push(`${parameters.highlight.fields.length}`)
+                    args = args.concat(parameters.highlight.fields)
                 }
                 if(parameters.highlight.tags !== undefined) {
                     args.push('TAGS')
-                    args = args.concat([parameters.highlight.tags.open, parameters.highlight.tags.close]);
+                    args = args.concat([parameters.highlight.tags.open, parameters.highlight.tags.close])
                 }
             }
             if(parameters.slop !== undefined)
@@ -321,14 +321,14 @@ export class Redisearch extends Module {
     async alter(index: string, field: string, fieldType: FTFieldType, options?: FTFieldOptions): Promise<'OK' | string> {
         let args = [index, 'SCHEMA', 'ADD', field, fieldType]
         if(options !== undefined) {
-            if (options.nostem === true) args.push('NOSTEM');
-            if (options.weight !== undefined) args = args.concat(['WEIGHT', `${options.weight}`]);
-            if (options.phonetic !== undefined) args = args.concat(['PHONETIC', options.phonetic]);
-            if (options.seperator !== undefined) args = args.concat(['SEPERATOR', options.seperator]);
-            if (options.sortable === true) args.push('SORTABLE');
-            if (options.noindex === true) args.push('NOINDEX');
-            if (options.unf === true) args.push('UNF');
-            if (options.caseSensitive === true) args.push('CASESENSITIVE');
+            if (options.nostem === true) args.push('NOSTEM')
+            if (options.weight !== undefined) args = args.concat(['WEIGHT', `${options.weight}`])
+            if (options.phonetic !== undefined) args = args.concat(['PHONETIC', options.phonetic])
+            if (options.seperator !== undefined) args = args.concat(['SEPERATOR', options.seperator])
+            if (options.sortable === true) args.push('SORTABLE')
+            if (options.noindex === true) args.push('NOINDEX')
+            if (options.unf === true) args.push('UNF')
+            if (options.caseSensitive === true) args.push('CASESENSITIVE')
         }
         const response = await this.sendCommand('FT.ALTER', args);
         return this.handleResponse(response);
