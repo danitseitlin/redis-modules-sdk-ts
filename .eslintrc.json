@@ -1,5 +1,37 @@
 {
     "parser": "@typescript-eslint/parser",
     "plugins": ["@typescript-eslint"],
-    "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"]
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "overrides": [{
+        "files": ["*/*.ts"],
+        "rules": {
+            "keyword-spacing": ["error", {
+                "overrides":{
+                    "for": {
+                        "before": false,
+                        "after": false
+                    },
+                    "while": {
+                        "before": false,
+                        "after": false
+                    },
+                    "catch": {
+                        "before": true,
+                        "after": false
+                    },
+                    "from": {
+                        "before": true,
+                        "after": true
+                    },
+                    "if": {
+                        "before": false,
+                        "after": false
+                    }
+                }
+            }]
+        }
+    }]
 }
