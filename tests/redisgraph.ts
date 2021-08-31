@@ -53,7 +53,7 @@ describe('RedisGraph Module testing', async function() {
         expect(response[3]).to.contain('Node By Label Scan | (p:Person)', 'The response of the GRAPH.EXPLAIN command');
     });
     it('slowlog function', async () => {
-        const response = await client.slowlog(0)
+        const response = await client.slowlog(1)
         expect(response.length).to.equal(0, 'The response of the GRAPH.SLOWLOG command');
     });
     it('delete function', async () => {
