@@ -119,10 +119,10 @@ describe('RediSearch Module testing', async function () {
             }
         )
     })
-    it('Simple search test with field specified in query', async () => {
-        const [count, ...result] = await client.search(`${index}-searchtest`, '@name:Doe')
+     it('Simple search test with field specified in query', async () => {
+        const [count, ...result] = await client.search(`${index}-searchtest`, '@name:Doe');
         expect(count).to.equal(2, 'Total number of returining document of FT.SEARCH command')
-        expect(result[0].indexOf('doc')).to.equal(0, 'first document key')
+        expect((result[0] as {[key: string]: string}).key).to.equal('doc:1', 'first document key')
     })
     it('Simple search tests with field specified using inFields', async () => {
         let res = await client.search(
@@ -214,12 +214,12 @@ describe('RediSearch Module testing', async function () {
             }
         )
         expect(res[0]).to.equal(3, 'Total number of returining document of FT.SEARCH command')
-        expect(res[2].length).to.equal(2, 'Total number of returned key-values')
-        expect(res[2].includes('age')).to.equal(true, 'Age must be returned')
-        expect(res[2].includes('salary')).to.equal(false, 'Salary must not be returned')
-        expect(res[2].includes('name')).to.equal(false, 'Name must not be returned')
-        expect(res[4].length).to.equal(2, 'Total number of returned key-values')
-        expect(res[6].length).to.equal(2, 'Total number of returned key-values')
+        expect(Object.keys(res[1]).length).to.equal(2, 'Total number of returned key-values')
+        expect(Object.keys(res[1]).includes('age')).to.equal(true, 'Age must be returned')
+        expect(Object.keys(res[1]).includes('salary')).to.equal(false, 'Salary must not be returned')
+        expect(Object.keys(res[1]).includes('name')).to.equal(false, 'Name must not be returned')
+        expect(Object.keys(res[2]).length).to.equal(2, 'Total number of returned key-values')
+        expect(Object.keys(res[3]).length).to.equal(2, 'Total number of returned key-values')
         res = await client.search(
             `${index}-searchtest`,
             'Sarah',
@@ -237,9 +237,9 @@ describe('RediSearch Module testing', async function () {
             }
         )
         expect(res[0]).to.equal(1, 'Total number of returining document of FT.SEARCH command')
-        expect(res[2].includes('age')).to.equal(true, 'Age must be returned')
-        expect(res[2].includes('salary')).to.equal(true, 'Salary must be returned')
-        expect(res[2].includes('name')).to.equal(false, 'Name must not be returned')
+        expect(Object.keys(res[1]).includes('age')).to.equal(true, 'Age must be returned')
+        expect(Object.keys(res[1]).includes('salary')).to.equal(true, 'Salary must be returned')
+        expect(Object.keys(res[1]).includes('name')).to.equal(false, 'Name must not be returned')
         res = await client.search(
             `${index}-searchtest`,
             '*',
@@ -266,8 +266,8 @@ describe('RediSearch Module testing', async function () {
             }
         )
         expect(res[0]).to.equal(2, 'Total number of returining document of FT.SEARCH command')
-        expect(res[2][1].endsWith('!?!')).to.equal(true, 'Custom summarize seperator')
-        expect(res[4][1].endsWith('!?!')).to.equal(true, 'Custom summarize seperator')
+        expect((res[1] as {[key: string]: string}).introduction.endsWith('!?!')).to.equal(true, 'Custom summarize seperator')
+        expect((res[1] as {[key: string]: string}).introduction.endsWith('!?!')).to.equal(true, 'Custom summarize seperator')
     })
     it('Search tests with highlight', async () => {
         const res = await client.search(
@@ -284,8 +284,8 @@ describe('RediSearch Module testing', async function () {
             }
         )
         expect(res[0]).to.equal(2, 'Total number of returining document of FT.SEARCH command')
-        expect(res[2][3].includes('**')).to.equal(false, 'Name mustn\'t be highlighted')
-        expect(res[2][1].includes('**developer**')).to.equal(true, 'Introduction must be highlighted')
+        expect((res[1] as {[key: string]: string}).name.includes('**')).to.equal(false, 'Name mustn\'t be highlighted')
+        expect((res[1] as {[key: string]: string}).introduction.includes('**developer**')).to.equal(true, 'Introduction must be highlighted')
     })
     it('Search test with sortby ', async () => {
         const res = await client.search(
@@ -300,9 +300,9 @@ describe('RediSearch Module testing', async function () {
             }
         )
         expect(res[0]).to.equal(3, 'Total number of returining document of FT.SEARCH command')
-        expect(res[2][1]).to.equal('25', 'Ages should be returned in ascending order')
-        expect(res[4][1]).to.equal('30', 'Ages should be returned in ascending order')
-        expect(res[6][1]).to.equal('80', 'Ages should be returned in ascending order')
+        expect((res[1] as {[key: string]: string}).age).to.equal('25', 'Ages should be returned in ascending order')
+        expect((res[2] as {[key: string]: string}).age).to.equal('30', 'Ages should be returned in ascending order')
+        expect((res[3] as {[key: string]: string}).age).to.equal('80', 'Ages should be returned in ascending order')
     })
     it('Search test with limit', async () => {
         const res = await client.search(
@@ -316,7 +316,7 @@ describe('RediSearch Module testing', async function () {
             }
         )
         expect(res[0]).to.equal(3, 'Total number of returining document of FT.SEARCH command')
-        expect(res.length).to.equal(3, 'Only one item should be returned')
+        expect(res.length).to.equal(2, 'Only one item should be returned')
     })
     it('aggregate function', async () => {
         const response = await client.aggregate(index, query)

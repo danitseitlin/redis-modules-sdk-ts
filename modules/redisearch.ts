@@ -109,7 +109,7 @@ export class Redisearch extends Module {
      * @param parameters The additional optional parameter
      * @returns Array reply, where the first element is the total number of results, and then pairs of document id, and a nested array of field/value.
      */
-    async search(index: string, query: string, parameters?: FTSearchParameters): Promise<[number, ...Array<string | string[]>]> {
+    async search(index: string, query: string, parameters?: FTSearchParameters): Promise<[number, ...Array<string | string[] | {[key: string]: string}>]> {
         let args: string[] = [index, query];
         if(parameters !== undefined) {
             if(parameters.noContent === true)
@@ -159,12 +159,12 @@ export class Redisearch extends Module {
                         `${parameters.return.num}` :
                         `${parameters.return.fields.length}`,
                 ]).concat(
-                    parameters.return.fields.map(
+                    ...parameters.return.fields.map(
                         (field) => {
                             if(field.as !== undefined) {
-                                return `${field.field} AS ${field.as}`;
+                                return [field.field, 'AS', field.as];
                             }
-                            return field.field;
+                            return [field.field];
                         },
                     )
                 );
@@ -222,7 +222,8 @@ export class Redisearch extends Module {
                 args = args.concat(['LIMIT', `${parameters.limit.first}`, `${parameters.limit.num}`])
         }
         const response = await this.sendCommand('FT.SEARCH', args);
-        return this.handleResponse(response, true);
+        const parseResponse = parameters?.parseSearchQueries ?? true;
+        return this.handleResponse(response, parseResponse);
     }
 
     /**
@@ -911,7 +912,12 @@ export interface FTSearchParameters {
         * The num argument of the 'LIMIT' parameter
         */
         num: number
-    }
+    },
+    /**
+    * If to parse search results to objects or leave them in their array form
+    * @default true
+    */
+    parseSearchQueries?: boolean
 }
 
 /**
