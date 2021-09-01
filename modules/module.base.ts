@@ -113,7 +113,6 @@ export class Module {
         else if(isSearchQuery) {
             //Search queries should be parsed into objects, if possible.
             let responseObjects = response;
-            console.log(responseObjects);
             if(Array.isArray(response) && response.length % 2 === 1) {
                 // Put index as 0th element
                 responseObjects = [response[0]];
