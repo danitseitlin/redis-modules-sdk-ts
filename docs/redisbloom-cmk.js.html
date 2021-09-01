@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: redisbloom-cmk.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: redisbloom-cmk.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
+var __awaiter = (this &amp;&amp; this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RedisBloomCMK = void 0;
+const module_base_1 = require("./module.base");
+class RedisBloomCMK extends module_base_1.Module {
+    constructor(options, moduleOptions, clusterOptions) {
+        super(RedisBloomCMK.name, options, moduleOptions, clusterOptions);
+    }
+    /**
+     * Initializes a Count-Min Sketch to dimensions specified by user.
+     * @param key The name of the sketch.
+     * @param width The number of counter in each array. Reduces the error size.
+     * @param depth The number of counter-arrays. Reduces the probability for an error of a certain size (percentage of total count).
+     */
+    initbydim(key, width, depth) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.sendCommand('CMS.INITBYDIM', [key, width, depth]);
+        });
+    }
+    /**
+     * Initializes a Count-Min Sketch to accommodate requested capacity.
+     * @param key The name of the sketch.
+     * @param errorSize Estimate size of error. The error is a percent of total counted items. This effects the width of the sketch.
+     * @param probability The desired probability for inflated count.
+     */
+    initbyprob(key, errorSize, probability) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.sendCommand('CMS.INITBYPROB', [key, errorSize, probability]);
+        });
+    }
+    /**
+     * Increases the count of item's by increment.
+     * @param key The name of the sketch.
+     * @param items A list of item and increment set's
+     */
+    incrby(key, items) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let args = [key];
+            for (const item of items)
+                args = args.concat([item.name.toString(), item.increment.toString()]);
+            return yield this.sendCommand('CMS.INCRBY', args);
+        });
+    }
+    /**
+     * Returns count for item's.
+     * @param key The name of the sketch.
+     * @param items A list of items.
+     */
+    query(key, items) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.sendCommand('CMS.QUERY', [key].concat(items));
+        });
+    }
+    /**
+     * Merges several sketches into one sketch.
+     * @param dest The name of destination sketch.
+     * @param numKeys The number of sketches to be merged.
+     * @param sources The names of source sketches to be merged.
+     * @param weights A multiple of each sketch. Default =1.
+     */
+    merge(dest, numKeys, sources, weights) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let args = [dest, numKeys];
+            args = args.concat(sources);
+            if (weights !== undefined &amp;&amp; weights.length > 0) {
+                args.push('WEIGHTS');
+                for (const weight of weights)
+                    args.push(weight.toString());
+            }
+            return yield this.sendCommand('CMS.MERGE', args);
+        });
+    }
+    /**
+     * Returning information about a key
+     * @param key The key of the 'CMS.INFO' command
+     */
+    info(key) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.sendCommand('CMS.INFO', [key]);
+        });
+    }
+}
+exports.RedisBloomCMK = RedisBloomCMK;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#modulePropNames">modulePropNames</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu Sep 02 2021 02:15:51 GMT+0300 (Israel Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
