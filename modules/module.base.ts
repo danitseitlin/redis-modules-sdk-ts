@@ -14,7 +14,7 @@ export class Module {
     /**
      * Initializing the module object
      * @constructor
-     * @param name The name of the module
+     * @param { string } name The name of the module
      * @param clusterNodes The nodes of the cluster
      * @param moduleOptions The additional module options
      * @param moduleOptions.isHandleError If to throw error on error
