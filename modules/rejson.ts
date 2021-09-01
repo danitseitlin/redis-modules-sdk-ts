@@ -67,7 +67,7 @@ export class ReJSON extends Module {
      * Setting a new JSON key
      * @param key The name of the key
      * @param path The path of the key
-     * @param json The JSON string of the key i.e. '{"x": 4}'
+     * @param json The JSON string of the key
      * @param condition Optional. The condition to set the JSON in.
      * @returns Simple String OK if executed correctly, or Null Bulk if the specified NX or XX conditions were not met. 
      */
