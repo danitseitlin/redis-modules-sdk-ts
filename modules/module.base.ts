@@ -147,20 +147,20 @@ export class Module {
      * @returns A param value converted to string
      */
     paramToString(paramValue: string): string {
-		if (paramValue == null) return 'null';
+		if(paramValue == null) return 'null';
 		const paramType = typeof paramValue;
-		if (paramType == 'string') {
+		if(paramType == 'string') {
 			let strValue = "";
             paramValue = paramValue.replace(/[\\"']/g, '\\$&');  
-			if (paramValue[0] != '"') strValue += "'";
+			if(paramValue[0] != '"') strValue += "'";
 			strValue += paramValue;
-			if (!paramValue.endsWith('"') || paramValue.endsWith("\\\"")) strValue += "'";
+			if(!paramValue.endsWith('"') || paramValue.endsWith("\\\"")) strValue += "'";
 			return strValue;
 		}
 
-		if (Array.isArray(paramValue)) {
+		if(Array.isArray(paramValue)) {
 			const stringsArr = new Array(paramValue.length);
-			for (let i = 0; i < paramValue.length; i++) {
+			for(let i = 0; i < paramValue.length; i++) {
 				stringsArr[i] = this.paramToString(paramValue[i]);
 			}
 			return ["[", stringsArr.join(", "), "]"].join("");
