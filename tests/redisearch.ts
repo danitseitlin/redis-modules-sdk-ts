@@ -30,7 +30,7 @@ describe('RediSearch Module testing', async function () {
         await redis.connect()
     })
     after(async () => {
-        await client.sendCommand("flushdb")
+        await client.redis.flushdb();
         await client.disconnect()
         await redis.disconnect()
     })
