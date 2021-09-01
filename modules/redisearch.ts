@@ -78,17 +78,17 @@ export class Redisearch extends Module {
         args.push('SCHEMA');
         for(const field of schemaFields) {
             args.push(field.name)
-            if (field.as !== undefined)
+            if(field.as !== undefined)
                 args = args.concat(['AS', field.as])
             args.push(field.type);
-            if (field.nostem === true) args.push('NOSTEM');
-            if (field.weight !== undefined) args = args.concat(['WEIGHT', `${field.weight}`])
-            if (field.phonetic !== undefined) args = args.concat(['PHONETIC', field.phonetic])
-            if (field.seperator !== undefined) args = args.concat(['SEPERATOR', field.seperator])
-            if (field.sortable === true) args.push('SORTABLE')
-            if (field.noindex === true) args.push('NOINDEX')
-            if (field.unf === true) args.push('UNF')
-            if (field.caseSensitive === true) args.push('CASESENSITIVE')
+            if(field.nostem === true) args.push('NOSTEM');
+            if(field.weight !== undefined) args = args.concat(['WEIGHT', `${field.weight}`])
+            if(field.phonetic !== undefined) args = args.concat(['PHONETIC', field.phonetic])
+            if(field.seperator !== undefined) args = args.concat(['SEPERATOR', field.seperator])
+            if(field.sortable === true) args.push('SORTABLE')
+            if(field.noindex === true) args.push('NOINDEX')
+            if(field.unf === true) args.push('UNF')
+            if(field.caseSensitive === true) args.push('CASESENSITIVE')
         }
         const response = await this.sendCommand('FT.CREATE', args);
         return this.handleResponse(response);
@@ -117,7 +117,7 @@ export class Redisearch extends Module {
             if(parameters.withSortKeys === true)
                 args.push('WITHSORTKEYS')
             if(parameters.filter !== undefined) {
-                for (const filterItem of parameters.filter) {
+                for(const filterItem of parameters.filter) {
                     args = args.concat(['FILTER', filterItem.field, `${filterItem.min}`, `${filterItem.max}`])
                 }
             }
@@ -138,7 +138,7 @@ export class Redisearch extends Module {
                 args.push('RETURN')
                 let itemCount = 0
                 let tempList = []
-                for (const returnItem of parameters.return) {
+                for(const returnItem of parameters.return) {
                     if(typeof returnItem === "string") {
                         //Strings can be pushed directly
                         tempList.push(returnItem)
@@ -322,14 +322,14 @@ export class Redisearch extends Module {
     async alter(index: string, field: string, fieldType: FTFieldType, options?: FTFieldOptions): Promise<'OK' | string> {
         let args = [index, 'SCHEMA', 'ADD', field, fieldType]
         if(options !== undefined) {
-            if (options.nostem === true) args.push('NOSTEM')
-            if (options.weight !== undefined) args = args.concat(['WEIGHT', `${options.weight}`])
-            if (options.phonetic !== undefined) args = args.concat(['PHONETIC', options.phonetic])
-            if (options.seperator !== undefined) args = args.concat(['SEPERATOR', options.seperator])
-            if (options.sortable === true) args.push('SORTABLE')
-            if (options.noindex === true) args.push('NOINDEX')
-            if (options.unf === true) args.push('UNF')
-            if (options.caseSensitive === true) args.push('CASESENSITIVE')
+            if(options.nostem === true) args.push('NOSTEM')
+            if(options.weight !== undefined) args = args.concat(['WEIGHT', `${options.weight}`])
+            if(options.phonetic !== undefined) args = args.concat(['PHONETIC', options.phonetic])
+            if(options.seperator !== undefined) args = args.concat(['SEPERATOR', options.seperator])
+            if(options.sortable === true) args.push('SORTABLE')
+            if(options.noindex === true) args.push('NOINDEX')
+            if(options.unf === true) args.push('UNF')
+            if(options.caseSensitive === true) args.push('CASESENSITIVE')
         }
         const response = await this.sendCommand('FT.ALTER', args);
         return this.handleResponse(response);
@@ -401,10 +401,10 @@ export class Redisearch extends Module {
      */
     async sugadd(key: string, suggestion: string, score: number, options?: FTSugAddParameters): Promise<number> {
         let args = [key, suggestion, score];
-        if (options !== undefined) {
-            if (options.incr === true)
+        if(options !== undefined) {
+            if(options.incr === true)
                 args.push('INCR');
-            if (options.payload !== undefined)
+            if(options.payload !== undefined)
                 args = args.concat(['PAYLOAD', options.payload]);
         }
         const response = await this.sendCommand('FT.SUGADD', args);
@@ -420,14 +420,14 @@ export class Redisearch extends Module {
      */
     async sugget(key: string, prefix: string, options?: FTSugGetParameters): Promise<string> {
         let args = [key, prefix];
-        if (options !== undefined) {
-            if (options.fuzzy === true)
+        if(options !== undefined) {
+            if(options.fuzzy === true)
                 args.push('FUZZY');
-            if (options.max !== undefined)
+            if(options.max !== undefined)
                 args = args.concat(['MAX', `${options.max}`]);
-            if (options.withScores === true)
+            if(options.withScores === true)
                 args.push('WITHSCORES');
-            if (options.withPayloads === true)
+            if(options.withPayloads === true)
                 args.push('WITHPAYLOADS');
         }
         const response = await this.sendCommand('FT.SUGGET', args);
@@ -463,7 +463,7 @@ export class Redisearch extends Module {
      */
     async synupdate(index: string, groupId: number, terms: string[], skipInitialScan = false): Promise<'OK'> {
         let args = [index, groupId];
-        if (skipInitialScan === true)
+        if(skipInitialScan === true)
             args.push('SKIPINITIALSCAN');
         args = args.concat(terms);
         const response = await this.sendCommand('FT.SYNUPDATE', args);
@@ -489,12 +489,12 @@ export class Redisearch extends Module {
      */
     async spellcheck(index: string, query: string, options?: FTSpellCheck): Promise<string[]> {
         let args = [index, query];
-        if (options !== undefined) {
-            if (options.distance !== undefined)
+        if(options !== undefined) {
+            if(options.distance !== undefined)
                 args = args.concat(['DISTANCE', `${options.distance}`]);
-            if (options.terms !== undefined) {
+            if(options.terms !== undefined) {
                 args.push('TERMS');
-                for (const term of options.terms) {
+                for(const term of options.terms) {
                     args = args.concat([term.type, term.dict]);
                 }
             }
