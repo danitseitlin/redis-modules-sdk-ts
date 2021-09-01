@@ -62,12 +62,13 @@ describe('RediSearch Module testing', async function () {
         let response = await client.search(index, query)
         expect(response).to.equal(0, 'The response of the FT.SEARCH command')
         //FIXME: JSON Needs more tests, also I couldn't find anything related to `RETURN AS` so that also needs tests
-        //! Old function ran command "FT.SEARCH" "idx" "@text:name" "RETURN" "3" "$.name" "AS" "name"
-        // So implemented it in the same way
         response = await client.search(`${index}-json`, query, {
-            return: [
-                { field: '$.name', as: 'name' }
-            ],
+            return: {
+                num: 3,
+                fields: [
+                    { field: '$.name', as: 'name' }
+                ]
+            }
         })
         expect(response).to.equal(0, 'The response of the FT.SEARCH command')
         await client.dropindex(`${index}-json`)
@@ -86,7 +87,9 @@ describe('RediSearch Module testing', async function () {
             name: 'introduction',
             type: 'TEXT'
         }], {
-            prefix: ["doc"]
+            prefix: {
+                prefixes: ["doc", "alma"]
+            }
         })
         await client.redis.hset(
             'doc:1',
@@ -126,7 +129,9 @@ describe('RediSearch Module testing', async function () {
             `${index}-searchtest`,
             'Doe',
             {
-                inFields: ['age', 'salary']
+                inFields: {
+                    fields: ['age', 'salary']
+                }
             }
         )
         expect(res).to.equal(0, 'Total number of returining document of FT.SEARCH command')
@@ -134,7 +139,9 @@ describe('RediSearch Module testing', async function () {
             `${index}-searchtest`,
             'Doe',
             {
-                inFields: ['name']
+                inFields: {
+                    fields: ['name']
+                }
             }
         )
         expect(res[0]).to.equal(2, 'Total number of returining document of FT.SEARCH command')
@@ -144,7 +151,9 @@ describe('RediSearch Module testing', async function () {
             `${index}-searchtest`,
             'Doe',
             {
-                inKeys: ['doc:1', 'doc:2']
+                inKeys: {
+                    keys: ['doc:1', 'doc:2']
+                }
             }
         )
         expect(res[0]).to.equal(2, 'Total number of returining document of FT.SEARCH command')
@@ -152,7 +161,9 @@ describe('RediSearch Module testing', async function () {
             `${index}-searchtest`,
             'Doe',
             {
-                inKeys: ['doc:3']
+                inKeys: {
+                    keys: ['doc:3']
+                }
             }
         )
         expect(res).to.equal(0, 'Total number of returining document of FT.SEARCH command')
@@ -195,7 +206,11 @@ describe('RediSearch Module testing', async function () {
             `${index}-searchtest`,
             '*',
             {
-                return: ['age']
+                return: {
+                    fields: [{
+                        field: 'age',
+                    }]
+                }
             }
         )
         expect(res[0]).to.equal(3, 'Total number of returining document of FT.SEARCH command')
@@ -209,7 +224,16 @@ describe('RediSearch Module testing', async function () {
             `${index}-searchtest`,
             'Sarah',
             {
-                return: ['age', 'salary']
+                return: {
+                    fields: [
+                        {
+                            field: 'age',
+                        },
+                        {
+                            field: 'salary',
+                        }
+                    ]
+                }
             }
         )
         expect(res[0]).to.equal(1, 'Total number of returining document of FT.SEARCH command')
@@ -220,7 +244,7 @@ describe('RediSearch Module testing', async function () {
             `${index}-searchtest`,
             '*',
             {
-                return: []
+                return: { fields: [] }
             }
         )
         expect(res.length).to.equal(4, 'Only keys should be returned (+count of them)')
@@ -234,7 +258,7 @@ describe('RediSearch Module testing', async function () {
                 //! Crash in redis image fabe0b38e273
                 // return: ['introduction'],
                 summarize: {
-                    fields: ['introduction'],
+                    fields: { fields: ['introduction'] },
                     frags: 1,
                     len: 3,
                     seperator: ' !?!'
@@ -251,7 +275,7 @@ describe('RediSearch Module testing', async function () {
             'Do*|De*',
             {
                 highlight: {
-                    fields: ['introduction'],
+                    fields: { fields: ['introduction'] },
                     tags: {
                         open: '**',
                         close: '**'
@@ -268,7 +292,7 @@ describe('RediSearch Module testing', async function () {
             `${index}-searchtest`,
             '*',
             {
-                return: ['age'],
+                return: { fields: [{ field: 'age' }] },
                 sortBy: {
                     field: 'age',
                     sort: 'ASC'
@@ -317,7 +341,7 @@ describe('RediSearch Module testing', async function () {
             sortable: true
         }
         ], {
-            prefix: ['person']
+            prefix: {prefixes: ['person']}
         })
 
         const time = new Date()

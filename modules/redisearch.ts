@@ -40,8 +40,12 @@ export class Redisearch extends Module {
         if(parameters !== undefined) {
             if(parameters.prefix !== undefined) {
                 args.push('PREFIX')
-                args.push(`${parameters.prefix.length}`)
-                args = args.concat(parameters.prefix)
+                args.push(
+                    parameters.prefix.num !== undefined ?
+                        `${parameters.prefix.num}` :
+                        `${parameters.prefix.prefixes.length}`
+                )
+                args = args.concat(parameters.prefix.prefixes);
             }
             if(parameters.filter !== undefined)
                 args = args.concat(['FILTER', parameters.filter])
@@ -69,8 +73,12 @@ export class Redisearch extends Module {
                 args.push('NOFREQS')
             if(parameters.stopwords !== undefined) {
                 args.push('STOPWORDS')
-                args.push(`${parameters.stopwords.length}`)
-                args = args.concat(parameters.stopwords)
+                args.push(
+                    parameters.stopwords.num !== undefined ?
+                        `${parameters.stopwords.num}` :
+                        `${parameters.stopwords.stopwords.length}`
+                )
+                args = args.concat(parameters.stopwords.stopwords);
             }
             if(parameters.skipInitialScan === true)
                 args.push('SKIPINITIALSCAN')
@@ -131,37 +139,46 @@ export class Redisearch extends Module {
                     parameters.geoFilter.measurement
                 ])
             if(parameters.inKeys !== undefined)
-                args = args.concat(['INKEYS', `${parameters.inKeys.length}`].concat(parameters.inKeys.map(inKeysItem => `${inKeysItem}`)))
+                args = args.concat([
+                    'INKEYS',
+                    parameters.inKeys.num !== undefined ?
+                        `${parameters.inKeys.num}` :
+                        `${parameters.inKeys.keys.length}`,
+                ]).concat(parameters.inKeys.keys);
             if(parameters.inFields !== undefined)
-                args = args.concat(['INFIELDS', `${parameters.inFields.length}`].concat(parameters.inFields.map(inFieldItem => `${inFieldItem}`)))
+                args = args.concat([
+                    'INFIELDS',
+                    parameters.inFields.num !== undefined ?
+                        `${parameters.inFields.num}` :
+                        `${parameters.inFields.fields.length}`,
+                ]).concat(parameters.inFields.fields);
             if(parameters.return !== undefined) {
-                args.push('RETURN')
-                let itemCount = 0
-                let tempList = []
-                for(const returnItem of parameters.return) {
-                    if(typeof returnItem === "string") {
-                        //Strings can be pushed directly
-                        tempList.push(returnItem)
-                        itemCount++
-                    } else {
-                        //Objects need to be converted to strings
-                        tempList.push(returnItem.field)
-                        itemCount++
-                        if(returnItem.as !== undefined) {
-                            tempList = tempList.concat(["AS", returnItem.as])
-                            itemCount += 2
-                        }
-                    }
-                }
-                args.push(`${itemCount}`)
-                args = args.concat(tempList)
+                args = args.concat([
+                    'RETURN',
+                    parameters.return.num !== undefined ?
+                        `${parameters.return.num}` :
+                        `${parameters.return.fields.length}`,
+                ]).concat(
+                    parameters.return.fields.map(
+                        (field) => {
+                            if(field.as !== undefined) {
+                                return `${field.field} AS ${field.as}`;
+                            }
+                            return field.field;
+                        },
+                    )
+                );
             }
             if(parameters.summarize !== undefined) {
                 args.push('SUMMARIZE')
                 if(parameters.summarize.fields !== undefined) {
                     args.push('FIELDS')
-                    args.push(`${parameters.summarize.fields.length}`)
-                    args = args.concat(parameters.summarize.fields)
+                    args.push(
+                        parameters.summarize.fields.num !== undefined ?
+                            `${parameters.summarize.fields.num}` :
+                            `${parameters.summarize.fields.fields.length}`
+                    )
+                    args = args.concat(parameters.summarize.fields.fields)
                 }
                 if(parameters.summarize.frags !== undefined)
                     args = args.concat(['FRAGS', `${parameters.summarize.frags}`])
@@ -173,9 +190,12 @@ export class Redisearch extends Module {
             if(parameters.highlight !== undefined) {
                 args.push('HIGHLIGHT')
                 if(parameters.highlight.fields !== undefined) {
-                    args.push('FIELDS')
-                    args.push(`${parameters.highlight.fields.length}`)
-                    args = args.concat(parameters.highlight.fields)
+                    args = args.concat([
+                        'FIELDS',
+                        parameters.highlight.fields.num !== undefined ?
+                            `${parameters.highlight.fields.num}` :
+                            `${parameters.highlight.fields.fields.length}`,
+                    ]).concat(parameters.highlight.fields.fields);
                 }
                 if(parameters.highlight.tags !== undefined) {
                     args.push('TAGS')
@@ -604,7 +624,10 @@ export interface FTCreateParameters {
     /**
     *  The 'PREFIX' parameter. tells the index which keys it should index.
     */
-    prefix?: string[],
+    prefix?: {
+        num?: number,
+        prefixes: string | string[],
+    },
     /**
     * The 'LANGUAGE' parameter.  If set indicates the default language for documents in the index.
     */
@@ -624,7 +647,10 @@ export interface FTCreateParameters {
     /**
     * The 'STOPWORDS' parameter. If set, we set the index with a custom stopword list, to be ignored during indexing and search time. 
     */
-    stopwords?: string[],
+    stopwords?: {
+        num?: number,
+        stopwords: string | string[],
+    },
 }
 
 /**
@@ -756,24 +782,33 @@ export interface FTSearchParameters {
     /**
      * The 'INKEYS' parameter. If set, we limit the result to a given set of keys specified in the list. the first argument must be the length of the list, and greater than zero.
      */
-    inKeys?: (string | number)[],
+    inKeys?: {
+        num?: number,
+        keys?: string | string[],
+    },
     /**
      * The 'INFIELDS' parameter. If set, filter the results to ones appearing only in specific fields of the document, like title or URL.
      */
-    inFields?: (string | number)[],
+    inFields?: {
+        num?: number,
+        fields?: string | string[],
+    },
     /**
      *  The 'RETURN' parameter. Use this keyword to limit which fields from the document are returned.
      */
-    return?: (string | {
-        /**
-         * The name of the field.
-         */
-        field: string,
-        /** 
-         * The 'AS' parameter following a "field" name, used by index type "JSON".
-        */
-        as?: string,
-    })[],
+    return?: {
+        num?: number,
+        fields: {
+            /**
+             * The name of the field.
+             */
+            field: string,
+            /** 
+             * The 'AS' parameter following a "field" name, used by index type "JSON".
+            */
+            as?: string,
+        }[],
+    },
     /**
      * The 'SUMMARIZE' parameter. Use this option to return only the sections of the field which contain the matched text. 
      */
@@ -781,7 +816,10 @@ export interface FTSearchParameters {
         /**
          * The fields argument of the 'SUMMARIZE' parameter
          */
-        fields?: string[],
+        fields?: {
+            num?: number,
+            fields: string | string[],
+        },
         /**
          * The fargs argument of the 'SUMMARIZE' parameter
          */
@@ -802,7 +840,10 @@ export interface FTSearchParameters {
         /**
          * The fields argument of the 'HIGHLIGHT' parameter
          */
-        fields?: string[],
+        fields?: {
+            num?: number,
+            fields: string | string[],
+        },
         /**
          * The tags argument of the 'HIGHLIGHT' parameter
          */
