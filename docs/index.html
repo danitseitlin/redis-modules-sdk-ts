@@ -42,87 +42,6 @@
 
 
 
-    <section>
-        <article><p align='center'>
-  <a href='https://www.npmjs.com/package/redis-modules-sdk-ts'>
-    <img src='https://img.shields.io/npm/v/redis-modules-sdk/latest?style=plastic' target='_blank' />
-  </a>
-  <a href='https://npmjs.org/package/redis-modules-sdk-ts' style='width:25px;height:20px;'>
-    <img src='https://img.shields.io/npm/dm/redis-modules-sdk.svg?color=blue&style=plastic' target='_blank' />
-  </a>
-  <a href='https://github.com/danitseitlin/redis-modules-sdk-ts/issues' style='width:25px;height:20px;'>
-    <img src='https://img.shields.io/github/issues/danitseitlin/redis-modules-sdk?style=plastic' target='_blank' />
-  </a>
-  <a href='https://npmjs.org/package/redis-modules-sdk' style='width:25px;height:20px;'>
-    <img src='https://img.shields.io/bundlephobia/min/redis-modules-sdk/latest?style=plastic' target='_blank' />
-  </a>
-  <a href='https://github.com/danitseitlin/redis-modules-sdk/commits/master'>
-    <img src='https://img.shields.io/github/last-commit/danitseitlin/redis-modules-sdk?style=plastic' />
-  </a>
-  <a href='https://github.com/danitseitlin/redis-modules-sdk/blob/master/LICENSE'>
-    <img src='https://img.shields.io/badge/license-BSD%203%20Clause-blue.svg?style=plastic' target='_blank' />
-  </a>
-</p></p>
-<h4>A Software development kit for easier connection and execution of Redis Modules commands</h4>
-<p align='center'>
-  <img src='https://github.com/danitseitlin/redis-modules-sdk/blob/master/.github/images/logo.png' />
-</p>
-<h1>A few words :speech_balloon:</h1>
-<p>An open source SDK of all the available Redis modules, built with TypeScript for better typing experiences and better usages.</p>
-<h2>Benefits :zap: :speak_no_evil:</h2>
-<ol>
-<li>All in 1, all Redis modules are covered in 1 project</li>
-<li>Amazing :fire: typing experiences, all types are well documented and easy to use!</li>
-<li>Easy to find your Redis command, each Redis module command has a referenced function in it's class!</li>
-</ol>
-<h1>Let's get started :memo:</h1>
-<h3>Installing latest version:<br></h3>
-<pre class="prettyprint source"><code>npm install redis-modules-sdk@latest
-</code></pre>
-<h3>Versions &amp; Releases</h3>
-<ul>
-<li>A list of existing versions can be found <a href="https://www.npmjs.com/package/redis-modules-sdk?activeTab=versions">here</a></li>
-<li>A list of releases will be found <a href="https://github.com/danitseitlin/redis-modules-sdk/releases">here</a></li>
-</ul>
-<h1>Documentation :book:</h1>
-<p>Come and read our documentation <a href="https://github.com/danitseitlin/redis-modules-sdk/blob/master/docs/doc.md#documentation-book">here</a> before starting</p>
-<ul>
-<li><a href="https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#redis-all-in-one-feature">Redis All in One</a></li>
-<li><a href="https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#-rejson-module">ReJSON</a></li>
-<li><a href="https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#-redistimeseries-module">RedisTimeSeries</a> (RTS)</li>
-<li><a href="https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#-redisearch-module">RediSearch</a></li>
-<li><a href="https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#-redisgraph-module">RedisGraph</a></li>
-<li><a href="https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#-redisgears-module">RedisGears</a></li>
-<li><a href="https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#bloom-filter">RedisBloom</a></li>
-<li><a href="https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#-redisai-module">RedisAI</a></li>
-<li><a href="https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#ris-module">RedisIntervalSets</a></li>
-</ul>
-<h1>Redis &quot;All in One&quot;! :scream:</h1>
-<p>A class built for integrating more than one Redis module without creating more than one class!</p>
-<pre class="prettyprint source"><code>const client = new Redis(....);
-await client.connect();
-await client.ai_module_tensorset(...);
-await client.ris_module_add(...);
-await client.disconnect();
-</code></pre>
-<p>All modules are supported! :fire:</p>
-<h1>Supported modules :dark_sunglasses:</h1>
-<ul>
-<li><a href="https://github.com/RedisJSON/RedisJSON">ReJSON</a></li>
-<li><a href="https://github.com/RedisTimeSeries/RedisTimeSeries">RedisTimeSeries</a> (RTS)</li>
-<li><a href="https://github.com/RediSearch/RediSearch">RediSearch</a></li>
-<li><a href="https://github.com/RedisGraph/RedisGraph">RedisGraph</a></li>
-<li><a href="https://github.com/RedisGears/RedisGears">RedisGears</a></li>
-<li><a href="https://github.com/RedisBloom/RedisBloom">RedisBloom</a></li>
-<li><a href="https://github.com/RedisAI/RedisAI">RedisAI</a></li>
-<li><a href="https://github.com/danitseitlin/redis-interval-sets">RedisIntervalSets</a></li>
-</ul>
-<h1>Contributing :raised_hands:</h1>
-<p>Interested in contributing? awesome! start with reading our guidelines <a href="https://github.com/danitseitlin/redis-modules-sdk/blob/master/docs/contributing.md#contributing-guide">here</a></p>
-<h1>Supporters :open_hands:</h1>
-<p><a href="https://github.com/danitseitlin/redis-modules-sdk/stargazers"><img src="https://reporoster.com/stars/danitseitlin/redis-modules-sdk" alt="Stargazers repo roster for @danitseitlin/redis-modules-sdk"></a></p></article>
-    </section>
-
 
 
 
@@ -137,7 +56,7 @@ await client.disconnect();
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu Sep 02 2021 01:49:29 GMT+0300 (Israel Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu Sep 02 2021 01:54:26 GMT+0300 (Israel Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
