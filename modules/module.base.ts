@@ -109,9 +109,11 @@ export class Module {
         }
         else if(Array.isArray(response) && response.length === 1){
             return this.handleResponse(response[0])
-        }else if(Array.isArray(response) && response.length > 1 && this.isOnlyTwoDimensionalArray(response)){
+        }
+        else if(Array.isArray(response) && response.length > 1 && this.isOnlyTwoDimensionalArray(response)){
             return this.handleResponse(this.reduceArrayDimension(response))
-        }else if(returnSingleDimensionArray && Array.isArray(response) && response.every(entry => !Array.isArray(entry))){
+        }
+        else if(returnSingleDimensionArray && Array.isArray(response) && response.every(entry => !Array.isArray(entry))){
             //Return single dimension arrays
             return response;
         }
@@ -155,26 +157,26 @@ export class Module {
      * @returns A param value converted to string
      */
     paramToString(paramValue: string): string {
-        if (paramValue == null) return 'null';
-        const paramType = typeof paramValue;
-        if (paramType == 'string') {
-            let strValue = "";
-            paramValue = paramValue.replace(/[\\"']/g, '\\$&');
-            if (paramValue[0] != '"') strValue += "'";
-            strValue += paramValue;
-            if (!paramValue.endsWith('"') || paramValue.endsWith("\\\"")) strValue += "'";
-            return strValue;
-        }
+		if(paramValue == null) return 'null';
+		const paramType = typeof paramValue;
+		if(paramType == 'string') {
+			let strValue = "";
+            paramValue = paramValue.replace(/[\\"']/g, '\\$&');  
+			if(paramValue[0] != '"') strValue += "'";
+			strValue += paramValue;
+			if(!paramValue.endsWith('"') || paramValue.endsWith("\\\"")) strValue += "'";
+			return strValue;
+		}
 
-        if (Array.isArray(paramValue)) {
-            const stringsArr = new Array(paramValue.length);
-            for (let i = 0; i < paramValue.length; i++) {
-                stringsArr[i] = this.paramToString(paramValue[i]);
-            }
-            return ["[", stringsArr.join(", "), "]"].join("");
-        }
-        return paramValue;
-    }
+		if(Array.isArray(paramValue)) {
+			const stringsArr = new Array(paramValue.length);
+			for(let i = 0; i < paramValue.length; i++) {
+				stringsArr[i] = this.paramToString(paramValue[i]);
+			}
+			return ["[", stringsArr.join(", "), "]"].join("");
+		}
+		return paramValue;
+	}
 }
 
 /**
