@@ -98,75 +98,68 @@ export class Module {
      */
     handleResponse(response: any, isSearchQuery = false): any {
         //If not an array/object
-        try {
-            if(
-                (typeof response === 'string' ||
-                typeof response === 'number' ||
-                (Array.isArray(response) && response.length % 2 === 1 && response.length > 1 && !this.isOnlyTwoDimensionalArray(response)) ||
-                (Array.isArray(response) && response.length === 0)) &&
-                !isSearchQuery
-            ) {
-                return response;
-            }
-            else if(Array.isArray(response) && response.length === 1) {
-                return this.handleResponse(response[0])
-            }
-            else if(isSearchQuery) {
-                    //Search queries should be parsed into objects, if possible.
-                    let responseObjects = response;
-                    if(Array.isArray(response) && response.length % 2 === 1) {
-                        // Put index as 0th element
-                        responseObjects = [response[0]];
-                        // Go through returned keys (doc:1, doc:2, ...)
-                        for(let i = 1; i < response.length; i += 2) {
-                            // propertyArray is the key-value pairs eg: ['name', 'John']
-                            const propertyArray = response[i+1];
-                            responseObjects.push({
-                                key: response[i] //This is the key, 'eg doc:1'
-                            });
-                        
-                            if(Array.isArray(propertyArray) && propertyArray.length % 2 === 0) {
-                                for(let j = 0; j < propertyArray.length; j += 2){
-                                    // Add keys to last responseObjects item
-                                    // propertyArray[j] = key name
-                                    // propertyArray[j+1] = value
-                                    responseObjects[responseObjects.length - 1][propertyArray[j]] = propertyArray[j+1];
-                                }
+        if(
+            (typeof response === 'string' ||
+            typeof response === 'number' ||
+            (Array.isArray(response) && response.length % 2 === 1 && response.length > 1 && !this.isOnlyTwoDimensionalArray(response)) ||
+            (Array.isArray(response) && response.length === 0)) &&
+            !isSearchQuery
+        ) {
+            return response;
+        }
+        else if(Array.isArray(response) && response.length === 1) {
+            return this.handleResponse(response[0])
+        }
+        else if(isSearchQuery) {
+                //Search queries should be parsed into objects, if possible.
+                let responseObjects = response;
+                if(Array.isArray(response) && response.length % 2 === 1) {
+                    // Put index as 0th element
+                    responseObjects = [response[0]];
+                    // Go through returned keys (doc:1, doc:2, ...)
+                    for(let i = 1; i < response.length; i += 2) {
+                        // propertyArray is the key-value pairs eg: ['name', 'John']
+                        const propertyArray = response[i+1];
+                        responseObjects.push({
+                            key: response[i] //This is the key, 'eg doc:1'
+                        });
+                        if(Array.isArray(propertyArray) && propertyArray.length % 2 === 0) {
+                            for(let j = 0; j < propertyArray.length; j += 2){
+                                // Add keys to last responseObjects item
+                                // propertyArray[j] = key name
+                                // propertyArray[j+1] = value
+                                responseObjects[responseObjects.length - 1][propertyArray[j]] = propertyArray[j+1];
                             }
                         }
                     }
-                    //Check for a single dimensional array, these should only be keys, if im right
-                    else if(response.every(entry => !Array.isArray(entry))) {
-                        responseObjects = [response[0]];
-                        for(let i = 1; i < response.length; i ++) {
-                            responseObjects.push({
-                                key: response[i],
-                            });
-                        }
-                    }
-                    return responseObjects;
-            }
-            else if(Array.isArray(response) && response.length > 1 && this.isOnlyTwoDimensionalArray(response)) {
-                return this.handleResponse(this.reduceArrayDimension(response))
-            }
-        
-            const obj = {}
-            //If is an array/obj we will build it
-            for(let i = 0; i < response.length; i += 2) {
-                if(response[i + 1] !== '' && response[i + 1] !== undefined) {
-                    if(Array.isArray(response[i + 1]) && this.isOnlyTwoDimensionalArray(response[i + 1])) {
-                        obj[response[i]] = this.reduceArrayDimension(response[i + 1]);
-                        continue;
-                    }
-                    const value = (Array.isArray(response[i + 1]) ? this.handleResponse(response[i + 1]) : response[i + 1])
-                    obj[response[i]] = value;
                 }
-            }
-            return obj
-        } catch(err) {
-            // console.log(this.handleError('An error occurred while parsing response\n' + err));
-            return response;
+                //Check for a single dimensional array, these should only be keys, if im right
+                else if(response.every(entry => !Array.isArray(entry))) {
+                    responseObjects = [response[0]];
+                    for(let i = 1; i < response.length; i ++) {
+                        responseObjects.push({
+                            key: response[i],
+                        });
+                    }
+                }
+                return responseObjects;
         }
+        else if(Array.isArray(response) && response.length > 1 && this.isOnlyTwoDimensionalArray(response)) {
+            return this.handleResponse(this.reduceArrayDimension(response))
+        }
+        const obj = {}
+        //If is an array/obj we will build it
+        for(let i = 0; i < response.length; i += 2) {
+            if(response[i + 1] !== '' && response[i + 1] !== undefined) {
+                if(Array.isArray(response[i + 1]) && this.isOnlyTwoDimensionalArray(response[i + 1])) {
+                    obj[response[i]] = this.reduceArrayDimension(response[i + 1]);
+                    continue;
+                }
+                const value = (Array.isArray(response[i + 1]) ? this.handleResponse(response[i + 1]) : response[i + 1])
+                obj[response[i]] = value;
+            }
+        }
+        return obj
     }
 
     /**
