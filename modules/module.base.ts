@@ -187,6 +187,7 @@ export class Module {
      * @returns A param value converted to string
      */
     paramToString(paramValue: string): string {
+<<<<<<< HEAD
         if(paramValue == null) return 'null';
         const paramType = typeof paramValue;
         if(paramType == 'string') {
@@ -207,6 +208,28 @@ export class Module {
         }
         return paramValue;
     }
+=======
+		if(paramValue == null) return 'null';
+		const paramType = typeof paramValue;
+		if(paramType == 'string') {
+			let strValue = "";
+            paramValue = paramValue.replace(/[\\"']/g, '\\$&');  
+			if(paramValue[0] != '"') strValue += "'";
+			strValue += paramValue;
+			if(!paramValue.endsWith('"') || paramValue.endsWith("\\\"")) strValue += "'";
+			return strValue;
+		}
+
+		if(Array.isArray(paramValue)) {
+			const stringsArr = new Array(paramValue.length);
+			for(let i = 0; i < paramValue.length; i++) {
+				stringsArr[i] = this.paramToString(paramValue[i]);
+			}
+			return ["[", stringsArr.join(", "), "]"].join("");
+		}
+		return paramValue;
+	}
+>>>>>>> 5c9f2e82e3f383a3f9d22ce4e16e302e542b120f
 }
 
 /**
