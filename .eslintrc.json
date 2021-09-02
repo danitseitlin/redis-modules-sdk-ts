@@ -6,7 +6,7 @@
         "plugin:@typescript-eslint/recommended"
     ],
     "overrides": [{
-        "files": ["*/*.ts"],
+        "files": ["*.ts", "*/*.ts", "*/*/*.ts", "*/*/*/*.ts"],
         "rules": {
             "keyword-spacing": ["error", {
                 "overrides":{
