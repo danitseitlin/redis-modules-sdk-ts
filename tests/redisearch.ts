@@ -119,7 +119,7 @@ describe('RediSearch Module testing', async function () {
             }
         )
     })
-     it('Simple search test with field specified in query', async () => {
+    it('Simple search test with field specified in query', async () => {
         const [count, ...result] = await client.search(`${index}-searchtest`, '@name:Doe');
         expect(count).to.equal(2, 'Total number of returining document of FT.SEARCH command')
         expect((result[0] as {[key: string]: string}).key).to.equal('doc:1', 'first document key')
