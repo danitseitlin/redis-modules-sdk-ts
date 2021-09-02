@@ -13,15 +13,14 @@ export class Module {
 
     /**
      * Initializing the module object
-     * @constructor
-     * @param { string } name The name of the module
-     * @param clusterNodes The nodes of the cluster
-     * @param moduleOptions The additional module options
+     * @param {string} name The name of the module
+     * @param {IORedis.ClusterNode[]} clusterNodes The nodes of the cluster
+     * @param {RedisModuleOptions} moduleOptions The additional module options
      * @param moduleOptions.isHandleError If to throw error on error
      * @param moduleOptions.showDebugLogs If to print debug logs
      * @param clusterOptions The options of the clusters
      */
-    constructor(name: string, clusterNodes: IORedis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: IORedis.ClusterOptions, )
+    constructor(name: string, clusterNodes: IORedis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: IORedis.ClusterOptions)
     /**
      * Initializing the module object
      * @param name The name of the module
