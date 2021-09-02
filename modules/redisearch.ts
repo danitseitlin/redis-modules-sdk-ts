@@ -39,16 +39,20 @@ export class Redisearch extends Module {
         let args: string[] = [index, 'ON', indexType]
         if(parameters !== undefined) {
             if(parameters.prefix !== undefined) {
-                args.push('PREFIX');
-                for(const prefix of parameters.prefix)
-                    args = args.concat([prefix.count.toString(), prefix.name])
+                args.push('PREFIX')
+                args.push(
+                    parameters.prefix.num !== undefined ?
+                        `${parameters.prefix.num}` :
+                        `${parameters.prefix.prefixes.length}`
+                )
+                args = args.concat(parameters.prefix.prefixes);
             }
             if(parameters.filter !== undefined)
                 args = args.concat(['FILTER', parameters.filter])
             if(parameters.language !== undefined)
                 args = args.concat(['LANGUAGE', parameters.language]);
             if(parameters.languageField !== undefined)
-                args = args.concat(['LANGUAGE_FIELD', parameters.languageField]);
+                args = args.concat(['LANGUAGE_FIELD', parameters.languageField])
             if(parameters.score !== undefined)
                 args = args.concat(['SCORE', parameters.score])
             if(parameters.scoreField !== undefined)
@@ -56,34 +60,43 @@ export class Redisearch extends Module {
             if(parameters.payloadField !== undefined)
                 args = args.concat(['PAYLOAD_FIELD', parameters.payloadField])
             if(parameters.maxTextFields !== undefined)
-                args = args.concat(['MAXTEXTFIELDS', parameters.maxTextFields.toString()])
-            if(parameters.noOffsets !== undefined)
-                args.push('NOOFFSETS');
+                args = args.concat(['MAXTEXTFIELDS', `${parameters.maxTextFields}`])
             if(parameters.temporary !== undefined)
-                args.push('TEMPORARY');
-            if(parameters.nohl !== undefined)
-                args.push('NOHL');
-            if(parameters.noFields !== undefined)
-                args.push('NOFIELDS');
-            if(parameters.noFreqs !== undefined)
-                args.push('NOFREQS');
-            if(parameters.stopwords !== undefined)
-                args = args.concat(['STOPWORDS', parameters.stopwords.num.toString(), parameters.stopwords.stopword]);
-            if(parameters.skipInitialScan !== undefined)
-                args.push('SKIPINITIALSCAN');
+                args = args.concat(['TEMPORARY', `${parameters.temporary}`])
+            if(parameters.noOffsets === true)
+                args.push('NOOFFSETS')
+            if(parameters.nohl === true)
+                args.push('NOHL')
+            if(parameters.noFields === true)
+                args.push('NOFIELDS')
+            if(parameters.noFreqs === true)
+                args.push('NOFREQS')
+            if(parameters.stopwords !== undefined) {
+                args.push('STOPWORDS')
+                args.push(
+                    parameters.stopwords.num !== undefined ?
+                        `${parameters.stopwords.num}` :
+                        `${parameters.stopwords.stopwords.length}`
+                )
+                args = args.concat(parameters.stopwords.stopwords);
+            }
+            if(parameters.skipInitialScan === true)
+                args.push('SKIPINITIALSCAN')
         }
         args.push('SCHEMA');
         for(const field of schemaFields) {
             args.push(field.name)
-            if(field.as)
+            if(field.as !== undefined)
                 args = args.concat(['AS', field.as])
             args.push(field.type);
-            if(field.nostem !== undefined) args.push('NOSTEM');
-            if(field.weight !== undefined) args = args.concat(['WEIGHT', field.weight.toString()]);
-            if(field.phonetic !== undefined) args = args.concat(['PHONETIC', field.phonetic]);
-            if(field.seperator !== undefined) args = args.concat(['SEPERATOR', field.seperator]);
-            if(field.sortable !== undefined) args.push('SORTABLE');
-            if(field.noindex !== undefined) args.push('NOINDEX');
+            if(field.nostem === true) args.push('NOSTEM');
+            if(field.weight !== undefined) args = args.concat(['WEIGHT', `${field.weight}`])
+            if(field.phonetic !== undefined) args = args.concat(['PHONETIC', field.phonetic])
+            if(field.seperator !== undefined) args = args.concat(['SEPERATOR', field.seperator])
+            if(field.sortable === true) args.push('SORTABLE')
+            if(field.noindex === true) args.push('NOINDEX')
+            if(field.unf === true) args.push('UNF')
+            if(field.caseSensitive === true) args.push('CASESENSITIVE')
         }
         const response = await this.sendCommand('FT.CREATE', args);
         return this.handleResponse(response);
@@ -96,13 +109,13 @@ export class Redisearch extends Module {
      * @param parameters The additional optional parameter
      * @returns Array reply, where the first element is the total number of results, and then pairs of document id, and a nested array of field/value.
      */
-    async search(index: string, query: string, parameters?: FTSearchParameters): Promise<[number, ...Array<string | string[]>]> {
-        let args: string[] = [];//[index, query];
+    async search(index: string, query: string, parameters?: FTSearchParameters): Promise<[number, ...Array<string | string[] | {[key: string]: string}>]> {
+        let args: string[] = [index, query];
         if(parameters !== undefined) {
             if(parameters.noContent === true)
                 args.push('NOCONTENT')
             if(parameters.verbatim === true)
-                args.push('VERBARIM')
+                args.push('VERBATIM')
             if(parameters.noStopWords === true)
                 args.push('NOSTOPWORDS')
             if(parameters.withScores === true)
@@ -111,65 +124,87 @@ export class Redisearch extends Module {
                 args.push('WITHPAYLOADS')
             if(parameters.withSortKeys === true)
                 args.push('WITHSORTKEYS')
-            if(parameters.filter !== undefined)
-                args = args.concat(['FILTER', parameters.filter.field, parameters.filter.min.toString(), parameters.filter.max.toString()])
+            if(parameters.filter !== undefined) {
+                for(const filterItem of parameters.filter) {
+                    args = args.concat(['FILTER', filterItem.field, `${filterItem.min}`, `${filterItem.max}`])
+                }
+            }
             if(parameters.geoFilter !== undefined)
                 args = args.concat([
                     'GEOFILTER',
                     parameters.geoFilter.field,
-                    parameters.geoFilter.lon.toString(),
-                    parameters.geoFilter.lat.toString(),
-                    parameters.geoFilter.radius.toString(),
+                    `${parameters.geoFilter.lon}`,
+                    `${parameters.geoFilter.lat}`,
+                    `${parameters.geoFilter.radius}`,
                     parameters.geoFilter.measurement
                 ])
             if(parameters.inKeys !== undefined)
-                args = args.concat(['INKEYS', parameters.inKeys.num.toString(), parameters.inKeys.field])
+                args = args.concat([
+                    'INKEYS',
+                    parameters.inKeys.num !== undefined ?
+                        `${parameters.inKeys.num}` :
+                        `${parameters.inKeys.keys.length}`,
+                ]).concat(parameters.inKeys.keys);
             if(parameters.inFields !== undefined)
-                args = args.concat(['INFIELDS', parameters.inFields.num.toString(), parameters.inFields.field])
+                args = args.concat([
+                    'INFIELDS',
+                    parameters.inFields.num !== undefined ?
+                        `${parameters.inFields.num}` :
+                        `${parameters.inFields.fields.length}`,
+                ]).concat(parameters.inFields.fields);
             if(parameters.return !== undefined) {
-                args.push('RETURN');
-                if(parameters.return.num)
-                    args.push(parameters.return.num.toString());
-                if(parameters.return.fields)    
-                    parameters.return.fields.forEach(field => {
-                        args.push(field.name)
-                        if(field.as)
-                            args = args.concat(['AS', field.as])
-                    })
+                args = args.concat([
+                    'RETURN',
+                    parameters.return.num !== undefined ?
+                        `${parameters.return.num}` :
+                        `${parameters.return.fields.length}`,
+                ]).concat(
+                    ...parameters.return.fields.map(
+                        (field) => {
+                            if(field.as !== undefined) {
+                                return [field.field, 'AS', field.as];
+                            }
+                            return [field.field];
+                        },
+                    )
+                );
             }
             if(parameters.summarize !== undefined) {
                 args.push('SUMMARIZE')
                 if(parameters.summarize.fields !== undefined) {
                     args.push('FIELDS')
-                    for(const field of parameters.summarize.fields) {
-                        args = args.concat([field.num.toString(), field.field]);
-                    }
+                    args.push(
+                        parameters.summarize.fields.num !== undefined ?
+                            `${parameters.summarize.fields.num}` :
+                            `${parameters.summarize.fields.fields.length}`
+                    )
+                    args = args.concat(parameters.summarize.fields.fields)
                 }
-                if(parameters.summarize.frags !== undefined) 
-                    args = args.concat(['FRAGS', parameters.summarize.frags.toString()])
-                if(parameters.summarize.len !== undefined) 
-                    args = args.concat(['LEN', parameters.summarize.len.toString()])
-                if(parameters.summarize.seperator !== undefined) 
+                if(parameters.summarize.frags !== undefined)
+                    args = args.concat(['FRAGS', `${parameters.summarize.frags}`])
+                if(parameters.summarize.len !== undefined)
+                    args = args.concat(['LEN', `${parameters.summarize.len}`])
+                if(parameters.summarize.seperator !== undefined)
                     args = args.concat(['SEPARATOR', parameters.summarize.seperator])
             }
             if(parameters.highlight !== undefined) {
                 args.push('HIGHLIGHT')
                 if(parameters.highlight.fields !== undefined) {
-                    args.push('FIELDS')
-                    for(const field of parameters.highlight.fields) {
-                        args = args.concat([field.num.toString(), field.field]);
-                    }
+                    args = args.concat([
+                        'FIELDS',
+                        parameters.highlight.fields.num !== undefined ?
+                            `${parameters.highlight.fields.num}` :
+                            `${parameters.highlight.fields.fields.length}`,
+                    ]).concat(parameters.highlight.fields.fields);
                 }
                 if(parameters.highlight.tags !== undefined) {
                     args.push('TAGS')
-                    for(const tag of parameters.highlight.tags) {
-                        args = args.concat([tag.open, tag.close]);
-                    }
+                    args = args.concat([parameters.highlight.tags.open, parameters.highlight.tags.close])
                 }
             }
             if(parameters.slop !== undefined)
-                args = args.concat(['SLOP', parameters.slop.toString()])
-            if(parameters.inOrder !== undefined)
+                args = args.concat(['SLOP', `${parameters.slop}`])
+            if(parameters.inOrder === true)
                 args.push('INORDER')
             if(parameters.language !== undefined)
                 args = args.concat(['LANGUAGE', parameters.language])
@@ -177,18 +212,18 @@ export class Redisearch extends Module {
                 args = args.concat(['EXPANDER', parameters.expander])
             if(parameters.scorer !== undefined)
                 args = args.concat(['SCORER', parameters.scorer])
-            if(parameters.explainScore !== undefined)
+            if(parameters.explainScore === true)
                 args.push('EXPLAINSCORE')
             if(parameters.payload)
                 args = args.concat(['PAYLOAD', parameters.payload])
             if(parameters.sortBy !== undefined)
                 args = args.concat(['SORTBY', parameters.sortBy.field, parameters.sortBy.sort])
             if(parameters.limit !== undefined)
-                args = args.concat(['LIMIT', parameters.limit.first.toString(), parameters.limit.num.toString()])
+                args = args.concat(['LIMIT', `${parameters.limit.first}`, `${parameters.limit.num}`])
         }
-        console.log(args)
-        const response = await this.sendCommand('FT.SEARCH', [index, query, args.join(' ')]);
-        return this.handleResponse(response);
+        const response = await this.sendCommand('FT.SEARCH', args);
+        const parseResponse = parameters?.parseSearchQueries ?? true;
+        return this.handleResponse(response, parseResponse);
     }
 
     /**
@@ -218,7 +253,7 @@ export class Redisearch extends Module {
                         args = args.concat(['AS', apply.as]);
                 })
             }
-            if(parameters.groupby !== undefined){
+            if(parameters.groupby !== undefined) {
                 args.push('GROUPBY')
                 if(parameters.groupby.nargs !== undefined)
                     args.push(parameters.groupby.nargs);
@@ -253,7 +288,7 @@ export class Redisearch extends Module {
                         args.push(property.sort);
                     })
                 if(parameters.sortby.max !== undefined)
-                    args = args.concat(['MAX', parameters.sortby.max.toString()]);
+                    args = args.concat(['MAX', `${parameters.sortby.max}`]);
             }
             if(parameters.expressions !== undefined) {
                 parameters.expressions.forEach(expression => {
@@ -268,7 +303,7 @@ export class Redisearch extends Module {
                 if(parameters.limit.offset !== undefined)
                     args.push(parameters.limit.offset)
                 if(parameters.limit.numberOfResults !== undefined)
-                    args.push(parameters.limit.numberOfResults.toString());
+                    args.push(`${parameters.limit.numberOfResults}`);
             }
         }
         const response = await this.sendCommand('FT.AGGREGATE', args);
@@ -308,12 +343,14 @@ export class Redisearch extends Module {
     async alter(index: string, field: string, fieldType: FTFieldType, options?: FTFieldOptions): Promise<'OK' | string> {
         let args = [index, 'SCHEMA', 'ADD', field, fieldType]
         if(options !== undefined) {
-            if(options.sortable !== undefined) args.push('SORTABLE');
-            if(options.noindex !== undefined) args.push('NOINDEX');
-            if(options.nostem !== undefined) args.push('NOSTEM');
-            if(options.phonetic !== undefined) args = args.concat(['PHONETIC', options.phonetic]);
-            if(options.seperator !== undefined) args = args.concat(['SEPERATOR', options.seperator]);
-            if(options.weight !== undefined) args = args.concat(['WEIGHT', options.weight.toString()]);
+            if(options.nostem === true) args.push('NOSTEM')
+            if(options.weight !== undefined) args = args.concat(['WEIGHT', `${options.weight}`])
+            if(options.phonetic !== undefined) args = args.concat(['PHONETIC', options.phonetic])
+            if(options.seperator !== undefined) args = args.concat(['SEPERATOR', options.seperator])
+            if(options.sortable === true) args.push('SORTABLE')
+            if(options.noindex === true) args.push('NOINDEX')
+            if(options.unf === true) args.push('UNF')
+            if(options.caseSensitive === true) args.push('CASESENSITIVE')
         }
         const response = await this.sendCommand('FT.ALTER', args);
         return this.handleResponse(response);
@@ -331,7 +368,7 @@ export class Redisearch extends Module {
         const response = await this.sendCommand('FT.DROPINDEX', args);
         return this.handleResponse(response);
     }
-    
+
     /**
      * Adding alias fron an index
      * @param name The alias name
@@ -363,7 +400,7 @@ export class Redisearch extends Module {
         const response = await this.sendCommand('FT.ALIASDEL', [name]);
         return this.handleResponse(response);
     }
-    
+
     /**
      * Retrieving the distinct tags indexed in a Tag field
      * @param index The index
@@ -383,12 +420,14 @@ export class Redisearch extends Module {
      * @param options The additional optional parameters
      * @returns The current size of the suggestion dictionary
      */
-    async sugadd(key: string, suggestion: string, score: number, options?: FTSugAddParameters): Promise<number>{
+    async sugadd(key: string, suggestion: string, score: number, options?: FTSugAddParameters): Promise<number> {
         let args = [key, suggestion, score];
-        if(options !== undefined && options.incr !== undefined)
-            args.push('INCR');
-        if(options !== undefined && options.payload !== undefined)
-            args = args.concat(['PAYLOAD', options.payload]);
+        if(options !== undefined) {
+            if(options.incr === true)
+                args.push('INCR');
+            if(options.payload !== undefined)
+                args = args.concat(['PAYLOAD', options.payload]);
+        }
         const response = await this.sendCommand('FT.SUGADD', args);
         return this.handleResponse(response);
     }
@@ -402,14 +441,16 @@ export class Redisearch extends Module {
      */
     async sugget(key: string, prefix: string, options?: FTSugGetParameters): Promise<string> {
         let args = [key, prefix];
-        if(options !== undefined && options.fuzzy !== undefined)
-            args.push('FUZZY');
-        if(options !== undefined && options.max !== undefined)   
-            args = args.concat(['MAX', options.max.toString()]);
-        if(options !== undefined && options.withScores !== undefined)
-            args.push('WITHSCORES');
-        if(options !== undefined && options.withPayloads !== undefined)
-            args.push('WITHPAYLOADS');
+        if(options !== undefined) {
+            if(options.fuzzy === true)
+                args.push('FUZZY');
+            if(options.max !== undefined)
+                args = args.concat(['MAX', `${options.max}`]);
+            if(options.withScores === true)
+                args.push('WITHSCORES');
+            if(options.withPayloads === true)
+                args.push('WITHPAYLOADS');
+        }
         const response = await this.sendCommand('FT.SUGGET', args);
         return this.handleResponse(response);
     }
@@ -442,9 +483,10 @@ export class Redisearch extends Module {
      * @returns 'OK'
      */
     async synupdate(index: string, groupId: number, terms: string[], skipInitialScan = false): Promise<'OK'> {
-        const args = [index, groupId].concat(terms);
+        let args = [index, groupId];
         if(skipInitialScan === true)
             args.push('SKIPINITIALSCAN');
+        args = args.concat(terms);
         const response = await this.sendCommand('FT.SYNUPDATE', args);
         return this.handleResponse(response);
     }
@@ -466,20 +508,22 @@ export class Redisearch extends Module {
      * @param options The additional optional parameters
      * @returns An array, in which each element represents a misspelled term from the query
      */
-    async spellcheck(index: string, query: string, options?: FTSpellCheck): Promise<string[]>  {
+    async spellcheck(index: string, query: string, options?: FTSpellCheck): Promise<string[]> {
         let args = [index, query];
-        if(options !== undefined && options.distance !== undefined)
-            args = args.concat(['DISTANCE', options.distance])
-        if(options !== undefined && options.terms !== undefined) {
-            args.push('TERMS');
-            for(const term of options.terms) {
-                args = args.concat([term.type, term.dict]);
+        if(options !== undefined) {
+            if(options.distance !== undefined)
+                args = args.concat(['DISTANCE', `${options.distance}`]);
+            if(options.terms !== undefined) {
+                args.push('TERMS');
+                for(const term of options.terms) {
+                    args = args.concat([term.type, term.dict]);
+                }
             }
         }
         const response = await this.sendCommand('FT.SPELLCHECK', args);
         return this.handleResponse(response);
     }
-    
+
     /**
      * Adding terms to a dictionary
      * @param dict The dictionary
@@ -540,289 +584,467 @@ export class Redisearch extends Module {
 
 /**
  * The 'FT.CREATE' additional optional parameters
- * @param filter The expression of the 'FILTER' parameter. is a filter expression with the full RediSearch aggregation expression language.
- * @param payloadField The field of the 'PAYLOAD' parameter. If set indicates the document field that should be used as a binary safe payload string to the document, that can be evaluated at query time by a custom scoring function, or retrieved to the client.
- * @param maxTextFields The 'MAXTEXTFIELDS' parameter. For efficiency, RediSearch encodes indexes differently if they are created with less than 32 text fields.
- * @param noOffsets The 'NOFFSETS' parameter. If set, we do not store term offsets for documents (saves memory, does not allow exact searches or highlighting).
- * @param temporary The 'TEMPORARY' parameter. Create a lightweight temporary index which will expire after the specified period of inactivity.
- * @param nohl The 'NOHL' parameter. Conserves storage space and memory by disabling highlighting support. If set, we do not store corresponding byte offsets for term positions.
- * @param noFields The 'NOFIELDS' parameter. If set, we do not store field bits for each term.
- * @param noFreqs The 'NOFREQS' parameter.  If set, we avoid saving the term frequencies in the index.
- * @param skipInitialScan The 'SKIPINITIALSCAN' parameter. If set, we do not scan and index. 
- * @param prefix The 'PREFIX' parameter. tells the index which keys it should index.
- * @param prefix.count The count argument of the 'PREFIX' parameter. 
- * @param prefix.name The name argument of the 'PREFIX' parameter. 
- * @param language The 'LANGUAGE' parameter.  If set indicates the default language for documents in the index.
- * @param languageField The 'LANGUAGE_FIELD' parameter. If set indicates the document field that should be used as the document language.
- * @param score The 'SCORE' parameter. If set indicates the default score for documents in the index.
- * @param scoreField The 'SCORE_FIELD' parameter. If set indicates the document field that should be used as the document's rank based on the user's ranking. 
- * @param stopwords The 'STOPWORDS' parameter. If set, we set the index with a custom stopword list, to be ignored during indexing and search time.
- * @param stopwords.num The num argument of the 'STOPWORDS' parameter. 
- * @param stopwords.stopword The stopword argument of the 'STOPWORDS' parameter.
- */
-export type FTCreateParameters = {
+*/
+export interface FTCreateParameters {
+    /**
+    * The expression of the 'FILTER' parameter. is a filter expression with the full RediSearch aggregation expression language.
+    */
     filter?: string,
+    /**
+    * The field of the 'PAYLOAD' parameter. If set indicates the document field that should be used as a binary safe payload string to the document, that can be evaluated at query time by a custom scoring function, or retrieved to the client.
+    */
     payloadField?: string,
+    /**
+    * The 'MAXTEXTFIELDS' parameter. For efficiency, RediSearch encodes indexes differently if they are created with less than 32 text fields.
+    */
     maxTextFields?: number,
-    noOffsets?: string,
+    /**
+    * The 'NOFFSETS' parameter. If set, we do not store term offsets for documents (saves memory, does not allow exact searches or highlighting).
+    */
+    noOffsets?: boolean,
+    /**
+    * The 'TEMPORARY' parameter. Create a lightweight temporary index which will expire after the specified period of inactivity.
+    */
     temporary?: number,
-    nohl?: string,
-    noFields?: string,
-    noFreqs?: string,
+    /** 
+    * The 'NOHL' parameter. Conserves storage space and memory by disabling highlighting support. If set, we do not store corresponding byte offsets for term positions.
+    */
+    nohl?: boolean,
+    /**
+    *  The 'NOFIELDS' parameter. If set, we do not store field bits for each term.
+    */
+    noFields?: boolean,
+    /**
+    *  The 'NOFREQS' parameter.  If set, we avoid saving the term frequencies in the index.
+    */
+    noFreqs?: boolean,
+    /**
+    *  The 'SKIPINITIALSCAN' parameter. If set, we do not scan and index. 
+    */
     skipInitialScan?: boolean
+    /**
+    *  The 'PREFIX' parameter. tells the index which keys it should index.
+    */
     prefix?: {
-        count: number,
-        name: string
-    }[],
+        num?: number,
+        prefixes: string | string[],
+    },
+    /**
+    * The 'LANGUAGE' parameter.  If set indicates the default language for documents in the index.
+    */
     language?: string,
+    /**
+    * The 'LANGUAGE_FIELD' parameter. If set indicates the document field that should be used as the document language.
+    */
     languageField?: string,
+    /**
+    * The 'SCORE' parameter. If set indicates the default score for documents in the index. 
+    */
     score?: string,
+    /**
+    * The 'SCORE_FIELD' parameter. If set indicates the document field that should be used as the document's rank based on the user's ranking. 
+    */
     scoreField?: string
+    /**
+    * The 'STOPWORDS' parameter. If set, we set the index with a custom stopword list, to be ignored during indexing and search time. 
+    */
     stopwords?: {
-        num: number,
-        stopword: string
-    }
+        num?: number,
+        stopwords: string | string[],
+    },
 }
 
 /**
  * The field parameter
- * @param sortable The 'SORTABLE' parameter. Numeric, tag or text field can have the optional SORTABLE argument that allows the user to later sort the results by the value of this field (this adds memory overhead so do not declare it on large text fields).
- * @param nostem The 'NOSTEM' parameter. Text fields can have the NOSTEM argument which will disable stemming when indexing its values. This may be ideal for things like proper names.
- * @param noindex The 'NOINDEX' parameter. Fields can have the NOINDEX option, which means they will not be indexed. This is useful in conjunction with SORTABLE , to create fields whose update using PARTIAL will not cause full reindexing of the document. If a field has NOINDEX and doesn't have SORTABLE, it will just be ignored by the index.
- * @param phonetic The 'PHONETIC' parameter. Declaring a text field as PHONETIC will perform phonetic matching on it in searches by default. The obligatory {matcher} argument specifies the phonetic algorithm and language used.
- * @param weight The 'WEIGHT' parameter. For TEXT fields, declares the importance of this field when calculating result accuracy. This is a multiplication factor, and defaults to 1 if not specified.
- * @param seperator The 'SEPERATOR' parameter. For TAG fields, indicates how the text contained in the field is to be split into individual tags. The default is , . The value must be a single character.
- */
-export type FTFieldOptions = {
+*/
+export interface FTFieldOptions {
+    /**
+    * The 'SORTABLE' parameter. Numeric, tag or text field can have the optional SORTABLE argument that allows the user to later sort the results by the value of this field (this adds memory overhead so do not declare it on large text fields).
+    */
     sortable?: boolean,
+    /**
+    *  The 'NOINDEX' parameter. Fields can have the NOINDEX option, which means they will not be indexed. This is useful in conjunction with SORTABLE , to create fields whose update using PARTIAL will not cause full reindexing of the document. If a field has NOINDEX and doesn't have SORTABLE, it will just be ignored by the index.
+    */
     noindex?: boolean,
+    /**
+    * The 'NOSTEM' parameter. Text fields can have the NOSTEM argument which will disable stemming when indexing its values. This may be ideal for things like proper names.
+    */
     nostem?: boolean,
+    /**
+    *  The 'PHONETIC' parameter. Declaring a text field as PHONETIC will perform phonetic matching on it in searches by default. The obligatory {matcher} argument specifies the phonetic algorithm and language used.
+    */
     phonetic?: string,
+    /**
+    * The 'WEIGHT' parameter. For TEXT fields, declares the importance of this field when calculating result accuracy. This is a multiplication factor, and defaults to 1 if not specified.
+    */
     weight?: number,
+    /**
+    * The 'SEPERATOR' parameter. For TAG fields, indicates how the text contained in the field is to be split into individual tags. The default is , . The value must be a single character.
+    */
     seperator?: string
+    /**
+     * The 'UNF' parameter. By default, SORTABLE applies a normalization to the indexed value (characters set to lowercase, removal of diacritics). When using UNF (un-normalized form) it is possible to disable the normalization and keep the original form of the value. 
+     */
+    unf?: boolean,
+    /**
+     * For `TAG` attributes, keeps the original letter cases of the tags. If not specified, the characters are converted to lowercase.
+     */
+    caseSensitive?: boolean,
 }
 
 /**
  * The parameters of the 'FT.CREATE' command, schema fields (Field comming after the 'SCHEMA' command)
- * @param name The name of the field
- * @param type The type of the field
- * @param sortable The 'SORTABLE' parameter. Numeric, tag or text field can have the optional SORTABLE argument that allows the user to later sort the results by the value of this field (this adds memory overhead so do not declare it on large text fields).
- * @param nostem The 'NOSTEM' parameter. Text fields can have the NOSTEM argument which will disable stemming when indexing its values. This may be ideal for things like proper names.
- * @param noindex The 'NOINDEX' parameter. Fields can have the NOINDEX option, which means they will not be indexed. This is useful in conjunction with SORTABLE , to create fields whose update using PARTIAL will not cause full reindexing of the document. If a field has NOINDEX and doesn't have SORTABLE, it will just be ignored by the index.
- * @param phonetic The 'PHONETIC' parameter. Declaring a text field as PHONETIC will perform phonetic matching on it in searches by default. The obligatory {matcher} argument specifies the phonetic algorithm and language used.
- * @param weight The 'WEIGHT' parameter. For TEXT fields, declares the importance of this field when calculating result accuracy. This is a multiplication factor, and defaults to 1 if not specified.
- * @param seperator The 'SEPERATOR' parameter. For TAG fields, indicates how the text contained in the field is to be split into individual tags. The default is , . The value must be a single character.
- * @param as The 'AS' parameter. Used when creating an index on 'JSON'.
- */
+*/
 export interface FTSchemaField extends FTFieldOptions {
+    /**
+    * The name of the field
+    */
     name: string,
+    /**
+    * The type of the field
+    */
     type: FTFieldType,
+    /**
+    * The 'AS' parameter. Used when creating an index on 'JSON'.
+    */
     as?: string
 }
 
 /**
  * The parameter of the 'FT.SEARCH' command
- * @param noContent The 'NOTCONTENT' parameter. If it appears after the query, we only return the document ids and not the content.
- * @param verbatim The 'VERBATIM' parameter.  if set, we do not try to use stemming for query expansion but search the query terms verbatim.
- * @param noStopWords The 'noStopWords' parameter. If set, we do not filter stopwords from the query. 
- * @param withScores The 'WITHSCORES' parameter. If set, we also return the relative internal score of each document.
- * @param withPayloads The 'WITHPAYLOADS' parameter. If set, we retrieve optional document payloads (see FT.ADD).
- * @param withSoryKeys The 'WITHSORTKEYS' parameter. Only relevant in conjunction with SORTBY . Returns the value of the sorting key, right after the id and score and /or payload if requested.
- * @param filter The 'FILTER' parameter.  If set, and numeric_field is defined as a numeric field in FT.CREATE, we will limit results to those having numeric values ranging between min and max. min and max follow ZRANGE syntax, and can be -inf , +inf and use ( for exclusive ranges. 
- * @param filter.field The numeric_field argument of the 'FILTER' parameter
- * @param filter.min The min argument of the 'FILTER' parameter
- * @param filter.max The max argument of the 'FILTER' parameter
- * @param geoFilter The 'GEOFILTER' parameter. If set, we filter the results to a given radius from lon and lat. Radius is given as a number and units.
- * @param geoFilter.field The field of the 'GEOFILTER' parameter
- * @param geoFilter.lon The lon argument of the 'GEOFILTER' parameter
- * @param geoFilter.lat The lat argument of the 'GEOFILTER' parameter
- * @param geoFilter.radius The radius argument of the 'GEOFILTER' parameter
- * @param geoFilter.measurement The measurement argument of the 'GEOFILTER' parameter
- * @param inKeys The 'INKEYS' parameter. If set, we limit the result to a given set of keys specified in the list. the first argument must be the length of the list, and greater than zero.
- * @param inKeys.num The num argument of the 'INKEYS' parameter
- * @param inKeys.field The field argument of the 'INKEYS' parameter
- * @param inFields The 'INFIELDS' parameter. If set, filter the results to ones appearing only in specific fields of the document, like title or URL.
- * @param inFields.num The num argument of the 'INFIELDS' parameter
- * @param inFields.field The field argument of the 'INFIELDS' parameter
- * @param return The 'RETURN' parameter. Use this keyword to limit which fields from the document are returned.
- * @param return.num The num argument of the 'RETURN' parameter. If num is 0, it acts like NOCONTENT.
- * @param return.fields The fields of the 'RETURN' parameter. No need to pass if num is 0.
- * @param return.fields.name The name of the field.
- * @param return.fields.as The 'AS' parameter following a "field" name, used by index type "JSON".
- * @param summarize The 'SUMMARIZE' parameter. Use this option to return only the sections of the field which contain the matched text.
- * @param summarize.fields The fields argument of the 'SUMMARIZE' parameter
- * @param summarize.fields.num The num argument of the fields argument. 
- * @param summarize.fields.field The field argument of the fields argument
- * @param summarize.frags The fargs argument of the 'SUMMARIZE' parameter
- * @param summarize.len The len argument of the 'SUMMARIZE' parameter
- * @param summarize.seperator The seperator argument of the 'SUMMARIZE' parameter
- * @param highlight The 'HIGHLIGHT' parameter. Use this option to format occurrences of matched text.
- * @param highlight.fields The fields argument of the 'HIGHLIGHT' parameter
- * @param highlight.fields.num The num argument of the fields argument
- * @param highlight.fields.field The field argument of the fields argument
- * @param highlight.tags The tags argument of the 'HIGHLIGHT' parameter
- * @param highlight.open The open argument of the tags argument
- * @param highlight.close The close argument of the tags argument
- * @param slop The 'SLOP' parameter. If set, we allow a maximum of N intervening number of unmatched offsets between phrase terms.
- * @param inorder The 'INORDER' parameter. If set, and usually used in conjunction with SLOP, we make sure the query terms appear in the same order in the document as in the query, regardless of the offsets between them. 
- * @param language The 'LANGUAGE' parameter. If set, we use a stemmer for the supplied language during search for query expansion.
- * @param expander The 'EXPANDER' parameter. If set, we will use a custom query expander instead of the stemmer.
- * @param scorer The 'SCORER' parameter. If set, we will use a custom scoring function defined by the user.
- * @param explainScore The 'EXPLAINSCORE' parameter. If set, will return a textual description of how the scores were calculated.
- * @param payload The 'PAYLOAD' parameter. Add an arbitrary, binary safe payload that will be exposed to custom scoring functions.
- * @param sortBy The 'SORTBY' parameter. If specified, the results are ordered by the value of this field. This applies to both text and numeric fields.
- * @param sortBy.field The <> argument of the 'SORTBY' parameter
- * @param sortBy.sort The <> argument of the 'SORTBY' parameter
- * @param limit The 'LIMIT' parameter. If the parameters appear after the query, we limit the results to the offset and number of results given.
- * @param limit.first The <> argument of the 'LIMIT' parameter
- * @param limit.num The <> argument of the 'LIMIT' parameter
  */
-export type FTSearchParameters = {
+export interface FTSearchParameters {
+    /**
+    * The 'NOTCONTENT' parameter. If it appears after the query, we only return the document ids and not the content.
+    */
     noContent?: boolean,
+    /**
+    * The 'VERBATIM' parameter. if set, we do not try to use stemming for query expansion but search the query terms verbatim.
+    */
     verbatim?: boolean,
+    /**
+     * The 'noStopWords' parameter. If set, we do not filter stopwords from the query. 
+     */
     noStopWords?: boolean,
+    /**
+     * The 'WITHSCORES' parameter. If set, we also return the relative internal score of each document.
+     */
     withScores?: boolean,
+    /**
+     * The 'WITHPAYLOADS' parameter. If set, we retrieve optional document payloads (see FT.ADD).
+    */
     withPayloads?: boolean,
+    /**
+     * The 'WITHSORTKEYS' parameter. Only relevant in conjunction with SORTBY . Returns the value of the sorting key, right after the id and score and /or payload if requested.
+     */
     withSortKeys?: boolean,
+    /**
+     * The 'FILTER' parameter.  If set, and numeric_field is defined as a numeric field in FT.CREATE, we will limit results to those having numeric values ranging between min and max. min and max follow ZRANGE syntax, and can be -inf , +inf and use ( for exclusive ranges. 
+     */
     filter?: {
+        /**
+         * The numeric_field argument of the 'FILTER' parameter
+         */
         field: string,
+        /**
+         * The min argument of the 'FILTER' parameter
+         */
         min: number,
+        /**
+         * The max argument of the 'FILTER' parameter
+         */
         max: number
-    },
+    }[],
+    /**
+     * The 'GEOFILTER' parameter. If set, we filter the results to a given radius from lon and lat. Radius is given as a number and units.
+     */
     geoFilter?: {
+        /**
+         * The field of the 'GEOFILTER' parameter
+         */
         field: string,
+        /**
+         * The lon argument of the 'GEOFILTER' parameter
+         */
         lon: number,
+        /**
+         * The lat argument of the 'GEOFILTER' parameter
+         */
         lat: number,
+        /**
+         * The radius argument of the 'GEOFILTER' parameter
+         */
         radius: number,
+        /**
+         * The measurement argument of the 'GEOFILTER' parameter
+         */
         measurement: 'm' | 'km' | 'mi' | 'ft'
     },
+    /**
+     * The 'INKEYS' parameter. If set, we limit the result to a given set of keys specified in the list. the first argument must be the length of the list, and greater than zero.
+     */
     inKeys?: {
-        num: number,
-        field: string
+        num?: number,
+        keys?: string | string[],
     },
+    /**
+     * The 'INFIELDS' parameter. If set, filter the results to ones appearing only in specific fields of the document, like title or URL.
+     */
     inFields?: {
-        num: number,
-        field: string
+        num?: number,
+        fields?: string | string[],
     },
+    /**
+     *  The 'RETURN' parameter. Use this keyword to limit which fields from the document are returned.
+     */
     return?: {
-        num: number,
-        fields?: {
-            name: string,
-            as?: string
-        }[]
-    },
-    summarize?: {
-        fields?: {
-            num: number,
-            field: string
+        num?: number,
+        fields: {
+            /**
+             * The name of the field.
+             */
+            field: string,
+            /** 
+             * The 'AS' parameter following a "field" name, used by index type "JSON".
+            */
+            as?: string,
         }[],
+    },
+    /**
+     * The 'SUMMARIZE' parameter. Use this option to return only the sections of the field which contain the matched text. 
+     */
+    summarize?: {
+        /**
+         * The fields argument of the 'SUMMARIZE' parameter
+         */
+        fields?: {
+            num?: number,
+            fields: string | string[],
+        },
+        /**
+         * The fargs argument of the 'SUMMARIZE' parameter
+         */
         frags?: number,
+        /**
+         * The len argument of the 'SUMMARIZE' parameter
+         */
         len?: number,
+        /**
+         * The seperator argument of the 'SUMMARIZE' parameter
+         */
         seperator?: string
     },
+    /**
+     * The 'HIGHLIGHT' parameter. Use this option to format occurrences of matched text.
+     */
     highlight?: {
+        /**
+         * The fields argument of the 'HIGHLIGHT' parameter
+         */
         fields?: {
-            num: number,
-            field: string
-        }[],
+            num?: number,
+            fields: string | string[],
+        },
+        /**
+         * The tags argument of the 'HIGHLIGHT' parameter
+         */
         tags?: {
+            /**
+             * The open argument of the tags argument
+             */
             open: string,
+            /**
+             * The close argument of the tags argument
+             */
             close: string
-        }[]
+        },
     },
+    /**
+     * The 'SLOP' parameter. If set, we allow a maximum of N intervening number of unmatched offsets between phrase terms.
+     */
     slop?: number,
+    /**
+     * The 'INORDER' parameter. If set, and usually used in conjunction with SLOP, we make sure the query terms appear in the same order in the document as in the query, regardless of the offsets between them. 
+     */
     inOrder?: boolean,
+    /**
+     * The 'LANGUAGE' parameter. If set, we use a stemmer for the supplied language during search for query expansion.
+     */
     language?: string,
+    /**
+     * The 'EXPANDER' parameter. If set, we will use a custom query expander instead of the stemmer.
+     */
     expander?: string,
+    /**
+     * The 'SCORER' parameter. If set, we will use a custom scoring function defined by the user.
+     */
     scorer?: string,
+    /**
+     * The 'EXPLAINSCORE' parameter. If set, will return a textual description of how the scores were calculated.
+     */
     explainScore?: boolean,
+    /**
+     * The 'PAYLOAD' parameter. Add an arbitrary, binary safe payload that will be exposed to custom scoring functions.
+     */
     payload?: string,
+    /**
+     * The 'SORTBY' parameter. If specified, the results are ordered by the value of this field. This applies to both text and numeric fields.
+     */
     sortBy?: {
+        /**
+         * The field argument of the 'SORTBY' parameter
+         */
         field: string,
+        /**
+         * The sort argument of the 'SORTBY' parameter
+         */
         sort: FTSort
     },
+    /**
+     * The 'LIMIT' parameter. If the parameters appear after the query, we limit the results to the offset and number of results given.
+     */
     limit?: {
+        /**
+         * The first argument of the 'LIMIT' parameter
+         */
         first: number,
+        /**
+        * The num argument of the 'LIMIT' parameter
+        */
         num: number
-    }
+    },
+    /**
+    * If to parse search results to objects or leave them in their array form
+    * @default true
+    */
+    parseSearchQueries?: boolean
 }
 
 /**
  * The additional parameter of 'FT.AGGREGATE' command
- * @param load The 'LOAD' parameter. 
- * @param load.nargs The number of arguments
- * @param load.property The property name
- * @param apply Create new fields using 'APPLY' keyword for aggregations
- * @param groupby The 'GROUPBY' parameter.
- * @param groupby.nargs The number of arguments of the 'GROUPBY' parameter
- * @param groupby.properties The property name of the 'GROUPBY' parameter
- * @param reduce The 'REDUCE' parameter.
- * @param sortby The 'SORTBY' parameter. 
- * @param sortby.nargs The number of arguments of the 'SORTBY' parameter
- * @param sortby.properties A list of property names of the 'SORTBY' parameter
- * @param sortby.sort The sort type of the 'SORTBY' parameter
- * @param sortby.max The max of the 'SORTBY' parameter
- * @param expression Given expressions starting by the 'APPLY' keyword
- * @param limit The 'LIMIT' parameter.
- * @param limit.offset The offset of the 'LIMIT' parameter
- * @param limit.numberOfResults The number of results of the 'LIMIT' parameter
- * @param filter The expression of the 'FILTER' parameter.
  */
-export type FTAggregateParameters = {
+export interface FTAggregateParameters {
+    /**
+     * The 'LOAD' parameter. 
+     */
     load?: {
+        /**
+         * The number of arguments
+         */
         nargs: string,
+        /**
+         * The property name
+         */
         properties: string[]
     },
+    /**
+     *  Create new fields using 'APPLY' keyword for aggregations
+     */
     apply?: FTExpression[],
+    /**
+     * The 'GROUPBY' parameter.
+     */
     groupby?: {
+        /**
+         * The number of arguments of the 'GROUPBY' parameter
+         */
         nargs: string,
+        /**
+         * The property name of the 'GROUPBY' parameter
+         */
         properties: string[]
     },
+    /**
+     * The 'REDUCE' parameter.
+     */
     reduce?: FTReduce[],
+    /**
+     * The 'SORTBY' parameter. 
+     */
     sortby?: {
+        /**
+         *  The number of arguments of the 'SORTBY' parameter
+         */
         nargs: string,
+        /**
+         * A list of property names of the 'SORTBY' parameter
+         */
         properties: FTSortByProperty[],
+        /**
+         * The sort type of the 'SORTBY' parameter
+         */
         max: number
     },
+    /**
+     *  Given expressions starting by the 'APPLY' keyword
+     */
     expressions?: FTExpression[],
+    /**
+     * The 'LIMIT' parameter.
+     */
     limit?: {
+        /**
+         * The offset of the 'LIMIT' parameter
+         */
         offset: string,
+        /**
+         * The number of results of the 'LIMIT' parameter
+         */
         numberOfResults: number
     },
+    /**
+     * The expression of the 'FILTER' parameter.
+     */
     filter?: string
 }
 
 /**
  * The expressions given to the 'APPLY' key word
- * @param expression The expression given
- * @param as The value of 'AS' of the expression determining the name of it.
  */
-export type FTExpression = {
+export interface FTExpression {
+    /**
+     * The expression given
+     */
     expression: string,
+    /**
+     * The value of 'AS' of the expression determining the name of it.
+     */
     as: string
 }
 
 /**
  * The 'REDUCE' parameter.
- * @param function A function of the 'REDUCE' parameter
- * @param nargs The number of arguments of the 'REDUCE' parameter
- * @param arg The argument of the 'REDUCE' parameter
- * @param as The name of the function of the 'REDUCE' parameter
  */
-export type FTReduce = {
+export interface FTReduce {
+    /**
+     * A function of the 'REDUCE' parameter
+     */
     function: string,
+    /**
+     * The number of arguments of the 'REDUCE' parameter
+     */
     nargs: string,
+    /**
+     * The argument of the 'REDUCE' parameter
+     */
     args: string[],
+    /**
+     * The name of the function of the 'REDUCE' parameter
+     */
     as?: string
 }
 
 /**
  * The 'SORT BY' property object
- * @param property The value of the property
- * @param sort The 'SORT' value of the property
  */
-export type FTSortByProperty = {
+export interface FTSortByProperty {
+    /**
+     * The value of the property
+     */
     property: string,
+    /**
+     * The 'SORT' value of the property
+     */
     sort: FTSort
 }
 
@@ -835,41 +1057,61 @@ export type FTSort = 'ASC' | 'DESC';
 
 /**
  * The additional parameters of 'FT.SUGADD' command
- * @param incr The 'INCR' parameter. if set, we increment the existing entry of the suggestion by the given score, instead of replacing the score. This is useful for updating the dictionary based on user queries in real time
- * @param payload The 'PAYLOAD' parameter. If set, we save an extra payload with the suggestion, that can be fetched by adding the WITHPAYLOADS argument to FT.SUGGET
  */
-export type FTSugAddParameters = {
-    incr: number,
+export interface FTSugAddParameters {
+    /**
+     * The 'INCR' parameter. if set, we increment the existing entry of the suggestion by the given score, instead of replacing the score. This is useful for updating the dictionary based on user queries in real time
+     */
+    incr: boolean,
+    /**
+     * The 'PAYLOAD' parameter. If set, we save an extra payload with the suggestion, that can be fetched by adding the WITHPAYLOADS argument to FT.SUGGET
+     */
     payload: string
 }
 
 /**
  * The additional parameters of 'FT.SUGGET' command
- * @param fuzzy The 'FUZZY' parameter. if set, we do a fuzzy prefix search, including prefixes at Levenshtein distance of 1 from the prefix sent
- * @param max The 'MAX' parameter. If set, we limit the results to a maximum of num (default: 5).
- * @param withScores The 'WITHSCORES' parameter. If set, we also return the score of each suggestion. this can be used to merge results from multiple instances
- * @param withPayloads The 'WITHPAYLOADS' parameter. If set, we return optional payloads saved along with the suggestions. If no payload is present for an entry, we return a Null Reply.
  */
-export type FTSugGetParameters = {
-    fuzzy: string,
+export interface FTSugGetParameters {
+    /**
+     * The 'FUZZY' parameter. if set, we do a fuzzy prefix search, including prefixes at Levenshtein distance of 1 from the prefix sent
+     */
+    fuzzy: boolean,
+    /**
+     * The 'MAX' parameter. If set, we limit the results to a maximum of num (default: 5).
+     */
     max: number,
+    /**
+     * The 'WITHSCORES' parameter. If set, we also return the score of each suggestion. this can be used to merge results from multiple instances
+     */
     withScores: boolean,
+    /**
+     * The 'WITHPAYLOADS' parameter. If set, we return optional payloads saved along with the suggestions. If no payload is present for an entry, we return a Null Reply.
+     */
     withPayloads: boolean
 }
 
 /**
  * The additional parameters of 'FT.SPELLCHECK' command
- * @param terms A list of terms
- * @param terms.type The type of the term
- * @param terms.dict The dict of the term
- * @param distance The maximal Levenshtein distance for spelling suggestions (default: 1, max: 4)
  */
-export type FTSpellCheck = {
+export interface FTSpellCheck {
+    /**
+     * A list of terms
+     */
     terms?: {
+        /**
+         * The type of the term
+         */
         type: 'INCLUDE' | 'EXCLUDE',
+        /**
+         * The dict of the term
+         */
         dict?: string
     }[],
-    distance?: string
+    /**
+     * The maximal Levenshtein distance for spelling suggestions (default: 1, max: 4)
+     */
+    distance?: number | string,
 }
 
 /**
@@ -890,7 +1132,7 @@ export type FTIndexType = 'HASH' | 'JSON';
 /**
  * The config response
  */
-export type FTConfig = {
+export interface FTConfig {
     EXTLOAD?: string | null,
     SAFEMODE?: string,
     CONCURRENT_WRITE_MODE?: string,
@@ -923,7 +1165,7 @@ export type FTConfig = {
 /**
  * The info response
  */
-export type FTInfo = {
+export interface FTInfo {
     index_name?: string,
     index_options?: string[],
     index_definition?: {
