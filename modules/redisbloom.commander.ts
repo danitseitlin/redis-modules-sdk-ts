@@ -9,7 +9,7 @@ export class Commander {
      * @param capacity The number of entries you intend to add to the filter. Performance will begin to degrade after adding more items than this number. The actual degradation will depend on how far the limit has been exceeded. Performance will degrade linearly as the number of entries grow exponentially. 
      * @param options The additional optional parameters
      */
-     reserve(key: string, errorRate: number, capacity: number, options?: BFReserveParameter): CommandData {
+    reserve(key: string, errorRate: number, capacity: number, options?: BFReserveParameter): CommandData {
         const args = [key, errorRate, capacity];
         if(options !== undefined && options.expansion !== undefined)
             args.push(options.expansion);
