@@ -1,6 +1,6 @@
 import * as Redis from 'ioredis';
 import { Module, RedisModuleOptions } from './module.base';
-import { Commander } from './redisbloom-cmk.helpers';
+import { Commander } from './redisbloom-cmk.commander';
 
 export class RedisBloomCMK extends Module {
 

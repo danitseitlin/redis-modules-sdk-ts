@@ -87,6 +87,5 @@ export class Commander {
             command: 'CMS.INFO',
             args: [key]
         }
-        return await this.sendCommand('CMS.INFO', [key]);
     }
 }
