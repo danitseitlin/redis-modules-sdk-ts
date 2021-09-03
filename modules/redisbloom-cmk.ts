@@ -1,8 +1,10 @@
 import * as Redis from 'ioredis';
 import { Module, RedisModuleOptions } from './module.base';
+import { Commander } from './redisbloom-cmk.helpers';
 
 export class RedisBloomCMK extends Module {
 
+    commander: Commander
     /**
      * Initializing the module object
      * @param name The name of the module
@@ -24,6 +26,7 @@ export class RedisBloomCMK extends Module {
     constructor(redisOptions: Redis.RedisOptions, moduleOptions?: RedisModuleOptions)
     constructor(options: Redis.RedisOptions & Redis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: Redis.ClusterOptions) {
         super(RedisBloomCMK.name, options, moduleOptions, clusterOptions)
+        this.commander = new Commander()
     }
 
     /**
@@ -33,7 +36,8 @@ export class RedisBloomCMK extends Module {
      * @param depth The number of counter-arrays. Reduces the probability for an error of a certain size (percentage of total count).
      */
     async initbydim(key: string, width: number, depth: number): Promise<'OK'> {
-        return await this.sendCommand('CMS.INITBYDIM', [key, width, depth]);
+        const command = this.commander.initbydim(key, width, depth)
+        return await this.sendCommand(command);
     }
 
     /**
@@ -43,7 +47,8 @@ export class RedisBloomCMK extends Module {
      * @param probability The desired probability for inflated count.
      */
     async initbyprob(key: string, errorSize: number, probability: number): Promise<'OK'> {
-        return await this.sendCommand('CMS.INITBYPROB', [key, errorSize, probability]);
+        const command = this.commander.initbyprob(key, errorSize, probability);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -52,10 +57,11 @@ export class RedisBloomCMK extends Module {
      * @param items A list of item and increment set's
      */
     async incrby(key: string, items: CMKIncrbyItems[]): Promise<number[]> {
-        let args = [key];
+        /*let args = [key];
         for(const item of items)
-            args = args.concat([item.name.toString(), item.increment.toString()])
-        return await this.sendCommand('CMS.INCRBY', args);
+            args = args.concat([item.name.toString(), item.increment.toString()])*/
+        const command = this.commander.incrby(key, items);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -64,7 +70,8 @@ export class RedisBloomCMK extends Module {
      * @param items A list of items.
      */
     async query(key: string, items: string[]): Promise<number[]> {
-        return await this.sendCommand('CMS.QUERY', [key].concat(items));
+        const command = this.commander.query(key, items);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -75,14 +82,8 @@ export class RedisBloomCMK extends Module {
      * @param weights A multiple of each sketch. Default =1.
      */
     async merge(dest: string, numKeys: number, sources: string[], weights?: number[]): Promise<'OK'> {
-        let args = [dest, numKeys];
-        args = args.concat(sources);
-        if(weights !== undefined && weights.length > 0) {
-            args.push('WEIGHTS');
-            for(const weight of weights)
-                args.push(weight.toString());
-        }
-        return await this.sendCommand('CMS.MERGE', args);
+        const command = this.commander.merge(dest, numKeys, sources, weights);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -90,7 +91,8 @@ export class RedisBloomCMK extends Module {
      * @param key The key of the 'CMS.INFO' command
      */
     async info(key: string): Promise<string[]> {
-        return await this.sendCommand('CMS.INFO', [key]);
+        const command = this.commander.info(key);
+        return await this.sendCommand(command);
     }
 }
 

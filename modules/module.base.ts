@@ -67,16 +67,16 @@ export class Module {
      * @param command The redis command
      * @param args The args of the redis command
      */
-    async sendCommand(command: string, args: IORedis.ValueType | IORedis.ValueType[] = []): Promise<any> {
+    async sendCommand(data: CommandData): Promise<any> {
         try {
             if(this.showDebugLogs)
-                console.log(`${this.name}: Running command ${command} with arguments: ${args}`);
-            const response = this.clusterNodes ? await this.cluster.cluster.call(command, args) : await this.redis.send_command(command, args);
+                console.log(`${this.name}: Running command ${data.command} with arguments: ${data.args}`);
+            const response = this.clusterNodes ? await this.cluster.cluster.call(data.command, data.args) : await this.redis.send_command(data.command, data.args);
             if(this.showDebugLogs)
-                console.log(`${this.name}: command ${command} responded with ${response}`);
+                console.log(`${this.name}: command ${data.command} responded with ${response}`);
             return response;
         } catch(error) {
-            return this.handleError(`${this.name} class (${command.split(' ')[0]}): ${error}`)
+            return this.handleError(`${this.name} class (${data.command.split(' ')[0]}): ${error}`)
         }
     }
 
@@ -221,4 +221,9 @@ export type RedisModuleOptions = {
     *  If to print debug logs
     */
     showDebugLogs?: boolean
+}
+
+export type CommandData = {
+    command: string,
+    args?: any[]
 }
