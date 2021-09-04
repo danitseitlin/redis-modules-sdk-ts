@@ -28,7 +28,6 @@ export class Commander {
     readonlyQuery(name: string, query: string, params?: {[key: string]: string}): CommandData {
         let args = [name]
         args = args.concat(this.buildQueryCommand(query, params));
-        //const args: string[] = [];
         const queryList: string[] = []
         if(params !== undefined){
             queryList.push('CYPHER')
