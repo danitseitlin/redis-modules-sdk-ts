@@ -19,7 +19,6 @@ import { RedisTimeSeries } from './rts';
 
 export class Redis extends Module {
 	
-	//private rediaiCommander: RedisAICommander
 	/**
      * Initializing the module object
      * @param name The name of the module
@@ -40,10 +39,13 @@ export class Redis extends Module {
 	 */
 	constructor(redisOptions: IORedis.RedisOptions, moduleOptions?: RedisModuleOptions)
 	constructor(options: IORedis.RedisOptions & IORedis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: IORedis.ClusterOptions) {
-		super(Redis.name, options, moduleOptions, clusterOptions) 
-		this.applyMixins(Redis, [
-			RedisAI, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, RedisBloomTDigest, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries, RedisIntervalSets
+		super(Redis.name, options, moduleOptions, clusterOptions);
+		this.applyMixins(this, [
+			new RedisAI(options, moduleOptions, clusterOptions)
 		])
+		/*this.applyMixins(Redis, [
+			RedisAI, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, RedisBloomTDigest, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries, RedisIntervalSets
+		])*/
 	}
 
 	/**
