@@ -56,12 +56,12 @@ export class Redis extends Module {
 		givenObjects.forEach(givenObject => {
 			console.log(givenObject)
 			Object.getOwnPropertyNames(givenObject.prototype).forEach((name: string) => {
-				if(name !== 'constructor'){
+				//if(name !== 'constructor'){
 					console.log(name)
 					const functionName = addPrefix ? `${modulePropNames[givenObject.name]}_${name}`: name;
 					console.log(functionName)
 					Object.defineProperty(baseObject.prototype, functionName, Object.getOwnPropertyDescriptor(givenObject.prototype, name));
-				}
+				//}
 			});
 		});
 	}
