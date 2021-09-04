@@ -1,9 +1,11 @@
 
 import * as Redis from 'ioredis';
 import { Module, RedisModuleOptions } from './module.base';
+import { Commander } from './rejson.commander';
 
 export class ReJSON extends Module {
 
+    commander: Commander
     /**
      * Initializing the module object
      * @param name The name of the module
@@ -25,6 +27,7 @@ export class ReJSON extends Module {
     constructor(redisOptions: Redis.RedisOptions, moduleOptions?: RedisModuleOptions)
     constructor(options: Redis.RedisOptions & Redis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: Redis.ClusterOptions) {
         super(ReJSON.name, options, moduleOptions, clusterOptions)
+        this.commander = new Commander()
     }
 
     /**
@@ -34,9 +37,8 @@ export class ReJSON extends Module {
      * @returns The number of paths deleted (0 or 1).
      */
     async del(key: string, path?: string): Promise<number> {
-        const parameters = [key];
-        if(path !== undefined) parameters.push(path)
-        return await this.sendCommand('JSON.DEL', parameters)
+        const command = this.commander.del(key, path);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -46,9 +48,8 @@ export class ReJSON extends Module {
      * @returns The number of paths deleted (0 or 1).
      */
     async clear(key: string, path?: string): Promise<number> {
-        const parameters = [key];
-        if(path !== undefined) parameters.push(path);
-        return await this.sendCommand('JSON.CLEAR', parameters);
+        const command = this.commander.clear(key, path);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -58,9 +59,8 @@ export class ReJSON extends Module {
      * @returns The value of the path after the toggle.
      */
     async toggle(key: string, path?: string): Promise<boolean> {
-        const parameters = [key];
-        if(path !== undefined) parameters.push(path);
-        return await this.sendCommand('JSON.TOGGLE', parameters);
+        const command = this.commander.toggle(key, path);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -72,10 +72,8 @@ export class ReJSON extends Module {
      * @returns Simple String OK if executed correctly, or Null Bulk if the specified NX or XX conditions were not met. 
      */
     async set(key: string, path: string, json: string, condition?: 'NX' | 'XX'): Promise<"OK"> {
-        const args = [key, path, json]
-        if(condition)
-            args.push(condition)
-        return await this.sendCommand('JSON.SET', args)
+        const command = this.commander.set(key, path, json, condition);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -86,16 +84,8 @@ export class ReJSON extends Module {
      * @returns The value at path in JSON serialized form.
      */
     async get(key: string, path?: string, parameters?: ReJSONGetParameters): Promise<string>{
-        const args = [key];
-        for(const parameter in parameters) {
-            const name = parameter.toUpperCase();
-            const value = parameters[parameter];
-            args.push(name);
-            if(typeof value !== 'boolean')
-                args.push(value);
-        }
-        if(path !== undefined) args.push(path);
-        return await this.sendCommand('JSON.GET', args)
+        const command = this.commander.get(key, path, parameters);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -105,9 +95,8 @@ export class ReJSON extends Module {
      * @returns The values at path from multiple key's. Non-existing keys and non-existing paths are reported as null.
      */
     async mget(keys: string[], path?: string): Promise<string[]> {
-        const args = keys;
-        if(path !== undefined) args.push(path);
-        return await this.sendCommand('JSON.MGET', args)
+        const command = this.commander.mget(keys, path);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -117,9 +106,8 @@ export class ReJSON extends Module {
      * @returns Simple String, specifically the type of value. 
      */
     async type(key: string, path?: string): Promise<string> {
-        const args = [key];
-        if(path !== undefined) args.push(path);
-        return await this.sendCommand('JSON.TYPE', args)
+        const command = this.commander.type(key, path);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -130,10 +118,8 @@ export class ReJSON extends Module {
      * @returns Bulk String, specifically the stringified new value.
      */
     async numincrby(key: string, number: number, path?: string): Promise<string> {
-        const args = [key];
-        if(path !== undefined) args.push(path);
-        args.push(number.toString())
-        return await this.sendCommand('JSON.NUMINCRBY', args)
+        const command = this.commander.numincrby(key, number, path);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -144,10 +130,8 @@ export class ReJSON extends Module {
      * @returns Bulk String, specifically the stringified new value. 
      */
     async nummultby(key: string, number: number, path?: string): Promise<string> {
-        const args = [key];
-        if(path !== undefined) args.push(path);
-        args.push(number.toString())
-        return await this.sendCommand('JSON.NUMMULTBY', args)
+        const command = this.commander.nummultby(key, number, path);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -158,9 +142,8 @@ export class ReJSON extends Module {
      * @returns Integer, specifically the string's new length.
      */
     async strappend(key: string, string: string, path?: string): Promise<string> {
-        const args = [key];
-        if(path !== undefined) args.push(path);
-        return await this.sendCommand('JSON.STRAPPEND', args.concat(string));
+        const command = this.commander.strappend(key, string, path);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -170,9 +153,8 @@ export class ReJSON extends Module {
      * @returns Integer, specifically the string's length. 
      */
     async strlen(key: string, path?: string): Promise<number | null> {
-        const args = [key];
-        if(path !== undefined) args.push(path);
-        return await this.sendCommand('JSON.STRLEN', args);
+        const command = this.commander.strlen(key, path);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -183,9 +165,8 @@ export class ReJSON extends Module {
      * @returns Integer, specifically the array's new size.
      */
     async arrappend(key: string, items: string[], path?: string): Promise<number> {
-        const args = [key];
-        if(path !== undefined) args.push(path);
-        return await this.sendCommand('JSON.ARRAPPEND', args.concat(items));
+        const command = this.commander.arrappend(key, items, path);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -196,10 +177,8 @@ export class ReJSON extends Module {
      * @returns Integer, specifically the position of the scalar value in the array, or -1 if unfound. 
      */
     async arrindex(key: string, scalar: string, path?: string): Promise<number> {
-        const args = [key];
-        if(path !== undefined) args.push(path);
-        args.push(scalar);
-        return await this.sendCommand('JSON.ARRINDEX', args);
+        const command = this.commander.arrindex(key, scalar, path);
+        return await this.sendCommand(command);
     }
     
     /**
@@ -211,11 +190,8 @@ export class ReJSON extends Module {
      * @returns Integer, specifically the array's new size.
      */
     async arrinsert(key: string, index: number, json: string, path?: string): Promise<number> {
-        const args = [key];
-        if(path !== undefined) args.push(path);
-        args.push(index.toString());
-        args.push(json);
-        return await this.sendCommand('JSON.ARRINSERT', args);
+        const command = this.commander.arrinsert(key, index, json, path);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -225,9 +201,8 @@ export class ReJSON extends Module {
      * @returns Integer, specifically the array's length. 
      */
     async arrlen(key: string, path?: string): Promise<number> {
-        const args = [key];
-        if(path !== undefined) args.push(path);
-        return await this.sendCommand('JSON.ARRLEN', args);
+        const command = this.commander.arrlen(key, path);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -238,10 +213,8 @@ export class ReJSON extends Module {
      * @returns Bulk String, specifically the popped JSON value.
      */
     async arrpop(key: string, index: number, path?: string): Promise<string> {
-        const args = [key];
-        if(path !== undefined) args.push(path);
-        args.push(index.toString());
-        return await this.sendCommand('JSON.ARRPOP', args);
+        const command = this.commander.arrpop(key, index, path);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -253,11 +226,8 @@ export class ReJSON extends Module {
      * @returns Integer, specifically the array's new size. 
      */
     async arrtrim(key: string, start: number, end: number, path?: string): Promise<string> {
-        const args = [key];
-        if(path !== undefined) args.push(path);
-        args.push(start.toString());
-        args.push(end.toString());
-        return await this.sendCommand('JSON.ARRTRIM', args);
+        const command = this.commander.arrtrim(key, start, end, path);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -267,9 +237,8 @@ export class ReJSON extends Module {
      * @returns Array, specifically the key names in the object as Bulk Strings. 
      */
     async objkeys(key: string, path?: string): Promise<string[]> {
-        const args = [key];
-        if(path !== undefined) args.push(path);
-        return await this.sendCommand('JSON.OBJKEYS', args);
+        const command = this.commander.objkeys(key, path);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -279,9 +248,8 @@ export class ReJSON extends Module {
      * @returns Integer, specifically the number of keys in the object.
      */
     async objlen(key: string, path?: string): Promise<number> {
-        const args = [key];
-        if(path !== undefined) args.push(path);
-        return await this.sendCommand('JSON.OBJLEN', args);
+        const command = this.commander.objlen(key, path);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -294,12 +262,8 @@ export class ReJSON extends Module {
         HELP returns an array, specifically with the help message
      */
     async debug(subcommand: 'MEMORY' | 'HELP', key?: string, path?: string): Promise<string[] | number> {
-        const args: string[] = [subcommand];
-        if(subcommand === 'MEMORY') {
-            if(key !== undefined) args.push(key);
-            if(path !== undefined) args.push(path);
-        }
-        return await this.sendCommand('JSON.DEBUG', args);
+        const command = this.commander.debug(subcommand, key, path);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -309,9 +273,8 @@ export class ReJSON extends Module {
      * @returns The number of paths deleted (0 or 1).
      */
     async forget(key: string, path?: string): Promise<number> {
-        const parameters = [key];
-        if(path !== undefined) parameters.push(path)
-        return await this.sendCommand('JSON.FORGET', parameters)
+        const command = this.commander.forget(key, path);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -321,9 +284,8 @@ export class ReJSON extends Module {
      * @returns Array, specifically the JSON's RESP form as detailed. 
      */
     async resp(key: string, path?: string): Promise<string[]> {
-        const parameters = [key];
-        if(path !== undefined) parameters.push(path)
-        return await this.sendCommand('JSON.RESP', parameters)
+        const command = this.commander.resp(key, path);
+        return await this.sendCommand(command);
     }
 }
 
