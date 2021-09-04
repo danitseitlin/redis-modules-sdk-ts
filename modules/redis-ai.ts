@@ -1,13 +1,14 @@
 import { Module, RedisModuleOptions } from './module.base'
 import * as Redis from 'ioredis';
-import { Commander } from './redis-ai.commander';
+import { RedisAICommander } from './redis-ai.commander';
 
 export class RedisAI extends Module {
 
     /**
      * 
      */
-    private redisaiCommander: Commander
+    private redisaiCommander: RedisAICommander
+
     /**
      * Initializing the module object
      * @param name The name of the module
@@ -29,7 +30,7 @@ export class RedisAI extends Module {
     constructor(redisOptions: Redis.RedisOptions, moduleOptions?: RedisModuleOptions)
     constructor(options: Redis.RedisOptions & Redis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: Redis.ClusterOptions) {
         super(RedisAI.name, options, moduleOptions, clusterOptions);
-        this.redisaiCommander = new Commander()
+        this.redisaiCommander = new RedisAICommander()
     }
 
     /**
