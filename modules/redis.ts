@@ -42,7 +42,7 @@ export class Redis extends Module {
 	constructor(options: IORedis.RedisOptions & IORedis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: IORedis.ClusterOptions) {
 		super(Redis.name, options, moduleOptions, clusterOptions) 
 		this.applyMixins(Redis, [
-			new RedisAI(options, moduleOptions, clusterOptions), RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, RedisBloomTDigest, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries
+			RedisAI, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, RedisBloomTDigest, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries
 		])
 		console.log(this)
 	}

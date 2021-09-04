@@ -7,7 +7,7 @@ export class RedisAI extends Module {
     /**
      * 
      */
-    private redisaiCommander: RedisAICommander
+    private redisaiCommander: RedisAICommander = new RedisAICommander()
 
     /**
      * Initializing the module object
@@ -30,7 +30,6 @@ export class RedisAI extends Module {
     constructor(redisOptions: Redis.RedisOptions, moduleOptions?: RedisModuleOptions)
     constructor(options: Redis.RedisOptions & Redis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: Redis.ClusterOptions) {
         super(RedisAI.name, options, moduleOptions, clusterOptions);
-        this.redisaiCommander = new RedisAICommander()
     }
 
     /**
