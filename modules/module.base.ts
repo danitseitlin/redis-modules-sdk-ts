@@ -37,9 +37,9 @@ export class Module {
             this.clusterNodes = options as IORedis.ClusterNode[];
         else
             this.redisOptions = options as IORedis.RedisOptions;
-        this.isHandleError = moduleOptions && moduleOptions.isHandleError ? moduleOptions.isHandleError : true;
-        this.showDebugLogs = moduleOptions && moduleOptions.showDebugLogs ? moduleOptions.showDebugLogs : false;
-        this.clusterOptions = clusterOptions ? clusterOptions : undefined;
+        this.isHandleError = moduleOptions && moduleOptions.isHandleError ? moduleOptions.isHandleError: true;
+        this.showDebugLogs = moduleOptions && moduleOptions.showDebugLogs ? moduleOptions.showDebugLogs: false;
+        this.clusterOptions = clusterOptions ? clusterOptions: undefined;
     }
 
     /**

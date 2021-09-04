@@ -51,8 +51,11 @@ export class Redis extends Module {
 	 * @param addPrefix If to add a prefix of Object name to the properties as ObjectName_FunctionName
 	 */
 	private applyMixins(baseObject: any, givenObjects: any[], addPrefix = true): void {
+
 		givenObjects.forEach(givenObject => {
+			console.log(givenObject)
 			Object.getOwnPropertyNames(givenObject.prototype).forEach((name: string) => {
+				console.log(name)
 				const functionName = addPrefix ? `${modulePropNames[givenObject.name]}_${name}`: name;
 				Object.defineProperty(baseObject.prototype, functionName, Object.getOwnPropertyDescriptor(givenObject.prototype, name));
 			});
