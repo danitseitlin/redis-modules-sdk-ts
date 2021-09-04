@@ -54,27 +54,6 @@ export class RedisGraph extends Module {
     }
 
     /**
-     * Building the cypher params of a query
-     * @param query The query
-     * @param params The params of the query
-     * @returns Returning an array of arguments
-     */
-    buildQuery(query: string, params?: {[key: string]: string}): string[] {
-        const args: string[] = [];
-        const queryList: string[] = []
-        if(params !== undefined){
-            queryList.push('CYPHER')
-            for(const key in params) {
-                const value = this.paramToString(params[key])
-                queryList.push(`${key}=${value}`)
-            }
-            args.push(`${queryList.join(' ')} ${query}`)
-        }
-        else args.push(query)
-        return args;
-    }
-
-    /**
      * Executing a query and produces an execution plan augmented with metrics for each operation's execution
      * @param name The name of the graph
      * @param query The query to execute 
