@@ -42,6 +42,7 @@ export class Redis extends Module {
 		this.applyMixins(Redis, [
 			RedisAI, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, RedisBloomTDigest, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries
 		])
+		console.log(this)
 	}
 
 	/**
