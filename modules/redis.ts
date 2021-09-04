@@ -44,7 +44,6 @@ export class Redis extends Module {
 		this.applyMixins(Redis, [
 			RedisAI, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, RedisBloomTDigest, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries
 		])
-		console.log(this)
 	}
 
 	/**
@@ -72,6 +71,7 @@ export class Redis extends Module {
  * The Redis 'All in One' RedisIntervalSet module functions
  */
 export type RedisIntervalSetMixin = {
+	redisaiCommander: RedisAICommander,
 	ris_module_add: typeof RedisIntervalSets.prototype.add,
 	ris_module_get: typeof RedisIntervalSets.prototype.get,
 	ris_module_del: typeof RedisIntervalSets.prototype.del,
