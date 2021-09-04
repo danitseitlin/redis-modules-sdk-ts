@@ -24,11 +24,11 @@ describe('Module base testing', async function() {
 
     it('sendCommand function', async() => {
         for(const client of clients) {
-            let response = await client.sendCommand('set', ['foo', 'bar'])
+            let response = await client.sendCommand({command: 'set', args: ['foo', 'bar']})
             expect(response).to.equal('OK', 'The response of the SET command')
-            response = await client.sendCommand('get', ['foo'])
+            response = await client.sendCommand({command: 'get', args: ['foo']})
             expect(response).to.equal('bar', 'The response of the GET command')
-            response = await client.sendCommand('del', ['foo'])
+            response = await client.sendCommand({command: 'del', args: ['foo']})
             expect(response).to.equal(1, 'The response of the DEL command')
         }
     })
