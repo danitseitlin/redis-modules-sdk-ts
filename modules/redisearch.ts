@@ -5,7 +5,7 @@ import { Commander } from './redisearch.commander';
 
 export class Redisearch extends Module {
 
-    commander: Commander
+    private commander: Commander
     /**
      * Initializing the module object
      * @param name The name of the module

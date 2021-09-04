@@ -7,7 +7,7 @@ export class RedisAI extends Module {
     /**
      * 
      */
-    private commander: Commander
+    private private commander: Commander
     /**
      * Initializing the module object
      * @param name The name of the module

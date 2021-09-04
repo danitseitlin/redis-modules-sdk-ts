@@ -4,7 +4,7 @@ import { Commander } from './redisgears.commander';
 
 export class RedisGears extends Module {
 
-    commander: Commander
+    private commander: Commander
     /**
      * Initializing the module object
      * @param name The name of the module

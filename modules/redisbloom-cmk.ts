@@ -4,7 +4,7 @@ import { Commander } from './redisbloom-cmk.commander';
 
 export class RedisBloomCMK extends Module {
 
-    commander: Commander
+    private commander: Commander
     /**
      * Initializing the module object
      * @param name The name of the module
