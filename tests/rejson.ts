@@ -17,9 +17,8 @@ describe('ReJSON Module testing', async function() {
         });
         redis = new Redis({
             host: cliArguments.host,
-            port: parseInt(cliArguments.port),
-            { showDebugLogs: true }
-        });
+            port: parseInt(cliArguments.port)
+        }, { showDebugLogs: true });
         await client.connect();
         await redis.connect();
     })
