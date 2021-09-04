@@ -42,7 +42,7 @@ export class Redis extends Module {
 	constructor(options: IORedis.RedisOptions & IORedis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: IORedis.ClusterOptions) {
 		super(Redis.name, options, moduleOptions, clusterOptions) 
 		this.applyMixins(Redis, [
-			RedisAI, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, RedisBloomTDigest, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries
+			RedisAI, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, RedisBloomTDigest, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries, RedisIntervalSets
 		])
 	}
 
@@ -71,7 +71,6 @@ export class Redis extends Module {
  * The Redis 'All in One' RedisIntervalSet module functions
  */
 export type RedisIntervalSetMixin = {
-	redisaiCommander: RedisAICommander,
 	ris_module_add: typeof RedisIntervalSets.prototype.add,
 	ris_module_get: typeof RedisIntervalSets.prototype.get,
 	ris_module_del: typeof RedisIntervalSets.prototype.del,
@@ -83,6 +82,7 @@ export type RedisIntervalSetMixin = {
  * The Redis 'All in One' RedisAI module functions
  */
 export type RedisAIMixin = {
+	redisaiCommander: RedisAICommander,
 	ai_module_tensorset: typeof RedisAI.prototype.tensorset,
 	ai_module_tensorget: typeof RedisAI.prototype.tensorget,
 	ai_module_modeldel: typeof RedisAI.prototype.modeldel,
