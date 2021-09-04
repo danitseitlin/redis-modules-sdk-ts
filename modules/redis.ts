@@ -4,6 +4,7 @@
 import * as IORedis from 'ioredis';
 import { Module, RedisModuleOptions } from './module.base';
 import { RedisAI } from './redis-ai';
+import { RedisAICommander } from './redis-ai.commander';
 import { RedisBloom } from './redisbloom';
 import { RedisBloomCMK } from './redisbloom-cmk';
 import { RedisBloomCuckoo } from './redisbloom-cuckoo';
@@ -18,6 +19,7 @@ import { RedisTimeSeries } from './rts';
 
 export class Redis extends Module {
 	
+	private rediaiCommander: RedisAICommander
 	/**
      * Initializing the module object
      * @param name The name of the module
@@ -42,6 +44,7 @@ export class Redis extends Module {
 		this.applyMixins(Redis, [
 			RedisAI, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, RedisBloomTDigest, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries
 		])
+		this.rediaiCommander = new RedisAICommander()
 		console.log(this)
 	}
 
