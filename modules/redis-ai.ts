@@ -1,6 +1,6 @@
 import { Module, RedisModuleOptions } from './module.base'
 import * as Redis from 'ioredis';
-import { Commander } from './redis-ai.helpers';
+import { Commander } from './redis-ai.commander';
 
 export class RedisAI extends Module {
 

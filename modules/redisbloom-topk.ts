@@ -1,8 +1,10 @@
 import * as Redis from 'ioredis';
 import { Module, RedisModuleOptions } from './module.base';
+import { Commander } from './redisbloom-topk.commander';
 
 export class RedisBloomTopK extends Module {
 
+    commander: Commander
     /**
      * Initializing the module object
      * @param name The name of the module
@@ -24,6 +26,7 @@ export class RedisBloomTopK extends Module {
     constructor(redisOptions: Redis.RedisOptions, moduleOptions?: RedisModuleOptions)
     constructor(options: Redis.RedisOptions & Redis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: Redis.ClusterOptions) {
         super(RedisBloomTopK.name, options, moduleOptions, clusterOptions)
+        this.commander = new Commander()
     }
 
     /**
@@ -35,7 +38,8 @@ export class RedisBloomTopK extends Module {
      * @param decay The probability of reducing a counter in an occupied bucket. It is raised to power of it's counter (decay ^ bucket[i].counter). Therefore, as the counter gets higher, the chance of a reduction is being reduced. 
      */
     async reserve(key: string, topk: number, width: number, depth: number, decay: number): Promise<'OK'> {
-        return await this.sendCommand('TOPK.RESERVE', [key, topk, width, depth, decay]);
+        const command = this.commander.reserve(key, topk, width, depth, decay);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -44,7 +48,8 @@ export class RedisBloomTopK extends Module {
      * @param items Item/s to be added.
      */
     async add(key: string, items: (number | string)[]): Promise<string[]> {
-        return await this.sendCommand('TOPK.ADD', [key].concat(items as string[]))
+        const command = this.commander.add(key, items);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -53,11 +58,8 @@ export class RedisBloomTopK extends Module {
      * @param items A list of item and increment set's
      */
     async incrby(key: string, items: TOPKIncrbyItems[]): Promise<string[]> {
-        let args = [key];
-        for(const item of items) {
-            args = args.concat([item.name.toString(), item.increment.toString()])
-        }
-        return await this.sendCommand('TOPK.INCRBY', args);
+        const command = this.commander.incrby(key, items);
+        return await this.sendCommand(command);
         
     }
     
@@ -67,7 +69,8 @@ export class RedisBloomTopK extends Module {
      * @param items Item/s to be queried.
      */
     async query(key: string, items: (string | number)[]): Promise<TOPKResponse[]> {
-        return await this.sendCommand('TOPK.QUERY', [key].concat(items as string[]))
+        const command = this.commander.query(key, items);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -76,7 +79,8 @@ export class RedisBloomTopK extends Module {
      * @param items Item/s to be counted.
      */
     async count(key: string, items: (string | number)[]): Promise<number[]> {
-        return await this.sendCommand('TOPK.COUNT', [key].concat(items as string[]));
+        const command = this.commander.count(key, items);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -84,7 +88,8 @@ export class RedisBloomTopK extends Module {
      * @param key Name of sketch where item is counted. 
      */
     async list(key: string): Promise<(string | number)[]> {
-        return await this.sendCommand('TOPK.LIST', [key]);
+        const command = this.commander.list(key);
+        return await this.sendCommand(command);
     }
     
     /**
@@ -92,7 +97,8 @@ export class RedisBloomTopK extends Module {
      * @param key Name of sketch.
      */
     async info(key: string): Promise<(string | number)[]> {
-        return await this.sendCommand('TOPK.INFO', [key]);
+        const command = this.commander.info(key);
+        return await this.sendCommand(command);
     }
 }
 
