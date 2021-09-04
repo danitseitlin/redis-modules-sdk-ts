@@ -71,7 +71,10 @@ export class Module {
         try {
             if(this.showDebugLogs)
                 console.log(`${this.name}: Running command ${data.command} with arguments: ${data.args}`);
-            const response = this.clusterNodes ? await this.cluster.cluster.call(data.command, data.args) : await this.redis.send_command(data.command, data.args);
+            const response = this.clusterNodes ? 
+                await this.cluster.cluster.call(data.command, data.args)
+                    : await this.redis.send_command(data.command, data.args);
+
             if(this.showDebugLogs)
                 console.log(`${this.name}: command ${data.command} responded with ${response}`);
             return response;
@@ -181,6 +184,7 @@ export class Module {
         })
         return newArray;
     }
+
     /**
      * Formatting given param value to string
      * @param paramValue The given param value
@@ -223,7 +227,16 @@ export type RedisModuleOptions = {
     showDebugLogs?: boolean
 }
 
+/**
+ * The command object send to the sendCommand function
+ */
 export type CommandData = {
+    /**
+     * The full Redis command
+     */
     command: string,
+    /**
+     * The arguments passed to the command
+     */
     args?: any[]
 }
