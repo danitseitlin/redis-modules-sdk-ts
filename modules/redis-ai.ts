@@ -7,7 +7,7 @@ export class RedisAI extends Module {
     /**
      * 
      */
-    private redisaiCommander: RedisAICommander = new RedisAICommander()
+    public redisaiCommander: RedisAICommander = new RedisAICommander()
 
     /**
      * Initializing the module object
