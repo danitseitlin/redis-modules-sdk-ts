@@ -23,7 +23,6 @@ describe('AI testing', async function() {
         await client.disconnect();
         await redis.disconnect();
     })
-
     it('tensorset function', async () => {
         let response = await client.tensorset('values-key', 'FLOAT', [2, 2], [1, 2 ,3, 4])
         expect(response).to.eql('OK', 'The response of tensorset')
