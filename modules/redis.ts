@@ -18,7 +18,9 @@ import { RedisIntervalSets } from './ris';
 import { RedisTimeSeries } from './rts';
 
 export class Redis extends Module {
-	
+
+	public redisaiCommander: RedisAICommander = new RedisAICommander()
+
 	/**
      * Initializing the module object
      * @param name The name of the module
@@ -40,12 +42,11 @@ export class Redis extends Module {
 	constructor(redisOptions: IORedis.RedisOptions, moduleOptions?: RedisModuleOptions)
 	constructor(options: IORedis.RedisOptions & IORedis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: IORedis.ClusterOptions) {
 		super(Redis.name, options, moduleOptions, clusterOptions);
-		this.applyMixins(this, [
-			new RedisAI(options, moduleOptions, clusterOptions)
+		this.applyMixins(Redis, [
+			[RedisAI, new RedisAI(options, moduleOptions, clusterOptions)]
+			//new RedisAI(options, moduleOptions, clusterOptions)
+			//RedisAI, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, RedisBloomTDigest, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries, RedisIntervalSets
 		])
-		/*this.applyMixins(Redis, [
-			RedisAI, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, RedisBloomTDigest, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries, RedisIntervalSets
-		])*/
 	}
 
 	/**
@@ -56,19 +57,30 @@ export class Redis extends Module {
 	 */
 	private applyMixins(baseObject: any, givenObjects: any[], addPrefix = true): void {
 		givenObjects.forEach(givenObject => {
+			const paleObject = givenObject[0];
+			const initializedObject = givenObject[1];
 			console.log(givenObject)
-			Object.getOwnPropertyNames(givenObject.prototype).forEach((name: string) => {
-				//if(name !== 'constructor'){
-					console.log(name)
-					const functionName = addPrefix ? `${modulePropNames[givenObject.name]}_${name}`: name;
-					console.log(functionName)
-					Object.defineProperty(baseObject.prototype, functionName, Object.getOwnPropertyDescriptor(givenObject.prototype, name));
-				//}
+			Object.getOwnPropertyNames(paleObject.prototype).forEach((name: string) => {
+				if(name !== 'constructor'){
+					const functionName = addPrefix ? `${modulePropNames[paleObject.name]}_${name}`: name;
+					Object.defineProperty(baseObject.prototype, functionName, Object.getOwnPropertyDescriptor(paleObject.prototype, name));
+				}
 			});
+			/*Object.getOwnPropertyNames(initializedObject).forEach((name: string) => {
+				if(name !== 'constructor'){
+					//const functionName = addPrefix ? `${modulePropNames[givenObject.name]}_${name}`: name;
+					Object.defineProperty(baseObject.prototype, name, Object.getOwnPropertyDescriptor(initializedObject, name));
+				}
+			});*/
+			console.log(Redis)
 		});
 	}
 }
 
+
+export type RedisType = {
+	ris_module_add: typeof RedisIntervalSets.prototype.add
+}
 /**
  * The Redis 'All in One' RedisIntervalSet module functions
  */
