@@ -7,7 +7,7 @@ export class RedisAI extends Module {
     /**
      * 
      */
-    public redisaiCommander: RedisAICommander = new RedisAICommander()
+    private aiCommander: RedisAICommander = new RedisAICommander()
 
     /**
      * Initializing the module object
@@ -40,7 +40,7 @@ export class RedisAI extends Module {
      * @param shape One or more dimensions, or the number of elements per axis, for the tensor
      */
     async tensorset(key: string, type: TensorType, shapes: number[], data?: number[] | Buffer[]): Promise<'OK'> {
-        const command = this.redisaiCommander.tensorset(key, type, shapes, data);
+        const command = this.aiCommander.tensorset(key, type, shapes, data);
         return await this.sendCommand(command);
     }
 
@@ -51,7 +51,7 @@ export class RedisAI extends Module {
      * @param format The tensor's reply format can be one of the following (BLOB/VALUES)
      */
     async tensorget(key: string, format?: 'BLOB' | 'VALUES', meta?: boolean): Promise<AITensorInfo | string[] | string> {
-        const command = this.redisaiCommander.tensorget(key, format, meta);
+        const command = this.aiCommander.tensorget(key, format, meta);
         const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }
@@ -65,7 +65,7 @@ export class RedisAI extends Module {
      * @param options Additional optional parameters
      */
     async modelstore(key: string, backend: AIBackend, device: AIDevice, model: Buffer, options?: AIModelSetParameters): Promise<'OK'> {
-        const command = this.redisaiCommander.modelstore(key, backend, device, model, options)
+        const command = this.aiCommander.modelstore(key, backend, device, model, options)
         return await this.sendCommand(command); 
     }
 
@@ -76,7 +76,7 @@ export class RedisAI extends Module {
      * @param blob Will return the model's blob containing the serialized model
      */
     async modelget(key: string, meta?: boolean, blob?: boolean): Promise<AIModel | string[] | string> {
-        const command = this.redisaiCommander.modelget(key, meta, blob);
+        const command = this.aiCommander.modelget(key, meta, blob);
         const response = await this.sendCommand(command);
         return this.handleResponse(response)
     }
@@ -86,7 +86,7 @@ export class RedisAI extends Module {
      * @param key The model's key name
      */
     async modeldel(key: string): Promise<'OK'> {
-        const command = this.redisaiCommander.modeldel(key);
+        const command = this.aiCommander.modeldel(key);
         return await this.sendCommand(command);
     }
 
@@ -96,7 +96,7 @@ export class RedisAI extends Module {
      * @param parameters The parameters of 'AI.MODELEXECUTE'
      */
     async modelexecute(key: string, parameters: AIModelExecute): Promise<'OK'> {
-        const command = this.redisaiCommander.modelexecute(key, parameters);
+        const command = this.aiCommander.modelexecute(key, parameters);
         return await this.sendCommand(command);
     }
 
@@ -104,7 +104,7 @@ export class RedisAI extends Module {
      * Scanning a model
      */
     async modelscan(): Promise<string[][]> {
-        const command = this.redisaiCommander.modelscan();
+        const command = this.aiCommander.modelscan();
         return await this.sendCommand(command);
     }
 
@@ -114,7 +114,7 @@ export class RedisAI extends Module {
      * @param parameters Additional optional parameters
      */
     async scriptset(key: string, parameters: AIScriptSetParameters): Promise<'OK'> {
-        const command = this.redisaiCommander.scriptset(key, parameters);
+        const command = this.aiCommander.scriptset(key, parameters);
         return await this.sendCommand(command);
     }
 
@@ -125,7 +125,7 @@ export class RedisAI extends Module {
      * @param source The script's source code as a String
      */
     async scriptget(key: string, meta?: boolean, source?: boolean): Promise<AIScript | string[] | string> {
-        const command = this.redisaiCommander.scriptget(key, meta, source);
+        const command = this.aiCommander.scriptget(key, meta, source);
         const response: string[] = await this.sendCommand(command);
         return this.handleResponse(response);
     }
@@ -135,7 +135,7 @@ export class RedisAI extends Module {
      * @param key The script's key name
      */
     async scriptdel(key: string): Promise<'OK'> {
-        const command = this.redisaiCommander.scriptdel(key);
+        const command = this.aiCommander.scriptdel(key);
         return await this.sendCommand(command);
     }
 
@@ -146,7 +146,7 @@ export class RedisAI extends Module {
      * @param parameters The parameters of the 'AI.SCRIPTEXECUTE' command
     */
     async scriptexecute(key: string, functionName: string, parameters: AIScriptExecuteParameters): Promise<'OK'> {
-        const command = this.redisaiCommander.scriptexecute(key, functionName, parameters);
+        const command = this.aiCommander.scriptexecute(key, functionName, parameters);
         return await this.sendCommand(command);
     }
 
@@ -154,7 +154,7 @@ export class RedisAI extends Module {
      * Scanning a script
      */
     async scriptscan(): Promise<string[][]> {
-        const command = this.redisaiCommander.scriptscan();
+        const command = this.aiCommander.scriptscan();
         return await this.sendCommand(command);
     }
 
@@ -164,7 +164,7 @@ export class RedisAI extends Module {
      * @param commands The commands sent to the 'AI.DAGEXECUTE' command
      */
     async dagexecute(parameters: AIDagExecuteParameters, commands: string[]): Promise<string[]> {
-        const command = this.redisaiCommander.dagexecute(parameters, commands);
+        const command = this.aiCommander.dagexecute(parameters, commands);
         return await this.sendCommand(command)
     }
 
@@ -174,7 +174,7 @@ export class RedisAI extends Module {
      * @param commands The commands sent to the 'AI.DAGEXECUTE_RO' command
      */
     async dagexecuteRO(parameters: AIDagExecuteParameters, commands: string[]): Promise<string[]> {
-        const command = this.redisaiCommander.dagexecuteRO(parameters, commands);
+        const command = this.aiCommander.dagexecuteRO(parameters, commands);
         return await this.sendCommand(command);
     }
 
@@ -184,7 +184,7 @@ export class RedisAI extends Module {
      * @param RESETSTAT Resets all statistics associated with the key 
      */
     async info(key: string, RESETSTAT?: boolean): Promise<AIScriptInfo | string[] | string> {
-        const command = this.redisaiCommander.info(key, RESETSTAT);
+        const command = this.aiCommander.info(key, RESETSTAT);
         const response: string[] = await this.sendCommand(command);
         return this.handleResponse(response);
     }
@@ -195,7 +195,7 @@ export class RedisAI extends Module {
      * @param backend  Loads the DL/ML backend specified by the backend identifier from path . If path is relative, it is resolved by prefixing the BACKENDSPATH to it. If path is absolute then it is used as is.
      */
     async config(path: string, backend?: AIBackend): Promise<'OK'> {
-        const command = this.redisaiCommander.config(path, backend);
+        const command = this.aiCommander.config(path, backend);
         return await this.sendCommand(command);
     }
 }

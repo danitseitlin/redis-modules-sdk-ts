@@ -4,7 +4,7 @@ import { RedisIntervalSetsCommander } from './ris.commander';
 
 export class RedisIntervalSets extends Module {
 
-    public risCommander: RedisIntervalSetsCommander
+    private risCommander = new RedisIntervalSetsCommander();
     /**
      * Initializing the module object
      * @param name The name of the module
@@ -26,7 +26,6 @@ export class RedisIntervalSets extends Module {
     constructor(redisOptions: Redis.RedisOptions, moduleOptions?: RedisModuleOptions)
     constructor(options: Redis.RedisOptions & Redis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: Redis.ClusterOptions) {
         super(RedisIntervalSets.name, options, moduleOptions, clusterOptions)
-        this.risCommander = new RedisIntervalSetsCommander()
     }
 
     /**

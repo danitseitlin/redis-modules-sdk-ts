@@ -4,7 +4,7 @@ import { BloomTdigestCommander } from './redisbloom-tdigest.commander';
 
 export class RedisBloomTDigest extends Module {
 
-    private redisBloomTdigestCommander: BloomTdigestCommander
+    private bloomTdigestCommander = new BloomTdigestCommander();
     /**
      * Initializing the module object
      * @param name The name of the module
@@ -26,7 +26,6 @@ export class RedisBloomTDigest extends Module {
     constructor(redisOptions: Redis.RedisOptions, moduleOptions?: RedisModuleOptions)
     constructor(options: Redis.RedisOptions & Redis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: Redis.ClusterOptions) {
         super(RedisBloomTDigest.name, options, moduleOptions, clusterOptions)
-        this.redisBloomTdigestCommander = new BloomTdigestCommander()
     }
 
     /**
@@ -36,7 +35,7 @@ export class RedisBloomTDigest extends Module {
      * @returns OK on success, error otherwise
      */
     async create(key: string, compression: number): Promise<'OK'> {
-        const command = this.redisBloomTdigestCommander.create(key, compression);
+        const command = this.bloomTdigestCommander.create(key, compression);
         return await this.sendCommand(command);
     }
 
@@ -46,7 +45,7 @@ export class RedisBloomTDigest extends Module {
      * @returns OK on success, error otherwise
      */
     async reset(key: string): Promise<'OK'> {
-        const command = this.redisBloomTdigestCommander.reset(key);
+        const command = this.bloomTdigestCommander.reset(key);
         return await this.sendCommand(command);
     }
 
@@ -57,7 +56,7 @@ export class RedisBloomTDigest extends Module {
      * @returns OK on success, error otherwise
      */
     async add(key: string, parameters: TDigestAddParameters[]): Promise<'OK'> {  
-        const command = this.redisBloomTdigestCommander.add(key, parameters);
+        const command = this.bloomTdigestCommander.add(key, parameters);
         return await this.sendCommand(command);
     }
 
@@ -68,7 +67,7 @@ export class RedisBloomTDigest extends Module {
      * @returns OK on success, error otherwise
      */
     async merge(fromKey: string, toKey: string): Promise<'OK'> {
-        const command = this.redisBloomTdigestCommander.merge(fromKey, toKey);
+        const command = this.bloomTdigestCommander.merge(fromKey, toKey);
         return await this.sendCommand(command);
     }
 
@@ -78,7 +77,7 @@ export class RedisBloomTDigest extends Module {
      * @returns DBL_MAX if the sketch is empty
      */
     async min(key: string): Promise<number> {
-        const command = this.redisBloomTdigestCommander.min(key);
+        const command = this.bloomTdigestCommander.min(key);
         return await this.sendCommand(command);
     }
 
@@ -88,7 +87,7 @@ export class RedisBloomTDigest extends Module {
      * @returns DBL_MIN if the sketch is empty
      */
     async max(key: string): Promise<number> {
-        const command = this.redisBloomTdigestCommander.max(key);
+        const command = this.bloomTdigestCommander.max(key);
         return await this.sendCommand(command);
     }
 
@@ -99,7 +98,7 @@ export class RedisBloomTDigest extends Module {
      * @returns Double value estimate of the cutoff such that a specified fraction of the data added to this TDigest would be less than or equal to the cutoff
      */
     async quantile(key: string, quantile: number): Promise<number> {
-        const command = this.redisBloomTdigestCommander.quantile(key, quantile);
+        const command = this.bloomTdigestCommander.quantile(key, quantile);
         return await this.sendCommand(command);
     }
 
@@ -110,7 +109,7 @@ export class RedisBloomTDigest extends Module {
      * @returns Returns compression, capacity, total merged and unmerged nodes, the total compressions made up to date on that key, and merged and unmerged weight
      */
     async cdf(key: string, value: number): Promise<number> {
-        const command = this.redisBloomTdigestCommander.cdf(key, value);
+        const command = this.bloomTdigestCommander.cdf(key, value);
         return await this.sendCommand(command);
     }
 
@@ -119,7 +118,7 @@ export class RedisBloomTDigest extends Module {
      * @param key The name of the sketch
      */
     async info(key: string): Promise<TDigestInfo> {
-        const command = this.redisBloomTdigestCommander.info(key);
+        const command = this.bloomTdigestCommander.info(key);
         const response = await this.sendCommand(command);
         return this.handleResponse(response)
     }

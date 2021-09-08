@@ -4,7 +4,7 @@ import { GearsCommander } from './redisgears.commander';
 
 export class RedisGears extends Module {
 
-    private gearsCommander: GearsCommander
+    private gearsCommander = new GearsCommander();
     /**
      * Initializing the module object
      * @param name The name of the module
@@ -26,7 +26,6 @@ export class RedisGears extends Module {
     constructor(redisOptions: Redis.RedisOptions, moduleOptions?: RedisModuleOptions)
     constructor(options: Redis.RedisOptions & Redis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: Redis.ClusterOptions) {
         super(RedisGears.name, options, moduleOptions, clusterOptions)
-        this.gearsCommander = new GearsCommander()
     }
 
     /**

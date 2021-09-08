@@ -5,7 +5,7 @@ import { SearchCommander } from './redisearch.commander';
 
 export class Redisearch extends Module {
 
-    private redisearchCommander: SearchCommander
+    private searchCommander = new SearchCommander();
     /**
      * Initializing the module object
      * @param name The name of the module
@@ -27,7 +27,6 @@ export class Redisearch extends Module {
     constructor(redisOptions: Redis.RedisOptions, moduleOptions?: RedisModuleOptions)
     constructor(options: Redis.RedisOptions & Redis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: Redis.ClusterOptions) {
         super(Redisearch.name, options, moduleOptions, clusterOptions)
-        this.redisearchCommander = new SearchCommander()
     }
 
     /**
@@ -39,7 +38,7 @@ export class Redisearch extends Module {
      * @returns 'OK' or error
      */
     async create(index: string, indexType: FTIndexType, schemaFields: FTSchemaField[], parameters?: FTCreateParameters): Promise<'OK' | string> {
-        const command = this.redisearchCommander.create(index, indexType, schemaFields, parameters);
+        const command = this.searchCommander.create(index, indexType, schemaFields, parameters);
         const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }
@@ -52,7 +51,7 @@ export class Redisearch extends Module {
      * @returns Array reply, where the first element is the total number of results, and then pairs of document id, and a nested array of field/value.
      */
     async search(index: string, query: string, parameters?: FTSearchParameters): Promise<[number, ...Array<string | string[] | {[key: string]: string}>]> {
-        const command = this.redisearchCommander.search(index, query, parameters);
+        const command = this.searchCommander.search(index, query, parameters);
         const response = await this.sendCommand(command);
         const parseResponse = parameters?.parseSearchQueries ?? true;
         return this.handleResponse(response, parseResponse);
@@ -66,7 +65,7 @@ export class Redisearch extends Module {
      * @returns Array Response. Each row is an array and represents a single aggregate result
      */
     async aggregate(index: string, query: string, parameters?: FTAggregateParameters): Promise<[number, ...Array<string[]>]> {
-        const command = this.redisearchCommander.aggregate(index, query, parameters);
+        const command = this.searchCommander.aggregate(index, query, parameters);
         const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }
@@ -78,7 +77,7 @@ export class Redisearch extends Module {
      * @returns Returns the execution plan for a complex query
      */
     async explain(index: string, query: string): Promise<string> {
-        const command = this.redisearchCommander.explain(index, query);
+        const command = this.searchCommander.explain(index, query);
         const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }
@@ -90,7 +89,7 @@ export class Redisearch extends Module {
      * @returns A string representing the execution plan.
      */
     async explainCLI(index: string, query: string): Promise<string[]> {
-        const command = this.redisearchCommander.explainCLI(index, query);
+        const command = this.searchCommander.explainCLI(index, query);
         const response = await this.sendCommand(command);
         return this.handleResponse(response.join(''));
     }
@@ -104,7 +103,7 @@ export class Redisearch extends Module {
      * @returns 'OK' or error
      */
     async alter(index: string, field: string, fieldType: FTFieldType, options?: FTFieldOptions): Promise<'OK' | string> {
-        const command = this.redisearchCommander.alter(index, field, fieldType, options);
+        const command = this.searchCommander.alter(index, field, fieldType, options);
         const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }
@@ -116,7 +115,7 @@ export class Redisearch extends Module {
      * @returns 'OK' or error
      */
     async dropindex(index: string, deleteHash = false): Promise<'OK' | string> {
-        const command = this.redisearchCommander.dropindex(index, deleteHash);
+        const command = this.searchCommander.dropindex(index, deleteHash);
         const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }
@@ -128,7 +127,7 @@ export class Redisearch extends Module {
      * @returns 'OK' or error
      */
     async aliasadd(name: string, index: string): Promise<'OK' | string> {
-        const command = this.redisearchCommander.aliasadd(name, index);
+        const command = this.searchCommander.aliasadd(name, index);
         const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }
@@ -140,7 +139,7 @@ export class Redisearch extends Module {
      * @returns 'OK' or error
      */
     async aliasupdate(name: string, index: string): Promise<'OK' | string> {
-        const command = this.redisearchCommander.aliasupdate(name, index);
+        const command = this.searchCommander.aliasupdate(name, index);
         const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }
@@ -151,7 +150,7 @@ export class Redisearch extends Module {
      * @returns 'OK' or error
      */
     async aliasdel(name: string): Promise<'OK' | string> {
-        const command = this.redisearchCommander.aliasdel(name);
+        const command = this.searchCommander.aliasdel(name);
         const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }
@@ -163,7 +162,7 @@ export class Redisearch extends Module {
      * @returns The distinct tags indexed in a Tag field 
      */
     async tagvals(index: string, field: string): Promise<string[]> {
-        const command = this.redisearchCommander.tagvals(index, field);
+        const command = this.searchCommander.tagvals(index, field);
         const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }
@@ -177,7 +176,7 @@ export class Redisearch extends Module {
      * @returns The current size of the suggestion dictionary
      */
     async sugadd(key: string, suggestion: string, score: number, options?: FTSugAddParameters): Promise<number> {
-        const command = this.redisearchCommander.sugadd(key, suggestion, score, options);
+        const command = this.searchCommander.sugadd(key, suggestion, score, options);
         const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }
@@ -190,7 +189,7 @@ export class Redisearch extends Module {
      * @returns A list of the top suggestions matching the prefix, optionally with score after each entry 
      */
     async sugget(key: string, prefix: string, options?: FTSugGetParameters): Promise<string> {
-        const command = this.redisearchCommander.sugget(key, prefix, options);
+        const command = this.searchCommander.sugget(key, prefix, options);
         const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }
@@ -201,7 +200,7 @@ export class Redisearch extends Module {
      * @param suggestion The suggestion
      */
     async sugdel(key: string, suggestion: string): Promise<number> {
-        const command = this.redisearchCommander.sugdel(key, suggestion);
+        const command = this.searchCommander.sugdel(key, suggestion);
         const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }
@@ -211,7 +210,7 @@ export class Redisearch extends Module {
      * @param key The key
      */
     async suglen(key: string): Promise<number> {
-        const command = this.redisearchCommander.suglen(key);
+        const command = this.searchCommander.suglen(key);
         const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }
@@ -225,7 +224,7 @@ export class Redisearch extends Module {
      * @returns 'OK'
      */
     async synupdate(index: string, groupId: number, terms: string[], skipInitialScan = false): Promise<'OK'> {
-        const command = this.redisearchCommander.synupdate(index, groupId, terms, skipInitialScan);
+        const command = this.searchCommander.synupdate(index, groupId, terms, skipInitialScan);
         const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }
@@ -236,7 +235,7 @@ export class Redisearch extends Module {
      * @returns A list of synonym terms and their synonym group ids.  
      */
     async syndump(index: string): Promise<{[key: string]: string | number}> {
-        const command = this.redisearchCommander.syndump(index);
+        const command = this.searchCommander.syndump(index);
         const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }
@@ -249,7 +248,7 @@ export class Redisearch extends Module {
      * @returns An array, in which each element represents a misspelled term from the query
      */
     async spellcheck(index: string, query: string, options?: FTSpellCheck): Promise<string[]> {
-        const command = this.redisearchCommander.spellcheck(index, query, options);
+        const command = this.searchCommander.spellcheck(index, query, options);
         const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }
@@ -261,7 +260,7 @@ export class Redisearch extends Module {
      * @returns The number of new terms that were added
      */
     async dictadd(dict: string, terms: string[]): Promise<number> {
-        const command = this.redisearchCommander.dictadd(dict, terms);
+        const command = this.searchCommander.dictadd(dict, terms);
         const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }
@@ -273,7 +272,7 @@ export class Redisearch extends Module {
      * @returns The number of terms that were deleted
      */
     async dictdel(dict: string, terms: string[]): Promise<number> {
-        const command = this.redisearchCommander.dictdel(dict, terms);
+        const command = this.searchCommander.dictdel(dict, terms);
         const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }
@@ -284,7 +283,7 @@ export class Redisearch extends Module {
      * @returns An array, where each element is term
      */
     async dictdump(dict: string): Promise<string> {
-        const command = this.redisearchCommander.dictdump(dict);
+        const command = this.searchCommander.dictdump(dict);
         const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }
@@ -295,7 +294,7 @@ export class Redisearch extends Module {
      * @returns A nested array of keys and values. 
      */
     async info(index: string): Promise<FTInfo> {
-        const command = this.redisearchCommander.info(index);
+        const command = this.searchCommander.info(index);
         const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }
@@ -308,7 +307,7 @@ export class Redisearch extends Module {
      * @returns If 'SET' command, returns 'OK' for valid runtime-settable option names and values. If 'GET' command, returns a string with the current option's value.
      */
     async config(commandType: 'GET' | 'SET' | 'HELP', option: string, value?: string): Promise<FTConfig> {
-        const command = this.redisearchCommander.config(commandType, option, value);
+        const command = this.searchCommander.config(commandType, option, value);
         const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }

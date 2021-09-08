@@ -4,7 +4,7 @@ import { GraphCommander } from './redisgraph.commander';
 
 export class RedisGraph extends Module {
 
-    private graphCommander: GraphCommander
+    private graphCommander = new GraphCommander();
     /**
      * Initializing the module object
      * @param name The name of the module
@@ -26,7 +26,6 @@ export class RedisGraph extends Module {
     constructor(redisOptions: Redis.RedisOptions, moduleOptions?: RedisModuleOptions)
     constructor(options: Redis.RedisOptions & Redis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: Redis.ClusterOptions) {
         super(RedisGraph.name, options, moduleOptions, clusterOptions)
-        this.graphCommander = new GraphCommander()
     }
 
     /**

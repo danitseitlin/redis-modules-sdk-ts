@@ -18,12 +18,30 @@ import { RedisIntervalSets } from './ris/ris';
 import { RedisIntervalSetsCommander } from './ris/ris.commander';
 import { RedisTimeSeries } from './rts/rts';
 import { BloomTdigestCommander } from './bloom-tdigest/redisbloom-tdigest.commander';
+import { BloomCommander } from './bloom/redisbloom.commander';
+import { BloomCmkCommander } from './bloom-cmk/redisbloom-cmk.commander';
+import { BloomCuckooCommander } from './bloom-cuckoo/redisbloom-cuckoo.commander';
+import { BloomTopkCommander } from './bloom-topk/redisbloom-topk.commander';
+import { SearchCommander } from './redisearch/redisearch.commander';
+import { GearsCommander } from './redisgears/redisgears.commander';
+import { GraphCommander } from './redisgraph/redisgraph.commander';
+import { RejsonCommander } from './rejson/rejson.commander';
+import { RedisTimeSeriesCommander } from './rts/rts.commander';
 
 export class Redis extends Module {
-
-	public redisaiCommander = new RedisAICommander()
+	public bloomCommander = new BloomCommander()
+	public bloomCmkCommander = new BloomCmkCommander()
+	public bloomCuckooCommander = new BloomCuckooCommander()
+	public bloomTdigestCommander = new BloomTdigestCommander()
+	public bloomTopkCommander = new BloomTopkCommander()
+	public aiCommander = new RedisAICommander()
+	public searchCommander = new SearchCommander()
+	public gearsCommander = new GearsCommander()
+	public graphCommander = new GraphCommander()
+	public rejsonCommander = new RejsonCommander()
 	public risCommander = new RedisIntervalSetsCommander()
-	public redisBloomTdigestCommander = new BloomTdigestCommander()
+	public rtsCommander = new RedisTimeSeriesCommander()
+
 	/**
      * Initializing the module object
      * @param name The name of the module
