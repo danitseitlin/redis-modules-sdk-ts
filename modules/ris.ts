@@ -1,10 +1,10 @@
 import * as Redis from 'ioredis';
 import { Module, RedisModuleOptions } from './module.base';
-import { Commander } from './ris.commander';
+import { RedisIntervalSetsCommander } from './ris.commander';
 
 export class RedisIntervalSets extends Module {
 
-    private commander: Commander
+    private risCommander: RedisIntervalSetsCommander
     /**
      * Initializing the module object
      * @param name The name of the module
@@ -26,7 +26,7 @@ export class RedisIntervalSets extends Module {
     constructor(redisOptions: Redis.RedisOptions, moduleOptions?: RedisModuleOptions)
     constructor(options: Redis.RedisOptions & Redis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: Redis.ClusterOptions) {
         super(RedisIntervalSets.name, options, moduleOptions, clusterOptions)
-        this.commander = new Commander()
+        this.risCommander = new RedisIntervalSetsCommander()
     }
 
     /**
@@ -35,7 +35,7 @@ export class RedisIntervalSets extends Module {
      * @param sets A list of sets to create. At least 1 set is required.
      */
     async add(key: string, sets: RISSet[]): Promise<'OK'> {
-        const command = this.commander.add(key, sets);
+        const command = this.risCommander.add(key, sets);
         return await this.sendCommand(command);
     }
 
@@ -45,7 +45,7 @@ export class RedisIntervalSets extends Module {
      * @param setName Optional. The name of specific set. If not passed all interval sets under key will be retrieved. 
      */
     async get(key: string, setName?: string): Promise<RISSet[]> {
-        const command = this.commander.get(key, setName);
+        const command = this.risCommander.get(key, setName);
         const response = await this.sendCommand(command);
         return this.parseGet(response);
     }
@@ -56,7 +56,7 @@ export class RedisIntervalSets extends Module {
      * @param setNames Optional. A list of set names to delete. If not passed all interval sets under key will be removed. 
      */
     async del(key: string, setNames?: string[]): Promise<'OK'> {
-        const command = this.commander.del(key, setNames);
+        const command = this.risCommander.del(key, setNames);
         return await this.sendCommand(command);
     }
 
@@ -66,7 +66,7 @@ export class RedisIntervalSets extends Module {
      * @param score The score of the set
      */
     async score(key: string, score: number): Promise<string[]> {
-        const command = this.commander.score(key, score);
+        const command = this.risCommander.score(key, score);
         return await this.sendCommand(command);
     }
 
@@ -76,7 +76,7 @@ export class RedisIntervalSets extends Module {
      * @param score The score of the set
      */
     async notScore(key: string, score: number): Promise<string[]> {
-        const command = this.commander.notScore(key, score);
+        const command = this.risCommander.notScore(key, score);
         return await this.sendCommand(command);
     }
 

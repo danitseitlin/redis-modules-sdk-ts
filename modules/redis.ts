@@ -15,12 +15,13 @@ import { RedisGears } from './redisgears';
 import { RedisGraph } from './redisgraph';
 import { ReJSON } from './rejson';
 import { RedisIntervalSets } from './ris';
+import { RedisIntervalSetsCommander } from './ris.commander';
 import { RedisTimeSeries } from './rts';
 
 export class Redis extends Module {
 
 	public redisaiCommander: RedisAICommander = new RedisAICommander()
-
+	risCommander: RedisIntervalSetsCommander
 	/**
      * Initializing the module object
      * @param name The name of the module
