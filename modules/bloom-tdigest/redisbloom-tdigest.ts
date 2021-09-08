@@ -1,8 +1,10 @@
 import * as Redis from 'ioredis';
-import { Module, RedisModuleOptions } from './module.base';
+import { Module, RedisModuleOptions } from '../module.base';
+import { BloomTdigestCommander } from './redisbloom-tdigest.commander';
 
 export class RedisBloomTDigest extends Module {
 
+    private bloomTdigestCommander = new BloomTdigestCommander();
     /**
      * Initializing the module object
      * @param name The name of the module
@@ -33,7 +35,8 @@ export class RedisBloomTDigest extends Module {
      * @returns OK on success, error otherwise
      */
     async create(key: string, compression: number): Promise<'OK'> {
-        return await this.sendCommand('TDIGEST.CREATE', [key, `${compression}`]);
+        const command = this.bloomTdigestCommander.create(key, compression);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -42,7 +45,8 @@ export class RedisBloomTDigest extends Module {
      * @returns OK on success, error otherwise
      */
     async reset(key: string): Promise<'OK'> {
-        return await this.sendCommand('TDIGEST.RESET', [key]);
+        const command = this.bloomTdigestCommander.reset(key);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -52,10 +56,8 @@ export class RedisBloomTDigest extends Module {
      * @returns OK on success, error otherwise
      */
     async add(key: string, parameters: TDigestAddParameters[]): Promise<'OK'> {  
-        let args = [key]
-        for(const pair of parameters)
-            args = args.concat([`${pair.value}`, `${pair.weight}`])
-        return await this.sendCommand('TDIGEST.ADD', args);
+        const command = this.bloomTdigestCommander.add(key, parameters);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -65,7 +67,8 @@ export class RedisBloomTDigest extends Module {
      * @returns OK on success, error otherwise
      */
     async merge(fromKey: string, toKey: string): Promise<'OK'> {
-        return await this.sendCommand('TDIGEST.MERGE', [toKey, fromKey]);
+        const command = this.bloomTdigestCommander.merge(fromKey, toKey);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -74,7 +77,8 @@ export class RedisBloomTDigest extends Module {
      * @returns DBL_MAX if the sketch is empty
      */
     async min(key: string): Promise<number> {
-        return await this.sendCommand('TDIGEST.MIN', [key]);
+        const command = this.bloomTdigestCommander.min(key);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -83,7 +87,8 @@ export class RedisBloomTDigest extends Module {
      * @returns DBL_MIN if the sketch is empty
      */
     async max(key: string): Promise<number> {
-        return await this.sendCommand('TDIGEST.MAX', [key]);
+        const command = this.bloomTdigestCommander.max(key);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -93,7 +98,8 @@ export class RedisBloomTDigest extends Module {
      * @returns Double value estimate of the cutoff such that a specified fraction of the data added to this TDigest would be less than or equal to the cutoff
      */
     async quantile(key: string, quantile: number): Promise<number> {
-        return await this.sendCommand('TDIGEST.QUANTILE', [key, quantile]);
+        const command = this.bloomTdigestCommander.quantile(key, quantile);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -103,7 +109,8 @@ export class RedisBloomTDigest extends Module {
      * @returns Returns compression, capacity, total merged and unmerged nodes, the total compressions made up to date on that key, and merged and unmerged weight
      */
     async cdf(key: string, value: number): Promise<number> {
-        return await this.sendCommand('TDIGEST.CDF', [key, value]);
+        const command = this.bloomTdigestCommander.cdf(key, value);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -111,7 +118,8 @@ export class RedisBloomTDigest extends Module {
      * @param key The name of the sketch
      */
     async info(key: string): Promise<TDigestInfo> {
-        const response = await this.sendCommand('TDIGEST.INFO', [key]);
+        const command = this.bloomTdigestCommander.info(key);
+        const response = await this.sendCommand(command);
         return this.handleResponse(response)
     }
 }

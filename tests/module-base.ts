@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { Module } from '../modules/module.base';
@@ -24,11 +25,11 @@ describe('Module base testing', async function() {
 
     it('sendCommand function', async() => {
         for(const client of clients) {
-            let response = await client.sendCommand('set', ['foo', 'bar'])
+            let response = await client.sendCommand({command: 'set', args: ['foo', 'bar']})
             expect(response).to.equal('OK', 'The response of the SET command')
-            response = await client.sendCommand('get', ['foo'])
+            response = await client.sendCommand({command: 'get', args: ['foo']})
             expect(response).to.equal('bar', 'The response of the GET command')
-            response = await client.sendCommand('del', ['foo'])
+            response = await client.sendCommand({command: 'del', args: ['foo']})
             expect(response).to.equal(1, 'The response of the DEL command')
         }
     })
@@ -46,17 +47,6 @@ describe('Module base testing', async function() {
         ];
         parsed = clients[0].handleResponse(response)
         expect(parsed.numbers.num1).to.equal(response[1][1], 'The parsed response')
-        console.log(clients[0].handleResponse([
-            'key',
-            1,
-            'fields',
-            [
-                [1,2,3],
-                [3,4,5]
-            ]
-        ]))
-
-        console.log(clients[0].handleResponse([ [ 'TERM', 'name', [] ] ]))
     });
 
     it('isOnlyTwoDimensionalArray function', async () => {

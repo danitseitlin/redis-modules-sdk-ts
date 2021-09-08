@@ -1,6 +1,6 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
-import { GraphConfigInfo, RedisGraph } from '../modules/redisgraph';
+import { GraphConfigInfo, RedisGraph } from '../modules/redisgraph/redisgraph';
 import { Redis } from '../modules/redis';
 let client: RedisGraph;
 let redis: Redis;
@@ -27,7 +27,6 @@ describe('RedisGraph Module testing', async function() {
 
     it('query function', async () => {
         let response = await client.query(graphName, 'CREATE (p:Person {name: \'Kurt\', age: 27}) RETURN p');
-        console.log(response)
         expect(response[2].find(item => item === 'Labels added: 1')).to.not.equal(undefined, 'The value of Labels added');
         expect(response[2].find(item => item === 'Nodes created: 1')).to.not.equal(undefined, 'The value of Nodes created');
         expect(response[2].find(item => item === 'Properties set: 2')).to.not.equal(undefined, 'The value of Properties set');

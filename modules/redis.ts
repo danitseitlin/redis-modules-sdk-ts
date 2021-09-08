@@ -3,21 +3,45 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import * as IORedis from 'ioredis';
 import { Module, RedisModuleOptions } from './module.base';
-import { RedisAI } from './redis-ai';
-import { RedisBloom } from './redisbloom';
-import { RedisBloomCMK } from './redisbloom-cmk';
-import { RedisBloomCuckoo } from './redisbloom-cuckoo';
-import { RedisBloomTDigest } from './redisbloom-tdigest';
-import { RedisBloomTopK } from './redisbloom-topk';
-import { Redisearch } from './redisearch';
-import { RedisGears } from './redisgears';
-import { RedisGraph } from './redisgraph';
-import { ReJSON } from './rejson';
-import { RedisIntervalSets } from './ris';
-import { RedisTimeSeries } from './rts';
+import { RedisAI } from './redis-ai/redis-ai';
+import { RedisAICommander } from './redis-ai/redis-ai.commander';
+import { RedisBloom } from './bloom/redisbloom';
+import { RedisBloomCMK } from './bloom-cmk/redisbloom-cmk';
+import { RedisBloomCuckoo } from './bloom-cuckoo/redisbloom-cuckoo';
+import { RedisBloomTDigest } from './bloom-tdigest/redisbloom-tdigest';
+import { RedisBloomTopK } from './bloom-topk/redisbloom-topk';
+import { Redisearch } from './redisearch/redisearch';
+import { RedisGears } from './redisgears/redisgears';
+import { RedisGraph } from './redisgraph/redisgraph';
+import { ReJSON } from './rejson/rejson';
+import { RedisIntervalSets } from './ris/ris';
+import { RedisIntervalSetsCommander } from './ris/ris.commander';
+import { RedisTimeSeries } from './rts/rts';
+import { BloomTdigestCommander } from './bloom-tdigest/redisbloom-tdigest.commander';
+import { BloomCommander } from './bloom/redisbloom.commander';
+import { BloomCmkCommander } from './bloom-cmk/redisbloom-cmk.commander';
+import { BloomCuckooCommander } from './bloom-cuckoo/redisbloom-cuckoo.commander';
+import { BloomTopkCommander } from './bloom-topk/redisbloom-topk.commander';
+import { SearchCommander } from './redisearch/redisearch.commander';
+import { GearsCommander } from './redisgears/redisgears.commander';
+import { GraphCommander } from './redisgraph/redisgraph.commander';
+import { RejsonCommander } from './rejson/rejson.commander';
+import { RedisTimeSeriesCommander } from './rts/rts.commander';
 
 export class Redis extends Module {
-	
+	public bloomCommander = new BloomCommander()
+	public bloomCmkCommander = new BloomCmkCommander()
+	public bloomCuckooCommander = new BloomCuckooCommander()
+	public bloomTdigestCommander = new BloomTdigestCommander()
+	public bloomTopkCommander = new BloomTopkCommander()
+	public aiCommander = new RedisAICommander()
+	public searchCommander = new SearchCommander()
+	public gearsCommander = new GearsCommander()
+	public graphCommander = new GraphCommander()
+	public rejsonCommander = new RejsonCommander()
+	public risCommander = new RedisIntervalSetsCommander()
+	public rtsCommander = new RedisTimeSeriesCommander()
+
 	/**
      * Initializing the module object
      * @param name The name of the module
@@ -38,9 +62,9 @@ export class Redis extends Module {
 	 */
 	constructor(redisOptions: IORedis.RedisOptions, moduleOptions?: RedisModuleOptions)
 	constructor(options: IORedis.RedisOptions & IORedis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: IORedis.ClusterOptions) {
-		super(Redis.name, options, moduleOptions, clusterOptions) 
+		super(Redis.name, options, moduleOptions, clusterOptions);
 		this.applyMixins(Redis, [
-			RedisAI, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, RedisBloomTDigest, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries
+			RedisAI, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, RedisBloomTDigest, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries, RedisIntervalSets
 		])
 	}
 
@@ -53,8 +77,10 @@ export class Redis extends Module {
 	private applyMixins(baseObject: any, givenObjects: any[], addPrefix = true): void {
 		givenObjects.forEach(givenObject => {
 			Object.getOwnPropertyNames(givenObject.prototype).forEach((name: string) => {
-				const functionName = addPrefix ? `${modulePropNames[givenObject.name]}_${name}`: name;
-				Object.defineProperty(baseObject.prototype, functionName, Object.getOwnPropertyDescriptor(givenObject.prototype, name));
+				if(name !== 'constructor'){
+					const functionName = addPrefix ? `${modulePropNames[givenObject.name]}_${name}`: name;
+					Object.defineProperty(baseObject.prototype, functionName, Object.getOwnPropertyDescriptor(givenObject.prototype, name));
+				}
 			});
 		});
 	}
@@ -75,6 +101,7 @@ export type RedisIntervalSetMixin = {
  * The Redis 'All in One' RedisAI module functions
  */
 export type RedisAIMixin = {
+	redisaiCommander: RedisAICommander,
 	ai_module_tensorset: typeof RedisAI.prototype.tensorset,
 	ai_module_tensorget: typeof RedisAI.prototype.tensorget,
 	ai_module_modeldel: typeof RedisAI.prototype.modeldel,

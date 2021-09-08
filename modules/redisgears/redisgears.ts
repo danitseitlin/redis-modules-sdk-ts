@@ -1,8 +1,10 @@
 import * as Redis from 'ioredis';
-import { Module, RedisModuleOptions } from './module.base';
+import { Module, RedisModuleOptions } from '../module.base';
+import { GearsCommander } from './redisgears.commander';
 
 export class RedisGears extends Module {
 
+    private gearsCommander = new GearsCommander();
     /**
      * Initializing the module object
      * @param name The name of the module
@@ -31,7 +33,8 @@ export class RedisGears extends Module {
      * @param id The id of the execution
      */
     async abortExecution(id: string): Promise<'OK'> {
-        return await this.sendCommand('RG.ABORTEXECUTION', [id]);
+        const commander = this.gearsCommander.abortExecution(id);
+        return await this.sendCommand(commander);
     }
 
     /**
@@ -39,7 +42,8 @@ export class RedisGears extends Module {
      * @param key A list of keys
      */
     async configGet(key: string[]): Promise<number> {
-        return await this.sendCommand('RG.CONFIGGET', key);
+        const command = this.gearsCommander.configGet(key);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -47,10 +51,8 @@ export class RedisGears extends Module {
      * @param keyvalue A key value array, i.e. [['key', 'value]]
      */
     async configSet(keyvalues: string[][]): Promise<'OK'[]> {
-        const args = [];
-        for(const keyvalue of keyvalues)
-            args.concat(keyvalue)
-        return await this.sendCommand('RG.CONFIGSET', args);
+        const command = this.gearsCommander.configSet(keyvalues);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -58,21 +60,24 @@ export class RedisGears extends Module {
      * @param id The id of the execution
      */
     async dropExecution(id: string): Promise<'OK'> {
-        return await this.sendCommand('RG.DROPEXECUTION', [id]);
+        const command = this.gearsCommander.dropExecution(id);
+        return await this.sendCommand(command);
     }
 
     /**
      * Dumping all of the executions
      */
     async dumpExecutions(): Promise<string[][]> {
-        return await this.sendCommand('RG.DUMPEXECUTIONS');
+        const command = this.gearsCommander.dumpExecutions();
+        return await this.sendCommand(command);
     }
 
     /**
      * Dumping all of the registrations
      */
     async dumpRegistrations(): Promise<string[][]> {
-        return await this.sendCommand('RG.DUMPREGISTRATIONS');
+        const command = this.gearsCommander.dumpRegistrations();
+        return await this.sendCommand(command);
     }
 
     /**
@@ -81,10 +86,8 @@ export class RedisGears extends Module {
      * @param options The additional optional parameters
      */
     async getExecution(id: string, options?: RGGetExecutionParameters): Promise<string[][]> {
-        const args = [id.toString()];
-        if(options !== undefined && options.shard === true) args.push('SHARD');
-        if(options !== undefined && options.cluster === true) args.push('CLUSTER');
-        return await this.sendCommand('RG.GETEXECUTION', args);
+        const command = this.gearsCommander.getExecution(id, options);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -92,7 +95,8 @@ export class RedisGears extends Module {
      * @param id The id of the execution
      */
     async getResults(id: string): Promise<string> {
-        return await this.sendCommand('RG.GETRESULTS', [id])
+        const command = this.gearsCommander.getResults(id);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -100,14 +104,16 @@ export class RedisGears extends Module {
      * @param id The id of the execution
      */
     async getResultsBlocking(id: string): Promise<string> {
-        return await this.sendCommand('RG.GETRESULTSBLOCKING', [id])
+        const command = this.gearsCommander.getResultsBlocking(id);
+        return await this.sendCommand(command);
     }
     
     /**
      * Retrieving information about the cluster
      */
     async infocluster(): Promise<string[]> {
-        return await this.sendCommand('RG.INFOCLUSTER')
+        const command = this.gearsCommander.infocluster();
+        return await this.sendCommand(command);
     }
 
     /**
@@ -116,31 +122,32 @@ export class RedisGears extends Module {
      * @param options The additional optional arguments
      */
     async pyexecute(func: string, options?: RGPyExecuteParameters): Promise<string> {
-        const args = [func];
-        if(options !== undefined && options.unblocking === true) args.push('UNBLOCKING');
-        if(options !== undefined && options.requirements !== undefined) args.concat(['REQUIREMENTS'].concat(options.requirements));
-        return await this.sendCommand('RG.PYEXECUTE', args);
+        const command = this.gearsCommander.pyexecute(func, options);
+        return await this.sendCommand(command);
     }
 
     /**
      * Retrieving memory usage statistics from the 'Python interpreter'
      */
     async pystats(): Promise<string[]> {
-        return await this.sendCommand('RG.PYSTATS');
+        const command = this.gearsCommander.pystats();
+        return await this.sendCommand(command);
     }
 
     /**
      * Retrieving a list of all the python requirements available
      */
     async pydumpreqs(): Promise<string[]> {
-        return await this.sendCommand('RG.PYDUMPREQS');
+        const command = this.gearsCommander.pydumpreqs();
+        return await this.sendCommand(command);
     }
 
     /**
      * Refreshing the node's view of the cluster's topology
      */
     async refreshCluster(): Promise<'OK'> {
-        return await this.sendCommand('RG.REFRESHCLUSTER');
+        const command = this.gearsCommander.refreshCluster();
+        return await this.sendCommand(command);
     }
 
     /**
@@ -149,7 +156,8 @@ export class RedisGears extends Module {
      * @param args The additional arguments
      */
     async trigger(trigger: string, args: string[]): Promise<string[]> {
-        return await this.sendCommand('RG.TRIGGER', [trigger].concat(args));
+        const command = this.gearsCommander.trigger(trigger, args);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -157,7 +165,8 @@ export class RedisGears extends Module {
      * @param id The id of the execution
      */
     async unregister(id: string): Promise<'OK'> {
-        return await this.sendCommand('RG.UNREGISTER', [id]);
+        const command = this.gearsCommander.unregister(id);
+        return await this.sendCommand(command);
     }
 }
 
