@@ -5,7 +5,7 @@ export { RedisGears, RGGetExecutionParameters, RGPyExecuteParameters } from './m
 export { RedisBloom, BFInsertParameters, BFResponse, BFReserveParameter } from './modules/bloom/redisbloom';
 export { RedisBloomTopK, TOPKIncrbyItems, TOPKResponse } from './modules/bloom-topk/redisbloom-topk';
 export { RedisBloomCuckoo, CFInsertParameters, CFResponse, CFReserveParameters } from './modules/bloom-cuckoo/redisbloom-cuckoo';
-export { RedisBloomCMK, CMKIncrbyItems } from './modules/redisbloom-cmk';
+export { RedisBloomCMK, CMKIncrbyItems } from './modules/bloom-cmk/redisbloom-cmk';
 export {
     RedisTimeSeries as RTS, RedisTimeSeries, TSCreateOptions, TSLabel, TSAddOptions, TSKeySet, TSIncrbyDecrbyOptions, TSOptions, TSCreateRule, TSAggregationType,
     TSRangeOptions, TSMRangeOptions, TSInfo, TSAlignType
