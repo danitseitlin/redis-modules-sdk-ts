@@ -1,6 +1,6 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
-import { RedisBloomCuckoo } from '../modules/redisbloom-cuckoo';
+import { RedisBloomCuckoo } from '../modules/bloom-cuckoo/redisbloom-cuckoo';
 import { Redis } from '../modules/redis';
 const key1 = 'key1cuckoo'
 const key2 = '1'
@@ -71,7 +71,6 @@ describe('RedisBloom Cuckoo filter testing', async function() {
             data = response[1]
             chunks.push({iterator: iter, data: data})
         }
-        console.log(chunks)
         expect(chunks.length).gt(0, `The count of chunks of key ${key2}`)
     });
     it.skip('loadchunk function', async () => {

@@ -1,7 +1,7 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { Redis } from '../modules/redis';
-import { RedisBloomTDigest } from '../modules/redisbloom-tdigest';
+import { RedisBloomTDigest } from '../modules/bloom-tdigest/redisbloom-tdigest';
 let client: RedisBloomTDigest;
 let redis: Redis;
 const key1 = 'mykey1'

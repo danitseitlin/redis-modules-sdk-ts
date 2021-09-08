@@ -1,8 +1,10 @@
 import * as Redis from 'ioredis';
-import { Module, RedisModuleOptions } from './module.base';
+import { Module, RedisModuleOptions } from '../module.base';
+import { GraphCommander } from './redisgraph.commander';
 
 export class RedisGraph extends Module {
 
+    private graphCommander = new GraphCommander();
     /**
      * Initializing the module object
      * @param name The name of the module
@@ -34,9 +36,8 @@ export class RedisGraph extends Module {
      * @returns Result set
      */
     async query(name: string, query: string, params?: {[key: string]: string}): Promise<string[][]> {
-        let args = [name]
-        args = args.concat(this.buildQuery(query, params));
-        return await this.sendCommand('GRAPH.QUERY', args)
+        const command = this.graphCommander.query(name, query, params);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -47,30 +48,8 @@ export class RedisGraph extends Module {
      * @returns Result set
      */
     async readonlyQuery(name: string, query: string, params?: {[key: string]: string}): Promise<string[][]> {
-        let args = [name]
-        args = args.concat(this.buildQuery(query, params));
-        return await this.sendCommand('GRAPH.RO_QUERY', args)
-    }
-
-    /**
-     * Building the cypher params of a query
-     * @param query The query
-     * @param params The params of the query
-     * @returns Returning an array of arguments
-     */
-    buildQuery(query: string, params?: {[key: string]: string}): string[] {
-        const args: string[] = [];
-        const queryList: string[] = []
-        if(params !== undefined){
-            queryList.push('CYPHER')
-            for(const key in params) {
-                const value = this.paramToString(params[key])
-                queryList.push(`${key}=${value}`)
-            }
-            args.push(`${queryList.join(' ')} ${query}`)
-        }
-        else args.push(query)
-        return args;
+        const command = this.graphCommander.readonlyQuery(name, query, params);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -80,7 +59,8 @@ export class RedisGraph extends Module {
      * @returns String representation of a query execution plan, with details on results produced by and time spent in each operation.
      */
     async profile(name: string, query: string): Promise<string[]> {
-        return await this.sendCommand('GRAPH.PROFILE', [name, query])
+        const command = this.graphCommander.profile(name, query);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -89,7 +69,8 @@ export class RedisGraph extends Module {
      * @returns String indicating if operation succeeded or failed.
      */
     async delete(name: string): Promise<string> {
-        return await this.sendCommand('GRAPH.DELETE', [name])
+        const command = this.graphCommander.delete(name);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -99,7 +80,8 @@ export class RedisGraph extends Module {
      * @returns String representation of a query execution plan
      */
     async explain(name: string, query: string): Promise<string[]> {
-        return await this.sendCommand('GRAPH.EXPLAIN', [name, query])
+        const command = this.graphCommander.explain(name, query);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -108,7 +90,8 @@ export class RedisGraph extends Module {
      * @returns A list containing up to 10 of the slowest queries issued against the given graph ID. 
      */
     async slowlog(id: number): Promise<string[]> {
-        return await this.sendCommand('GRAPH.SLOWLOG', [id])
+        const command = this.graphCommander.slowlog(id);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -118,11 +101,9 @@ export class RedisGraph extends Module {
      * @param value In case of 'SET' command, a valid value to set
      * @returns If 'SET' command, returns 'OK' for valid runtime-settable option names and values. If 'GET' command, returns a string with the current option's value.
      */
-    async config(command: 'GET' | 'SET' | 'HELP', option: string, value?: string): Promise<GraphConfigInfo | 'OK' | string | number> {
-        const args = [command, option];
-        if(command === 'SET')
-            args.push(value);
-        const response = await this.sendCommand('GRAPH.CONFIG', args);
+    async config(commandType: 'GET' | 'SET' | 'HELP', option: string, value?: string): Promise<GraphConfigInfo | 'OK' | string | number> {
+        const command = this.graphCommander.config(commandType, option, value);
+        const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }
 }
@@ -145,5 +126,6 @@ export type GraphConfigInfo = {
     RESULTSET_SIZE: number,
     MAINTAIN_TRANSPOSED_MATRICES: number,
     VKEY_MAX_ENTITY_COUNT: number,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any
 }

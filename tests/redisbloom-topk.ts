@@ -1,6 +1,6 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
-import { RedisBloomTopK } from '../modules/redisbloom-topk';
+import { RedisBloomTopK } from '../modules/bloom-topk/redisbloom-topk';
 import { Redis } from '../modules/redis';
 let client: RedisBloomTopK;
 let redis: Redis;
@@ -41,7 +41,6 @@ describe('RedisBloom Top-K filter testing', async function() {
     });
     it('query function', async () => {
         const response = await client.query(key1, [42, 'nonexist'])
-        console.log(response)
         expect(response[0]).to.equal(1, 'The query response of key 42');
         expect(response[1]).to.equal(0, 'The query response of key nonexist');
     });
@@ -57,7 +56,6 @@ describe('RedisBloom Top-K filter testing', async function() {
     });
     it('info function', async () => {
         const response = await client.info(key1);
-        console.log(response)
+        expect(response.length).to.equal(8, 'The length of items in the response')
     });
-    
 });

@@ -1,7 +1,13 @@
-import { Module, RedisModuleOptions } from './module.base'
+import { Module, RedisModuleOptions } from '../module.base'
 import * as Redis from 'ioredis';
+import { RedisAICommander } from './redis-ai.commander';
 
 export class RedisAI extends Module {
+
+    /**
+     * 
+     */
+    private aiCommander: RedisAICommander = new RedisAICommander()
 
     /**
      * Initializing the module object
@@ -23,7 +29,7 @@ export class RedisAI extends Module {
      */
     constructor(redisOptions: Redis.RedisOptions, moduleOptions?: RedisModuleOptions)
     constructor(options: Redis.RedisOptions & Redis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: Redis.ClusterOptions) {
-        super(RedisAI.name, options, moduleOptions, clusterOptions) 
+        super(RedisAI.name, options, moduleOptions, clusterOptions);
     }
 
     /**
@@ -34,13 +40,8 @@ export class RedisAI extends Module {
      * @param shape One or more dimensions, or the number of elements per axis, for the tensor
      */
     async tensorset(key: string, type: TensorType, shapes: number[], data?: number[] | Buffer[]): Promise<'OK'> {
-        const args: (number | string | Buffer)[] = [key, type];
-        shapes.forEach(shape => {args.push(shape.toString())});
-        if(data !== undefined) {
-            args.push(data instanceof Buffer ? 'BLOB': 'VALUES');
-            data.forEach((value: (number | string | Buffer)) => {args.push(value.toString())});
-        }
-        return await this.sendCommand('AI.TENSORSET', args);
+        const command = this.aiCommander.tensorset(key, type, shapes, data);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -50,12 +51,8 @@ export class RedisAI extends Module {
      * @param format The tensor's reply format can be one of the following (BLOB/VALUES)
      */
     async tensorget(key: string, format?: 'BLOB' | 'VALUES', meta?: boolean): Promise<AITensorInfo | string[] | string> {
-        const args = [key];
-        if(meta === true)
-            args.push('META');
-        if(format !== undefined)
-            args.push(format);
-        const response = await this.sendCommand('AI.TENSORGET', args);
+        const command = this.aiCommander.tensorget(key, format, meta);
+        const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }
 
@@ -68,19 +65,8 @@ export class RedisAI extends Module {
      * @param options Additional optional parameters
      */
     async modelstore(key: string, backend: AIBackend, device: AIDevice, model: Buffer, options?: AIModelSetParameters): Promise<'OK'> {
-        let args: (string | Buffer | number)[] = [key, backend, device];
-        if(options !== undefined && options.tag !== undefined)
-            args = args.concat(['TAG', options.tag]);
-        if(options !== undefined && options.batch !== undefined) {
-            args = args.concat(['BATCHSIZE', options.batch.size])
-            if(options.batch.minSize !== undefined)
-                args = args.concat(['MINBATCHSIZE', options.batch.minSize]);
-        }
-        if(options !== undefined && options.inputs !== undefined && options.inputs.length > 0)
-            args = args.concat(['INPUTS', options.inputsCount].concat(options.inputs));
-        if(options !== undefined && options.outputs !== undefined && options.outputs.length > 0)
-            args = args.concat(['OUTPUTS', options.outputsCount].concat(options.outputs));
-        return await this.sendCommand('AI.MODELSTORE', args.concat(['BLOB', model])); 
+        const command = this.aiCommander.modelstore(key, backend, device, model, options)
+        return await this.sendCommand(command); 
     }
 
     /**
@@ -90,12 +76,8 @@ export class RedisAI extends Module {
      * @param blob Will return the model's blob containing the serialized model
      */
     async modelget(key: string, meta?: boolean, blob?: boolean): Promise<AIModel | string[] | string> {
-        const args = [key];
-        if(meta === true)
-            args.push('META');
-        if(blob === true)
-            args.push('BLOB');
-        const response = await this.sendCommand('AI.MODELGET', args);
+        const command = this.aiCommander.modelget(key, meta, blob);
+        const response = await this.sendCommand(command);
         return this.handleResponse(response)
     }
 
@@ -104,7 +86,8 @@ export class RedisAI extends Module {
      * @param key The model's key name
      */
     async modeldel(key: string): Promise<'OK'> {
-        return await this.sendCommand('AI.MODELDEL', [key]);
+        const command = this.aiCommander.modeldel(key);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -113,17 +96,16 @@ export class RedisAI extends Module {
      * @param parameters The parameters of 'AI.MODELEXECUTE'
      */
     async modelexecute(key: string, parameters: AIModelExecute): Promise<'OK'> {
-        let args = [key, 'INPUTS', parameters.inputsCount].concat(parameters.inputs).concat(['OUTPUTS', parameters.outputsCount]).concat(parameters.outputs);
-        if(parameters.timeout)
-            args = args.concat(['TIMEOUT', parameters.timeout])
-        return await this.sendCommand('AI.MODELEXECUTE', args);
+        const command = this.aiCommander.modelexecute(key, parameters);
+        return await this.sendCommand(command);
     }
 
     /**
      * Scanning a model
      */
     async modelscan(): Promise<string[][]> {
-        return await this.sendCommand('AI._MODELSCAN', []);
+        const command = this.aiCommander.modelscan();
+        return await this.sendCommand(command);
     }
 
     /**
@@ -132,10 +114,8 @@ export class RedisAI extends Module {
      * @param parameters Additional optional parameters
      */
     async scriptset(key: string, parameters: AIScriptSetParameters): Promise<'OK'> {
-        let args = [key, parameters.device];
-        if(parameters.tag !== undefined)
-            args = args.concat(['TAG', parameters.tag])
-        return await this.sendCommand('AI.SCRIPTSET', args.concat(['SOURCE', parameters.script]));
+        const command = this.aiCommander.scriptset(key, parameters);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -145,12 +125,8 @@ export class RedisAI extends Module {
      * @param source The script's source code as a String
      */
     async scriptget(key: string, meta?: boolean, source?: boolean): Promise<AIScript | string[] | string> {
-        const args = [key];
-        if(meta === true)
-            args.push('META');
-        if(source === true)
-            args.push('SOURCE');
-        const response: string[] = await this.sendCommand('AI.SCRIPTGET', args);
+        const command = this.aiCommander.scriptget(key, meta, source);
+        const response: string[] = await this.sendCommand(command);
         return this.handleResponse(response);
     }
 
@@ -159,7 +135,8 @@ export class RedisAI extends Module {
      * @param key The script's key name
      */
     async scriptdel(key: string): Promise<'OK'> {
-        return await this.sendCommand('AI.SCRIPTDEL', [key]);
+        const command = this.aiCommander.scriptdel(key);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -169,22 +146,16 @@ export class RedisAI extends Module {
      * @param parameters The parameters of the 'AI.SCRIPTEXECUTE' command
     */
     async scriptexecute(key: string, functionName: string, parameters: AIScriptExecuteParameters): Promise<'OK'> {
-        let args = [key, functionName, 'KEYS', parameters.numberOfKeys].concat(parameters.keys)
-        if(parameters.inputs && parameters.numberOfInputs && parameters.inputs.length > 0)
-            args = args.concat(['INPUTS', parameters.numberOfInputs]).concat(parameters.inputs)
-        else if(parameters.listInputs && parameters.numberOfListInputs && parameters.listInputs.length > 0)
-            args = args.concat('LIST_INPUTS', parameters.numberOfListInputs).concat(parameters.listInputs)
-        args = args.concat('OUTPUTS', parameters.numberOfOutputs).concat(parameters.outputs)
-        if(parameters.timeout)
-            args.concat('TIMEOUT', parameters.timeout)
-        return await this.sendCommand('AI.SCRIPTEXECUTE', args);
+        const command = this.aiCommander.scriptexecute(key, functionName, parameters);
+        return await this.sendCommand(command);
     }
 
     /**
      * Scanning a script
      */
     async scriptscan(): Promise<string[][]> {
-        return await this.sendCommand('AI._SCRIPTSCAN')
+        const command = this.aiCommander.scriptscan();
+        return await this.sendCommand(command);
     }
 
     /**
@@ -193,7 +164,8 @@ export class RedisAI extends Module {
      * @param commands The commands sent to the 'AI.DAGEXECUTE' command
      */
     async dagexecute(parameters: AIDagExecuteParameters, commands: string[]): Promise<string[]> {
-        return await this.sendCommand('AI.DAGEXECUTE', this.generateDagRunArguments(parameters, commands))
+        const command = this.aiCommander.dagexecute(parameters, commands);
+        return await this.sendCommand(command)
     }
 
     /**
@@ -202,24 +174,8 @@ export class RedisAI extends Module {
      * @param commands The commands sent to the 'AI.DAGEXECUTE_RO' command
      */
     async dagexecuteRO(parameters: AIDagExecuteParameters, commands: string[]): Promise<string[]> {
-        return await this.sendCommand('AI.DAGEXECUTE_RO', this.generateDagRunArguments(parameters, commands))
-    }
-
-    /**
-     * Generating the dagexecute CLI arguments
-     * @param parameters Additional parameters required for the DAG command
-     * @param commands The given commands
-     */
-    private generateDagRunArguments(parameters: AIDagExecuteParameters, commands: string[]): string[] {
-        let args: string[] = [];
-        args = args.concat([parameters.type.toUpperCase(), `${parameters.numberOfKeys}`].concat(parameters.keys));
-        if(parameters.timeout)
-            args = args.concat(['TIMEOUT', `${parameters.timeout}`])
-        commands.forEach(command => {
-            args = args.concat(['|>'].concat(command.split(' ')))
-        });
-        console.log(args)
-        return args
+        const command = this.aiCommander.dagexecuteRO(parameters, commands);
+        return await this.sendCommand(command);
     }
 
     /**
@@ -228,9 +184,8 @@ export class RedisAI extends Module {
      * @param RESETSTAT Resets all statistics associated with the key 
      */
     async info(key: string, RESETSTAT?: boolean): Promise<AIScriptInfo | string[] | string> {
-        const args = [key]
-        if(RESETSTAT === true) args.push('RESETSTAT')
-        const response: string[] = await this.sendCommand('AI.INFO', args)
+        const command = this.aiCommander.info(key, RESETSTAT);
+        const response: string[] = await this.sendCommand(command);
         return this.handleResponse(response);
     }
 
@@ -240,12 +195,8 @@ export class RedisAI extends Module {
      * @param backend  Loads the DL/ML backend specified by the backend identifier from path . If path is relative, it is resolved by prefixing the BACKENDSPATH to it. If path is absolute then it is used as is.
      */
     async config(path: string, backend?: AIBackend): Promise<'OK'> {
-        let args: string[] = []
-        if(backend !== undefined)
-            args = args.concat(['LOADBACKEND', backend, path])
-        else
-            args = args.concat(['BACKENDSPATH', path])
-        return await this.sendCommand('AI.CONFIG', args)
+        const command = this.aiCommander.config(path, backend);
+        return await this.sendCommand(command);
     }
 }
 

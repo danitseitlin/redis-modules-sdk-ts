@@ -1,6 +1,6 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
-import { RedisIntervalSets } from '../modules/ris';
+import { RedisIntervalSets } from '../modules/ris/ris';
 import { Redis } from '../modules/redis';
 let client: RedisIntervalSets;
 let redis: Redis;
@@ -14,7 +14,7 @@ describe('RedisIntervalSets Module testing', async function() {
         redis = new Redis({
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
-        });
+        }, { showDebugLogs: true });
         await client.connect();
         await redis.connect();
     })
