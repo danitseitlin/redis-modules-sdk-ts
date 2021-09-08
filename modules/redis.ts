@@ -43,9 +43,9 @@ export class Redis extends Module {
 	constructor(options: IORedis.RedisOptions & IORedis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: IORedis.ClusterOptions) {
 		super(Redis.name, options, moduleOptions, clusterOptions);
 		this.applyMixins(Redis, [
-			[RedisAI, new RedisAI(options, moduleOptions, clusterOptions)]
+			//RedisAI,
 			//new RedisAI(options, moduleOptions, clusterOptions)
-			//RedisAI, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, RedisBloomTDigest, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries, RedisIntervalSets
+			RedisAI, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, RedisBloomTDigest, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries, RedisIntervalSets
 		])
 	}
 
@@ -60,10 +60,10 @@ export class Redis extends Module {
 			const paleObject = givenObject[0];
 			const initializedObject = givenObject[1];
 			console.log(givenObject)
-			Object.getOwnPropertyNames(paleObject.prototype).forEach((name: string) => {
+			Object.getOwnPropertyNames(givenObject.prototype).forEach((name: string) => {
 				if(name !== 'constructor'){
-					const functionName = addPrefix ? `${modulePropNames[paleObject.name]}_${name}`: name;
-					Object.defineProperty(baseObject.prototype, functionName, Object.getOwnPropertyDescriptor(paleObject.prototype, name));
+					const functionName = addPrefix ? `${modulePropNames[givenObject.name]}_${name}`: name;
+					Object.defineProperty(baseObject.prototype, functionName, Object.getOwnPropertyDescriptor(givenObject.prototype, name));
 				}
 			});
 			/*Object.getOwnPropertyNames(initializedObject).forEach((name: string) => {
