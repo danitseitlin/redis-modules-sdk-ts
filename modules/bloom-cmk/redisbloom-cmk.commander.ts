@@ -1,7 +1,7 @@
-import { CommandData } from "./module.base";
+import { CommandData } from "../module.base";
 import { CMKIncrbyItems } from "./redisbloom-cmk";
 
-export class Commander {
+export class BloomCmkCommander {
     /**
      * Initializes a Count-Min Sketch to dimensions specified by user.
      * @param key The name of the sketch.

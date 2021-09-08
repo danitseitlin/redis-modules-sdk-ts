@@ -1,6 +1,6 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
-import { RedisBloomTopK } from '../modules/redisbloom-topk';
+import { RedisBloomTopK } from '../modules/bloom-topk/redisbloom-topk';
 import { Redis } from '../modules/redis';
 let client: RedisBloomTopK;
 let redis: Redis;

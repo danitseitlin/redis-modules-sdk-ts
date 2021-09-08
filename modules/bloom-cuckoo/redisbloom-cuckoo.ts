@@ -1,10 +1,10 @@
 import * as Redis from 'ioredis';
-import { Module, RedisModuleOptions } from './module.base';
-import { Commander } from './redisbloom-cuckoo.commander';
+import { Module, RedisModuleOptions } from '../module.base';
+import { BloomCuckooCommander } from './redisbloom-cuckoo.commander';
 
 export class RedisBloomCuckoo extends Module {
     
-    private commander: Commander
+    private redisBloomCuckooCommander: BloomCuckooCommander
     /**
      * Initializing the module object
      * @param name The name of the module
@@ -26,7 +26,7 @@ export class RedisBloomCuckoo extends Module {
     constructor(redisOptions: Redis.RedisOptions, moduleOptions?: RedisModuleOptions)
     constructor(options: Redis.RedisOptions & Redis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: Redis.ClusterOptions) {
         super(RedisBloomCuckoo.name, options, moduleOptions, clusterOptions)
-        this.commander = new Commander()
+        this.redisBloomCuckooCommander = new BloomCuckooCommander()
     }
 
     /**
@@ -36,7 +36,7 @@ export class RedisBloomCuckoo extends Module {
      * @param options The additional optional parameters
      */
     async reserve(key: string, capacity: number, options?: CFReserveParameters): Promise<'OK'> {
-        const command = this.commander.reserve(key, capacity, options)
+        const command = this.redisBloomCuckooCommander.reserve(key, capacity, options)
         return await this.sendCommand(command);
     }
 
@@ -46,7 +46,7 @@ export class RedisBloomCuckoo extends Module {
      * @param item The item to add
      */
     async add(key: string, item: string): Promise<CFResponse> {
-        const command = this.commander.add(key, item);
+        const command = this.redisBloomCuckooCommander.add(key, item);
         return await this.sendCommand(command);
     }
 
@@ -56,7 +56,7 @@ export class RedisBloomCuckoo extends Module {
      * @param item The item to add
      */
     async addnx(key: string, item: string): Promise<CFResponse> {
-        const command = this.commander.addnx(key, item);
+        const command = this.redisBloomCuckooCommander.addnx(key, item);
         return await this.sendCommand(command);
     }
 
@@ -67,7 +67,7 @@ export class RedisBloomCuckoo extends Module {
      * @param options The additional optional parameters of the 'CF.INSERT' command
      */
     async insert(key: string, items: string[], options?: CFInsertParameters): Promise<CFResponse[]> {
-        const command = this.commander.insert(key, items, options);
+        const command = this.redisBloomCuckooCommander.insert(key, items, options);
         return await this.sendCommand(command);
     }
 
@@ -78,7 +78,7 @@ export class RedisBloomCuckoo extends Module {
      * @param options The additional optional parameters of the 'CF.INSERTNX' command
      */
     async insertnx(key: string, items: string[], options?: CFInsertParameters): Promise<CFResponse[]> {
-        const command = this.commander.insertnx(key, items, options);
+        const command = this.redisBloomCuckooCommander.insertnx(key, items, options);
         return await this.sendCommand(command);
     }
 
@@ -88,7 +88,7 @@ export class RedisBloomCuckoo extends Module {
      * @param item The item to check for
      */
     async exists(key: string, item: string): Promise<CFResponse> {
-        const command = this.commander.exists(key, item);
+        const command = this.redisBloomCuckooCommander.exists(key, item);
         return await this.sendCommand(command);
     }
 
@@ -98,7 +98,7 @@ export class RedisBloomCuckoo extends Module {
      * @param item The item to delete from the filter
      */
     async del(key: string, item: string): Promise<CFResponse> {
-        const command = this.commander.del(key, item);
+        const command = this.redisBloomCuckooCommander.del(key, item);
         return await this.sendCommand(command);
     }
 
@@ -108,7 +108,7 @@ export class RedisBloomCuckoo extends Module {
      * @param item The item to count
      */
     async count(key: string, item: string): Promise<number> {
-        const command = this.commander.count(key, item);
+        const command = this.redisBloomCuckooCommander.count(key, item);
         return await this.sendCommand(command);
     }
 
@@ -118,7 +118,7 @@ export class RedisBloomCuckoo extends Module {
      * @param iterator Iterator value. This is either 0, or the iterator from a previous invocation of this command
      */
     async scandump(key: string, iterator: number): Promise<string[]> {
-        const command = this.commander.scandump(key, iterator);
+        const command = this.redisBloomCuckooCommander.scandump(key, iterator);
         return await this.sendCommand(command);
     }
 
@@ -129,7 +129,7 @@ export class RedisBloomCuckoo extends Module {
      * @param data The current data chunk (returned by SCANDUMP ) 
      */
     async loadchunk(key: string, iterator: number, data: string): Promise<'OK'> {
-        const command = this.commander.loadchunk(key, iterator, data);
+        const command = this.redisBloomCuckooCommander.loadchunk(key, iterator, data);
         return await this.sendCommand(command);
     }
     
@@ -138,7 +138,7 @@ export class RedisBloomCuckoo extends Module {
      * @param key The name of the filter
      */
     async info(key: string): Promise<string[]> {
-        const command = this.commander.info(key);
+        const command = this.redisBloomCuckooCommander.info(key);
         return await this.sendCommand(command);
     }
 }

@@ -1,7 +1,7 @@
-import { CommandData } from "./module.base";
+import { CommandData } from "../module.base";
 import { RGGetExecutionParameters, RGPyExecuteParameters } from "./redisgears";
 
-export class Commander {
+export class GearsCommander {
     /**
      * Aborting an existing execution
      * @param id The id of the execution

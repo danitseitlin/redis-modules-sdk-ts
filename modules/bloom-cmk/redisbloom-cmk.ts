@@ -1,10 +1,10 @@
 import * as Redis from 'ioredis';
-import { Module, RedisModuleOptions } from './module.base';
-import { Commander } from './redisbloom-cmk.commander';
+import { Module, RedisModuleOptions } from '../module.base';
+import { BloomCmkCommander } from './redisbloom-cmk.commander';
 
 export class RedisBloomCMK extends Module {
 
-    private redisBloomCmkCommander: Commander
+    private redisBloomCmkCommander: BloomCmkCommander
     /**
      * Initializing the module object
      * @param name The name of the module
@@ -26,7 +26,7 @@ export class RedisBloomCMK extends Module {
     constructor(redisOptions: Redis.RedisOptions, moduleOptions?: RedisModuleOptions)
     constructor(options: Redis.RedisOptions & Redis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: Redis.ClusterOptions) {
         super(RedisBloomCMK.name, options, moduleOptions, clusterOptions)
-        this.redisBloomCmkCommander = new Commander()
+        this.redisBloomCmkCommander = new BloomCmkCommander()
     }
 
     /**

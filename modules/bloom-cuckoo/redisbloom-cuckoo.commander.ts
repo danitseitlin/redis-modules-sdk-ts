@@ -1,7 +1,7 @@
 import { CFReserveParameters, CFInsertParameters } from "./redisbloom-cuckoo";
-import { CommandData } from "./module.base";
+import { CommandData } from "../module.base";
 
-export class Commander {
+export class BloomCuckooCommander {
     
     /**
      * Creating an empty Bloom Cuckoo filter with a given initial capacity.

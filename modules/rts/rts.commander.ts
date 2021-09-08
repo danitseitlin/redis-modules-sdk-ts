@@ -1,7 +1,7 @@
-import { CommandData } from "./module.base";
+import { CommandData } from "../module.base";
 import { TSAddOptions, TSCreateOptions, TSCreateRule, TSIncrbyDecrbyOptions, TSKeySet, TSLabel, TSMRangeOptions, TSRangeOptions } from "./rts";
 
-export class Commander {
+export class RedisTimeSeriesCommander {
 
     /**
      * Creating a new TS key

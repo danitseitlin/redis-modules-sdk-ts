@@ -1,7 +1,7 @@
-import { CommandData } from "./module.base";
+import { CommandData } from "../module.base";
 import { TOPKIncrbyItems } from "./redisbloom-topk";
 
-export class Commander {
+export class BloomTopkCommander {
     
     /**
      * Initializing a TopK with specified parameters

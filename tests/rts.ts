@@ -1,6 +1,6 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
-import { RedisTimeSeries } from '../modules/rts';
+import { RedisTimeSeries } from '../modules/rts/rts';
 import { Redis } from '../modules/redis';
 let client: RedisTimeSeries;
 let redis: Redis;

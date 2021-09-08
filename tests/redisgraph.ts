@@ -1,6 +1,6 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
-import { GraphConfigInfo, RedisGraph } from '../modules/redisgraph';
+import { GraphConfigInfo, RedisGraph } from '../modules/redisgraph/redisgraph';
 import { Redis } from '../modules/redis';
 let client: RedisGraph;
 let redis: Redis;

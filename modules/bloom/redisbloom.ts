@@ -1,10 +1,10 @@
 import * as Redis from 'ioredis';
-import { Module, RedisModuleOptions } from './module.base';
-import { Commander } from './redisbloom.commander';
+import { Module, RedisModuleOptions } from '../module.base';
+import { BloomCommander } from './redisbloom.commander';
 
 export class RedisBloom extends Module {
 
-    private commander: Commander
+    private redisBloomCommander: BloomCommander
     /**
      * Initializing the module object
      * @param name The name of the module
@@ -26,7 +26,7 @@ export class RedisBloom extends Module {
     constructor(redisOptions: Redis.RedisOptions, moduleOptions?: RedisModuleOptions)
     constructor(options: Redis.RedisOptions & Redis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: Redis.ClusterOptions) {
         super(RedisBloom.name, options, moduleOptions, clusterOptions)
-        this.commander = new Commander()
+        this.redisBloomCommander = new BloomCommander()
     }
 
     /**
@@ -37,7 +37,7 @@ export class RedisBloom extends Module {
      * @param options The additional optional parameters
      */
     async reserve(key: string, errorRate: number, capacity: number, options?: BFReserveParameter): Promise<'OK'> {
-        const command = this.commander.reserve(key, errorRate, capacity, options);
+        const command = this.redisBloomCommander.reserve(key, errorRate, capacity, options);
         return await this.sendCommand(command);
     }
 
@@ -47,7 +47,7 @@ export class RedisBloom extends Module {
      * @param item The item of the 'BF.ADD' command
      */
     async add(key: string, item: string): Promise<BFResponse> {
-        const command = this.commander.add(key, item);
+        const command = this.redisBloomCommander.add(key, item);
         return await this.sendCommand(command);
     }
 
@@ -56,7 +56,7 @@ export class RedisBloom extends Module {
      * @param items The items of the 'BF.MADD' command
      */
     async madd(key: string, items: string[]): Promise<BFResponse[]> {
-        const command = this.commander.madd(key, items);
+        const command = this.redisBloomCommander.madd(key, items);
         return await this.sendCommand(command);
     }
 
@@ -67,7 +67,7 @@ export class RedisBloom extends Module {
      * @param options The additional optional parameters of the 'BF.INSERT' command
      */
     async insert(key: string, items: string[], options?: BFInsertParameters): Promise<BFResponse[]> {
-        const command = this.commander.insert(key, items, options);
+        const command = this.redisBloomCommander.insert(key, items, options);
         return await this.sendCommand(command);
     }
 
@@ -77,7 +77,7 @@ export class RedisBloom extends Module {
      * @param item The key of the 'BF.EXISTS' command
      */
     async exists(key: string, item: string): Promise<BFResponse> {
-        const command = this.commander.exists(key, item);
+        const command = this.redisBloomCommander.exists(key, item);
         return await this.sendCommand(command);
     }
 
@@ -87,7 +87,7 @@ export class RedisBloom extends Module {
      * @param items The items of the 'BF.MEXISTS' command
      */
     async mexists(key: string, items: string[]): Promise<BFResponse[]> {
-        const command = this.commander.mexists(key, items);
+        const command = this.redisBloomCommander.mexists(key, items);
         return await this.sendCommand(command);
     }
 
@@ -97,7 +97,7 @@ export class RedisBloom extends Module {
      * @param iterator The iterator of the 'BF.SCANDUMP' command
      */
     async scandump(key: string, iterator: number): Promise<string[]> {
-        const command = this.commander.scandump(key, iterator);
+        const command = this.redisBloomCommander.scandump(key, iterator);
         return await this.sendCommand(command);
     }
 
@@ -108,7 +108,7 @@ export class RedisBloom extends Module {
      * @param data The data of the 'BF.LOADCHUNK' command
      */
     async loadchunk(key: string, iterator: number, data: string): Promise<'OK'> {
-        const command = this.commander.loadchunk(key, iterator, data);
+        const command = this.redisBloomCommander.loadchunk(key, iterator, data);
         return await this.sendCommand(command);
     }
 
@@ -117,7 +117,7 @@ export class RedisBloom extends Module {
      * @param key The key of the 'BF.INFO' command
      */
     async info(key: string): Promise<string[]> {
-        const command = this.commander.info(key);
+        const command = this.redisBloomCommander.info(key);
         return await this.sendCommand(command);
     }
 }

@@ -1,5 +1,5 @@
 import * as Redis from 'ioredis';
-import { Module, RedisModuleOptions } from './module.base';
+import { Module, RedisModuleOptions } from '../module.base';
 import { RedisIntervalSetsCommander } from './ris.commander';
 
 export class RedisIntervalSets extends Module {

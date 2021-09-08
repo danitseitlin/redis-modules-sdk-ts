@@ -1,7 +1,7 @@
-import { CommandData } from "./module.base";
+import { CommandData } from "../module.base";
 import { ReJSONGetParameters } from "./rejson";
 
-export class Commander {
+export class RejsonCommander {
     /**
      * Deleting a JSON key
      * @param key The name of the key

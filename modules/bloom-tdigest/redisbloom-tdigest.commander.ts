@@ -1,7 +1,7 @@
-import { CommandData } from "./module.base";
+import { CommandData } from "../module.base";
 import { TDigestAddParameters } from "./redisbloom-tdigest";
 
-export class Commander {
+export class BloomTdigestCommander {
     /**
      * Allocate the memory and initialize the t-digest
      * @param key The name of the sketch

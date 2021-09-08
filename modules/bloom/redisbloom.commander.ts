@@ -1,7 +1,7 @@
-import { BFReserveParameter, BFInsertParameters } from "..";
-import { CommandData } from "./module.base";
+import { BFReserveParameter, BFInsertParameters } from "../..";
+import { CommandData } from "../module.base";
 
-export class Commander {
+export class BloomCommander {
     /**
      * Creating an empty Bloom filter with a given desired error ratio and initial capacity.
      * @param key The key under which the filter is to be found

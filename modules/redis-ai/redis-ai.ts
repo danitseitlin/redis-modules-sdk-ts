@@ -1,4 +1,4 @@
-import { Module, RedisModuleOptions } from './module.base'
+import { Module, RedisModuleOptions } from '../module.base'
 import * as Redis from 'ioredis';
 import { RedisAICommander } from './redis-ai.commander';
 

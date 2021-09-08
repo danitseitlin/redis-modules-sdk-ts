@@ -1,6 +1,6 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
-import { RedisBloomCuckoo } from '../modules/redisbloom-cuckoo';
+import { RedisBloomCuckoo } from '../modules/bloom-cuckoo/redisbloom-cuckoo';
 import { Redis } from '../modules/redis';
 const key1 = 'key1cuckoo'
 const key2 = '1'

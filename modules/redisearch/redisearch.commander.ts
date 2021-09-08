@@ -1,7 +1,7 @@
-import { FTIndexType, FTSchemaField, FTCreateParameters, FTSearchParameters, FTAggregateParameters, FTFieldType, FTFieldOptions, FTSugAddParameters, FTSugGetParameters, FTSpellCheck } from "..";
-import { CommandData } from "./module.base";
+import { FTIndexType, FTSchemaField, FTCreateParameters, FTSearchParameters, FTAggregateParameters, FTFieldType, FTFieldOptions, FTSugAddParameters, FTSugGetParameters, FTSpellCheck } from "../..";
+import { CommandData } from "../module.base";
 
-export class Commander {
+export class SearchCommander {
     
     /**
      * Creating an index with a given spec

@@ -1,6 +1,6 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
-import { RedisIntervalSets } from '../modules/ris';
+import { RedisIntervalSets } from '../modules/ris/ris';
 import { Redis } from '../modules/redis';
 let client: RedisIntervalSets;
 let redis: Redis;

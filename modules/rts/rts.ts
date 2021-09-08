@@ -1,10 +1,10 @@
 import * as Redis from 'ioredis';
-import { Module, RedisModuleOptions } from './module.base';
-import { Commander } from './rts.commander';
+import { Module, RedisModuleOptions } from '../module.base';
+import { RedisTimeSeriesCommander } from './rts.commander';
 
 export class RedisTimeSeries extends Module {
 
-    private commander: Commander
+    private redisTimeSeriesCommander: RedisTimeSeriesCommander
     /**
      * Initializing the module object
      * @param name The name of the module
@@ -26,7 +26,7 @@ export class RedisTimeSeries extends Module {
     constructor(redisOptions: Redis.RedisOptions, moduleOptions?: RedisModuleOptions)
     constructor(options: Redis.RedisOptions & Redis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: Redis.ClusterOptions) {
         super(RedisTimeSeries.name, options, moduleOptions, clusterOptions)
-        this.commander = new Commander()
+        this.redisTimeSeriesCommander = new RedisTimeSeriesCommander()
     }
 
     /**
@@ -41,7 +41,7 @@ export class RedisTimeSeries extends Module {
      * @returns "OK"
      */
     async create(key: string, options?: TSCreateOptions): Promise<'OK'> {
-        const command = this.commander.create(key, options);
+        const command = this.redisTimeSeriesCommander.create(key, options);
         return await this.sendCommand(command);
     }
 
@@ -53,7 +53,7 @@ export class RedisTimeSeries extends Module {
      * 
      */
     async alter(key: string, retention?: number, labels?: TSLabel[]): Promise<'OK'> {
-        const command = this.commander.alter(key, retention, labels);
+        const command = this.redisTimeSeriesCommander.alter(key, retention, labels);
         return await this.sendCommand(command);
     }
 
@@ -70,7 +70,7 @@ export class RedisTimeSeries extends Module {
      * @param options.labels A list of 'LABELS' optional parameter
      */
     async add(key: string, timestamp: string, value: string, options?: TSAddOptions): Promise<number> {
-        const command = this.commander.add(key, timestamp, value, options);
+        const command = this.redisTimeSeriesCommander.add(key, timestamp, value, options);
         return await this.sendCommand(command);
     }
 
@@ -82,7 +82,7 @@ export class RedisTimeSeries extends Module {
      * @param keySets.value The value
      */
     async madd(keySets: TSKeySet[]):Promise<number[]> {
-        const command = this.commander.madd(keySets);
+        const command = this.redisTimeSeriesCommander.madd(keySets);
         return await this.sendCommand(command);
     }
 
@@ -98,7 +98,7 @@ export class RedisTimeSeries extends Module {
      * @param options.labels A list of 'LABELS' optional parameter
      */
     async incrby(key: string, value: string, options?: TSIncrbyDecrbyOptions): Promise<number> {
-        const command = this.commander.incrby(key, value, options);
+        const command = this.redisTimeSeriesCommander.incrby(key, value, options);
         return await this.sendCommand(command);
     }
 
@@ -114,7 +114,7 @@ export class RedisTimeSeries extends Module {
      * @param options.labels A list of 'LABELS' optional parameter
      */
     async decrby(key: string, value: string, options?: TSIncrbyDecrbyOptions): Promise<number> {
-        const command = this.commander.decrby(key, value, options);
+        const command = this.redisTimeSeriesCommander.decrby(key, value, options);
         return await this.sendCommand(command);
     }
     
@@ -127,7 +127,7 @@ export class RedisTimeSeries extends Module {
      * @param options.timeBucket The time bucket
      */
     async createrule(parameters: TSCreateRule): Promise<'OK'> {
-        const command = this.commander.createrule(parameters);
+        const command = this.redisTimeSeriesCommander.createrule(parameters);
         return await this.sendCommand(command);
     }
 
@@ -137,7 +137,7 @@ export class RedisTimeSeries extends Module {
      * @param destKey The dest key
      */
     async deleterule(sourceKey: string, destKey: string): Promise<'OK'> {
-        const command = this.commander.deleterule(sourceKey, destKey);
+        const command = this.redisTimeSeriesCommander.deleterule(sourceKey, destKey);
         return await this.sendCommand(command);
     }
 
@@ -153,7 +153,7 @@ export class RedisTimeSeries extends Module {
      * @param options.aggregation.timeBucket The time bucket of the 'AGGREGATION' command
      */
     async range(key: string, fromTimestamp: string, toTimestamp: string, options?: TSRangeOptions): Promise<number[]> {
-        const command = this.commander.range(key, fromTimestamp, toTimestamp, options);
+        const command = this.redisTimeSeriesCommander.range(key, fromTimestamp, toTimestamp, options);
         return await this.sendCommand(command);
     }
     
@@ -169,7 +169,7 @@ export class RedisTimeSeries extends Module {
      * @param options.aggregation.timeBucket The time bucket of the 'AGGREGATION' command
      */
     async revrange(key: string, fromTimestamp: string, toTimestamp: string, options?: TSRangeOptions): Promise<number[]> {
-        const command = this.commander.revrange(key, fromTimestamp, toTimestamp, options);
+        const command = this.redisTimeSeriesCommander.revrange(key, fromTimestamp, toTimestamp, options);
         return await this.sendCommand(command);
     }
 
@@ -186,7 +186,7 @@ export class RedisTimeSeries extends Module {
      * @param options.withLabels The 'WITHLABELS' optional parameter
      */
     async mrange(fromTimestamp: string, toTimestamp: string, filter: string, options?: TSMRangeOptions): Promise<(string | number)[][]> {
-        const command = this.commander.mrange(fromTimestamp, toTimestamp, filter, options);
+        const command = this.redisTimeSeriesCommander.mrange(fromTimestamp, toTimestamp, filter, options);
         return await this.sendCommand(command);
     }
     
@@ -203,7 +203,7 @@ export class RedisTimeSeries extends Module {
      * @param options.withLabels The 'WITHLABELS' optional parameter
      */
     async mrevrange(fromTimestamp: string, toTimestamp: string, filter: string, options?: TSMRangeOptions): Promise<(string | number)[][]> {
-        const command = this.commander.mrevrange(fromTimestamp, toTimestamp, filter, options);
+        const command = this.redisTimeSeriesCommander.mrevrange(fromTimestamp, toTimestamp, filter, options);
         return await this.sendCommand(command);
     }
     
@@ -212,7 +212,7 @@ export class RedisTimeSeries extends Module {
      * @param key The key
      */
     async get(key: string): Promise<(string | number)[]> {
-        const command = this.commander.get(key);
+        const command = this.redisTimeSeriesCommander.get(key);
         return await this.sendCommand(command);
     }
 
@@ -222,7 +222,7 @@ export class RedisTimeSeries extends Module {
      * @param withLabels Optional. If to add the 'WITHLABELS' Optional parameter
      */
     async mget(filter: string, withLabels?: boolean): Promise<(string | number)[][]> {
-        const command = this.commander.mget(filter, withLabels);
+        const command = this.redisTimeSeriesCommander.mget(filter, withLabels);
         return await this.sendCommand(command);
     }
 
@@ -231,7 +231,7 @@ export class RedisTimeSeries extends Module {
      * @param key The key
      */
     async info(key: string): Promise<TSInfo> {
-        const command = this.commander.info(key);
+        const command = this.redisTimeSeriesCommander.info(key);
         const response = await this.sendCommand(command);
         const info: TSInfo = {};
         for(let i = 0; i < response.length; i+=2) {
@@ -245,7 +245,7 @@ export class RedisTimeSeries extends Module {
      * @param filter The filter
      */
     async queryindex(filter: string): Promise<string[]> {
-        const command = this.commander.queryindex(filter);
+        const command = this.redisTimeSeriesCommander.queryindex(filter);
         return await this.sendCommand(command);
     }
 
@@ -257,7 +257,7 @@ export class RedisTimeSeries extends Module {
      * @returns The count of samples deleted
      */
     async del(key: string, fromTimestamp: string, toTimestamp: string): Promise<number> {
-        const command = this.commander.del(key, fromTimestamp, toTimestamp);
+        const command = this.redisTimeSeriesCommander.del(key, fromTimestamp, toTimestamp);
         return await this.sendCommand(command);
     }
 }

@@ -1,6 +1,6 @@
-import { CommandData } from "./module.base";
+import { CommandData } from "../module.base";
 
-export class Commander {
+export class GraphCommander {
 
     /**
      * Executing the given query against a specific graph

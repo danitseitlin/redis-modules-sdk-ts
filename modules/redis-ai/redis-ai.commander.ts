@@ -1,4 +1,4 @@
-import { CommandData } from "./module.base";
+import { CommandData } from "../module.base";
 import { AIBackend, AIDagExecuteParameters, AIDevice, AIModelExecute, AIModelSetParameters, AIScriptExecuteParameters, AIScriptSetParameters, TensorType } from "./redis-ai";
 
 export class RedisAICommander {
@@ -212,7 +212,8 @@ export class RedisAICommander {
      */
     scriptscan(): CommandData {
         return {
-            command: 'AI._SCRIPTSCAN'
+            command: 'AI._SCRIPTSCAN',
+            args: []
         }
     }
 

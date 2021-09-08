@@ -1,10 +1,10 @@
 import * as Redis from 'ioredis';
-import { Module, RedisModuleOptions } from './module.base';
-import { Commander } from './redisgraph.commander';
+import { Module, RedisModuleOptions } from '../module.base';
+import { GraphCommander } from './redisgraph.commander';
 
 export class RedisGraph extends Module {
 
-    private commander: Commander
+    private graphCommander: GraphCommander
     /**
      * Initializing the module object
      * @param name The name of the module
@@ -26,7 +26,7 @@ export class RedisGraph extends Module {
     constructor(redisOptions: Redis.RedisOptions, moduleOptions?: RedisModuleOptions)
     constructor(options: Redis.RedisOptions & Redis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: Redis.ClusterOptions) {
         super(RedisGraph.name, options, moduleOptions, clusterOptions)
-        this.commander = new Commander()
+        this.graphCommander = new GraphCommander()
     }
 
     /**
@@ -37,7 +37,7 @@ export class RedisGraph extends Module {
      * @returns Result set
      */
     async query(name: string, query: string, params?: {[key: string]: string}): Promise<string[][]> {
-        const command = this.commander.query(name, query, params);
+        const command = this.graphCommander.query(name, query, params);
         return await this.sendCommand(command);
     }
 
@@ -49,7 +49,7 @@ export class RedisGraph extends Module {
      * @returns Result set
      */
     async readonlyQuery(name: string, query: string, params?: {[key: string]: string}): Promise<string[][]> {
-        const command = this.commander.readonlyQuery(name, query, params);
+        const command = this.graphCommander.readonlyQuery(name, query, params);
         return await this.sendCommand(command);
     }
 
@@ -60,7 +60,7 @@ export class RedisGraph extends Module {
      * @returns String representation of a query execution plan, with details on results produced by and time spent in each operation.
      */
     async profile(name: string, query: string): Promise<string[]> {
-        const command = this.commander.profile(name, query);
+        const command = this.graphCommander.profile(name, query);
         return await this.sendCommand(command);
     }
 
@@ -70,7 +70,7 @@ export class RedisGraph extends Module {
      * @returns String indicating if operation succeeded or failed.
      */
     async delete(name: string): Promise<string> {
-        const command = this.commander.delete(name);
+        const command = this.graphCommander.delete(name);
         return await this.sendCommand(command);
     }
 
@@ -81,7 +81,7 @@ export class RedisGraph extends Module {
      * @returns String representation of a query execution plan
      */
     async explain(name: string, query: string): Promise<string[]> {
-        const command = this.commander.explain(name, query);
+        const command = this.graphCommander.explain(name, query);
         return await this.sendCommand(command);
     }
 
@@ -91,7 +91,7 @@ export class RedisGraph extends Module {
      * @returns A list containing up to 10 of the slowest queries issued against the given graph ID. 
      */
     async slowlog(id: number): Promise<string[]> {
-        const command = this.commander.slowlog(id);
+        const command = this.graphCommander.slowlog(id);
         return await this.sendCommand(command);
     }
 
@@ -103,7 +103,7 @@ export class RedisGraph extends Module {
      * @returns If 'SET' command, returns 'OK' for valid runtime-settable option names and values. If 'GET' command, returns a string with the current option's value.
      */
     async config(commandType: 'GET' | 'SET' | 'HELP', option: string, value?: string): Promise<GraphConfigInfo | 'OK' | string | number> {
-        const command = this.commander.config(commandType, option, value);
+        const command = this.graphCommander.config(commandType, option, value);
         const response = await this.sendCommand(command);
         return this.handleResponse(response);
     }

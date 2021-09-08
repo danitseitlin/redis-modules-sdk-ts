@@ -1,4 +1,4 @@
-import { CommandData } from "./module.base";
+import { CommandData } from "../module.base";
 import { RISSet } from "./ris";
 
 export class RedisIntervalSetsCommander {
