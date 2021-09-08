@@ -56,9 +56,6 @@ export class RedisBloomCMK extends Module {
      * @param items A list of item and increment set's
      */
     async incrby(key: string, items: CMKIncrbyItems[]): Promise<number[]> {
-        /*let args = [key];
-        for(const item of items)
-            args = args.concat([item.name.toString(), item.increment.toString()])*/
         const command = this.bloomCmkCommander.incrby(key, items);
         return await this.sendCommand(command);
     }
