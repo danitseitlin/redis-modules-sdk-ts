@@ -37,9 +37,9 @@ export class Module {
             this.clusterNodes = options as IORedis.ClusterNode[];
         else
             this.redisOptions = options as IORedis.RedisOptions;
-        this.isHandleError = moduleOptions && moduleOptions.isHandleError ? moduleOptions.isHandleError : true;
-        this.showDebugLogs = moduleOptions && moduleOptions.showDebugLogs ? moduleOptions.showDebugLogs : false;
-        this.clusterOptions = clusterOptions ? clusterOptions : undefined;
+        this.isHandleError = moduleOptions && moduleOptions.isHandleError ? moduleOptions.isHandleError: true;
+        this.showDebugLogs = moduleOptions && moduleOptions.showDebugLogs ? moduleOptions.showDebugLogs: false;
+        this.clusterOptions = clusterOptions ? clusterOptions: undefined;
     }
 
     /**
@@ -67,16 +67,21 @@ export class Module {
      * @param command The redis command
      * @param args The args of the redis command
      */
-    async sendCommand(command: string, args: IORedis.ValueType | IORedis.ValueType[] = []): Promise<any> {
+    async sendCommand(data: CommandData): Promise<any> {
         try {
-            if(this.showDebugLogs)
-                console.log(`${this.name}: Running command ${command} with arguments: ${args}`);
-            const response = this.clusterNodes ? await this.cluster.cluster.call(command, args) : await this.redis.send_command(command, args);
-            if(this.showDebugLogs)
-                console.log(`${this.name}: command ${command} responded with ${response}`);
+            if(this.showDebugLogs){
+                console.log(`${this.name}: Running command ${data.command} with arguments: ${data.args}`);
+            }
+            const response = this.clusterNodes ? 
+                await this.cluster.cluster.call(data.command, data.args)
+                    : await this.redis.send_command(data.command, data.args);
+
+            if(this.showDebugLogs){
+                console.log(`${this.name}: command ${data.command} responded with ${response}`);
+            }
             return response;
         } catch(error) {
-            return this.handleError(`${this.name} class (${command.split(' ')[0]}): ${error}`)
+            return this.handleError(`${this.name} class (${data.command.split(' ')[0]}): ${error}`)
         }
     }
 
@@ -96,6 +101,7 @@ export class Module {
      * @param response The array response from the module
      * @param isSearchQuery If we should try to build search result object from result array (default: false)
      */
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     handleResponse(response: any, isSearchQuery = false): any {
         //If not an array/object
         if(
@@ -181,6 +187,7 @@ export class Module {
         })
         return newArray;
     }
+
     /**
      * Formatting given param value to string
      * @param paramValue The given param value
@@ -221,4 +228,18 @@ export type RedisModuleOptions = {
     *  If to print debug logs
     */
     showDebugLogs?: boolean
+}
+
+/**
+ * The command object send to the sendCommand function
+ */
+export type CommandData = {
+    /**
+     * The full Redis command
+     */
+    command: string,
+    /**
+     * A list of arguments passed to the Redis command
+     */
+    args?: any[]
 }
