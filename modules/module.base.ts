@@ -69,14 +69,16 @@ export class Module {
      */
     async sendCommand(data: CommandData): Promise<any> {
         try {
-            if(this.showDebugLogs)
+            if(this.showDebugLogs){
                 console.log(`${this.name}: Running command ${data.command} with arguments: ${data.args}`);
+            }
             const response = this.clusterNodes ? 
                 await this.cluster.cluster.call(data.command, data.args)
                     : await this.redis.send_command(data.command, data.args);
 
-            if(this.showDebugLogs)
+            if(this.showDebugLogs){
                 console.log(`${this.name}: command ${data.command} responded with ${response}`);
+            }
             return response;
         } catch(error) {
             return this.handleError(`${this.name} class (${data.command.split(' ')[0]}): ${error}`)
@@ -99,6 +101,7 @@ export class Module {
      * @param response The array response from the module
      * @param isSearchQuery If we should try to build search result object from result array (default: false)
      */
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     handleResponse(response: any, isSearchQuery = false): any {
         //If not an array/object
         if(
@@ -236,7 +239,7 @@ export type CommandData = {
      */
     command: string,
     /**
-     * The arguments passed to the command
+     * A list of arguments passed to the Redis command
      */
     args?: any[]
 }

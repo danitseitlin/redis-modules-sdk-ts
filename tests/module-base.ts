@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { Module } from '../modules/module.base';
@@ -46,17 +47,6 @@ describe('Module base testing', async function() {
         ];
         parsed = clients[0].handleResponse(response)
         expect(parsed.numbers.num1).to.equal(response[1][1], 'The parsed response')
-        console.log(clients[0].handleResponse([
-            'key',
-            1,
-            'fields',
-            [
-                [1,2,3],
-                [3,4,5]
-            ]
-        ]))
-
-        console.log(clients[0].handleResponse([ [ 'TERM', 'name', [] ] ]))
     });
 
     it('isOnlyTwoDimensionalArray function', async () => {

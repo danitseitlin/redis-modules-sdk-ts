@@ -17,7 +17,6 @@ describe('RedisIntervalSets Module testing', async function() {
         }, { showDebugLogs: true });
         await client.connect();
         await redis.connect();
-        console.log(redis)
     })
     after(async () => {
         await client.disconnect();

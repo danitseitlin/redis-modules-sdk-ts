@@ -126,5 +126,6 @@ export type GraphConfigInfo = {
     RESULTSET_SIZE: number,
     MAINTAIN_TRANSPOSED_MATRICES: number,
     VKEY_MAX_ENTITY_COUNT: number,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any
 }
