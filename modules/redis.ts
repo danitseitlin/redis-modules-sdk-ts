@@ -21,7 +21,7 @@ import { RedisTimeSeries } from './rts';
 export class Redis extends Module {
 
 	public redisaiCommander: RedisAICommander = new RedisAICommander()
-	public risCommander: RedisIntervalSetsCommander
+	public risCommander: RedisIntervalSetsCommander = new RedisIntervalSetsCommander()
 	/**
      * Initializing the module object
      * @param name The name of the module
