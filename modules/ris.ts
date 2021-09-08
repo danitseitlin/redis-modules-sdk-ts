@@ -4,7 +4,7 @@ import { RedisIntervalSetsCommander } from './ris.commander';
 
 export class RedisIntervalSets extends Module {
 
-    risCommander: RedisIntervalSetsCommander
+    public risCommander: RedisIntervalSetsCommander
     /**
      * Initializing the module object
      * @param name The name of the module
