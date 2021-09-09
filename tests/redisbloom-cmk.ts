@@ -1,9 +1,9 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { RedisBloomCMK } from '../modules/bloom-cmk/redisbloom-cmk';
-import { Redis } from '../modules/redis';
+import { RedisModules } from '../modules/redis-modules';
 let client: RedisBloomCMK;
-let redis: Redis;
+let redis: RedisModules;
 const key1 = 'key1cmk'
 const key2 = 'key1cmk2';
 
@@ -13,7 +13,7 @@ describe('RedisBloom Count-Min-Sketch filter testing', async function() {
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });
-        redis = new Redis({
+        redis = new RedisModules({
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });

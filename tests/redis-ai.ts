@@ -2,10 +2,10 @@ import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { RedisAI } from '../modules/redis-ai/redis-ai';
 import * as fs from 'fs';
-import { Redis } from '../modules/redis';
+import { RedisModules } from '../modules/redis-modules';
 import { AIModel, AIScript, AIScriptInfo, AITensorInfo } from '../modules/redis-ai/redis-ai.types';
 let client: RedisAI;
-let redis: Redis;
+let redis: RedisModules;
 
 describe('AI testing', async function() {
     before(async () => {
@@ -13,7 +13,7 @@ describe('AI testing', async function() {
             host: cliArguments.host,
             port: parseInt(cliArguments.port)
         });
-        redis = new Redis({
+        redis = new RedisModules({
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });

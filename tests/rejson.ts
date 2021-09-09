@@ -1,9 +1,9 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { ReJSON } from '../modules/rejson/rejson';
-import { Redis } from '../modules/redis';
+import { RedisModules } from '../modules/redis-modules';
 let client: ReJSON;
-let redis: Redis;
+let redis: RedisModules;
 const key1 = 'key1';
 const key2 = 'key2';
 const key3 = 'arrkey';
@@ -15,7 +15,7 @@ describe('ReJSON Module testing', async function() {
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });
-        redis = new Redis({
+        redis = new RedisModules({
             host: cliArguments.host,
             port: parseInt(cliArguments.port)
         }, { showDebugLogs: true });

@@ -1,9 +1,9 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { RedisTimeSeries } from '../modules/rts/rts';
-import { Redis } from '../modules/redis';
+import { RedisModules } from '../modules/redis-modules';
 let client: RedisTimeSeries;
-let redis: Redis;
+let redis: RedisModules;
 const date = new Date(2019, 11, 24, 19).getTime();
 const key1 = 'key:2:32';
 const key2 = 'key:2:33';
@@ -13,7 +13,7 @@ describe('RTS Module testing', async function() {
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });
-        redis = new Redis({
+        redis = new RedisModules({
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });

@@ -1,9 +1,9 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
-import { Redis } from '../modules/redis';
+import { RedisModules } from '../modules/redis-modules';
 import { RedisBloomTDigest } from '../modules/bloom-tdigest/redisbloom-tdigest';
 let client: RedisBloomTDigest;
-let redis: Redis;
+let redis: RedisModules;
 const key1 = 'mykey1'
 const key2 = 'mykey2';
 
@@ -13,7 +13,7 @@ describe('RedisBloom TDigest filter testing', async function() {
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });
-        redis = new Redis({
+        redis = new RedisModules({
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });

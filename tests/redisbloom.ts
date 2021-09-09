@@ -1,9 +1,9 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { RedisBloom } from '../modules/bloom/redisbloom';
-import { Redis } from '../modules/redis';
+import { RedisModules } from '../modules/redis-modules';
 let client: RedisBloom;
-let redis: Redis;
+let redis: RedisModules;
 const key1 = 'key1bloom';
 const key2 = '1';
 const item1 = 'item1';
@@ -15,7 +15,7 @@ describe('RedisBloom Module testing', async function() {
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });
-        redis = new Redis({
+        redis = new RedisModules({
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });
