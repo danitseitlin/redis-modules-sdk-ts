@@ -1,4 +1,4 @@
-import { BFReserveParameter, BFInsertParameters } from "../..";
+import { BFReserveParameter, BFInsertParameters } from "./redisbloom.types";
 import { CommandData } from "../module.base";
 
 export class BloomCommander {

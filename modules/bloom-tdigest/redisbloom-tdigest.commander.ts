@@ -1,5 +1,5 @@
 import { CommandData } from "../module.base";
-import { TDigestAddParameters } from "./redisbloom-tdigest";
+import { TDigestAddParameters } from "./redisbloom-tdigest.types";
 
 export class BloomTdigestCommander {
     /**
