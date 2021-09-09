@@ -1,4 +1,4 @@
-import { CFReserveParameters, CFInsertParameters } from "./redisbloom-cuckoo";
+import { CFReserveParameters, CFInsertParameters } from "./redisbloom-cuckoo.types";
 import { CommandData } from "../module.base";
 
 export class BloomCuckooCommander {

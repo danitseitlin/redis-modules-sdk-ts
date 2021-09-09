@@ -1,8 +1,9 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
-import { AIModel, AIScript, AIScriptInfo, AITensorInfo, RedisAI } from '../modules/redis-ai/redis-ai';
+import { RedisAI } from '../modules/redis-ai/redis-ai';
 import * as fs from 'fs';
 import { Redis } from '../modules/redis';
+import { AIModel, AIScript, AIScriptInfo, AITensorInfo } from '../modules/redis-ai/redis-ai.types';
 let client: RedisAI;
 let redis: Redis;
 

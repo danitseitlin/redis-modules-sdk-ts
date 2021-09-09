@@ -1,6 +1,7 @@
 import * as Redis from 'ioredis';
 import { Module, RedisModuleOptions } from '../module.base';
 import { BloomCmkCommander } from './redisbloom-cmk.commander';
+import { CMKIncrbyItems } from './redisbloom-cmk.types';
 
 export class RedisBloomCMK extends Module {
 
@@ -90,14 +91,4 @@ export class RedisBloomCMK extends Module {
         const command = this.bloomCmkCommander.info(key);
         return await this.sendCommand(command);
     }
-}
-
-/**
- * The sets of the incrby items (and increments)
- * @param name The item name which counter to be increased.
- * @param increment The counter to be increased by this integer.
- */
-export type CMKIncrbyItems = {
-    name: string,
-    increment: number
 }
