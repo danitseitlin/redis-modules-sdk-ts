@@ -1,6 +1,7 @@
 import * as Redis from 'ioredis';
 import { Module, RedisModuleOptions } from '../module.base';
 import { BloomTopkCommander } from './redisbloom-topk.commander';
+import { TOPKIncrbyItems, TOPKResponse } from './redisbloom-topk.types';
 
 export class RedisBloomTopK extends Module {
 
@@ -99,21 +100,4 @@ export class RedisBloomTopK extends Module {
         const command = this.bloomTopkCommander.info(key);
         return await this.sendCommand(command);
     }
-}
-
-/**
- * The response of the TOPK commands
- * @param 1 Stands for 'true'
- * @param 0 Stands for 'false'
- */
-export type TOPKResponse = '1' | '0';
-
-/**
- * The sets of the incrby items (and increments)
- * @param item The item name which counter to be increased.
- * @param increment The counter to be increased by this integer.
- */
-export type TOPKIncrbyItems = {
-    name: string | number,
-    increment: number
 }

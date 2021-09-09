@@ -1,5 +1,5 @@
 import { CommandData } from "../module.base";
-import { CMKIncrbyItems } from "./redisbloom-cmk";
+import { CMKIncrbyItems } from "./redisbloom-cmk.types";
 
 export class BloomCmkCommander {
     /**

@@ -1,6 +1,7 @@
 import * as Redis from 'ioredis';
 import { Module, RedisModuleOptions } from '../module.base';
 import { RedisIntervalSetsCommander } from './ris.commander';
+import { RISSet } from './ris.types';
 
 export class RedisIntervalSets extends Module {
 
@@ -95,16 +96,4 @@ export class RedisIntervalSets extends Module {
         }
         return parsedSets;
     }
-}
-
-/**
- * The Interval Set object
- * @param name The name of the interval set
- * @param minimum The minimum score of the interval set
- * @param maximum The maximum score of the interval set
- */
-export type RISSet = {
-    name?: string,
-    minimum: number,
-    maximum: number
 }

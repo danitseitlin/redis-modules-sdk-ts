@@ -1,5 +1,5 @@
 import { CommandData } from "../module.base";
-import { TOPKIncrbyItems } from "./redisbloom-topk";
+import { TOPKIncrbyItems } from "./redisbloom-topk.types";
 
 export class BloomTopkCommander {
     

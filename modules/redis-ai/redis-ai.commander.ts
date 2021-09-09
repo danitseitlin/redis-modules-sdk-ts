@@ -1,5 +1,7 @@
 import { CommandData } from "../module.base";
-import { AIBackend, AIDagExecuteParameters, AIDevice, AIModelExecute, AIModelSetParameters, AIScriptExecuteParameters, AIScriptSetParameters, TensorType } from "./redis-ai";
+import {
+    AIBackend, AIDagExecuteParameters, AIDevice, AIModelExecute, AIModelSetParameters, AIScriptExecuteParameters, AIScriptSetParameters, TensorType
+} from "./redis-ai.types";
 
 export class RedisAICommander {
 

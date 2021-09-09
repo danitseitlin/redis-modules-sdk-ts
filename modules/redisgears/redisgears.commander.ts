@@ -1,5 +1,5 @@
 import { CommandData } from "../module.base";
-import { RGGetExecutionParameters, RGPyExecuteParameters } from "./redisgears";
+import { RGGetExecutionParameters, RGPyExecuteParameters } from "./redisgears.types";
 
 export class GearsCommander {
     /**

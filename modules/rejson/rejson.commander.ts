@@ -1,5 +1,5 @@
 import { CommandData } from "../module.base";
-import { ReJSONGetParameters } from "./rejson";
+import { ReJSONGetParameters } from "./rejson.types";
 
 export class RejsonCommander {
     /**
