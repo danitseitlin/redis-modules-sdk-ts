@@ -1,15 +1,13 @@
-export { Redis } from './modules/redis';
+export { RedisModules as Redis } from './modules/redis-modules';
 /* ** Redis JSON  ***/
 export { ReJSON } from './modules/rejson/rejson';
 export { ReJSONGetParameters } from './modules/rejson/rejson.types'
 /* ** Redis Graph ***/
 export { RedisGraph } from './modules/redisgraph/redisgraph';
 export { GraphConfigInfo } from './modules/redisgraph/redisgraph.types';
-
 /* ** Redis Gears ***/
 export { RedisGears } from './modules/redisgears/redisgears';
 export { RGGetExecutionParameters, RGPyExecuteParameters } from './modules/redisgears/redisgears.types';
-
 /* ** Redis Bloom ***/
 export { RedisBloom } from './modules/bloom/redisbloom';
 export { BFInsertParameters, BFResponse, BFReserveParameter } from './modules/bloom/redisbloom.types';

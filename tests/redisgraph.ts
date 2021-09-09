@@ -1,10 +1,10 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { RedisGraph } from '../modules/redisgraph/redisgraph';
-import { Redis } from '../modules/redis';
+import { RedisModules } from '../modules/redis-modules';
 import { GraphConfigInfo } from '../modules/redisgraph/redisgraph.types';
 let client: RedisGraph;
-let redis: Redis;
+let redis: RedisModules;
 const graphName = 'Test'
 
 describe('RedisGraph Module testing', async function() {
@@ -14,7 +14,7 @@ describe('RedisGraph Module testing', async function() {
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         }, { showDebugLogs: true });
-        redis = new Redis({
+        redis = new RedisModules({
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });

@@ -1,13 +1,13 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { RedisBloomCuckoo } from '../modules/bloom-cuckoo/redisbloom-cuckoo';
-import { Redis } from '../modules/redis';
+import { RedisModules } from '../modules/redis-modules';
 const key1 = 'key1cuckoo'
 const key2 = '1'
 const key3 = 'cuckoo'
 const chunks: {iterator: number, data: string}[] = [];
 let client: RedisBloomCuckoo;
-let redis: Redis;
+let redis: RedisModules;
 
 describe('RedisBloom Cuckoo filter testing', async function() {
     before(async () => {
@@ -15,7 +15,7 @@ describe('RedisBloom Cuckoo filter testing', async function() {
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });
-        redis = new Redis({
+        redis = new RedisModules({
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });
