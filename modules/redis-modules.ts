@@ -28,7 +28,7 @@ import { GraphCommander } from './redisgraph/redisgraph.commander';
 import { RejsonCommander } from './rejson/rejson.commander';
 import { RedisTimeSeriesCommander } from './rts/rts.commander';
 
-export class Redis extends Module {
+export class RedisModules extends Module {
 	public bloomCommander = new BloomCommander()
 	public bloomCmkCommander = new BloomCmkCommander()
 	public bloomCuckooCommander = new BloomCuckooCommander()
@@ -62,8 +62,8 @@ export class Redis extends Module {
 	 */
 	constructor(redisOptions: IORedis.RedisOptions, moduleOptions?: RedisModuleOptions)
 	constructor(options: IORedis.RedisOptions & IORedis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: IORedis.ClusterOptions) {
-		super(Redis.name, options, moduleOptions, clusterOptions);
-		this.applyMixins(Redis, [
+		super(RedisModules.name, options, moduleOptions, clusterOptions);
+		this.applyMixins(RedisModules, [
 			RedisAI, RedisIntervalSets, RedisBloom, RedisBloomCMK, RedisBloomCuckoo, RedisBloomTopK, RedisBloomTDigest, Redisearch, RedisGears, RedisGraph, ReJSON, RedisTimeSeries, RedisIntervalSets
 		])
 	}
@@ -326,4 +326,4 @@ export const modulePropNames = {
 /**
  * A definition of all the modules functions to be under the Redis 'All in One'
  */
-export interface Redis extends RedisAIMixin, RedisBloomCMKMixin, RedisBloomCuckooMixin, RedisBloomTopKMixin, RedisBloomMixin, RedisBloomTDigestMixin, RedisearchMixin, RedisGearsMixin, RedisGraphMixin, ReJSONMixin, RedisIntervalSetMixin, RedisTimeSeriesMixin {}
+export interface RedisModules extends RedisAIMixin, RedisBloomCMKMixin, RedisBloomCuckooMixin, RedisBloomTopKMixin, RedisBloomMixin, RedisBloomTDigestMixin, RedisearchMixin, RedisGearsMixin, RedisGraphMixin, ReJSONMixin, RedisIntervalSetMixin, RedisTimeSeriesMixin {}

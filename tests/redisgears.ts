@@ -1,9 +1,9 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
 import { RedisGears } from '../modules/redisgears/redisgears';
-import { Redis } from '../modules/redis';
+import { RedisModules } from '../modules/redis-modules';
 let client: RedisGears;
-let redis: Redis;
+let redis: RedisModules;
 let executionId1: string;
 let executionId2: string;
 let executionId3: string;
@@ -13,7 +13,7 @@ describe('RedisGears Module testing', async function() {
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });
-        redis = new Redis({
+        redis = new RedisModules({
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
         });
