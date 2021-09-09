@@ -2,6 +2,7 @@
 import * as Redis from 'ioredis';
 import { Module, RedisModuleOptions } from '../module.base';
 import { RejsonCommander } from './rejson.commander';
+import { ReJSONGetParameters } from './rejson.types';
 
 export class ReJSON extends Module {
 
@@ -286,18 +287,4 @@ export class ReJSON extends Module {
         const command = this.rejsonCommander.resp(key, path);
         return await this.sendCommand(command);
     }
-}
-
-/**
- * The get command additional parameters
- * @param indent Sets the indentation string for nested levels
- * @param newline Sets the string that's printed at the end of each line
- * @param space Sets the string that's put between a key and a value 
- * @param noescape Will disable the sending of \uXXXX escapes for non-ascii characters
- */
-export type ReJSONGetParameters = {
-    indent?: string,
-    newline?: string,
-    space?: string,
-    noescape?: boolean,
 }
