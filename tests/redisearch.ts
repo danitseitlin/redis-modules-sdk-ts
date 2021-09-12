@@ -34,7 +34,7 @@ describe('RediSearch Module testing', async function () {
         await client.disconnect()
         await redis.disconnect()
     })
-    /* it('create function', async () => {
+    it('create function', async () => {
         let response = await client.create(index, 'HASH', [{
             name: 'name',
             type: 'TEXT'
@@ -420,7 +420,7 @@ describe('RediSearch Module testing', async function () {
     it('syndump function', async () => {
         const response = await client.syndump(index)
         expect(response.term1).to.equal('0', 'The response of the FT.SYNDUMP command')
-    }) */
+    })
     it('spellcheck function', async () => {
         await client.create(`${index}-spellcheck`, 'HASH', [{
             name: "content",
@@ -436,7 +436,7 @@ describe('RediSearch Module testing', async function () {
         response = await client.spellcheck(`${index}-spellcheck`, "mellow blua")
         expect(response.length).to.equal(2, 'Both word should be spellchecked')
     })
-    /* it('dictadd function', async () => {
+    it('dictadd function', async () => {
         const response = await client.dictadd(dict.name, [dict.term])
         expect(response).to.equal(1, 'The response of the FT.DICTADD command')
     })
@@ -466,5 +466,5 @@ describe('RediSearch Module testing', async function () {
         }])
         const response = await client.dropindex(`${index}-droptest`)
         expect(response).to.equal('OK', 'The response of the FT.DROPINDEX command')
-    }) */
+    })
 })
