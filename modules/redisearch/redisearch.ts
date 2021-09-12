@@ -4,7 +4,7 @@ import { Module, RedisModuleOptions } from '../module.base';
 import { SearchCommander } from './redisearch.commander';
 import {
     FTAggregateParameters, FTConfig, FTCreateParameters, FTFieldOptions, FTFieldType, FTIndexType, FTInfo, FTSchemaField,
-    FTSearchParameters, FTSpellCheck, FTSugAddParameters, FTSugGetParameters
+    FTSearchParameters, FTSpellCheck, FTSpellCheckResponse, FTSugAddParameters, FTSugGetParameters
 } from './redisearch.types';
 
 export class Redisearch extends Module {
@@ -251,11 +251,28 @@ export class Redisearch extends Module {
      * @param options The additional optional parameters
      * @returns An array, in which each element represents a misspelled term from the query
      */
-    async spellcheck(index: string, query: string, options?: FTSpellCheck): Promise<string[]> {
+    async spellcheck(index: string, query: string, options?: FTSpellCheck): Promise<FTSpellCheckResponse[]> {
         const command = this.searchCommander.spellcheck(index, query, options);
         const response = await this.sendCommand(command);
-        console.log(response);
-        return this.handleResponse(response);
+        return this.handleSpellcheckResponse(response);
+    }
+
+    handleSpellcheckResponse(response: any): FTSpellCheckResponse[] {
+        const output = [];
+        for(const term of response){
+            output.push({
+                term: term[1],
+                suggestions: (term[2] as string[]).map(
+                    function (suggestionArrayElem) {
+                        return {
+                            score: suggestionArrayElem[0],
+                            suggestion: suggestionArrayElem[1]
+                        }
+                    }
+                )
+            });
+        }
+        return output;
     }
 
     /**

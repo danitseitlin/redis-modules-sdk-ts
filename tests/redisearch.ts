@@ -423,16 +423,18 @@ describe('RediSearch Module testing', async function () {
     }) */
     it('spellcheck function', async () => {
         await client.create(`${index}-spellcheck`, 'HASH', [{
-            name: "colors",
+            name: "content",
             type: "TEXT",
         }], {
             prefix: { prefixes: 'colors:' }
         });
-        await client.redis.hset('colors:1', { colors: 'red green blue yellow' });
+        await client.redis.hset('colors:1', { content: 'red green blue yellow mellon' })
 
-        const response = await client.spellcheck(index, "mellow");
-        console.log(response);
-        expect(response.length).to.be.greaterThan(0, 'The response of the FT.SPELLCHECK command')
+        let response = await client.spellcheck(`${index}-spellcheck`, "redis")
+        expect(response[0].suggestions.length).to.equal(0, 'No suggestion should be found')
+
+        response = await client.spellcheck(`${index}-spellcheck`, "mellow blua")
+        expect(response.length).to.equal(2, 'Both word should be spellchecked')
     })
     /* it('dictadd function', async () => {
         const response = await client.dictadd(dict.name, [dict.term])
