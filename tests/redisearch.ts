@@ -34,7 +34,7 @@ describe('RediSearch Module testing', async function () {
         await client.disconnect()
         await redis.disconnect()
     })
-    it('create function', async () => {
+    /* it('create function', async () => {
         let response = await client.create(index, 'HASH', [{
             name: 'name',
             type: 'TEXT'
@@ -122,7 +122,7 @@ describe('RediSearch Module testing', async function () {
     it('Simple search test with field specified in query', async () => {
         const [count, ...result] = await client.search(`${index}-searchtest`, '@name:Doe');
         expect(count).to.equal(2, 'Total number of returining document of FT.SEARCH command')
-        expect((result[0] as {[key: string]: string}).key).to.equal('doc:1', 'first document key')
+        expect((result[0] as { [key: string]: string }).key).to.equal('doc:1', 'first document key')
     })
     it('Simple search tests with field specified using inFields', async () => {
         let res = await client.search(
@@ -266,8 +266,8 @@ describe('RediSearch Module testing', async function () {
             }
         )
         expect(res[0]).to.equal(2, 'Total number of returining document of FT.SEARCH command')
-        expect((res[1] as {[key: string]: string}).introduction.endsWith('!?!')).to.equal(true, 'Custom summarize seperator')
-        expect((res[1] as {[key: string]: string}).introduction.endsWith('!?!')).to.equal(true, 'Custom summarize seperator')
+        expect((res[1] as { [key: string]: string }).introduction.endsWith('!?!')).to.equal(true, 'Custom summarize seperator')
+        expect((res[1] as { [key: string]: string }).introduction.endsWith('!?!')).to.equal(true, 'Custom summarize seperator')
     })
     it('Search tests with highlight', async () => {
         const res = await client.search(
@@ -284,8 +284,8 @@ describe('RediSearch Module testing', async function () {
             }
         )
         expect(res[0]).to.equal(2, 'Total number of returining document of FT.SEARCH command')
-        expect((res[1] as {[key: string]: string}).name.includes('**')).to.equal(false, 'Name mustn\'t be highlighted')
-        expect((res[1] as {[key: string]: string}).introduction.includes('**developer**')).to.equal(true, 'Introduction must be highlighted')
+        expect((res[1] as { [key: string]: string }).name.includes('**')).to.equal(false, 'Name mustn\'t be highlighted')
+        expect((res[1] as { [key: string]: string }).introduction.includes('**developer**')).to.equal(true, 'Introduction must be highlighted')
     })
     it('Search test with sortby ', async () => {
         const res = await client.search(
@@ -300,9 +300,9 @@ describe('RediSearch Module testing', async function () {
             }
         )
         expect(res[0]).to.equal(3, 'Total number of returining document of FT.SEARCH command')
-        expect((res[1] as {[key: string]: string}).age).to.equal('25', 'Ages should be returned in ascending order')
-        expect((res[2] as {[key: string]: string}).age).to.equal('30', 'Ages should be returned in ascending order')
-        expect((res[3] as {[key: string]: string}).age).to.equal('80', 'Ages should be returned in ascending order')
+        expect((res[1] as { [key: string]: string }).age).to.equal('25', 'Ages should be returned in ascending order')
+        expect((res[2] as { [key: string]: string }).age).to.equal('30', 'Ages should be returned in ascending order')
+        expect((res[3] as { [key: string]: string }).age).to.equal('80', 'Ages should be returned in ascending order')
     })
     it('Search test with limit', async () => {
         const res = await client.search(
@@ -341,7 +341,7 @@ describe('RediSearch Module testing', async function () {
             sortable: true
         }
         ], {
-            prefix: {prefixes: ['person']}
+            prefix: { prefixes: ['person'] }
         })
 
         const time = new Date()
@@ -420,14 +420,21 @@ describe('RediSearch Module testing', async function () {
     it('syndump function', async () => {
         const response = await client.syndump(index)
         expect(response.term1).to.equal('0', 'The response of the FT.SYNDUMP command')
-    })
+    }) */
     it('spellcheck function', async () => {
-        const response = await client.spellcheck(index, query, {
-            distance: 1
-        })
+        await client.create(`${index}-spellcheck`, 'HASH', [{
+            name: "colors",
+            type: "TEXT",
+        }], {
+            prefix: { prefixes: 'colors:' }
+        });
+        await client.redis.hset('colors:1', { colors: 'red green blue yellow' });
+
+        const response = await client.spellcheck(index, "mellow");
+        console.log(response);
         expect(response.length).to.be.greaterThan(0, 'The response of the FT.SPELLCHECK command')
     })
-    it('dictadd function', async () => {
+    /* it('dictadd function', async () => {
         const response = await client.dictadd(dict.name, [dict.term])
         expect(response).to.equal(1, 'The response of the FT.DICTADD command')
     })
@@ -457,5 +464,5 @@ describe('RediSearch Module testing', async function () {
         }])
         const response = await client.dropindex(`${index}-droptest`)
         expect(response).to.equal('OK', 'The response of the FT.DROPINDEX command')
-    })
+    }) */
 })

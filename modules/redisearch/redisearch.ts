@@ -254,6 +254,7 @@ export class Redisearch extends Module {
     async spellcheck(index: string, query: string, options?: FTSpellCheck): Promise<string[]> {
         const command = this.searchCommander.spellcheck(index, query, options);
         const response = await this.sendCommand(command);
+        console.log(response);
         return this.handleResponse(response);
     }
 

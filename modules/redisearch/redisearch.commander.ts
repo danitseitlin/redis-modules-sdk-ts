@@ -19,11 +19,15 @@ export class SearchCommander {
         if(parameters !== undefined) {
             if(parameters.prefix !== undefined) {
                 args.push('PREFIX')
-                args.push(
-                    parameters.prefix.num !== undefined ?
-                        `${parameters.prefix.num}` :
-                        `${parameters.prefix.prefixes.length}`
-                )
+                if(parameters.prefix.num !== undefined) {
+                    args.push(`${parameters.prefix.num}`)
+                } else {
+                    if(Array.isArray(parameters.prefix.prefixes)) {
+                        args.push(`${parameters.prefix.prefixes.length}`)
+                    } else {
+                        args.push("1")
+                    }
+                }
                 args = args.concat(parameters.prefix.prefixes);
             }
             if(parameters.filter !== undefined)
@@ -52,11 +56,15 @@ export class SearchCommander {
                 args.push('NOFREQS')
             if(parameters.stopwords !== undefined) {
                 args.push('STOPWORDS')
-                args.push(
-                    parameters.stopwords.num !== undefined ?
-                        `${parameters.stopwords.num}` :
-                        `${parameters.stopwords.stopwords.length}`
-                )
+                if(parameters.stopwords.num !== undefined) {
+                    args.push(`${parameters.stopwords.num}`)
+                } else {
+                    if(Array.isArray(parameters.stopwords.stopwords)) {
+                        args.push(`${parameters.stopwords.stopwords.length}`)
+                    } else {
+                        args.push("1")
+                    }
+                }
                 args = args.concat(parameters.stopwords.stopwords);
             }
             if(parameters.skipInitialScan === true)
@@ -119,20 +127,32 @@ export class SearchCommander {
                     `${parameters.geoFilter.radius}`,
                     parameters.geoFilter.measurement
                 ])
-            if(parameters.inKeys !== undefined)
-                args = args.concat([
-                    'INKEYS',
-                    parameters.inKeys.num !== undefined ?
-                        `${parameters.inKeys.num}` :
-                        `${parameters.inKeys.keys.length}`,
-                ]).concat(parameters.inKeys.keys);
-            if(parameters.inFields !== undefined)
-                args = args.concat([
-                    'INFIELDS',
-                    parameters.inFields.num !== undefined ?
-                        `${parameters.inFields.num}` :
-                        `${parameters.inFields.fields.length}`,
-                ]).concat(parameters.inFields.fields);
+            if(parameters.inKeys !== undefined) {
+                args.push('INKEYS')
+                if(parameters.inKeys.num !== undefined) {
+                    args.push(`${parameters.inKeys.num}`)
+                } else {
+                    if(Array.isArray(parameters.inKeys.keys)) {
+                        args.push(`${parameters.inKeys.keys.length}`)
+                    } else {
+                        args.push("1")
+                    }
+                }
+                args = args.concat(parameters.inKeys.keys);
+            }
+            if(parameters.inFields !== undefined) {
+                args.push('INFIELDS');
+                if(parameters.inFields.num !== undefined) {
+                    args.push(`${parameters.inFields.num}`)
+                } else {
+                    if(Array.isArray(parameters.inFields.fields)) {
+                        args.push(`${parameters.inFields.fields.length}`)
+                    } else {
+                        args.push("1")
+                    }
+                }
+                args = args.concat(parameters.inFields.fields);
+            }
             if(parameters.return !== undefined) {
                 args = args.concat([
                     'RETURN',
@@ -154,11 +174,15 @@ export class SearchCommander {
                 args.push('SUMMARIZE')
                 if(parameters.summarize.fields !== undefined) {
                     args.push('FIELDS')
-                    args.push(
-                        parameters.summarize.fields.num !== undefined ?
-                            `${parameters.summarize.fields.num}` :
-                            `${parameters.summarize.fields.fields.length}`
-                    )
+                    if(parameters.summarize.fields.num !== undefined) {
+                        args.push(`${parameters.summarize.fields.num}`)
+                    } else {
+                        if(Array.isArray(parameters.summarize.fields.fields)) {
+                            args.push(`${parameters.summarize.fields.fields.length}`)
+                        } else {
+                            args.push("1")
+                        }
+                    }
                     args = args.concat(parameters.summarize.fields.fields)
                 }
                 if(parameters.summarize.frags !== undefined)
@@ -171,12 +195,17 @@ export class SearchCommander {
             if(parameters.highlight !== undefined) {
                 args.push('HIGHLIGHT')
                 if(parameters.highlight.fields !== undefined) {
-                    args = args.concat([
-                        'FIELDS',
-                        parameters.highlight.fields.num !== undefined ?
-                            `${parameters.highlight.fields.num}` :
-                            `${parameters.highlight.fields.fields.length}`,
-                    ]).concat(parameters.highlight.fields.fields);
+                    args.push('FIELDS');
+                    if(parameters.highlight.fields.num !== undefined) {
+                        args.push(`${parameters.highlight.fields.num}`)
+                    } else {
+                        if(Array.isArray(parameters.highlight.fields.fields)) {
+                            args.push(`${parameters.highlight.fields.fields.length}`)
+                        } else {
+                            args.push("1")
+                        }
+                    }
+                    args = args.concat(parameters.highlight.fields.fields);
                 }
                 if(parameters.highlight.tags !== undefined) {
                     args.push('TAGS')
