@@ -4,12 +4,15 @@ import { Module, RedisModuleOptions } from '../module.base';
 import { SearchCommander } from './redisearch.commander';
 import {
     FTAggregateParameters, FTConfig, FTCreateParameters, FTFieldOptions, FTFieldType, FTIndexType, FTInfo, FTSchemaField,
-    FTSearchParameters, FTSpellCheck, FTSugAddParameters, FTSugGetParameters
+    FTSearchParameters, FTSpellCheck, FTSpellCheckResponse, FTSugAddParameters, FTSugGetParameters
 } from './redisearch.types';
+import { RedisearchHelpers } from './redisearch.helpers';
 
 export class Redisearch extends Module {
 
     private searchCommander = new SearchCommander();
+    private searchHelpers = new RedisearchHelpers();
+
     /**
      * Initializing the module object
      * @param name The name of the module
@@ -251,10 +254,10 @@ export class Redisearch extends Module {
      * @param options The additional optional parameters
      * @returns An array, in which each element represents a misspelled term from the query
      */
-    async spellcheck(index: string, query: string, options?: FTSpellCheck): Promise<string[]> {
+    async spellcheck(index: string, query: string, options?: FTSpellCheck): Promise<FTSpellCheckResponse[]> {
         const command = this.searchCommander.spellcheck(index, query, options);
         const response = await this.sendCommand(command);
-        return this.handleResponse(response);
+        return this.searchHelpers.handleSpellcheckResponse(response);
     }
 
     /**
