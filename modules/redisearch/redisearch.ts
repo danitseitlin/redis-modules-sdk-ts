@@ -11,7 +11,7 @@ import { RedisearchHelpers } from './redisearch.helpers';
 export class Redisearch extends Module {
 
     private searchCommander = new SearchCommander();
-    private helpers = new RedisearchHelpers();
+    private searchHelpers = new RedisearchHelpers();
 
     /**
      * Initializing the module object
@@ -257,7 +257,7 @@ export class Redisearch extends Module {
     async spellcheck(index: string, query: string, options?: FTSpellCheck): Promise<FTSpellCheckResponse[]> {
         const command = this.searchCommander.spellcheck(index, query, options);
         const response = await this.sendCommand(command);
-        return this.helpers.handleSpellcheckResponse(response);
+        return this.searchHelpers.handleSpellcheckResponse(response);
     }
 
     /**

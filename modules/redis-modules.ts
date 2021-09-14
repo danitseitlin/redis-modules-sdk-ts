@@ -27,6 +27,7 @@ import { GearsCommander } from './redisgears/redisgears.commander';
 import { GraphCommander } from './redisgraph/redisgraph.commander';
 import { RejsonCommander } from './rejson/rejson.commander';
 import { RedisTimeSeriesCommander } from './rts/rts.commander';
+import { RedisearchHelpers } from './redisearch/redisearch.helpers';
 
 export class RedisModules extends Module {
 	public bloomCommander = new BloomCommander()
@@ -41,6 +42,7 @@ export class RedisModules extends Module {
 	public rejsonCommander = new RejsonCommander()
 	public risCommander = new RedisIntervalSetsCommander()
 	public rtsCommander = new RedisTimeSeriesCommander()
+	public searchHelpers = new RedisearchHelpers();
 
 	/**
      * Initializing the module object
