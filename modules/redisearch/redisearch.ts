@@ -6,10 +6,13 @@ import {
     FTAggregateParameters, FTConfig, FTCreateParameters, FTFieldOptions, FTFieldType, FTIndexType, FTInfo, FTSchemaField,
     FTSearchParameters, FTSpellCheck, FTSpellCheckResponse, FTSugAddParameters, FTSugGetParameters
 } from './redisearch.types';
+import { RedisearchHelpers } from './redisearch.helpers';
 
 export class Redisearch extends Module {
 
     private searchCommander = new SearchCommander();
+    private helpers = new RedisearchHelpers();
+
     /**
      * Initializing the module object
      * @param name The name of the module
@@ -254,29 +257,7 @@ export class Redisearch extends Module {
     async spellcheck(index: string, query: string, options?: FTSpellCheck): Promise<FTSpellCheckResponse[]> {
         const command = this.searchCommander.spellcheck(index, query, options);
         const response = await this.sendCommand(command);
-        return this.handleSpellcheckResponse(response);
-    }
-
-    /**
-     * Parses `spellcheck` response into a list of objects.
-     * @param response The response array from the spellcheck command
-     */
-    handleSpellcheckResponse(response: any): FTSpellCheckResponse[] {
-        const output = [];
-        for(const term of response){
-            output.push({
-                term: term[1],
-                suggestions: (term[2] as string[]).map(
-                    function (suggestionArrayElem) {
-                        return {
-                            score: suggestionArrayElem[0],
-                            suggestion: suggestionArrayElem[1]
-                        }
-                    }
-                )
-            });
-        }
-        return output;
+        return this.helpers.handleSpellcheckResponse(response);
     }
 
     /**
