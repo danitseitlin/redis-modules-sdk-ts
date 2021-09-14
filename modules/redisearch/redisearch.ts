@@ -257,6 +257,10 @@ export class Redisearch extends Module {
         return this.handleSpellcheckResponse(response);
     }
 
+    /**
+     * Parses `spellcheck` response into a list of objects.
+     * @param response The response array from the spellcheck command
+     */
     handleSpellcheckResponse(response: any): FTSpellCheckResponse[] {
         const output = [];
         for(const term of response){
