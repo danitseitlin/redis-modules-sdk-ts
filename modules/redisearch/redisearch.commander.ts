@@ -21,12 +21,10 @@ export class SearchCommander {
                 args.push('PREFIX')
                 if(parameters.prefix.num !== undefined) {
                     args.push(`${parameters.prefix.num}`)
+                } else if(Array.isArray(parameters.prefix.prefixes)) {
+                    args.push(`${parameters.prefix.prefixes.length}`)
                 } else {
-                    if(Array.isArray(parameters.prefix.prefixes)) {
-                        args.push(`${parameters.prefix.prefixes.length}`)
-                    } else {
-                        args.push("1")
-                    }
+                    args.push("1")
                 }
                 args = args.concat(parameters.prefix.prefixes);
             }
@@ -58,12 +56,10 @@ export class SearchCommander {
                 args.push('STOPWORDS')
                 if(parameters.stopwords.num !== undefined) {
                     args.push(`${parameters.stopwords.num}`)
+                } else if(Array.isArray(parameters.stopwords.stopwords)) {
+                    args.push(`${parameters.stopwords.stopwords.length}`)
                 } else {
-                    if(Array.isArray(parameters.stopwords.stopwords)) {
-                        args.push(`${parameters.stopwords.stopwords.length}`)
-                    } else {
-                        args.push("1")
-                    }
+                    args.push("1")
                 }
                 args = args.concat(parameters.stopwords.stopwords);
             }
@@ -131,12 +127,10 @@ export class SearchCommander {
                 args.push('INKEYS')
                 if(parameters.inKeys.num !== undefined) {
                     args.push(`${parameters.inKeys.num}`)
+                } else if(Array.isArray(parameters.inKeys.keys)) {
+                    args.push(`${parameters.inKeys.keys.length}`)
                 } else {
-                    if(Array.isArray(parameters.inKeys.keys)) {
-                        args.push(`${parameters.inKeys.keys.length}`)
-                    } else {
-                        args.push("1")
-                    }
+                    args.push("1")
                 }
                 args = args.concat(parameters.inKeys.keys);
             }
@@ -144,12 +138,10 @@ export class SearchCommander {
                 args.push('INFIELDS');
                 if(parameters.inFields.num !== undefined) {
                     args.push(`${parameters.inFields.num}`)
+                } else if(Array.isArray(parameters.inFields.fields)) {
+                    args.push(`${parameters.inFields.fields.length}`)
                 } else {
-                    if(Array.isArray(parameters.inFields.fields)) {
-                        args.push(`${parameters.inFields.fields.length}`)
-                    } else {
-                        args.push("1")
-                    }
+                    args.push("1")
                 }
                 args = args.concat(parameters.inFields.fields);
             }
@@ -176,12 +168,10 @@ export class SearchCommander {
                     args.push('FIELDS')
                     if(parameters.summarize.fields.num !== undefined) {
                         args.push(`${parameters.summarize.fields.num}`)
+                    } else if(Array.isArray(parameters.summarize.fields.fields)) {
+                        args.push(`${parameters.summarize.fields.fields.length}`)
                     } else {
-                        if(Array.isArray(parameters.summarize.fields.fields)) {
-                            args.push(`${parameters.summarize.fields.fields.length}`)
-                        } else {
-                            args.push("1")
-                        }
+                        args.push("1")
                     }
                     args = args.concat(parameters.summarize.fields.fields)
                 }
@@ -198,12 +188,10 @@ export class SearchCommander {
                     args.push('FIELDS');
                     if(parameters.highlight.fields.num !== undefined) {
                         args.push(`${parameters.highlight.fields.num}`)
+                    } else if(Array.isArray(parameters.highlight.fields.fields)) {
+                        args.push(`${parameters.highlight.fields.fields.length}`)
                     } else {
-                        if(Array.isArray(parameters.highlight.fields.fields)) {
-                            args.push(`${parameters.highlight.fields.fields.length}`)
-                        } else {
-                            args.push("1")
-                        }
+                        args.push("1")
                     }
                     args = args.concat(parameters.highlight.fields.fields);
                 }
