@@ -626,3 +626,26 @@ export interface FTInfo {
         index_total?: number
     }
 }
+
+/**
+ * The FT.SPELLCHECK response object
+ */
+export interface FTSpellCheckResponse {
+    /** 
+     * The term that was spellchecked
+    */
+    term: string,
+    /**
+     *  Suggested corrections
+     */
+    suggestions: {
+        /**
+         * Score of the suggestion
+         */
+        score: string,
+        /**
+         * Score of the suggestion
+         */
+        suggestion: string
+    }[],
+}
