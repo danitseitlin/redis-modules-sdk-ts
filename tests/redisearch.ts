@@ -422,10 +422,19 @@ describe('RediSearch Module testing', async function () {
         expect(response.term1).to.equal('0', 'The response of the FT.SYNDUMP command')
     })
     it('spellcheck function', async () => {
-        const response = await client.spellcheck(index, query, {
-            distance: 1
-        })
-        expect(response.length).to.be.greaterThan(0, 'The response of the FT.SPELLCHECK command')
+        await client.create(`${index}-spellcheck`, 'HASH', [{
+            name: "content",
+            type: "TEXT",
+        }], {
+            prefix: { prefixes: 'colors:' }
+        });
+        await client.redis.hset('colors:1', { content: 'red green blue yellow mellon' })
+
+        let response = await client.spellcheck(`${index}-spellcheck`, "redis")
+        expect(response[0].suggestions.length).to.equal(0, 'No suggestion should be found')
+
+        response = await client.spellcheck(`${index}-spellcheck`, "mellow blua")
+        expect(response.length).to.equal(2, 'Both word should be spellchecked')
     })
     it('dictadd function', async () => {
         const response = await client.dictadd(dict.name, [dict.term])
