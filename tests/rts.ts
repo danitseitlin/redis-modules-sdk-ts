@@ -154,6 +154,7 @@ describe('RTS Module testing', async function() {
         let response = await client.mget('label=value');
         expect(response.length).to.equal(1, 'The response of the mget command');
         response = await client.mget('label=value label1=value1');
+        console.log(response)
         expect(response.length).to.equal(1, 'The response of the mget command');
         response = await client.mget('label=value x=(a,b,c)');
         expect(response.length).to.equal(1, 'The response of the mget command');
