@@ -12,7 +12,7 @@ describe('RTS Module testing', async function() {
         client = new RedisTimeSeries({
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
-        });
+        }, { showDebugLogs: true });
         redis = new RedisModules({
             host: cliArguments.host,
             port: parseInt(cliArguments.port),
