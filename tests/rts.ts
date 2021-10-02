@@ -47,7 +47,7 @@ describe('RTS Module testing', async function() {
         expect(response).to.equal('OK', 'The response of the alter command');
     });
     it('add function', async () => {
-        const response = await client.add(key1, date.toString(), '26')
+        const response = await client.add(key1, `${date}`, '26', { onDuplicate: 'SUM'})
         expect(response).to.equal(date, 'The response of the add command');
     });
     it('madd function', async () => {
