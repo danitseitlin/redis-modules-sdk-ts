@@ -73,15 +73,19 @@ export class RedisTimeSeriesCommander {
      */
     add(key: string, timestamp: string, value: string, options?: TSAddOptions): CommandData {
         let args = [key, timestamp, value];
-        if(options !== undefined && options.retention !== undefined)
-            args = args.concat(['RETENTION', options.retention.toString()])
-        if(options !== undefined && options.uncompressed === true)
+        if(options?.retention !== undefined) {
+            args = args.concat(['RETENTION', `${options.retention}`])
+        }
+        if(options?.uncompressed === true){
             args.push('UNCOMPRESSED');
-        if(options !== undefined && options.onDuplicate === true)
-            args.push('ON_DUPLICATE');
-        if(options !== undefined && options.chunkSize !== undefined)
-            args = args.concat(['CHUNK_SIZE', options.chunkSize.toString()])
-        if(options !== undefined && options.labels !== undefined && options.labels.length > 0) {
+        }
+        if(options?.onDuplicate){
+            args = args.concat(['ON_DUPLICATE', options.onDuplicate]);
+        }
+        if(options?.chunkSize !== undefined){
+            args = args.concat(['CHUNK_SIZE', `${options.chunkSize}`])
+        }
+        if(options?.labels !== undefined && options.labels.length > 0) {
             args.push('LABELS')
             for(const label of options.labels) {
                 args = args.concat([label.name, label.value]);
