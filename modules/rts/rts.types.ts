@@ -57,8 +57,19 @@ export type TSLabel = {
  * @param labels A list of 'LABELS' optional parameter
  */
 export interface TSAddOptions extends TSOptions {
-    onDuplicate?: boolean
+    onDuplicate?: TSDuplicatePolicyType 
 }
+
+/**
+ * The available Duplicate policy types. Policy that will define handling of duplicate samples.
+ * @param BLOCK an error will occur for any out of order sample
+ * @param FIRST ignore the new value
+ * @param LAST override with latest value
+ * @param MIN only override if the value is lower than the existing value
+ * @param MAX only override if the value is higher than the existing value
+ * @param SUM If a previous sample exists, add the new sample to it so that the updated value is equal to (previous + new). If no previous sample exists, set the updated value equal to the new value.
+ */
+export type TSDuplicatePolicyType = 'BLOCK' | 'FIRST' | 'LAST' | 'MIN' | 'MAX' | 'SUM';
 
 /**
  * The 'TS.KEYSET' command optional parameters
