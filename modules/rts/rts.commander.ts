@@ -361,7 +361,7 @@ export class RedisTimeSeriesCommander {
         if(withLabels === true){
             args.push('WITHLABELS');
         }
-        args = args.concat(['FILTER', filter])
+        args = args.concat(['FILTER'], filter.split(' '))
         return {
             command: 'TS.MGET',
             args: args
