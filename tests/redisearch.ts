@@ -2,6 +2,7 @@ import { cliArguments } from 'cli-argument-parser'
 import { expect } from 'chai'
 import { Redisearch } from '../modules/redisearch/redisearch'
 import { RedisModules } from '../modules/redis-modules'
+import { FTSearchArrayResponse } from '../modules/redisearch/redisearch.types'
 let client: Redisearch
 let redis: RedisModules
 const index = 'idx'
@@ -120,7 +121,7 @@ describe('RediSearch Module testing', async function () {
         )
     })
     it('Simple search test with field specified in query', async () => {
-        const [count, ...result] = await client.search(`${index}-searchtest`, '@name:Doe');
+        const [count, ...result] = await client.search(`${index}-searchtest`, '@name:Doe') as FTSearchArrayResponse;
         expect(count).to.equal(2, 'Total number of returining document of FT.SEARCH command')
         expect((result[0] as {[key: string]: string}).key).to.equal('doc:1', 'first document key')
     })
@@ -246,7 +247,7 @@ describe('RediSearch Module testing', async function () {
             {
                 return: { fields: [] }
             }
-        )
+        ) as FTSearchArrayResponse;
         expect(res.length).to.equal(4, 'Only keys should be returned (+count of them)')
     })
     it('Search test with summarize', async () => {
@@ -314,7 +315,7 @@ describe('RediSearch Module testing', async function () {
                     num: 1
                 }
             }
-        )
+        ) as FTSearchArrayResponse;
         expect(res[0]).to.equal(3, 'Total number of returining document of FT.SEARCH command')
         expect(res.length).to.equal(2, 'Only one item should be returned')
     })
