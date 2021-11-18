@@ -649,3 +649,14 @@ export interface FTSpellCheckResponse {
         suggestion: string
     }[],
 }
+
+/**
+ * The response type of the FT search function.
+ * The function results in 0 when no results are found, else as an array.
+ */
+export type FTSearchResponse = number | FTSearchArrayResponse;
+
+/**
+ * The response type of the FT search function as an array
+ */
+export type FTSearchArrayResponse = [number, ...Array<string | string[] | {[key: string]: string}>];
