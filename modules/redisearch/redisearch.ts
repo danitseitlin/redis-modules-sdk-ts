@@ -4,7 +4,7 @@ import { Module, RedisModuleOptions } from '../module.base';
 import { SearchCommander } from './redisearch.commander';
 import {
     FTAggregateParameters, FTConfig, FTCreateParameters, FTFieldOptions, FTFieldType, FTIndexType, FTInfo, FTSchemaField,
-    FTSearchParameters, FTSpellCheck, FTSpellCheckResponse, FTSugAddParameters, FTSugGetParameters
+    FTSearchParameters, FTSearchResponse, FTSpellCheck, FTSpellCheckResponse, FTSugAddParameters, FTSugGetParameters
 } from './redisearch.types';
 import { RedisearchHelpers } from './redisearch.helpers';
 
@@ -57,7 +57,7 @@ export class Redisearch extends Module {
      * @param parameters The additional optional parameter
      * @returns Array reply, where the first element is the total number of results, and then pairs of document id, and a nested array of field/value.
      */
-    async search(index: string, query: string, parameters?: FTSearchParameters): Promise<[number, ...Array<string | string[] | {[key: string]: string}>]> {
+    async search(index: string, query: string, parameters?: FTSearchParameters): Promise<FTSearchResponse> {
         const command = this.searchCommander.search(index, query, parameters);
         const response = await this.sendCommand(command);
         const parseResponse = parameters?.parseSearchQueries ?? true;
