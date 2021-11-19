@@ -669,8 +669,10 @@ export type FTAggregateResponse = {
     items: FTAggregateResponseItem[]
 }
 
+/**
+ * The response item of the FT aggregate response type
+ */
 export type FTAggregateResponseItem = {
     name: string,
     value: number | string | boolean
 }
-//[number, ...Array<string[]>];

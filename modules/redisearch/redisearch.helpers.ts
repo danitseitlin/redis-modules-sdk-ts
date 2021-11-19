@@ -26,8 +26,9 @@ export class RedisearchHelpers {
     }
 
     /**
-     * 
-     * @param response 
+     * Handling the response of the aggregate function
+     * @param response The raw response from the command execution
+     * @returns A parsed response of the raw response
      */
     handleAggregateResponse(response: any): FTAggregateResponse {
         const numberOfItems = response[0];
