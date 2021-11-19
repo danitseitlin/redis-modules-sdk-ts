@@ -4,7 +4,7 @@ import { Module, RedisModuleOptions } from '../module.base';
 import { SearchCommander } from './redisearch.commander';
 import {
     FTAggregateParameters, FTConfig, FTCreateParameters, FTFieldOptions, FTFieldType, FTIndexType, FTInfo, FTSchemaField,
-    FTSearchParameters, FTSearchResponse, FTSpellCheck, FTSpellCheckResponse, FTSugAddParameters, FTSugGetParameters
+    FTSearchParameters, FTSearchResponse, FTSpellCheck, FTSpellCheckResponse, FTSugAddParameters, FTSugGetParameters, FTAggregateResponse
 } from './redisearch.types';
 import { RedisearchHelpers } from './redisearch.helpers';
 
@@ -71,10 +71,10 @@ export class Redisearch extends Module {
      * @param parameters The additional optional parameters
      * @returns Array Response. Each row is an array and represents a single aggregate result
      */
-    async aggregate(index: string, query: string, parameters?: FTAggregateParameters): Promise<[number, ...Array<string[]>]> {
+    async aggregate(index: string, query: string, parameters?: FTAggregateParameters): Promise<FTAggregateResponse> {
         const command = this.searchCommander.aggregate(index, query, parameters);
         const response = await this.sendCommand(command);
-        return this.handleResponse(response);
+        return this.searchHelpers.handleAggregateResponse(response);
     }
 
     /**

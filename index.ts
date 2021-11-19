@@ -30,7 +30,8 @@ export {
 export { Redisearch } from './modules/redisearch/redisearch';
 export {
     FTCreateParameters, FTFieldOptions, FTSchemaField, FTSearchParameters, FTAggregateParameters, FTSugAddParameters, FTSugGetParameters, FTSpellCheck,
-    FTFieldType, FTConfig, FTInfo, FTIndexType, FTSort, FTExpression, FTSortByProperty, FTReduce, FTSearchArrayResponse, FTSearchResponse, FTSpellCheckResponse
+    FTFieldType, FTConfig, FTInfo, FTIndexType, FTSort, FTExpression, FTSortByProperty, FTReduce, FTSearchArrayResponse, FTSearchResponse, FTSpellCheckResponse,
+    FTAggregateResponse, FTAggregateResponseItem
 } from './modules/redisearch/redisearch.types';
 /* ** Redis AI ***/
 export { RedisAI } from './modules/redis-ai/redis-ai';
