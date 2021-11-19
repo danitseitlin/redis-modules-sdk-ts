@@ -28,6 +28,7 @@ import { GraphCommander } from './redisgraph/redisgraph.commander';
 import { RejsonCommander } from './rejson/rejson.commander';
 import { RedisTimeSeriesCommander } from './rts/rts.commander';
 import { RedisearchHelpers } from './redisearch/redisearch.helpers';
+import { RedisIntervalSetsHelpers } from './ris/ris.helpers';
 
 export class RedisModules extends Module {
 	public bloomCommander = new BloomCommander()
@@ -43,6 +44,7 @@ export class RedisModules extends Module {
 	public risCommander = new RedisIntervalSetsCommander()
 	public rtsCommander = new RedisTimeSeriesCommander()
 	public searchHelpers = new RedisearchHelpers();
+	public risHelpers = new RedisIntervalSetsHelpers();
 
 	/**
      * Initializing the module object
@@ -219,7 +221,8 @@ export type RedisearchMixin = {
 	search_module_dictadd: typeof Redisearch.prototype.dictadd,
 	search_module_dictdel: typeof Redisearch.prototype.dictdel,
 	search_module_dictdump: typeof Redisearch.prototype.dictdump,
-	search_module_info: typeof Redisearch.prototype.info
+	search_module_info: typeof Redisearch.prototype.info,
+	search_module_config: typeof Redisearch.prototype.config
 }
 
 /**
@@ -304,7 +307,8 @@ export type RedisTimeSeriesMixin = {
 	rts_module_get: typeof RedisTimeSeries.prototype.get,
 	rts_module_mget: typeof RedisTimeSeries.prototype.mget,
 	rts_module_info: typeof RedisTimeSeries.prototype.info
-	rts_module_queryindex: typeof RedisTimeSeries.prototype.queryindex
+	rts_module_queryindex: typeof RedisTimeSeries.prototype.queryindex,
+	rts_module_del: typeof RedisTimeSeries.prototype.del
 }
 
 /**
