@@ -321,7 +321,7 @@ describe('RediSearch Module testing', async function () {
     })
     it('aggregate function', async () => {
         const response = await client.aggregate(index, query)
-        expect(response).to.equal(0, 'The response of the FT.AGGREGATE command')
+        expect(response.numberOfItems).to.equal(0, 'The response of the FT.AGGREGATE command')
     })
     it('aggregate function response', async () => {
         await client.create(`${index}-aggreagtetest`, 'HASH', [{

@@ -32,10 +32,10 @@ export class RedisearchHelpers {
     handleAggregateResponse(response: any): FTAggregateResponse {
         const numberOfItems = response[0];
         const items: FTAggregateResponseItem[] = [];
-        for(let i = 1; i < response.length; i+=2) {
+        for(let i = 1; i < response.length; i++) {
             items.push({
-                name: response[i],
-                value: response[i+1]
+                name: response[i][0],
+                value: response[i][1]
             })
         }
         return {
