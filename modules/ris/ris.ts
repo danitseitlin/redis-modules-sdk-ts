@@ -1,10 +1,11 @@
 import * as Redis from 'ioredis';
 import { Module, RedisModuleOptions } from '../module.base';
 import { RedisIntervalSetsCommander } from './ris.commander';
+import { RedisIntervalSetsHelpers } from './ris.helpers';
 import { RISSet } from './ris.types';
 
 export class RedisIntervalSets extends Module {
-
+    private risHelpers = new RedisIntervalSetsHelpers();
     private risCommander = new RedisIntervalSetsCommander();
     /**
      * Initializing the module object
@@ -47,7 +48,7 @@ export class RedisIntervalSets extends Module {
     async get(key: string, setName?: string): Promise<RISSet[]> {
         const command = this.risCommander.get(key, setName);
         const response = await this.sendCommand(command);
-        return this.parseGet(response);
+        return this.risHelpers.parseGet(response);
     }
 
     /**
@@ -78,22 +79,5 @@ export class RedisIntervalSets extends Module {
     async notScore(key: string, score: number): Promise<string[]> {
         const command = this.risCommander.notScore(key, score);
         return await this.sendCommand(command);
-    }
-
-    /**
-     * Parsing the iset.get command response
-     * @param sets The list of sets
-     */
-    private parseGet(sets: string[][]): RISSet[] {
-        const parsedSets: RISSet[] = [];
-        for(const set of sets) {
-            if(set.length > 2){
-                parsedSets.push({name: set[0], minimum: parseInt(set[1]), maximum: parseInt(set[2])})
-            }
-            else {
-                return [{minimum: parseInt(set[0]), maximum: parseInt(set[1])}]
-            }
-        }
-        return parsedSets;
     }
 }
