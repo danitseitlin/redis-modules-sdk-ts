@@ -1,4 +1,6 @@
-import { FTSpellCheckResponse } from "./redisearch.types";
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { FTAggregateResponse, FTAggregateResponseItem, FTSpellCheckResponse } from "./redisearch.types";
 
 export class RedisearchHelpers {
     /**
@@ -21,5 +23,24 @@ export class RedisearchHelpers {
             });
         }
         return output;
+    }
+
+    /**
+     * 
+     * @param response 
+     */
+    handleAggregateResponse(response: any): FTAggregateResponse {
+        const numberOfItems = response[0];
+        const items: FTAggregateResponseItem[] = [];
+        for(let i = 1; i < response.length; i=+2) {
+            items.push({
+                name: response[i],
+                value: response[i+1]
+            })
+        }
+        return {
+            numberOfItems: numberOfItems,
+            items: items
+        };
     }
 }

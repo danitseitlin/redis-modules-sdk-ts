@@ -355,18 +355,20 @@ describe('RediSearch Module testing', async function () {
         await client.redis.hset('person:3', { name: 'Sarah Brown', city: 'New York', gender: 'female', timestamp: (time.getTime() / 1000).toFixed(0) })
         await client.redis.hset('person:3', { name: 'Michael Doe', city: 'New York', gender: 'male', timestamp: (time.getTime() / 1000).toFixed(0) })
 
-        const [count, ...result] = await client.aggregate(`${index}-aggreagtetest`, 'Doe', {
+        let response = await client.aggregate(`${index}-aggreagtetest`, 'Doe', {
             groupby: { properties: ['@city'], nargs: '1' }
         })
-        expect(count).to.equal(2, 'Total number of the FT.AGGREGATE command result')
-        expect(result[0][0]).to.equal('city', 'Aggreagated prop of the FT.AGGREGATE command result')
+        console.log(response)
+        expect(response.numberOfItems).to.equal(2, 'Total number of the FT.AGGREGATE command result')
+        expect(response.items[0].name).to.equal('city', 'Aggreagated prop of the FT.AGGREGATE command result')
 
-        const [count2, ...results2] = await client.aggregate(`${index}-aggreagtetest`, '*', {
+        response = await client.aggregate(`${index}-aggreagtetest`, '*', {
             apply: [{ expression: 'hour(@timestamp)', as: 'hour' }],
             groupby: { properties: ['@hour'], nargs: '1' }
         })
-        expect(count2).to.equal(2, 'Total number of the FT.AGGREGATE command result')
-        expect(results2[0][0]).to.equal('hour', 'Aggreagated apply prop of the FT.AGGREGATE command result')
+        console.log(response)
+        expect(response.numberOfItems).to.equal(2, 'Total number of the FT.AGGREGATE command result')
+        expect(response.items[0].name).to.equal('hour', 'Aggreagated apply prop of the FT.AGGREGATE command result')
 
         await client.dropindex(`${index}-aggreagtetest`)
     })
