@@ -6,17 +6,14 @@ import { RedisModules } from '../modules/redis-modules';
 import { AIModel, AIScript, AIScriptInfo, AITensorInfo } from '../modules/redis-ai/redis-ai.types';
 let client: RedisAI;
 let redis: RedisModules;
-
 describe('AI testing', async function() {
     before(async () => {
-        client = new RedisAI({
+        const clientOptions = {
             host: cliArguments.host,
             port: parseInt(cliArguments.port)
-        });
-        redis = new RedisModules({
-            host: cliArguments.host,
-            port: parseInt(cliArguments.port),
-        });
+        };
+        client = new RedisAI(clientOptions);
+        redis = new RedisModules(clientOptions);
         await client.connect();
         await redis.connect();
     })
@@ -28,6 +25,12 @@ describe('AI testing', async function() {
         let response = await client.tensorset('values-key', 'FLOAT', [2, 2], [1, 2 ,3, 4])
         expect(response).to.eql('OK', 'The response of tensorset')
         response = await client.tensorset('blob-key', 'FLOAT', [1], [Buffer.from('1.11111')])
+        expect(response).to.eql('OK', 'The response of tensorset')
+    });
+    it('RAIO: tensorset function', async () => {
+        let response = await redis.ai_module_tensorset('values-key-raio', 'FLOAT', [2, 2], [1, 2 ,3, 4])
+        expect(response).to.eql('OK', 'The response of tensorset')
+        response = await redis.ai_module_tensorset('blob-key-raio', 'FLOAT', [1], [Buffer.from('1.11111')])
         expect(response).to.eql('OK', 'The response of tensorset')
     });
     it('tensorget function', async () => {

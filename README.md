@@ -54,7 +54,7 @@ Come and read our documentation [here](https://github.com/danitseitlin/redis-mod
 * [RedisAI](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#-redisai-module)
 * [RedisIntervalSets](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#ris-module)
 
-# Redis "All in One"! :scream:
+# (RAIO) Redis "All in One"! :scream:
 A class built for integrating more than one Redis module without creating more than one class!
 ```
 const client = new Redis(....);
