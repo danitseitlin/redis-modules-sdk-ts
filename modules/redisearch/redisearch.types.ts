@@ -660,3 +660,19 @@ export type FTSearchResponse = number | FTSearchArrayResponse;
  * The response type of the FT search function as an array
  */
 export type FTSearchArrayResponse = [number, ...Array<string | string[] | {[key: string]: string}>];
+
+/**
+ * The response type of the FT aggregate function
+ */
+export type FTAggregateResponse = {
+    numberOfItems: number,
+    items: FTAggregateResponseItem[]
+}
+
+/**
+ * The response item of the FT aggregate response type
+ */
+export type FTAggregateResponseItem = {
+    name: string,
+    value: number | string | boolean
+}
