@@ -358,7 +358,6 @@ describe('RediSearch Module testing', async function () {
         let response = await client.aggregate(`${index}-aggreagtetest`, 'Doe', {
             groupby: { properties: ['@city'], nargs: '1' }
         })
-        console.log(response)
         expect(response.numberOfItems).to.equal(2, 'Total number of the FT.AGGREGATE command result')
         expect(response.items[0].name).to.equal('city', 'Aggreagated prop of the FT.AGGREGATE command result')
 
@@ -366,7 +365,6 @@ describe('RediSearch Module testing', async function () {
             apply: [{ expression: 'hour(@timestamp)', as: 'hour' }],
             groupby: { properties: ['@hour'], nargs: '1' }
         })
-        console.log(response)
         expect(response.numberOfItems).to.equal(2, 'Total number of the FT.AGGREGATE command result')
         expect(response.items[0].name).to.equal('hour', 'Aggreagated apply prop of the FT.AGGREGATE command result')
 
