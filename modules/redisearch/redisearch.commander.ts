@@ -1,6 +1,6 @@
 import {
     FTIndexType, FTSchemaField, FTCreateParameters, FTSearchParameters, FTAggregateParameters, FTFieldType,
-    FTFieldOptions, FTSugAddParameters, FTSugGetParameters, FTSpellCheck, FTAggregateResponse
+    FTFieldOptions, FTSugAddParameters, FTSugGetParameters, FTSpellCheck
 } from "./redisearch.types";
 import { CommandData } from "../module.base";
 
