@@ -219,7 +219,8 @@ export type RedisearchMixin = {
 	search_module_dictadd: typeof Redisearch.prototype.dictadd,
 	search_module_dictdel: typeof Redisearch.prototype.dictdel,
 	search_module_dictdump: typeof Redisearch.prototype.dictdump,
-	search_module_info: typeof Redisearch.prototype.info
+	search_module_info: typeof Redisearch.prototype.info,
+	search_module_config: typeof Redisearch.prototype.config
 }
 
 /**
@@ -304,7 +305,8 @@ export type RedisTimeSeriesMixin = {
 	rts_module_get: typeof RedisTimeSeries.prototype.get,
 	rts_module_mget: typeof RedisTimeSeries.prototype.mget,
 	rts_module_info: typeof RedisTimeSeries.prototype.info
-	rts_module_queryindex: typeof RedisTimeSeries.prototype.queryindex
+	rts_module_queryindex: typeof RedisTimeSeries.prototype.queryindex,
+	rts_module_del: typeof RedisTimeSeries.prototype.del
 }
 
 /**
