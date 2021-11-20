@@ -24,7 +24,8 @@
     "start-redis-server-with-modules": "docker run --rm --name redis-mod-sdk -p 6379:6379 redislabs/redismod --port 6379 --loadmodule /usr/lib/redis/modules/redisai.so --loadmodule /usr/lib/redis/modules/redisbloom.so --loadmodule /usr/lib/redis/modules/redistimeseries.so --loadmodule /usr/lib/redis/modules/redisearch.so --loadmodule /usr/lib/redis/modules/redisgraph.so --loadmodule /usr/lib/redis/modules/rejson.so",
     "tests": "npm run redisbloom-tdigest-filter-tests && npm run rejson-module-tests && npm run rts-module-tests && npm run redisearch-module-tests && npm run redisgraph-module-tests && npm run redisgears-module-tests && npm run redisbloom-module-tests && npm run redis-ai-tests",
     "pre-deploy": "npm run build",
-    "deploy": "npm-deploy redis-modules-sdk"
+    "deploy": "npm-deploy redis-modules-sdk",
+    "generate-docs": "typedoc --out docs ."
   },
   "repository": {
     "type": "git",
@@ -52,6 +53,7 @@
   },
   "homepage": "https://github.com/danitseitlin/redis-modules-sdk#readme",
   "devDependencies": {
+    "@microsoft/tsdoc": "^0.13.2",
     "@types/chai": "^4.2.14",
     "@types/eslint": "^7.2.5",
     "@types/ioredis": "^4.17.6",
@@ -65,6 +67,7 @@
     "mocha": "^8.2.0",
     "npm-package-deployer": "^0.2.9",
     "ts-node": "^9.0.0",
+    "typedoc": "^0.22.9",
     "typescript": "^4.1.2"
   },
   "dependencies": {
