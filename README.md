@@ -43,16 +43,16 @@ npm install redis-modules-sdk@latest
 * A list of releases will be found [here](https://github.com/danitseitlin/redis-modules-sdk/releases)
 
 # Documentation :book:
-Come and read our documentation [here](https://github.com/danitseitlin/redis-modules-sdk/blob/master/docs/doc.md#documentation-book) before starting
-* [Redis All in One](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#redis-all-in-one-feature)
-* [ReJSON](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#-rejson-module)
-* [RedisTimeSeries](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#-redistimeseries-module) (RTS)
-* [RediSearch](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#-redisearch-module)
-* [RedisGraph](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#-redisgraph-module)
-* [RedisGears](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#-redisgears-module)
-* [RedisBloom](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#bloom-filter)
-* [RedisAI](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#-redisai-module)
-* [RedisIntervalSets](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/docs/doc.md#ris-module)
+Come and read our documentation [here](https://github.com/danitseitlin/redis-modules-sdk/blob/master/readme/doc.md#documentation-book) before starting
+* [Redis All in One](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/readme/doc.md#redis-all-in-one-feature)
+* [ReJSON](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/readme/doc.md#-rejson-module)
+* [RedisTimeSeries](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/readme/doc.md#-redistimeseries-module) (RTS)
+* [RediSearch](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/readme/doc.md#-redisearch-module)
+* [RedisGraph](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/readme/doc.md#-redisgraph-module)
+* [RedisGears](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/readme/doc.md#-redisgears-module)
+* [RedisBloom](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/readme/doc.md#bloom-filter)
+* [RedisAI](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/readme/doc.md#-redisai-module)
+* [RedisIntervalSets](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/readme/doc.md#ris-module)
 
 # (RAIO) Redis "All in One"! :scream:
 A class built for integrating more than one Redis module without creating more than one class!
@@ -76,7 +76,7 @@ All modules are supported! :fire:
 * [RedisIntervalSets](https://github.com/danitseitlin/redis-interval-sets)
 
 # Contributing :raised_hands:
-Interested in contributing? awesome! start with reading our guidelines [here](https://github.com/danitseitlin/redis-modules-sdk/blob/master/docs/contributing.md#contributing-guide)
+Interested in contributing? awesome! start with reading our guidelines [here](https://github.com/danitseitlin/redis-modules-sdk/blob/master/readme/contributing.md#contributing-guide)
 
 # Supporters :open_hands:
 [![Stargazers repo roster for @danitseitlin/redis-modules-sdk](https://reporoster.com/stars/danitseitlin/redis-modules-sdk)](https://github.com/danitseitlin/redis-modules-sdk/stargazers)

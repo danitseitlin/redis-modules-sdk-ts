@@ -5,6 +5,7 @@
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended"
     ],
+    "ignorePatterns": ["docs/*"],
     "overrides": [{
         "files": ["*.ts", "*/*.ts", "*/*/*.ts", "*/*/*/*.ts"],
         "rules": {
