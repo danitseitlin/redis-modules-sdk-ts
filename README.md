@@ -1,6 +1,6 @@
 <p align='center'>
   <a href='https://www.npmjs.com/package/redis-modules-sdk-ts'>
-    <img src='https://img.shields.io/npm/v/redis-modules-sdk/latest?style=plastic' target='_blank' />
+    <img src='https://img.shields.io/npm/v/redis-modules-sdk-ts/latest?style=plastic' target='_blank' />
   </a>
   <a href='https://npmjs.org/package/redis-modules-sdk-ts' style='width:25px;height:20px;'>
     <img src='https://img.shields.io/npm/dm/redis-modules-sdk.svg?color=blue&style=plastic' target='_blank' />
@@ -9,20 +9,20 @@
     <img src='https://img.shields.io/github/issues/danitseitlin/redis-modules-sdk?style=plastic' target='_blank' />
   </a>
   <a href='https://npmjs.org/package/redis-modules-sdk' style='width:25px;height:20px;'>
-    <img src='https://img.shields.io/bundlephobia/min/redis-modules-sdk/latest?style=plastic' target='_blank' />
+    <img src='https://img.shields.io/bundlephobia/min/redis-modules-sdk-ts/latest?style=plastic' target='_blank' />
   </a>
-  <a href='https://github.com/danitseitlin/redis-modules-sdk/commits/master'>
+  <a href='https://github.com/danitseitlin/redis-modules-sdk-ts/commits/master'>
     <img src='https://img.shields.io/github/last-commit/danitseitlin/redis-modules-sdk?style=plastic' />
   </a>
-  <a href='https://github.com/danitseitlin/redis-modules-sdk/blob/master/LICENSE'>
-    <img src='https://img.shields.io/badge/license-BSD%203%20Clause-blue.svg?style=plastic' target='_blank' />
+  <a href='https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/LICENSE'>
+    <img src='https://img.shields.io/badge/license-Apache%202.0-blue.svg?style=plastic' target='_blank' />
   </a>
 </p></p>
 
 #### A Software development kit for easier connection and execution of Redis Modules commands
 
 <p align='center'>
-  <img src='https://github.com/danitseitlin/redis-modules-sdk/blob/master/.github/images/logo.png' />
+  <img src='https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/.github/images/logo.png' />
 </p>
 
 # A few words :speech_balloon:
@@ -39,8 +39,8 @@ npm install redis-modules-sdk@latest
 ```
 
 ### Versions & Releases
-* A list of existing versions can be found [here](https://www.npmjs.com/package/redis-modules-sdk?activeTab=versions)
-* A list of releases will be found [here](https://github.com/danitseitlin/redis-modules-sdk/releases)
+* A list of existing versions can be found [here](https://www.npmjs.com/package/redis-modules-sdk-ts?activeTab=versions)
+* A list of releases will be found [here](https://github.com/danitseitlin/redis-modules-sdk-ts/releases)
 
 # Documentation :book:
 Come and read our documentation [here](https://danitseitlin.github.io/redis-modules-sdk-ts/modules.html) before starting
@@ -67,7 +67,7 @@ All modules are supported! :fire:
 * [RedisIntervalSets](https://github.com/danitseitlin/redis-interval-sets)
 
 # Contributing :raised_hands:
-Interested in contributing? awesome! start with reading our guidelines [here](https://github.com/danitseitlin/redis-modules-sdk/blob/master/readme/contributing.md#contributing-guide)
+Interested in contributing? awesome! start with reading our guidelines [here](https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/readme/contributing.md#contributing-guide)
 
 # Supporters :open_hands:
-[![Stargazers repo roster for @danitseitlin/redis-modules-sdk](https://reporoster.com/stars/danitseitlin/redis-modules-sdk)](https://github.com/danitseitlin/redis-modules-sdk/stargazers)
+[![Stargazers repo roster for @danitseitlin/redis-modules-sdk](https://reporoster.com/stars/danitseitlin/redis-modules-sdk-ts)](https://github.com/danitseitlin/redis-modules-sdk-ts/stargazers)
