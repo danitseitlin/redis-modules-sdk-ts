@@ -2,14 +2,14 @@
   <a href='https://www.npmjs.com/package/redis-modules-sdk'>
     <img src='https://img.shields.io/npm/v/redis-modules-sdk/latest?style=plastic' target='_blank' />
   </a>
-  <a href='https://npmjs.org/package/redis-modules-sdk-ts' style='width:25px;height:20px;'>
+  <a href='https://npmjs.org/package/redis-modules-sdk' style='width:25px;height:20px;'>
     <img src='https://img.shields.io/npm/dm/redis-modules-sdk.svg?color=blue&style=plastic' target='_blank' />
   </a>
   <a href='https://github.com/danitseitlin/redis-modules-sdk-ts/issues' style='width:25px;height:20px;'>
     <img src='https://img.shields.io/github/issues/danitseitlin/redis-modules-sdk?style=plastic' target='_blank' />
   </a>
   <a href='https://npmjs.org/package/redis-modules-sdk' style='width:25px;height:20px;'>
-    <img src='https://img.shields.io/bundlephobia/min/redis-modules-sdk-ts/latest?style=plastic' target='_blank' />
+    <img src='https://img.shields.io/bundlephobia/min/redis-modules-sdk/latest?style=plastic' target='_blank' />
   </a>
   <a href='https://github.com/danitseitlin/redis-modules-sdk-ts/commits/master'>
     <img src='https://img.shields.io/github/last-commit/danitseitlin/redis-modules-sdk?style=plastic' />
