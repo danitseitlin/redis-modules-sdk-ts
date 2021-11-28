@@ -1,6 +1,6 @@
 <p align='center'>
-  <a href='https://www.npmjs.com/package/redis-modules-sdk-ts'>
-    <img src='https://img.shields.io/npm/v/redis-modules-sdk-ts/latest?style=plastic' target='_blank' />
+  <a href='https://www.npmjs.com/package/redis-modules-sdk'>
+    <img src='https://img.shields.io/npm/v/redis-modules-sdk/latest?style=plastic' target='_blank' />
   </a>
   <a href='https://npmjs.org/package/redis-modules-sdk-ts' style='width:25px;height:20px;'>
     <img src='https://img.shields.io/npm/dm/redis-modules-sdk.svg?color=blue&style=plastic' target='_blank' />
