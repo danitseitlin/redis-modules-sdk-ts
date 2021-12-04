@@ -29,8 +29,10 @@ describe('ReJSON Module testing', async function() {
     });
 
     it('get function', async () => {
-        const response = await redis.rejson_module_get(key1, path);
+        let response = await redis.rejson_module_get(key1, path);
         expect(response).to.equal('{"x":1,"str":"yy"}', 'The response of the get command');
+        response = await redis.rejson_module_get(key1, '$..x');
+        expect(response).to.equal('[1]', 'The value of the X key')
     });
     
     it('mget function', async () => {
