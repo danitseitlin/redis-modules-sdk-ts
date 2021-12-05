@@ -1,0 +1,16 @@
+name: Docs
+on:
+  push: 
+    branches: [master]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Generating Docs
+      run: npm run generate-docs
+    - name: Deploy 🚀
+      uses: JamesIves/github-pages-deploy-action@4.1.7
+      with:
+        branch: gh-pages # The branch the action should deploy to.
+        folder: docs # The folder the action should deploy.
