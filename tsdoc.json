@@ -3,9 +3,9 @@
 		"source"		:"./modules",
 		"destination"	:"./docs",
 		"tutorials"		:"",
-		"systemName"	: "redis-modules-cli",
+		"systemName"	: "redis-modules-sdk-ts",
 		"footer"		: "",
-		"copyright"		: "redis-modules-cli Copyright © 2021 Dani.",
+		"copyright"		: "redis-modules-sdk-ts Copyright © 2021 Dani Tseitlin",
 		"outputSourceFiles" : true,
 		"commentsOnly": true
 	}
