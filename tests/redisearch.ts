@@ -254,13 +254,13 @@ describe('RediSearch Module testing', async function () {
                     fields: { fields: ['introduction'] },
                     frags: 1,
                     len: 3,
-                    seperator: ' !?!'
+                    separator: ' !?!'
                 }
             }
         )
         expect(res[0]).to.equal(2, 'Total number of returining document of FT.SEARCH command')
-        expect((res[1] as {[key: string]: string}).introduction.endsWith('!?!')).to.equal(true, 'Custom summarize seperator')
-        expect((res[1] as {[key: string]: string}).introduction.endsWith('!?!')).to.equal(true, 'Custom summarize seperator')
+        expect((res[1] as {[key: string]: string}).introduction.endsWith('!?!')).to.equal(true, 'Custom summarize separator')
+        expect((res[1] as {[key: string]: string}).introduction.endsWith('!?!')).to.equal(true, 'Custom summarize separator')
     })
     it('Search tests with highlight', async () => {
         const res = await redis.search_module_search(

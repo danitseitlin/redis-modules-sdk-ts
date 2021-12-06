@@ -5,7 +5,7 @@ import {
 import { CommandData } from "../module.base";
 
 export class SearchCommander {
-    
+
     /**
      * Creating an index with a given spec
      * @param index The index of the schema
@@ -75,7 +75,7 @@ export class SearchCommander {
             if(field.nostem === true) args.push('NOSTEM');
             if(field.weight !== undefined) args = args.concat(['WEIGHT', `${field.weight}`])
             if(field.phonetic !== undefined) args = args.concat(['PHONETIC', field.phonetic])
-            if(field.seperator !== undefined) args = args.concat(['SEPERATOR', field.seperator])
+            if(field.separator !== undefined) args = args.concat(['SEPARATOR', field.separator])
             if(field.sortable === true) args.push('SORTABLE')
             if(field.noindex === true) args.push('NOINDEX')
             if(field.unf === true) args.push('UNF')
@@ -179,8 +179,8 @@ export class SearchCommander {
                     args = args.concat(['FRAGS', `${parameters.summarize.frags}`])
                 if(parameters.summarize.len !== undefined)
                     args = args.concat(['LEN', `${parameters.summarize.len}`])
-                if(parameters.summarize.seperator !== undefined)
-                    args = args.concat(['SEPARATOR', parameters.summarize.seperator])
+                if(parameters.summarize.separator !== undefined)
+                    args = args.concat(['SEPARATOR', parameters.summarize.separator])
             }
             if(parameters.highlight !== undefined) {
                 args.push('HIGHLIGHT')
@@ -328,7 +328,7 @@ export class SearchCommander {
     }
 
     /**
-     * Retrieving the execution plan for a complex query but formatted for easier reading without using redis-cli --raw 
+     * Retrieving the execution plan for a complex query but formatted for easier reading without using redis-cli --raw
      * @param index The index
      * @param query The query
      * @returns A string representing the execution plan.
@@ -354,7 +354,7 @@ export class SearchCommander {
             if(options.nostem === true) args.push('NOSTEM')
             if(options.weight !== undefined) args = args.concat(['WEIGHT', `${options.weight}`])
             if(options.phonetic !== undefined) args = args.concat(['PHONETIC', options.phonetic])
-            if(options.seperator !== undefined) args = args.concat(['SEPERATOR', options.seperator])
+            if(options.separator !== undefined) args = args.concat(['SEPARATOR', options.separator])
             if(options.sortable === true) args.push('SORTABLE')
             if(options.noindex === true) args.push('NOINDEX')
             if(options.unf === true) args.push('UNF')
@@ -403,7 +403,7 @@ export class SearchCommander {
     aliasupdate(name: string, index: string): CommandData {
         return {
             command: 'FT.ALIASUPDATE',
-            args: [name, index]   
+            args: [name, index]
         }
     }
 
@@ -423,7 +423,7 @@ export class SearchCommander {
      * Retrieving the distinct tags indexed in a Tag field
      * @param index The index
      * @param field The field name
-     * @returns The distinct tags indexed in a Tag field 
+     * @returns The distinct tags indexed in a Tag field
      */
     tagvals(index: string, field: string): CommandData {
         return {
@@ -459,7 +459,7 @@ export class SearchCommander {
      * @param key The key
      * @param prefix The prefix of the suggestion
      * @param options The additional optional parameter
-     * @returns A list of the top suggestions matching the prefix, optionally with score after each entry 
+     * @returns A list of the top suggestions matching the prefix, optionally with score after each entry
      */
     sugget(key: string, prefix: string, options?: FTSugGetParameters): CommandData {
         let args = [key, prefix];
@@ -506,7 +506,7 @@ export class SearchCommander {
      * Updating a synonym group
      * @param index The index
      * @param groupId The group id
-     * @param terms A list of terms 
+     * @param terms A list of terms
      * @param skipInitialScan If set, we do not scan and index.
      * @returns 'OK'
      */
@@ -524,7 +524,7 @@ export class SearchCommander {
     /**
      * Dumps the contents of a synonym group
      * @param index The index
-     * @returns A list of synonym terms and their synonym group ids.  
+     * @returns A list of synonym terms and their synonym group ids.
      */
     syndump(index: string): CommandData {
         return {
@@ -599,7 +599,7 @@ export class SearchCommander {
     /**
      * Retrieving infromation and statistics on the index
      * @param index The index
-     * @returns A nested array of keys and values. 
+     * @returns A nested array of keys and values.
      */
     info(index: string): CommandData {
         return {
