@@ -71,3 +71,5 @@ Interested in contributing? awesome! start with reading our guidelines [here](ht
 
 # Supporters :open_hands:
 [![Stargazers repo roster for @danitseitlin/redis-modules-sdk](https://reporoster.com/stars/danitseitlin/redis-modules-sdk-ts)](https://github.com/danitseitlin/redis-modules-sdk-ts/stargazers)
+# Forkers :fork_and_knife:
+[![Forkers repo roster for @danitseitlin/redis-modules-sdk](https://reporoster.com/forks/danitseitlin/redis-modules-sdk-ts)](https://github.com/danitseitlin/redis-modules-sdk-ts/network/members)
