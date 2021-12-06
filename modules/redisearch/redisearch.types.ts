@@ -22,7 +22,7 @@ export interface FTCreateParameters {
     * The 'TEMPORARY' parameter. Create a lightweight temporary index which will expire after the specified period of inactivity.
     */
     temporary?: number,
-    /** 
+    /**
     * The 'NOHL' parameter. Conserves storage space and memory by disabling highlighting support. If set, we do not store corresponding byte offsets for term positions.
     */
     nohl?: boolean,
@@ -35,7 +35,7 @@ export interface FTCreateParameters {
     */
     noFreqs?: boolean,
     /**
-    *  The 'SKIPINITIALSCAN' parameter. If set, we do not scan and index. 
+    *  The 'SKIPINITIALSCAN' parameter. If set, we do not scan and index.
     */
     skipInitialScan?: boolean
     /**
@@ -54,15 +54,15 @@ export interface FTCreateParameters {
     */
     languageField?: string,
     /**
-    * The 'SCORE' parameter. If set indicates the default score for documents in the index. 
+    * The 'SCORE' parameter. If set indicates the default score for documents in the index.
     */
     score?: string,
     /**
-    * The 'SCORE_FIELD' parameter. If set indicates the document field that should be used as the document's rank based on the user's ranking. 
+    * The 'SCORE_FIELD' parameter. If set indicates the document field that should be used as the document's rank based on the user's ranking.
     */
     scoreField?: string
     /**
-    * The 'STOPWORDS' parameter. If set, we set the index with a custom stopword list, to be ignored during indexing and search time. 
+    * The 'STOPWORDS' parameter. If set, we set the index with a custom stopword list, to be ignored during indexing and search time.
     */
     stopwords?: {
         num?: number,
@@ -95,11 +95,11 @@ export interface FTFieldOptions {
     */
     weight?: number,
     /**
-    * The 'SEPERATOR' parameter. For TAG fields, indicates how the text contained in the field is to be split into individual tags. The default is , . The value must be a single character.
+    * The 'SEPARATOR' parameter. For TAG fields, indicates how the text contained in the field is to be split into individual tags. The default is , . The value must be a single character.
     */
-    seperator?: string
+    separator?: string
     /**
-     * The 'UNF' parameter. By default, SORTABLE applies a normalization to the indexed value (characters set to lowercase, removal of diacritics). When using UNF (un-normalized form) it is possible to disable the normalization and keep the original form of the value. 
+     * The 'UNF' parameter. By default, SORTABLE applies a normalization to the indexed value (characters set to lowercase, removal of diacritics). When using UNF (un-normalized form) it is possible to disable the normalization and keep the original form of the value.
      */
     unf?: boolean,
     /**
@@ -139,7 +139,7 @@ export interface FTSearchParameters {
     */
     verbatim?: boolean,
     /**
-     * The 'noStopWords' parameter. If set, we do not filter stopwords from the query. 
+     * The 'noStopWords' parameter. If set, we do not filter stopwords from the query.
      */
     noStopWords?: boolean,
     /**
@@ -155,7 +155,7 @@ export interface FTSearchParameters {
      */
     withSortKeys?: boolean,
     /**
-     * The 'FILTER' parameter.  If set, and numeric_field is defined as a numeric field in FT.CREATE, we will limit results to those having numeric values ranging between min and max. min and max follow ZRANGE syntax, and can be -inf , +inf and use ( for exclusive ranges. 
+     * The 'FILTER' parameter.  If set, and numeric_field is defined as a numeric field in FT.CREATE, we will limit results to those having numeric values ranging between min and max. min and max follow ZRANGE syntax, and can be -inf , +inf and use ( for exclusive ranges.
      */
     filter?: {
         /**
@@ -220,14 +220,14 @@ export interface FTSearchParameters {
              * The name of the field.
              */
             field: string,
-            /** 
+            /**
              * The 'AS' parameter following a "field" name, used by index type "JSON".
             */
             as?: string,
         }[],
     },
     /**
-     * The 'SUMMARIZE' parameter. Use this option to return only the sections of the field which contain the matched text. 
+     * The 'SUMMARIZE' parameter. Use this option to return only the sections of the field which contain the matched text.
      */
     summarize?: {
         /**
@@ -246,9 +246,9 @@ export interface FTSearchParameters {
          */
         len?: number,
         /**
-         * The seperator argument of the 'SUMMARIZE' parameter
+         * The separator argument of the 'SUMMARIZE' parameter
          */
-        seperator?: string
+        separator?: string
     },
     /**
      * The 'HIGHLIGHT' parameter. Use this option to format occurrences of matched text.
@@ -280,7 +280,7 @@ export interface FTSearchParameters {
      */
     slop?: number,
     /**
-     * The 'INORDER' parameter. If set, and usually used in conjunction with SLOP, we make sure the query terms appear in the same order in the document as in the query, regardless of the offsets between them. 
+     * The 'INORDER' parameter. If set, and usually used in conjunction with SLOP, we make sure the query terms appear in the same order in the document as in the query, regardless of the offsets between them.
      */
     inOrder?: boolean,
     /**
@@ -341,7 +341,7 @@ export interface FTSearchParameters {
  */
 export interface FTAggregateParameters {
     /**
-     * The 'LOAD' parameter. 
+     * The 'LOAD' parameter.
      */
     load?: {
         /**
@@ -375,7 +375,7 @@ export interface FTAggregateParameters {
      */
     reduce?: FTReduce[],
     /**
-     * The 'SORTBY' parameter. 
+     * The 'SORTBY' parameter.
      */
     sortby?: {
         /**
@@ -631,7 +631,7 @@ export interface FTInfo {
  * The FT.SPELLCHECK response object
  */
 export interface FTSpellCheckResponse {
-    /** 
+    /**
      * The term that was spellchecked
     */
     term: string,
