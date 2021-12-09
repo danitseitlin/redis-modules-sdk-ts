@@ -1,5 +1,6 @@
 import { cliArguments } from 'cli-argument-parser'
 import { expect } from 'chai'
+import {FTSearchResponse} from '../lib';
 import { RedisModules } from '../modules/redis-modules'
 import { FTSearchArrayResponse } from '../modules/redisearch/redisearch.types'
 import * as fs from 'fs';
@@ -462,8 +463,58 @@ describe('RediSearch Module testing', async function () {
         expect(response).to.equal('OK', 'The response of the FT.DROPINDEX command')
     })
 
-    describe('accounting for additional response values', () => {
-        const json = fs.readFileSync('../models/lorem_ipsum_500.json', { encoding: 'utf-8'});
+    describe('Handle extra return parameters', () => {
+        const json = fs.readFileSync('tests/data/models/lorem_ipsum_500.json', { encoding: 'utf-8'});
         const parsed = JSON.parse(json);
+        before(async () => {
+            await redis.search_module_create('li-index', 'JSON', [{
+                name: '$.title',
+                type: 'TEXT',
+            }, {
+                name: '$.description',
+                type: 'TEXT',
+            }]);
+
+            await Promise.all(parsed.map(async p => await redis.rejson_module_set(`li:${p.id}`, '$', JSON.stringify(p))));
+        })
+        it('Searches JSON index with default options', async () => {
+            const result = await redis.search_module_search('li-index', 'lorem') as Array<FTSearchResponse>;
+            expect(result[0]).to.be.greaterThan(0);
+            expect(result.slice(1).length).to.equal(10);
+        });
+
+        it('Searches JSON index with a limit of 20', async () => {
+            const result = await redis.search_module_search('li-index', 'lorem', { limit: { first: 0, num: 20 }}) as Array<FTSearchResponse>;
+            expect(result[0]).to.be.greaterThan(0);
+            expect(result.slice(1).length).to.equal(20);
+        });
+
+        it('Gets all of the matching results', async () => {
+            const result = await redis.search_module_search('li-index', 'lorem', { limit: { first: 0, num: 100000 }}) as Array<FTSearchResponse>;
+            const total = result[0];
+            expect(total).to.be.greaterThan(0);
+            expect(result.slice(1).length).to.equal(total);
+        });
+
+        it('Does not get the correct number of results when extra response properties are present', async () => {
+            const result = await redis.search_module_search('li-index', 'lorem', { limit: { first: 0, num: 20 }, withScores: true }) as Array<FTSearchResponse>;
+            const total = result[0];
+            expect(total).to.be.greaterThan(0);
+            expect(result.slice(1).length).to.be.greaterThan(20);
+        });
+
+        it('Has an edge case where number of extra properties causes a problem with hitting the result.length % 2 === 1 condition on module-base.ts:122', async () => {
+            /**
+             * This edge case ends up just returning the raw response from redis, because of a failed conditional check.
+             * The point is that this should get parsed as a search response, based on the module-base.ts:handleResponse
+             * method. The problem is that we're getting 3 response properties back for each search result, which ends
+             * up meaning that a result of 1 object means that the array length will be 4, where reponse[0] is the total,
+             * response[1] is the id, response[2] is the score, and response[3] is the document.
+             */
+            const result = await redis.search_module_search('li-index', 'edgecase', { limit: { first: 0, num: 20 }, withScores: true }) as Array<FTSearchResponse>;
+            const total = result[0];
+            expect(total).to.equal(1);
+        })
     })
+
 })
