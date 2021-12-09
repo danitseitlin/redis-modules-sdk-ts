@@ -2,6 +2,7 @@ import { cliArguments } from 'cli-argument-parser'
 import { expect } from 'chai'
 import { RedisModules } from '../modules/redis-modules'
 import { FTSearchArrayResponse } from '../modules/redisearch/redisearch.types'
+import * as fs from 'fs';
 let redis: RedisModules
 const index = 'idx'
 const query = '@text:name'
@@ -459,5 +460,10 @@ describe('RediSearch Module testing', async function () {
         }])
         const response = await redis.search_module_dropindex(`${index}-droptest`)
         expect(response).to.equal('OK', 'The response of the FT.DROPINDEX command')
+    })
+
+    describe('accounting for additional response values', () => {
+        const json = fs.readFileSync('../models/lorem_ipsum_500.json', { encoding: 'utf-8'});
+        const parsed = JSON.parse(json);
     })
 })
