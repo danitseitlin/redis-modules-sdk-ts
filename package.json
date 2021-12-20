@@ -1,9 +1,12 @@
 {
-  "name": "redis-modules-sdk",
-  "version": "0.0.1",
+  "name": "@michaelpapesca/redis-modules-sdk",
+  "version": "0.0.2",
   "description": "A Software development kit for easier connection and execution of Redis Modules commands. ",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "scripts": {
     "build": "tsc",
     "test": "mocha -r ts-node/register",
@@ -29,7 +32,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/danitseitlin/redis-modules-sdk.git"
+    "url": "git+https://github.com/michaelpapesca/redis-modules-sdk-ts.git"
   },
   "keywords": [
     "redis-modules-sdk",
@@ -49,9 +52,9 @@
   "author": "Dani Tseitlin",
   "license": "Apache 2.0",
   "bugs": {
-    "url": "https://github.com/danitseitlin/redis-modules-sdk/issues"
+    "url": "https://github.com/michaelpapesca/redis-modules-sdk-ts/issues"
   },
-  "homepage": "https://github.com/danitseitlin/redis-modules-sdk#readme",
+  "homepage": "https://github.com/michaelpapesca/redis-modules-sdk-ts#readme",
   "devDependencies": {
     "@microsoft/tsdoc": "0.13.2",
     "@types/chai": "4.2.14",
