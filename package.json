@@ -1,6 +1,6 @@
 {
   "name": "@michaelpapesca/redis-modules-sdk",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A Software development kit for easier connection and execution of Redis Modules commands. ",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
