@@ -30,18 +30,10 @@ export class RedisearchHelpers {
      * @param response The raw response from the command execution
      * @returns A parsed response of the raw response
      */
-    handleAggregateResponse(response: any): FTAggregateResponse {
-        const numberOfItems = response[0];
-        const items: FTAggregateResponseItem[] = [];
-        for(let i = 1; i < response.length; i++) {
-            items.push({
-                name: response[i][0],
-                value: response[i][1]
-            })
-        }
+    handleAggregateResponse(response) {
         return {
-            numberOfItems: numberOfItems,
-            items: items
+            numberOfItems: response[0],
+            items: response.slice(1, response.length)
         };
     }
 }

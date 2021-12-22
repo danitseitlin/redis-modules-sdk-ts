@@ -672,7 +672,4 @@ export type FTAggregateResponse = {
 /**
  * The response item of the FT aggregate response type
  */
-export type FTAggregateResponseItem = {
-    name: string,
-    value: number | string | boolean
-}
+export declare type FTAggregateResponseItem = Array<number | string>;
