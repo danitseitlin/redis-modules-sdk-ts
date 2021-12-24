@@ -10,6 +10,7 @@ export class Module {
     public clusterOptions: IORedis.ClusterOptions
     public isHandleError: boolean;
     public showDebugLogs: boolean;
+    public returnRawResponse: boolean;
 
     /**
      * Initializing the module object
@@ -33,12 +34,15 @@ export class Module {
     constructor(name: string, options: IORedis.RedisOptions | IORedis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: IORedis.ClusterOptions) {
         this.name = name;
         //If it's a list of cluster nodes
-        if(Array.isArray(options))
+        if(Array.isArray(options)){
             this.clusterNodes = options as IORedis.ClusterNode[];
-        else
+        }
+        else {
             this.redisOptions = options as IORedis.RedisOptions;
+        }
         this.isHandleError = moduleOptions && moduleOptions.isHandleError ? moduleOptions.isHandleError: true;
         this.showDebugLogs = moduleOptions && moduleOptions.showDebugLogs ? moduleOptions.showDebugLogs: false;
+        this.returnRawResponse = moduleOptions?.returnRawResponse ? moduleOptions.returnRawResponse: false;
         this.clusterOptions = clusterOptions ? clusterOptions: undefined;
     }
 
@@ -46,20 +50,24 @@ export class Module {
      * Connecting to the Redis database with the module
      */
     async connect(): Promise<void> {
-        if(this.clusterNodes)
+        if(this.clusterNodes){
             this.cluster = new IORedis.Cluster(this.clusterNodes, this.clusterOptions);
-        else
+        }
+        else {
             this.redis = new IORedis(this.redisOptions);
+        }
     }
 
     /**
      * Disconnecting from the Redis database with the module
      */
     async disconnect(): Promise<void> {
-        if(this.clusterNodes)
+        if(this.clusterNodes){
             await this.cluster.quit();
-        else
+        }
+        else {
             await this.redis.quit();
+        }
     }
 
     /**
@@ -103,6 +111,9 @@ export class Module {
      */
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     handleResponse(response: any, isSearchQuery = false): any {
+        if(this.returnRawResponse === true) {
+            return response
+        }
         //If not an array/object
         if(
             (typeof response === 'string' ||
@@ -227,7 +238,11 @@ export type RedisModuleOptions = {
     /**
     *  If to print debug logs
     */
-    showDebugLogs?: boolean
+    showDebugLogs?: boolean,
+    /**
+     * In some cases functions are parsing responses into a JS object, setting true here will disable that ability.
+     */
+    returnRawResponse?: boolean
 }
 
 /**
