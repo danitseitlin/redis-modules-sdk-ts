@@ -1,5 +1,5 @@
 {
-  "name": "redis-modules-sdk",
+  "name": "@redislabsdev/redis-modules-sdk-ts",
   "version": "0.0.1",
   "description": "A Software development kit for easier connection and execution of Redis Modules commands. ",
   "main": "lib/index.js",
@@ -49,9 +49,9 @@
   "author": "Redis",
   "license": "Apache 2.0",
   "bugs": {
-    "url": "https://github.com/redislabsdev/redis-modules-sdk/issues"
+    "url": "https://github.com/redislabsdev/redis-modules-sdk-ts/issues"
   },
-  "homepage": "https://github.com/redislabsdev/redis-modules-sdk#readme",
+  "homepage": "https://github.com/redislabsdev/redis-modules-sdk-ts#readme",
   "devDependencies": {
     "@microsoft/tsdoc": "0.13.2",
     "@types/chai": "4.2.14",
