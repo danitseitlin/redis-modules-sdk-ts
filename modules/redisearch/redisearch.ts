@@ -60,8 +60,11 @@ export class Redisearch extends Module {
     async search(index: string, query: string, parameters?: FTSearchParameters): Promise<FTSearchResponse> {
         const command = this.searchCommander.search(index, query, parameters);
         const response = await this.sendCommand(command);
-        const parseResponse = parameters?.parseSearchQueries ?? true;
-        return this.handleResponse(response, parseResponse);
+        if(this.returnRawResponse === true) {
+            return this.handleResponse(response);
+        }
+        
+        return this.searchHelpers.handleQueryResponse(response);
     }
 
     /**

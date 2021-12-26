@@ -328,12 +328,7 @@ export interface FTSearchParameters {
         * The num argument of the 'LIMIT' parameter
         */
         num: number
-    },
-    /**
-    * If to parse search results to objects or leave them in their array form
-    * @default true
-    */
-    parseSearchQueries?: boolean
+    }
 }
 
 /**
