@@ -29,7 +29,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/danitseitlin/redis-modules-sdk.git"
+    "url": "git+https://github.com/redislabsdev/redis-modules-sdk.git"
   },
   "keywords": [
     "redis-modules-sdk",
@@ -46,12 +46,12 @@
     "typescript",
     "nodejs"
   ],
-  "author": "Dani Tseitlin",
+  "author": "Redis",
   "license": "Apache 2.0",
   "bugs": {
-    "url": "https://github.com/danitseitlin/redis-modules-sdk/issues"
+    "url": "https://github.com/redislabsdev/redis-modules-sdk/issues"
   },
-  "homepage": "https://github.com/danitseitlin/redis-modules-sdk#readme",
+  "homepage": "https://github.com/redislabsdev/redis-modules-sdk#readme",
   "devDependencies": {
     "@microsoft/tsdoc": "0.13.2",
     "@types/chai": "4.2.14",
