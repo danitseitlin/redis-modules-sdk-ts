@@ -20,7 +20,7 @@ describe('RediSearch Module testing', async function () {
         redis = new RedisModules({
             host: cliArguments.host,
             port: parseInt(cliArguments.port)
-        })
+        }, { showDebugLogs: true })
         await redis.connect()
     })
     after(async () => {

@@ -193,6 +193,32 @@ export class Module {
 }
 
 /**
+ * Logging a message
+ * @param level The level of the log
+ * @param msg The log message
+ */
+export function log(level: LogLevel, msg: string): void {
+    if(level === LogLevel.DEBUG && this.showDebugLogs === true) {
+        console.debug(msg)
+    }
+    else if(level === LogLevel.Error) {
+        throw new Error(msg)
+    }
+    else {
+        console.log(msg);
+    }
+}
+
+/**
+ * Enum representing the log levels
+ */
+export enum LogLevel {
+    INFO,
+    DEBUG,
+    Error
+}
+
+/**
  * The Redis module class options
  */
 export type RedisModuleOptions = {

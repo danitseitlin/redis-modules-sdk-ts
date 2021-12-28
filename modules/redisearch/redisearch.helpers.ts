@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { log, LogLevel } from "../module.base";
 import { FTAggregateResponse, FTAggregateResponseItem, FTSpellCheckResponse } from "./redisearch.types";
 
 export class RedisearchHelpers {
@@ -53,7 +54,13 @@ export class RedisearchHelpers {
     handleQueryResponse(response: any) {
         //Search queries should be parsed into objects, if possible.
         let responseObjects = response;
-        if(Array.isArray(response) && response.length % 2 === 1) {
+        //If the response is an array with 1 item, we will return it as the value.
+        if(Array.isArray(response) && response.length === 1) {
+            log(LogLevel.DEBUG, `The response is ${response[0]}`);
+            return response[0];
+        }
+        //In case we have an array with a odd number of items, we will parse it as required. 
+        else if(Array.isArray(response) && response.length % 2 === 1) {
             // Put index as 0th element
             responseObjects = [response[0]];
             // Go through returned keys (doc:1, doc:2, ...)
