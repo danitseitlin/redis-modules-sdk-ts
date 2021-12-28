@@ -61,8 +61,10 @@ describe('RediSearch Module testing', async function () {
                 fields: [
                     { field: '$.name', as: 'name' }
                 ]
-            }
+            },
+            withScores: true
         })
+        console.log(response)
         expect(response).to.equal(0, 'The response of the FT.SEARCH command')
         await redis.search_module_dropindex(`${index}-json`)
     })
