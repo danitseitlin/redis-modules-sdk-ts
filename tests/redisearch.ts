@@ -1,7 +1,8 @@
 import { cliArguments } from 'cli-argument-parser'
 import { expect } from 'chai'
 import { RedisModules } from '../modules/redis-modules'
-import { FTSearchArrayResponse } from '../modules/redisearch/redisearch.types'
+import { FTSearchArrayResponse, FTSearchResponse } from '../modules/redisearch/redisearch.types'
+import * as fs from 'fs';
 let redis: RedisModules
 const index = 'idx'
 const query = '@text:name'
@@ -461,5 +462,22 @@ describe('RediSearch Module testing', async function () {
         }])
         const response = await redis.search_module_dropindex(`${index}-droptest`)
         expect(response).to.equal('OK', 'The response of the FT.DROPINDEX command')
+    })
+    it('issue', async () => {
+        const json = fs.readFileSync('tests/data/models/lorem_ipsum_500.json', { encoding: 'utf-8'});
+        const parsed = JSON.parse(json);
+        await redis.search_module_create('li-index', 'JSON', [{
+            name: '$.title',
+            type: 'TEXT',
+        }, {
+            name: '$.description',
+            type: 'TEXT',
+        }]);
+
+        await Promise.all(parsed.map(async p => await redis.rejson_module_set(`li:${p.id}`, '$', JSON.stringify(p))));
+        const result = await redis.search_module_search('li-index', 'edgecase', { limit: { first: 0, num: 20 }, withScores: true }) as Array<FTSearchResponse>;
+        console.log(result)
+        const total = result[0];
+        expect(total).to.equal(1);
     })
 })
