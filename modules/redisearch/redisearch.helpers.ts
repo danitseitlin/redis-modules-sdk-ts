@@ -55,7 +55,7 @@ export class RedisearchHelpers {
         //Search queries should be parsed into objects, if possible.
         let responseObjects = response;
         //If the response is an array with 1 item, we will return it as the value.
-        if(Array.isArray(response) && response.length === 1) {
+        if(Array.isArray(response) && response.length === 1 && !Array.isArray(response[0])) {
             log(LogLevel.DEBUG, `The response is ${response[0]}`);
             return response[0];
         }
