@@ -52,6 +52,7 @@ export class RedisearchHelpers {
      * @returns 
      */
     handleQueryResponse(response: any) {
+        log(LogLevel.DEBUG, `****** Function handleQueryResponse ******`);
         //Search queries should be parsed into objects, if possible.
         let responseObjects = response;
         //If the response is an array with 1 item, we will return it as the value.
@@ -88,6 +89,9 @@ export class RedisearchHelpers {
                     key: response[i],
                 });
             }
+        }
+        else {
+            log(LogLevel.DEBUG, 'NONE OF THE ABOVE!')
         }
         return responseObjects;
     }
