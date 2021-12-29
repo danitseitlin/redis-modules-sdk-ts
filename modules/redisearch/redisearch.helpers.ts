@@ -92,6 +92,20 @@ export class RedisearchHelpers {
         }
         else {
             log(LogLevel.DEBUG, 'NONE OF THE ABOVE!')
+            const responses = response[0]
+            const resultCounts = responses[0];
+            responseObjects = {}
+            responseObjects.resultsCount = resultCounts;
+            responseObjects.documentIds = []
+            responseObjects.data = []
+            for(let i = 1; i < responses.length; i ++) {
+                if(Array.isArray(responses[i])) {
+                    responseObjects.data = responses.data.concat(responses[i])
+                }
+                else {
+                    responseObjects.documentIds.push(responses[i])
+                }
+            }
         }
         return responseObjects;
     }
