@@ -68,7 +68,8 @@
     "npm-package-deployer": "0.2.9",
     "ts-node": "9.0.0",
     "typedoc": "0.22.10",
-    "typescript": "4.1.2"
+    "typescript": "4.1.2",
+    "fs": "0.0.1-security"
   },
   "dependencies": {
     "ioredis": "4.27.4"

@@ -110,7 +110,7 @@ export class Module {
      * @param isSearchQuery If we should try to build search result object from result array (default: false)
      */
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    handleResponse(response: any, isSearchQuery = false): any {
+    handleResponse(response: any): any {
         if(this.returnRawResponse === true) {
             return response
         }
@@ -119,47 +119,12 @@ export class Module {
             (typeof response === 'string' ||
             typeof response === 'number' ||
             (Array.isArray(response) && response.length % 2 === 1 && response.length > 1 && !this.isOnlyTwoDimensionalArray(response)) ||
-            (Array.isArray(response) && response.length === 0)) &&
-            !isSearchQuery
+            (Array.isArray(response) && response.length === 0))
         ) {
             return response;
         }
         else if(Array.isArray(response) && response.length === 1) {
             return this.handleResponse(response[0])
-        }
-        else if(isSearchQuery) {
-            //Search queries should be parsed into objects, if possible.
-            let responseObjects = response;
-            if(Array.isArray(response) && response.length % 2 === 1) {
-                // Put index as 0th element
-                responseObjects = [response[0]];
-                // Go through returned keys (doc:1, doc:2, ...)
-                for(let i = 1; i < response.length; i += 2) {
-                    // propertyArray is the key-value pairs eg: ['name', 'John']
-                    const propertyArray = response[i + 1];
-                    responseObjects.push({
-                        key: response[i] //This is the key, 'eg doc:1'
-                    });
-                    if(Array.isArray(propertyArray) && propertyArray.length % 2 === 0) {
-                        for(let j = 0; j < propertyArray.length; j += 2) {
-                            // Add keys to last responseObjects item
-                            // propertyArray[j] = key name
-                            // propertyArray[j+1] = value
-                            responseObjects[responseObjects.length - 1][propertyArray[j]] = propertyArray[j + 1];
-                        }
-                    }
-                }
-            }
-            //Check for a single dimensional array, these should only be keys, if im right
-            else if(response.every(entry => !Array.isArray(entry))) {
-                responseObjects = [response[0]];
-                for(let i = 1; i < response.length; i++) {
-                    responseObjects.push({
-                        key: response[i],
-                    });
-                }
-            }
-            return responseObjects;
         }
         else if(Array.isArray(response) && response.length > 1 && this.isOnlyTwoDimensionalArray(response)) {
             return this.handleResponse(this.reduceArrayDimension(response))
@@ -225,6 +190,32 @@ export class Module {
         }
         return paramValue;
     }
+}
+
+/**
+ * Logging a message
+ * @param level The level of the log
+ * @param msg The log message
+ */
+export function log(level: LogLevel, msg: string): void {
+    if(level === LogLevel.DEBUG && this.showDebugLogs === true) {
+        console.debug(msg)
+    }
+    else if(level === LogLevel.Error) {
+        throw new Error(msg)
+    }
+    else {
+        console.log(msg);
+    }
+}
+
+/**
+ * Enum representing the log levels
+ */
+export enum LogLevel {
+    INFO,
+    DEBUG,
+    Error
 }
 
 /**
