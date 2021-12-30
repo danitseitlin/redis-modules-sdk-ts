@@ -47,9 +47,9 @@ export class RedisearchHelpers {
     }
 
     /**
-     * 
-     * @param response 
-     * @returns 
+     * Parsing the response of Search QUERY
+     * @param response The raw response from Redis
+     * @returns A parsed or processed response
      */
     handleQueryResponse(response: any) {
         log(LogLevel.DEBUG, `****** Function handleQueryResponse ******`);

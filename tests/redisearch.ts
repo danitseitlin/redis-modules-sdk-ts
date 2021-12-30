@@ -62,10 +62,8 @@ describe('RediSearch Module testing', async function () {
                 fields: [
                     { field: '$.name', as: 'name' }
                 ]
-            },
-            withScores: true
+            }
         })
-        console.log(response)
         expect(response).to.equal(0, 'The response of the FT.SEARCH command')
         await redis.search_module_dropindex(`${index}-json`)
     })
@@ -465,7 +463,7 @@ describe('RediSearch Module testing', async function () {
     })
     it('Testing the parse of search function as JSON', async () => {
         const json = fs.readFileSync('tests/data/models/sample1.json', { encoding: 'utf-8'});
-        const parsed = JSON.parse(json);
+        const parsedJSON = JSON.parse(json);
         await redis.search_module_create('li-index', 'JSON', [{
             name: '$.title',
             type: 'TEXT',
@@ -474,10 +472,9 @@ describe('RediSearch Module testing', async function () {
             type: 'TEXT',
         }]);
 
-        await Promise.all(parsed.map(async (p: { id: any; }) => await redis.rejson_module_set(`li:${p.id}`, '$', JSON.stringify(p))));
+        await Promise.all(parsedJSON.map(async (p: { id: number; }) => await redis.rejson_module_set(`li:${p.id}`, '$', JSON.stringify(p))));
         const result = await redis.search_module_search('li-index', 'KAS', { limit: { first: 0, num: 20 }, withScores: true }) as FTParsedSearchResponse;
-        console.log(result)
-        const total = result.resultsCount;
-        expect(total).to.equal(1);
+        const { resultsCount } = result;
+        expect(resultsCount).to.equal(1);
     })
 })
