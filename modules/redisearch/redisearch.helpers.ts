@@ -92,7 +92,7 @@ export class RedisearchHelpers {
         }
         else {
             log(LogLevel.DEBUG, 'NONE OF THE ABOVE!')
-            const responses = response[0]
+            const responses = response
             const resultCounts = responses[0];
             responseObjects = {}
             responseObjects.resultsCount = resultCounts;
