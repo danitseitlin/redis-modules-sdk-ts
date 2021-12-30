@@ -223,9 +223,6 @@ export class SearchCommander {
             command: 'FT.SEARCH',
             args: args
         }
-        //const response = await this.sendCommand('FT.SEARCH', args);
-        //const parseResponse = parameters?.parseSearchQueries ?? true;
-        //return this.handleResponse(response, parseResponse);
     }
 
     /**
