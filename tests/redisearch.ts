@@ -475,6 +475,6 @@ describe('RediSearch Module testing', async function () {
         await Promise.all(parsedJSON.map(async (p: { id: number; }) => await redis.rejson_module_set(`li:${p.id}`, '$', JSON.stringify(p))));
         const result = await redis.search_module_search('li-index', 'KAS', { limit: { first: 0, num: 20 }, withScores: true }) as FTParsedSearchResponse;
         const { resultsCount } = result;
-        expect(resultsCount).to.equal(1);
+        expect(resultsCount).to.equal(1, 'The count of the results');
     })
 })
