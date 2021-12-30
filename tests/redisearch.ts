@@ -1,7 +1,7 @@
 import { cliArguments } from 'cli-argument-parser'
 import { expect } from 'chai'
 import { RedisModules } from '../modules/redis-modules'
-import { FTParsedSearchResponse, FTSearchArrayResponse, FTSearchResponse } from '../modules/redisearch/redisearch.types'
+import { FTParsedSearchResponse, FTSearchArrayResponse } from '../modules/redisearch/redisearch.types'
 import * as fs from 'fs';
 let redis: RedisModules
 const index = 'idx'
@@ -477,7 +477,7 @@ describe('RediSearch Module testing', async function () {
         await Promise.all(parsed.map(async (p: { id: any; }) => await redis.rejson_module_set(`li:${p.id}`, '$', JSON.stringify(p))));
         const result = await redis.search_module_search('li-index', 'KAS', { limit: { first: 0, num: 20 }, withScores: true }) as FTParsedSearchResponse;
         console.log(result)
-        const total = result;
+        const total = result.resultsCount;
         expect(total).to.equal(1);
     })
 })
