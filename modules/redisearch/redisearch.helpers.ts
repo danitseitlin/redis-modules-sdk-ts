@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { log, LogLevel } from "../module.base";
-import { FTAggregateResponse, FTAggregateResponseItem, FTSpellCheckResponse } from "./redisearch.types";
+import { FTAggregateResponse, FTAggregateResponseItem, FTParsedSearchResponse, FTSpellCheckResponse } from "./redisearch.types";
 
 export class RedisearchHelpers {
     /**
@@ -91,7 +91,7 @@ export class RedisearchHelpers {
             }
         }
         else {
-            log(LogLevel.DEBUG, 'NONE OF THE ABOVE!')
+            log(LogLevel.DEBUG, 'Parsing response to JSON:')
             const responses = response
             const resultCounts = responses[0];
             responseObjects = {}
@@ -107,6 +107,6 @@ export class RedisearchHelpers {
                 }
             }
         }
-        return responseObjects;
+        return responseObjects as FTParsedSearchResponse;
     }
 }

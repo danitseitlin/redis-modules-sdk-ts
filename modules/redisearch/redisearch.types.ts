@@ -649,7 +649,7 @@ export interface FTSpellCheckResponse {
  * The response type of the FT search function.
  * The function results in 0 when no results are found, else as an array.
  */
-export type FTSearchResponse = number | FTSearchArrayResponse;
+export type FTSearchResponse = number | FTSearchArrayResponse | FTParsedSearchResponse;
 
 /**
  * The response type of the FT search function as an array
@@ -670,4 +670,16 @@ export type FTAggregateResponse = {
 export type FTAggregateResponseItem = {
     name: string,
     value: number | string | boolean
+}
+
+/**
+ * The parsed response of the search function
+ * @param resultsCount The number of results returned
+ * @param documentIds Pairs of document IDs
+ * @param data A nested array of attribute/value pairs 
+ */
+export type FTParsedSearchResponse = {
+    resultsCount: number,
+    documentIds: string[],
+    data: string[]
 }
