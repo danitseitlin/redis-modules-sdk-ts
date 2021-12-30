@@ -100,7 +100,7 @@ export class RedisearchHelpers {
             responseObjects.data = []
             for(let i = 1; i < responses.length; i ++) {
                 if(Array.isArray(responses[i])) {
-                    responseObjects.data = responses.data.concat(responses[i])
+                    responseObjects.data = responseObjects.data.concat(responses[i])
                 }
                 else {
                     responseObjects.documentIds.push(responses[i])
