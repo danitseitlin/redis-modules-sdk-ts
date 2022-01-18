@@ -64,12 +64,12 @@
     "chai": "4.2.0",
     "cli-argument-parser": "0.3.4",
     "eslint": "7.14.0",
+    "fs": "0.0.1-security",
     "mocha": "8.2.0",
     "npm-package-deployer": "0.2.9",
     "ts-node": "9.0.0",
-    "typedoc": "0.22.10",
-    "typescript": "4.1.2",
-    "fs": "0.0.1-security"
+    "typedoc": "0.22.11",
+    "typescript": "4.1.2"
   },
   "dependencies": {
     "ioredis": "4.27.4"
