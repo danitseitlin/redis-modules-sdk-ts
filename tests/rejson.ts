@@ -110,7 +110,7 @@ describe('ReJSON Module testing', async function() {
     
     it('debug function', async () => {
         const response = await redis.rejson_module_debug('MEMORY', key1, path);
-        expect(response).to.equal(72, 'The response of the debug command');
+        expect(response).to.be.greaterThan(0, 'The response of the debug command');
     });
     
     it('forget function', async () => {
