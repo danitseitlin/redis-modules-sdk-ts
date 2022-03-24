@@ -155,7 +155,7 @@ export class RedisTimeSeries extends Module {
      * @param options.aggregation.type The type of the 'AGGREGATION' command
      * @param options.aggregation.timeBucket The time bucket of the 'AGGREGATION' command
      */
-    async range(key: string, fromTimestamp: string, toTimestamp: string, options?: TSRangeOptions): Promise<number[]> {
+    async range(key: string, fromTimestamp: string, toTimestamp: string, options?: TSRangeOptions): Promise<[number, string][]> {
         const command = this.rtsCommander.range(key, fromTimestamp, toTimestamp, options);
         return await this.sendCommand(command);
     }
@@ -171,7 +171,7 @@ export class RedisTimeSeries extends Module {
      * @param options.aggregation.type The type of the 'AGGREGATION' command
      * @param options.aggregation.timeBucket The time bucket of the 'AGGREGATION' command
      */
-    async revrange(key: string, fromTimestamp: string, toTimestamp: string, options?: TSRangeOptions): Promise<number[]> {
+    async revrange(key: string, fromTimestamp: string, toTimestamp: string, options?: TSRangeOptions): Promise<[number, string][]> {
         const command = this.rtsCommander.revrange(key, fromTimestamp, toTimestamp, options);
         return await this.sendCommand(command);
     }
