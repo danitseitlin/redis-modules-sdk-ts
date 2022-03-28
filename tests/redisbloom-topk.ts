@@ -17,7 +17,7 @@ describe('RedisBloom Top-K filter testing', async function() {
     })
     
     it('reserve function', async() => {
-        const response = await redis.bloom_topk_module_reserve(key1, 1, 2, 3, 0.1);
+        const response = await redis.bloom_topk_module_reserve(key1, 10, 2, 3, 0.1);
         expect(response).to.equal('OK', 'The response of the TOPK.RESERVE command');
     })
     it('add function', async () => {
@@ -29,7 +29,7 @@ describe('RedisBloom Top-K filter testing', async function() {
             name: 42,
             increment: 1
         }])
-        expect(response[0]).to.equal('bar', 'The response of the TOPK.INCRBY command');
+        expect(response[0]).to.equal(null, 'The response of the TOPK.INCRBY command');
     });
     it('query function', async () => {
         const response = await redis.bloom_topk_module_query(key1, [42, 'nonexist'])
