@@ -24,10 +24,10 @@ export class BloomTopkCommander {
      * @param items Item/s to be added.
      */
     add(key: string, items: (number | string)[]): CommandData {
-        const args = [key].concat(items as string[]);
+        const args: (number | string)[] = [key].concat(items as string[]);
         return {
             command: 'TOPK.ADD',
-            args
+            args: args
         }
     }
 
