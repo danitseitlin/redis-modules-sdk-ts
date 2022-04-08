@@ -18,3 +18,4 @@ jobs:
         pkg_managers: '[github, npm]'
         npm_access_token: ${{secrets.NPM_AUTH_TOKEN}}
         github_access_token: ${{secrets.G_AUTH_TOKEN}}
+        debug: true
