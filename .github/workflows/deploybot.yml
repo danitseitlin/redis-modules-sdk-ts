@@ -15,6 +15,7 @@ jobs:
       uses: danitseitlin/package-deployer@master
       with:
         pkg_name: redis-modules-sdk
+        main_pkg_manager: npm
         pkg_managers: '[github, npm]'
         npm_access_token: ${{secrets.NPM_AUTH_TOKEN}}
         github_access_token: ${{secrets.G_AUTH_TOKEN}}
