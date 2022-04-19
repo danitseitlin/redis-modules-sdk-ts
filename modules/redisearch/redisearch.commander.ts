@@ -286,15 +286,17 @@ export class SearchCommander {
                         args.push(property.property);
                         args.push(property.sort);
                     })
-                if(parameters.sortby.max !== undefined)
+                if(parameters.sortby.max !== undefined){
                     args = args.concat(['MAX', `${parameters.sortby.max}`]);
+                }
             }
             if(parameters.expressions !== undefined) {
                 parameters.expressions.forEach(expression => {
                     args.push('APPLY');
                     args.push(expression.expression);
-                    if(expression.as)
+                    if(expression.as){
                         args = args.concat(['AS', expression.as]);
+                    }
                 })
             }
             if(parameters.limit !== undefined) {
@@ -303,6 +305,9 @@ export class SearchCommander {
                     args.push(parameters.limit.offset)
                 if(parameters.limit.numberOfResults !== undefined)
                     args.push(`${parameters.limit.numberOfResults}`);
+            }
+            if(parameters.filter !== undefined) {
+                args = args.concat(['FILTER', parameters.filter])
             }
         }
         return {
