@@ -200,24 +200,36 @@ export class SearchCommander {
                     args = args.concat([parameters.highlight.tags.open, parameters.highlight.tags.close])
                 }
             }
-            if(parameters.slop !== undefined)
+            if(parameters.slop !== undefined) {
                 args = args.concat(['SLOP', `${parameters.slop}`])
-            if(parameters.inOrder === true)
+            }
+            if(parameters.inOrder === true) {
                 args.push('INORDER')
-            if(parameters.language !== undefined)
+            }
+            if(parameters.language !== undefined) {
                 args = args.concat(['LANGUAGE', parameters.language])
-            if(parameters.expander !== undefined)
+            }
+            if(parameters.expander !== undefined) {
                 args = args.concat(['EXPANDER', parameters.expander])
-            if(parameters.scorer !== undefined)
+            }
+            if(parameters.scorer !== undefined) {
                 args = args.concat(['SCORER', parameters.scorer])
-            if(parameters.explainScore === true)
+            }
+            if(parameters.explainScore === true) {
                 args.push('EXPLAINSCORE')
-            if(parameters.payload)
+            }
+            if(parameters.payload) {
                 args = args.concat(['PAYLOAD', parameters.payload])
-            if(parameters.sortBy !== undefined)
+            }
+            if(parameters.sortBy !== undefined) {
                 args = args.concat(['SORTBY', parameters.sortBy.field, parameters.sortBy.sort])
-            if(parameters.limit !== undefined)
+            }
+            if(parameters.limit !== undefined) {
                 args = args.concat(['LIMIT', `${parameters.limit.first}`, `${parameters.limit.num}`])
+            }
+            if(parameters.dialect !== undefined) {
+                args = args.concat(['DIALECT', parameters.dialect])
+            }
         }
         return {
             command: 'FT.SEARCH',
@@ -308,6 +320,9 @@ export class SearchCommander {
             }
             if(parameters.filter !== undefined) {
                 args = args.concat(['FILTER', parameters.filter])
+            }
+            if(parameters.dialect !== undefined) {
+                args = args.concat(['DIALECT', parameters.dialect])
             }
         }
         return {
