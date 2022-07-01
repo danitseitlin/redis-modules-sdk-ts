@@ -328,7 +328,11 @@ export interface FTSearchParameters {
         * The num argument of the 'LIMIT' parameter
         */
         num: number
-    }
+    },
+    /**
+     * Choose the dialect version to execute the query under. If not specified, the query will execute under the default dialect version set during module initial loading or via FT.CONFIG SET command.
+     */
+    dialect?: string
 }
 
 /**
@@ -406,7 +410,11 @@ export interface FTAggregateParameters {
     /**
      * The expression of the 'FILTER' parameter.
      */
-    filter?: string
+    filter?: string,
+    /**
+     * Choose the dialect version to execute the query under. If not specified, the query will execute under the default dialect version set during module initial loading or via FT.CONFIG SET command.
+     */
+    dialect?: string
 }
 
 /**
