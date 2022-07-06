@@ -657,7 +657,7 @@ export interface FTSpellCheckResponse {
  * The response type of the FT search function.
  * The function results in 0 when no results are found, else as an array.
  */
-export type FTSearchResponse = number | FTSearchArrayResponse | FTParsedSearchResponse;
+export type FTSearchResponse = number | FTSearchArrayResponse | FTParsedSearchResponse | null;
 
 /**
  * The response type of the FT search function as an array
