@@ -55,8 +55,8 @@ export class RedisTimeSeries extends Module {
      * @param labels Optional. The labels to update
      * 
      */
-    async alter(key: string, retention?: number, labels?: TSLabel[]): Promise<'OK'> {
-        const command = this.rtsCommander.alter(key, retention, labels);
+    async alter(key: string, retention?: number, labels?: TSLabel[], duplicatePolicy?: string, chunkSize?: number): Promise<'OK'> {
+        const command = this.rtsCommander.alter(key, retention, labels, duplicatePolicy, chunkSize);
         return await this.sendCommand(command);
     }
 

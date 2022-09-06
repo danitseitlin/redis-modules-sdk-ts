@@ -41,9 +41,11 @@ export class RedisTimeSeriesCommander {
      * @param key Required. The key
      * @param retention Optional. The retention time
      * @param labels Optional. The labels to update
+     * @param duplicatePolicy Optional. An update to the duplicate policy
+     * @param chunkSize Optional. An update to the chunk size
      * 
      */
-    alter(key: string, retention?: number, labels?: TSLabel[]): CommandData {
+    alter(key: string, retention?: number, labels?: TSLabel[], duplicatePolicy?: string, chunkSize?: number): CommandData {
         let args = [key];
         if(retention !== undefined)
             args = args.concat(['RETENTION', retention.toString()]);
@@ -52,6 +54,12 @@ export class RedisTimeSeriesCommander {
             for(const label of labels) {
                 args = args.concat([label.name, label.value]);
             }
+        }
+        if (duplicatePolicy !== undefined) {
+                args = args.concat(['DUPLICATE_POLICY', duplicatePolicy])
+        }
+        if (chunkSize !== undefined) {
+            args = args.concat(['CHUNK_SIZE', chunkSize.toString()])
         }
         return {
             command: 'TS.ALTER',
