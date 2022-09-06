@@ -20,7 +20,7 @@ export type TSInfo = {
     retentionTime?: number,
     chunkCount?: number,
     chunkSize?: number,
-    duplicatePolicy?: boolean | null,
+    duplicatePolicy?: string | null,
     labels?: Array<string[]>,
     sourceKey?: string | null,
     rules?: Array<string[]>,
