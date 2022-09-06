@@ -394,7 +394,7 @@ export class RedisTimeSeriesCommander {
     queryindex(filter: string): CommandData {
         return {
             command: 'TS.QUERYINDEX',
-            args: [filter]
+            args: filter.split(' ')
         }
     }
 
