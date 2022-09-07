@@ -54,7 +54,7 @@ export class Module {
             this.cluster = new IORedis.Cluster(this.clusterNodes, this.clusterOptions);
         }
         else {
-            this.redis = new IORedis(this.redisOptions);
+            this.redis = new IORedis.default(this.redisOptions);
         }
     }
 
@@ -82,7 +82,7 @@ export class Module {
             }
             const response = this.clusterNodes ? 
                 await this.cluster.cluster.call(data.command, data.args)
-                    : await this.redis.send_command(data.command, data.args);
+                    : await this.redis.call(data.command, data.args);
 
             if(this.showDebugLogs){
                 console.log(`${this.name}: command ${data.command} responded with ${response}`);
