@@ -28,7 +28,7 @@ jobs:
       redisgraph-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, '/redisgraph/')}}
       #RedisGears
       redisgears-selected: ${{(github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'redisgears') || github.event.inputs.tests == 'All'))}}
-      redisgears-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, '/redisgears/')}}
+      redisgears-changes: ${{github.event_name == 'pull_request' && (contains(steps.files.outputs.all, '/redisgears/') || contains(steps.files.outputs.all, 'redisgears.ts'))}}
       #RedisBloom
       redisbloom-selected: ${{(github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'redisbloom') || github.event.inputs.tests == 'All'))}}
       redisbloom-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, '/bloom/')}}
