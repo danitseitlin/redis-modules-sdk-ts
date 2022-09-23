@@ -31,19 +31,19 @@ jobs:
       redisgears-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, '/redisgears/')}}
       #RedisBloom
       redisbloom-selected: ${{(github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'redisbloom') || github.event.inputs.tests == 'All'))}}
-      redisbloom-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, '/redisbloom/')}}
+      redisbloom-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, '/bloom/')}}
       #RedisBloom Topk
       rebloom-topk-selected: ${{(github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rebloom-topk') || github.event.inputs.tests == 'All'))}}
-      rebloom-topk-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, '/redisbloom-topk/')}}
+      rebloom-topk-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, '/bloom-topk/')}}
       #RedisBloom CMK
       rebloom-cmk-selected: ${{(github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rebloom-cmk') || github.event.inputs.tests == 'All'))}}
-      rebloom-cmk-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, '/redisbloom-cmk/')}}
+      rebloom-cmk-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, '/bloom-cmk/')}}
       #RedisBloom Cuckoo
       rebloom-cuckoo-selected: ${{(github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rebloom-cuckoo') || github.event.inputs.tests == 'All'))}}
-      rebloom-cuckoo-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, '/redisbloom-cuckoo/')}}
+      rebloom-cuckoo-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, '/bloom-cuckoo/')}}
       #RedisBloom TDigest
       rebloom-tdigest-selected: ${{(github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rebloom-tdigest') || github.event.inputs.tests == 'All'))}}
-      rebloom-tdigest-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, '/redisbloom-tdigest/')}}
+      rebloom-tdigest-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, '/bloom-tdigest/')}}
       #Redis AI
       redis-ai-selected: ${{(github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'redis-ai') || github.event.inputs.tests == 'All'))}}
       redis-ai-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, '/redis-ai/')}}
