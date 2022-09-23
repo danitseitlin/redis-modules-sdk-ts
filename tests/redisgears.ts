@@ -95,7 +95,7 @@ describe('RedisGears Module testing', async function() {
         expect(response).to.equal('OK', 'The response of the \'RG.ABORTEXECUTION\' Command')
     });
     it('unregister function', async () => {
-        const registrationId = `${executionId3.split('-')[0]}-${parseInt(executionId3.split('-')[1])+1}`
+        const registrationId = `${executionId3.split('-')[0]}-${parseInt(executionId3.split('-')[1])}`
         console.log(registrationId)
         const response = await redis.gears_module_unregister(registrationId)
         expect(response).to.equal('OK', 'The response of the \'RG.UNREGISTER\' command')
