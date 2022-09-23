@@ -54,7 +54,7 @@ describe('RedisGears Module testing', async function() {
     });
     it('dumpRegistrations function', async () => {
         const response = await redis.gears_module_dumpRegistrations()
-        expect(response.length).to.equal(0, 'The response count of the \'RG.DUMPREGISTRATIONS\' Command')
+        expect(response.length).to.equal(1, 'The response count of the \'RG.DUMPREGISTRATIONS\' Command')
     });
     it('getResults function', async () => {
         const response = await redis.gears_module_getResults(executionId1)
@@ -98,7 +98,7 @@ describe('RedisGears Module testing', async function() {
     it('unregister function', async () => {
         const registrationId = `${executionId3.split('-')[0]}-${parseInt(executionId3.split('-')[1])}`
         console.log(registrationId)
-        const response = await redis.gears_module_unregister(registrationId)
+        const response = await redis.gears_module_unregister(executionId3)
         expect(response).to.equal('OK', 'The response of the \'RG.UNREGISTER\' command')
     });
 });
