@@ -1,5 +1,5 @@
 import { CommandData } from "../module.base";
-import { TDigestAddParameters } from "./redisbloom-tdigest.types";
+import { TDigestAddParameters, TDigestMergeOptions } from "./redisbloom-tdigest.types";
 
 export class BloomTdigestCommander {
     /**
@@ -45,15 +45,34 @@ export class BloomTdigestCommander {
     }
 
     /**
-     * Merges all of the values from 'from' to 'this' sketch
-     * @param fromKey Sketch to copy values to
-     * @param toKey Sketch to copy values from
+     * Merges all of the values from 'from' keys to 'destination-key' sketch.
+     * @param destinationKey Sketch to copy values to.
+     * @param sourceKeys Sketch to copy values from, this can be a string for 1 key or an array of keys.
+     * @param options.numberOfKeys Number of sketch(es) to copy observation values from. If not passed, it will set a default based on sourceKeys parameter.
+     * @param options.compression The compression parameter. 100 is a common value for normal uses. 1000 is extremely large. If no value is passed, the used compression will the maximal value among all inputs.
+     * @param options.override If destination already exists, it is overwritten.
      * @returns OK on success, error otherwise
      */
-    merge(fromKey: string, toKey: string): CommandData {
+    merge(destinationKey: string, sourceKeys: string | string[], options?: TDigestMergeOptions): CommandData {
+        const numkeys = options?.numberOfKeys ? options?.numberOfKeys: Array.isArray(sourceKeys) ? sourceKeys.length: 1; 
+        let args = [destinationKey, `${numkeys}`]
+        if(Array.isArray(sourceKeys)) {
+            args = args.concat(sourceKeys)
+        }
+        else {
+            args.push(sourceKeys)
+        }
+
+        if(options?.compression) {
+            args = args.concat(['COMPRESSION', `${options?.compression}`])
+        }
+
+        if(options?.override === true) {
+            args.push('OVERRIDE')
+        }
         return {
             command: 'TDIGEST.MERGE',
-            args: [toKey, fromKey]
+            args: args
         }
     }
 
