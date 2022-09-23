@@ -8,10 +8,10 @@ export class BloomTdigestCommander {
      * @param compression The compression parameter. 100 is a common value for normal uses. 1000 is extremely large. See the further notes bellow. 
      * @returns OK on success, error otherwise
      */
-    create(key: string, compression: number): CommandData {
+    create(key: string, compression?: number): CommandData {
         return {
             command: 'TDIGEST.CREATE',
-            args: [key, `${compression}`]
+            args: [key, `COMPRESSION ${compression}`]
         }
     }
 
