@@ -11,7 +11,7 @@ export class BloomTdigestCommander {
     create(key: string, compression?: number): CommandData {
         return {
             command: 'TDIGEST.CREATE',
-            args: [key, `COMPRESSION ${compression}`]
+            args: [key, 'COMPRESSION', `${compression}`]
         }
     }
 
