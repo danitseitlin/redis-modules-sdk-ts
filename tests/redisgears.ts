@@ -98,7 +98,7 @@ describe('RedisGears Module testing', async function() {
     it('unregister function', async () => {
         //const registrationId = `${executionId3.split('-')[0]}-${parseInt(executionId3.split('-')[1])}`
         //console.log(registrationId)
-        const executionId = await redis.gears_module_pyexecute('GB().run()', {
+        const executionId = await redis.gears_module_pyexecute('GB().run().register()', {
             unblocking: true
         })
         const response = await redis.gears_module_unregister(executionId)
