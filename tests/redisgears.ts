@@ -22,16 +22,16 @@ describe('RedisGears Module testing', async function() {
             unblocking: true
         })
         expect(executionId1).to.equal('0000000000000000000000000000000000000000-0', 'The execution id')
-        console.log(`Execution ID: ${executionId1}`)
+        console.log(`Execution ID1: ${executionId1}`)
         executionId2 = await redis.gears_module_pyexecute('GB().run()', {
             unblocking: true
         })
-        console.log(`Execution ID: ${executionId2}`)
+        console.log(`Execution ID2: ${executionId2}`)
         expect(executionId2).to.equal('0000000000000000000000000000000000000000-1', 'The execution id')
         executionId3 = await redis.gears_module_pyexecute('GB().run()', {
             unblocking: true
         })
-        console.log(`Execution ID: ${executionId3}`)
+        console.log(`Execution ID3: ${executionId3}`)
         expect(executionId3).to.equal('0000000000000000000000000000000000000000-2', 'The execution id')
     });
     it('configSet function', async () => {
@@ -44,6 +44,7 @@ describe('RedisGears Module testing', async function() {
     });
     it('getExecution function', async () => {
         const response = await redis.gears_module_getExecution(executionId1)
+        console.log(response)
         expect(response[0][3][1]).to.equal('done', 'The response count of the \'RG.GETEXECUTION\' Command')
     });
     it('dumpExecutions function', async () => {
