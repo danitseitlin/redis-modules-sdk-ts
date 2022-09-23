@@ -35,9 +35,7 @@ describe('RedisBloom TDigest filter testing', async function() {
         expect(response).to.equal('OK', 'The response of \'TDIGEST.ADD\' command');
     });
     it('merge function', async () => {
-        let response = await redis.bloom_tdigest_module_merge(key1, key2);
-        expect(response).to.equal('OK', 'The response of \'TDIGEST.MERGE\' command');
-        response = await redis.bloom_tdigest_module_merge(key1, key2, { override: true});
+        const response = await redis.bloom_tdigest_module_merge(key1, key2);
         expect(response).to.equal('OK', 'The response of \'TDIGEST.MERGE\' command');
     });
     it('max function', async () => {
