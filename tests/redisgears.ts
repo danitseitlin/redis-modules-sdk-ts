@@ -28,7 +28,7 @@ describe('RedisGears Module testing', async function() {
         })
         console.log(`Execution ID2: ${executionId2}`)
         expect(executionId2).to.equal('0000000000000000000000000000000000000000-1', 'The execution id')
-        executionId3 = await redis.gears_module_pyexecute('GB().register()', {
+        executionId3 = await redis.gears_module_pyexecute('GB().run()', {
             unblocking: true
         })
         console.log(`Execution ID3: ${executionId3}`)
@@ -44,7 +44,6 @@ describe('RedisGears Module testing', async function() {
     });
     it('getExecution function', async () => {
         const response = await redis.gears_module_getExecution(executionId1)
-        console.log(response)
         expect(response[0][3][1]).to.equal('done', 'The response count of the \'RG.GETEXECUTION\' Command')
     });
     it('dumpExecutions function', async () => {
@@ -58,7 +57,6 @@ describe('RedisGears Module testing', async function() {
     });
     it('getResults function', async () => {
         const response = await redis.gears_module_getResults(executionId1)
-        console.log(response)
         expect(response.length).to.equal(2, 'The response count of the \'RG.GETRESULTS\' Command')
     });
     it('getResultsBlocking function', async () => {
@@ -96,10 +94,9 @@ describe('RedisGears Module testing', async function() {
         const response = await redis.gears_module_abortExecution(executionId2)
         expect(response).to.equal('OK', 'The response of the \'RG.ABORTEXECUTION\' Command')
     });
-    it('unregister function', async () => {
+    it.skip('unregister function', async () => {
         const registrationId = `${executionId3.split('-')[0]}-${parseInt(executionId3.split('-')[1])}`
-        console.log(registrationId)
-        const response = await redis.gears_module_unregister(executionId3)
+        const response = await redis.gears_module_unregister(registrationId)
         expect(response).to.equal('OK', 'The response of the \'RG.UNREGISTER\' command')
     });
 });
