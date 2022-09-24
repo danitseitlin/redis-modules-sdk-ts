@@ -58,6 +58,7 @@ describe('RedisGears Module testing', async function() {
     });
     it('getResults function', async () => {
         const response = await redis.gears_module_getResults(executionId1)
+        console.log(response)
         expect(response.length).to.equal(2, 'The response count of the \'RG.GETRESULTS\' Command')
     });
     it('getResultsBlocking function', async () => {
