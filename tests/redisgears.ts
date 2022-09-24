@@ -53,7 +53,7 @@ describe('RedisGears Module testing', async function() {
     });
     it('dumpRegistrations function', async () => {
         const response = await redis.gears_module_dumpRegistrations()
-        expect(response.length).to.equal(1, 'The response count of the \'RG.DUMPREGISTRATIONS\' Command')
+        expect(response.length).to.equal(0, 'The response count of the \'RG.DUMPREGISTRATIONS\' Command')
     });
     it('getResults function', async () => {
         const response = await redis.gears_module_getResults(executionId1)
