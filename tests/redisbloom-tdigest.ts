@@ -48,11 +48,11 @@ describe('RedisBloom TDigest filter testing', async function() {
     });
     it('quantile function', async () => {
         const response = await redis.bloom_tdigest_module_quantile(key1, 0.5);
-        expect(response).to.eql('1500', 'The response of \'TDIGEST.QUANTILE\' command')
+        expect(response[0]).to.eql('1500', 'The response of \'TDIGEST.QUANTILE\' command')
     });
     it('cdf function', async () => {
         const response = await redis.bloom_tdigest_module_cdf(key1, 10);
-        expect(response).to.eql('0', 'The response of \'TDIGEST.CDF\' command')
+        expect(response[0]).to.eql('0', 'The response of \'TDIGEST.CDF\' command')
     });
     it('info function', async () => {
         const response = await redis.bloom_tdigest_module_info(key1);

@@ -27,3 +27,15 @@ export type TDigestInfo = {
     'Unmerged weight': string,
     'Total compressions': number
 }
+
+/**
+ * The optional parameters of the 'TDIGEST.MERGE' command
+ * @param numberOfKeys Number of sketch(es) to copy observation values from. If not passed, it will set a default based on sourceKeys parameter.
+ * @param compression The compression parameter. 100 is a common value for normal uses. 1000 is extremely large. If no value is passed, the used compression will the maximal value among all inputs.
+ * @param override If destination already exists, it is overwritten.
+ */
+export type TDigestMergeOptions = {
+    numberOfKeys?: number,
+    compression?: number,
+    override?: boolean
+}
