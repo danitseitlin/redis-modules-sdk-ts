@@ -1,7 +1,7 @@
 import * as Redis from 'ioredis';
 import { Module, RedisModuleOptions } from '../module.base';
 import { BloomTdigestCommander } from './redisbloom-tdigest.commander';
-import { TDigestAddParameters, TDigestInfo } from './redisbloom-tdigest.types';
+import { TDigestAddParameters, TDigestInfo, TDigestMergeOptions } from './redisbloom-tdigest.types';
 
 export class RedisBloomTDigest extends Module {
 
@@ -32,10 +32,10 @@ export class RedisBloomTDigest extends Module {
     /**
      * Allocate the memory and initialize the t-digest
      * @param key The name of the sketch
-     * @param compression The compression parameter. 100 is a common value for normal uses. 1000 is extremely large. See the further notes bellow. 
+     * @param compression The compression parameter. 100 is a common value for normal uses. 1000 is extremely large. If no value is passed by default the compression will be 100. 
      * @returns OK on success, error otherwise
      */
-    async create(key: string, compression: number): Promise<'OK'> {
+    async create(key: string, compression?: number): Promise<'OK'> {
         const command = this.bloomTdigestCommander.create(key, compression);
         return await this.sendCommand(command);
     }
@@ -62,13 +62,15 @@ export class RedisBloomTDigest extends Module {
     }
 
     /**
-     * Merges all of the values from 'from' to 'this' sketch
-     * @param fromKey Sketch to copy values to
-     * @param toKey Sketch to copy values from
-     * @returns OK on success, error otherwise
+     * Merges all of the values from 'from' keys to 'destination-key' sketch.
+     * @param destinationKey Sketch to copy values to.
+     * @param sourceKeys Sketch to copy values from, this can be a string for 1 key or an array of keys.
+     * @param options.numberOfKeys Number of sketch(es) to copy observation values from. If not passed, it will set a default based on sourceKeys parameter.
+     * @param options.compression The compression parameter. 100 is a common value for normal uses. 1000 is extremely large. If no value is passed, the used compression will the maximal value among all inputs.
+     * @param options.override If destination already exists, it is overwritten.
      */
-    async merge(fromKey: string, toKey: string): Promise<'OK'> {
-        const command = this.bloomTdigestCommander.merge(fromKey, toKey);
+    async merge(destinationKey: string, sourceKeys: string | string[], options?: TDigestMergeOptions): Promise<'OK'> {
+        const command = this.bloomTdigestCommander.merge(destinationKey, sourceKeys, options);
         return await this.sendCommand(command);
     }
 
