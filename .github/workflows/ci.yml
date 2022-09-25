@@ -78,7 +78,7 @@ jobs:
           docker_channel: nightly
           docker_nightly_version: snapshot-20200915
       - name: Setting up Redis
-        run: docker run -p 6379:6379 -d --rm redislabs/rejson:latest && docker ps -a
+        run: npm run run-redis
       - name: Running tests
         run: npm i && npm run redis-module-base-tests
   #Build for 'ReJSON' module
@@ -93,7 +93,7 @@ jobs:
         docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
-      run: docker run -p 6379:6379 -d --rm redislabs/rejson:edge && docker ps -a
+      run: npm run run-redis-with-rejson-module
     - name: Running tests
       run: npm i && npm run rejson-module-tests
   #Build for 'Redis Times Series' module
@@ -108,7 +108,7 @@ jobs:
         docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
-      run: docker run -p 6379:6379 -d --rm redislabs/redistimeseries:edge && docker ps -a
+      run: npm run run-redis-with-rts-module
     - name: Running tests
       run: npm i && npm run rts-module-tests
   #Build for 'Redis Search' module
@@ -123,7 +123,7 @@ jobs:
         docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
-      run: docker run -p 6379:6379 -d --rm redislabs/redisearch:edge && docker ps -a
+      run: npm run run-redis-with-redisearch-module
     - name: Running tests
       run: npm i && npm run redisearch-module-tests
   #Build for 'Redis Graph module
@@ -138,7 +138,7 @@ jobs:
         docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
-      run: docker run -p 6379:6379 -d --rm redislabs/redisgraph:edge && docker ps -a
+      run: npm run run-redis-with-redisgraph-module
     - name: Running tests
       run: npm i && npm run redisgraph-module-tests
   #Build for 'RedisGears' module
@@ -153,7 +153,7 @@ jobs:
         docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
-      run: docker run -p 6379:6379 -d --rm redislabs/redisgears:latest && docker ps -a
+      run: npm run run-redis-with-redisgears-module
     - name: Running tests
       run: npm i && npm run redisgears-module-tests
   #Build for 'Redis Bloom' module
@@ -168,7 +168,7 @@ jobs:
         docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
-      run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
+      run: npm run run-redis-with-bloom-module
     - name: Running tests
       run: npm i && npm run redisbloom-filter-tests
   #Build for 'Redis Bloom TopK' filter
@@ -183,7 +183,7 @@ jobs:
         docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
-      run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
+      run: npm run run-redis-with-bloom-module
     - name: Running tests
       run: npm i && npm run redisbloom-topk-filter-tests
   #Build for 'Redis Bloom CMK' filter
@@ -198,7 +198,7 @@ jobs:
         docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
-      run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
+      run: npm run run-redis-with-bloom-module
     - name: Running tests
       run: npm i && npm run redisbloom-cmk-filter-tests
   #Build for 'Redis Bloom Cuckoo' filter
@@ -213,7 +213,7 @@ jobs:
         docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
-      run: docker run -p 6379:6379 -d --rm redislabs/rebloom:latest && docker ps -a
+      run: npm run run-redis-with-bloom-module
     - name: Running tests
       run: npm i && npm run redisbloom-cuckoo-filter-tests
   #Build for 'Redis Bloom TDigest' filter
@@ -243,7 +243,7 @@ jobs:
         docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
-      run: docker run -p 6379:6379 -d --rm redislabs/redisai:edge-cpu-bionic && docker ps -a
+      run: npm run run-redis-with-redisai-module
     - name: Running tests
       run: npm i && npm run redis-ai-module-tests
   #Build for 'Redis Interval Sets' module
@@ -258,6 +258,6 @@ jobs:
         docker_nightly_version: snapshot-20200915
     - uses: actions/checkout@v2
     - name: Setting up Redis
-      run: docker run -p 6379:6379 -d --rm danitseitlin/redis-interval-sets && docker ps -a
+      run: npm run run-redis-with-ris-module
     - name: Running tests
       run: npm i && npm run ris-module-tests
