@@ -1,5 +1,5 @@
 import { CommandData } from "../module.base";
-import { TSAddOptions, TSCreateOptions, TSCreateRule, TSIncrbyDecrbyOptions, TSKeySet, TSLabel, TSMRangeOptions, TSRangeOptions } from "./rts.types";
+import { TSAddOptions, TSCreateOptions, TSCreateRule, TSIncrbyDecrbyOptions, TSKeySet, TSLabel, TSMRangeOptions, TSRangeOptions, TSAlterOptions } from "./rts.types";
 
 export class RedisTimeSeriesCommander {
 
@@ -45,8 +45,10 @@ export class RedisTimeSeriesCommander {
      * @param chunkSize Optional. An update to the chunk size
      * 
      */
-    alter(key: string, retention?: number, labels?: TSLabel[], duplicatePolicy?: string, chunkSize?: number): CommandData {
+    alter(key: string, options?: TSAlterOptions): CommandData {
         let args = [key];
+        const {retention, labels, duplicatePolicy, chunkSize} = options;
+
         if(retention !== undefined)
             args = args.concat(['RETENTION', retention.toString()]);
         if(labels !== undefined && labels.length > 0) {

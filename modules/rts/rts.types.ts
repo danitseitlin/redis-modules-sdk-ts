@@ -37,7 +37,6 @@ export type TSInfo = {
 export interface TSCreateOptions extends TSOptions {
     duplicatePolicy?: string
 }
-
 /**
  * The label object
  * @param name The name of the label
@@ -58,6 +57,20 @@ export type TSLabel = {
  */
 export interface TSAddOptions extends TSOptions {
     onDuplicate?: TSDuplicatePolicyType 
+}
+
+/** 
+* The 'TS.ALTER' command optional parameters
+* @param retention The 'RETENTION' optional parameter
+* @param chunkSize The 'CHUNK_SIZE' optional parameter
+* @param duplicatePolicy The DUPLICATE_POLICY optional parameter
+* @param labels A list of 'LABELS' optional parameter
+*/
+export type TSAlterOptions = {
+    retention?: number, 
+    chunkSize?: number,
+    duplicatePolicy?: TSDuplicatePolicyType, 
+    labels?: TSLabel[]
 }
 
 /**
@@ -102,6 +115,8 @@ export interface TSIncrbyDecrbyOptions extends TSOptions {
  * @param chunkSize The 'CHUNK_SIZE' optional parameter
  * @param labels A list of 'LABELS' optional parameter
  */
+
+
 export type TSOptions = {
     retention?: number,
     uncompressed?: boolean,

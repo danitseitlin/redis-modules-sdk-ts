@@ -2,7 +2,7 @@ import * as Redis from 'ioredis';
 import { Module, RedisModuleOptions } from '../module.base';
 import { RedisTimeSeriesCommander } from './rts.commander';
 import {
-    TSAddOptions, TSCreateOptions, TSCreateRule, TSIncrbyDecrbyOptions, TSInfo, TSKeySet, TSLabel,
+    TSAddOptions, TSAlterOptions, TSCreateOptions, TSCreateRule, TSIncrbyDecrbyOptions, TSInfo, TSKeySet,
     TSMRangeOptions, TSRangeOptions
 } from './rts.types';
 
@@ -55,8 +55,8 @@ export class RedisTimeSeries extends Module {
      * @param labels Optional. The labels to update
      * 
      */
-    async alter(key: string, retention?: number, labels?: TSLabel[], duplicatePolicy?: string, chunkSize?: number): Promise<'OK'> {
-        const command = this.rtsCommander.alter(key, retention, labels, duplicatePolicy, chunkSize);
+    async alter(key: string, options?: TSAlterOptions): Promise<'OK'> {
+        const command = this.rtsCommander.alter(key, options);
         return await this.sendCommand(command);
     }
 
