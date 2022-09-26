@@ -20,7 +20,7 @@ export type TSInfo = {
     retentionTime?: number,
     chunkCount?: number,
     chunkSize?: number,
-    duplicatePolicy?: string | null,
+    duplicatePolicy?: TSDuplicatePolicyType,
     labels?: Array<string[]>,
     sourceKey?: string | null,
     rules?: Array<string[]>,
@@ -35,7 +35,7 @@ export type TSInfo = {
  * @param duplicatePolicy The 'DUPLICATE_POLICY' optional parameter
  */
 export interface TSCreateOptions extends TSOptions {
-    duplicatePolicy?: string
+    duplicatePolicy?: TSDuplicatePolicyType
 }
 /**
  * The label object
