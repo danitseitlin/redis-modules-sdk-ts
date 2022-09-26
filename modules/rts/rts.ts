@@ -51,8 +51,10 @@ export class RedisTimeSeries extends Module {
     /**
      * Altering an existing TS key
      * @param key Required. The key
-     * @param retention Optional. The retention time
-     * @param labels Optional. The labels to update
+     * @param options.onDuplicate The 'ON_DUPLICATE' optional parameter
+     * @param options.retention The 'RETENTION' optional parameter
+     * @param options.chunkSize The 'CHUNK_SIZE' optional parameter
+     * @param options.labels A list of 'LABELS' optional parameter
      * 
      */
     async alter(key: string, options?: TSAlterOptions): Promise<'OK'> {
