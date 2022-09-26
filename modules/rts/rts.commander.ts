@@ -55,10 +55,10 @@ export class RedisTimeSeriesCommander {
                 args = args.concat([label.name, label.value]);
             }
         }
-        if (duplicatePolicy !== undefined) {
+        if(duplicatePolicy !== undefined) {
                 args = args.concat(['DUPLICATE_POLICY', duplicatePolicy])
         }
-        if (chunkSize !== undefined) {
+        if(chunkSize !== undefined) {
             args = args.concat(['CHUNK_SIZE', chunkSize.toString()])
         }
         return {
