@@ -116,7 +116,6 @@ export interface TSIncrbyDecrbyOptions extends TSOptions {
  * @param labels A list of 'LABELS' optional parameter
  */
 
-
 export type TSOptions = {
     retention?: number,
     uncompressed?: boolean,

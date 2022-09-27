@@ -39,10 +39,10 @@ export class RedisTimeSeriesCommander {
     /**
      * Altering an existing TS key
      * @param key Required. The key
-     * @param retention Optional. The retention time
-     * @param labels Optional. The labels to update
-     * @param duplicatePolicy Optional. An update to the duplicate policy
-     * @param chunkSize Optional. An update to the chunk size
+     * @param options.retention Optional. The retention time
+     * @param options.labels Optional. The labels to update
+     * @param options.duplicatePolicy Optional. An update to the duplicate policy
+     * @param options.chunkSize Optional. An update to the chunk size
      * 
      */
     alter(key: string, options?: TSAlterOptions): CommandData {
@@ -61,7 +61,7 @@ export class RedisTimeSeriesCommander {
                 args = args.concat(['DUPLICATE_POLICY', duplicatePolicy])
         }
         if(chunkSize !== undefined) {
-            args = args.concat(['CHUNK_SIZE', chunkSize.toString()])
+            args = args.concat(['CHUNK_SIZE', `${chunkSize}`])
         }
         return {
             command: 'TS.ALTER',
