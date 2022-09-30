@@ -56,6 +56,9 @@ await client.disconnect();
 ```
 All modules are supported! :fire:
 
+# Sandbox Playground
+Want to play around with the code before installing it? Feel free to do so [here](https://playcode.io/974244)
+
 # Supported modules :dark_sunglasses:
 * [ReJSON](https://github.com/RedisJSON/RedisJSON)
 * [RedisTimeSeries](https://github.com/RedisTimeSeries/RedisTimeSeries) (RTS)
