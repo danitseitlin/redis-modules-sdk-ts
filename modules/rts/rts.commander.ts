@@ -1,5 +1,5 @@
 import { CommandData } from "../module.base";
-import { TSAddOptions, TSCreateOptions, TSCreateRule, TSIncrbyDecrbyOptions, TSKeySet, TSLabel, TSMRangeOptions, TSRangeOptions } from "./rts.types";
+import { TSAddOptions, TSCreateOptions, TSCreateRule, TSIncrbyDecrbyOptions, TSKeySet, TSLabel, TSMRangeOptions, TSRangeOptions, TSAlterOptions } from "./rts.types";
 
 export class RedisTimeSeriesCommander {
 
@@ -39,12 +39,16 @@ export class RedisTimeSeriesCommander {
     /**
      * Altering an existing TS key
      * @param key Required. The key
-     * @param retention Optional. The retention time
-     * @param labels Optional. The labels to update
+     * @param options.retention Optional. The retention time
+     * @param options.labels Optional. The labels to update
+     * @param options.duplicatePolicy Optional. An update to the duplicate policy
+     * @param options.chunkSize Optional. An update to the chunk size
      * 
      */
-    alter(key: string, retention?: number, labels?: TSLabel[]): CommandData {
+    alter(key: string, options?: TSAlterOptions): CommandData {
         let args = [key];
+        const {retention, labels, duplicatePolicy, chunkSize} = options;
+
         if(retention !== undefined)
             args = args.concat(['RETENTION', retention.toString()]);
         if(labels !== undefined && labels.length > 0) {
@@ -52,6 +56,12 @@ export class RedisTimeSeriesCommander {
             for(const label of labels) {
                 args = args.concat([label.name, label.value]);
             }
+        }
+        if(duplicatePolicy !== undefined) {
+                args = args.concat(['DUPLICATE_POLICY', duplicatePolicy])
+        }
+        if(chunkSize !== undefined) {
+            args = args.concat(['CHUNK_SIZE', `${chunkSize}`])
         }
         return {
             command: 'TS.ALTER',
@@ -386,7 +396,7 @@ export class RedisTimeSeriesCommander {
     queryindex(filter: string): CommandData {
         return {
             command: 'TS.QUERYINDEX',
-            args: [filter]
+            args: filter.split(' ')
         }
     }
 
