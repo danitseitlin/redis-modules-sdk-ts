@@ -1,4 +1,4 @@
-export { RedisModules as Redis } from './modules/redis-modules';
+export { RedisModules } from './modules/redis-modules';
 /* ** Redis JSON  ***/
 export { ReJSON } from './modules/rejson/rejson';
 export { ReJSONGetParameters } from './modules/rejson/rejson.types'
@@ -41,4 +41,4 @@ export {
 } from './modules/redis-ai/redis-ai.types';
 /* ** RedisIntervalSets ***/
 export { RedisIntervalSets } from './modules/ris/ris';
-export { RISSet } from './modules/ris/ris.types';
+export { RedisIntervalSet } from './modules/ris/ris.types';

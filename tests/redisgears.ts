@@ -1,6 +1,6 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
-import { RedisModules } from '../modules/redis-modules';
+import { RedisModules } from '../';
 let redis: RedisModules;
 let executionId1: string;
 let executionId2: string;

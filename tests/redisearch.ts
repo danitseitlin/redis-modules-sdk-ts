@@ -1,6 +1,6 @@
 import { cliArguments } from 'cli-argument-parser'
 import { expect } from 'chai'
-import { RedisModules } from '../modules/redis-modules'
+import { RedisModules } from '../'
 import { FTParsedSearchResponse, FTSearchArrayResponse } from '../modules/redisearch/redisearch.types'
 import * as fs from 'fs';
 let redis: RedisModules
