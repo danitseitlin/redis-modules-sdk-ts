@@ -35,7 +35,7 @@ describe('RTS Module testing', async function() {
     });
     
     it('alter function', async () => {
-        const response = await redis.rts_module_alter(key1, 1);
+        const response = await redis.rts_module_alter(key1,{retention: 1});
         expect(response).to.equal('OK', 'The response of the alter command');
     });
     it('add function', async () => {
