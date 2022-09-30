@@ -1,5 +1,5 @@
 import { CommandData } from "../module.base";
-import { RISSet } from "./ris.types";
+import { RedisIntervalSet } from "./ris.types";
 
 export class RedisIntervalSetsCommander {
 
@@ -8,7 +8,7 @@ export class RedisIntervalSetsCommander {
      * @param key The name of the key
      * @param sets A list of sets to create. At least 1 set is required.
      */
-    add(key: string, sets: RISSet[]): CommandData {
+    add(key: string, sets: RedisIntervalSet[]): CommandData {
         let args: (number | string)[] = [key];
         for(const set of sets){
             args = args.concat([set.name, set.minimum, set.maximum])

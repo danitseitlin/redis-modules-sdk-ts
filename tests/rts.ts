@@ -1,6 +1,6 @@
 import { cliArguments } from 'cli-argument-parser';
 import { expect } from 'chai'
-import { RedisModules } from '../modules/redis-modules';
+import { RedisModules } from '../';
 let redis: RedisModules;
 const date = new Date(2019, 11, 24, 19).getTime();
 const key1 = 'key:2:32';

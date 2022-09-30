@@ -10,7 +10,7 @@ export class RedisAICommander {
      * @param key The tensor's key name 
      * @param type The tensor's data type can be one of: FLOAT , DOUBLE , INT8 , INT16 , INT32 , INT64 , UINT8 or UINT16 
      * @param data The tensor's data (binary/numberic)
-     * @param shape One or more dimensions, or the number of elements per axis, for the tensor
+     * @param shapes One or more dimensions, or the number of elements per axis, for the tensor
      */
     tensorset(key: string, type: TensorType, shapes: number[], data?: number[] | Buffer[]): CommandData {
         const args: (number | string | Buffer)[] = [key, type];
