@@ -25,7 +25,7 @@ jobs:
       #RediSearch
       redisearch-selected: ${{(github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'redisearch') || github.event.inputs.tests == 'All'))}}
       redisearch-code-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, '/redisearch/')}}
-      redisearch-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, 'redisearch.ts')}}
+      redisearch-test-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, 'redisearch.ts')}}
       #RedisGraph
       redisgraph-selected: ${{(github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'redisgraph') || github.event.inputs.tests == 'All'))}}
       redisgraph-code-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, '/redisgraph/')}}
@@ -41,7 +41,7 @@ jobs:
       #RedisBloom Topk
       rebloom-topk-selected: ${{(github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rebloom-topk') || github.event.inputs.tests == 'All'))}}
       rebloom-topk-code-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, '/bloom-topk/')}}
-      rebloom-topk-test-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, 'redisblook-topk.ts')}}
+      rebloom-topk-test-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, 'redisbloom-topk.ts')}}
       #RedisBloom CMK
       rebloom-cmk-selected: ${{(github.event_name == 'workflow_dispatch' && (contains(github.event.inputs.tests, 'rebloom-cmk') || github.event.inputs.tests == 'All'))}}
       rebloom-cmk-code-changes: ${{github.event_name == 'pull_request' && contains(steps.files.outputs.all, '/bloom-cmk/')}}

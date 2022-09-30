@@ -2,7 +2,7 @@ import * as Redis from 'ioredis';
 import { Module, RedisModuleOptions } from '../module.base';
 import { RedisIntervalSetsCommander } from './ris.commander';
 import { RedisIntervalSetsHelpers } from './ris.helpers';
-import { RISSet } from './ris.types';
+import { RedisIntervalSet } from './ris.types';
 
 export class RedisIntervalSets extends Module {
     private risHelpers = new RedisIntervalSetsHelpers();
@@ -35,7 +35,7 @@ export class RedisIntervalSets extends Module {
      * @param key The name of the key
      * @param sets A list of sets to create. At least 1 set is required.
      */
-    async add(key: string, sets: RISSet[]): Promise<'OK'> {
+    async add(key: string, sets: RedisIntervalSet[]): Promise<'OK'> {
         const command = this.risCommander.add(key, sets);
         return await this.sendCommand(command);
     }
@@ -45,7 +45,7 @@ export class RedisIntervalSets extends Module {
      * @param key The name of the key
      * @param setName Optional. The name of specific set. If not passed all interval sets under key will be retrieved. 
      */
-    async get(key: string, setName?: string): Promise<RISSet[]> {
+    async get(key: string, setName?: string): Promise<RedisIntervalSet[]> {
         const command = this.risCommander.get(key, setName);
         const response = await this.sendCommand(command);
         return this.risHelpers.parseGet(response);
