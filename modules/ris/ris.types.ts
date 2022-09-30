@@ -4,7 +4,7 @@
  * @param minimum The minimum score of the interval set
  * @param maximum The maximum score of the interval set
  */
-export type RISSet = {
+export type RedisIntervalSet = {
     name?: string,
     minimum: number,
     maximum: number

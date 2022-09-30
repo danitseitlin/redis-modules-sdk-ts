@@ -1,12 +1,12 @@
-import { RISSet } from "./ris.types";
+import { RedisIntervalSet } from "./ris.types";
 
 export class RedisIntervalSetsHelpers {
     /**
      * Parsing the iset.get command response
      * @param sets The list of sets
      */
-    parseGet(sets: string[][]): RISSet[] {
-        const parsedSets: RISSet[] = [];
+    parseGet(sets: string[][]): RedisIntervalSet[] {
+        const parsedSets: RedisIntervalSet[] = [];
         for(const set of sets) {
             if(set.length > 2){
                 parsedSets.push({name: set[0], minimum: parseInt(set[1]), maximum: parseInt(set[2])})

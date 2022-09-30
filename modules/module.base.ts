@@ -72,8 +72,7 @@ export class Module {
 
     /**
      * Running a Redis command
-     * @param command The redis command
-     * @param args The args of the redis command
+     * @param data The command data of a command to send. Consists of command and args.
      */
     async sendCommand(data: CommandData): Promise<any> {
         try {
@@ -95,7 +94,6 @@ export class Module {
 
     /**
      * Handling a error
-     * @param module The name of the module
      * @param error The message of the error
      */
     handleError(error: string): any {
@@ -107,7 +105,6 @@ export class Module {
     /**
      * Simpilizing the response of the Module command
      * @param response The array response from the module
-     * @param isSearchQuery If we should try to build search result object from result array (default: false)
      */
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     handleResponse(response: any): any {

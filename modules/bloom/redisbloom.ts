@@ -8,7 +8,6 @@ export class RedisBloom extends Module {
     private bloomCommander = new BloomCommander();
     /**
      * Initializing the module object
-     * @param name The name of the module
      * @param clusterNodes The nodes of the cluster
      * @param moduleOptions The additional module options
      * @param moduleOptions.isHandleError If to throw error on error
@@ -18,7 +17,6 @@ export class RedisBloom extends Module {
     constructor(clusterNodes: Redis.ClusterNode[], moduleOptions?: RedisModuleOptions, clusterOptions?: Redis.ClusterOptions)
     /**
      * Initializing the module object
-     * @param name The name of the module
      * @param redisOptions The options of the redis database
      * @param moduleOptions The additional module options
      * @param moduleOptions.isHandleError If to throw error on error
