@@ -201,7 +201,7 @@ export function log(level: LogLevel, msg: string): void {
     else if(level === LogLevel.Error) {
         throw new Error(msg)
     }
-    else {
+    else if(level === LogLevel.INFO){
         console.log(msg);
     }
 }
