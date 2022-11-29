@@ -60,7 +60,7 @@ describe('RedisBloom TDigest filter testing', async function() {
         expect(response.Capacity).to.eql(610, 'The capacity')
         expect(response['Merged nodes']).to.eql(2, 'The merged nodes')
         expect(response['Unmerged nodes']).to.eql(0, 'The unmerged nodes')
-        expect(response['Merged weight']).to.eql('1', 'The merged weight')
+        expect(response['Merged weight']).to.eql(2, 'The merged weight')
         expect(response['Unmerged weight']).to.eql('0', 'The unmerged weight')
         expect(response['Total compressions']).to.eql(1, 'The total compressions')
     });
