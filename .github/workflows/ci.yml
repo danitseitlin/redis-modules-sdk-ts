@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       tests:
-        description: "What tests to run. Available options: rejson, rts, redisearch, redisgraph, redisgears, redisbloom, rebloom-topk, rebloom-cmk, rebloom-cuckoo, redis-ai, ris. Use 'All' to run all tests."
+        description: "What tests to run. Available options: rejson, rts, redisearch, redisgraph, redisgears, redisbloom, rebloom-topk, rebloom-cmk, rebloom-cuckoo, rebloom-tdigest, redis-ai, ris. Use 'All' to run all tests."
         required: true
         default: 'All'
   pull_request: 

@@ -44,7 +44,7 @@ describe('RedisBloom TDigest filter testing', async function() {
     });
     it('min function', async () => {
         const response = await redis.bloom_tdigest_module_min(key1);
-        expect(response).to.eql('1500', 'The response of \'TDIGEST.MIN\' command')
+        expect(response).to.eql('1', 'The response of \'TDIGEST.MIN\' command')
     });
     it('quantile function', async () => {
         const response = await redis.bloom_tdigest_module_quantile(key1, 0.5);
@@ -52,16 +52,16 @@ describe('RedisBloom TDigest filter testing', async function() {
     });
     it('cdf function', async () => {
         const response = await redis.bloom_tdigest_module_cdf(key1, 10);
-        expect(response[0]).to.eql('0', 'The response of \'TDIGEST.CDF\' command')
+        expect(response[0]).to.eql('0.5', 'The response of \'TDIGEST.CDF\' command')
     });
     it('info function', async () => {
         const response = await redis.bloom_tdigest_module_info(key1);
         expect(response.Compression).to.eql(100, 'The compression')
         expect(response.Capacity).to.eql(610, 'The capacity')
-        expect(response['Merged nodes']).to.eql(1, 'The merged nodes')
+        expect(response['Merged nodes']).to.eql(2, 'The merged nodes')
         expect(response['Unmerged nodes']).to.eql(0, 'The unmerged nodes')
-        expect(response['Merged weight']).to.eql('1', 'The merged weight')
-        expect(response['Unmerged weight']).to.eql('0', 'The unmerged weight')
+        expect(response['Merged weight']).to.eql(2, 'The merged weight')
+        expect(response['Unmerged weight']).to.eql(0, 'The unmerged weight')
         expect(response['Total compressions']).to.eql(1, 'The total compressions')
     });
 });
