@@ -25,7 +25,7 @@
   <img src='https://github.com/danitseitlin/redis-modules-sdk-ts/blob/master/.github/images/logo.png' />
 </p>
 
-# A few words :speech_balloon:
+# A bit about us :speech_balloon:
 An open source SDK of all the available Redis modules, built with TypeScript for better typing experiences and better usages.
 ## Benefits :zap: :speak_no_evil:
 1. All in 1, all Redis modules are covered in 1 project
